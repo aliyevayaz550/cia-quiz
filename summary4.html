@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 4 Summary</title>
+<style>
+:root {
+  --navy:       #1a2e4a;
+  --navy-mid:   #2e4d72;
+  --gold:       #c9a84c;
+  --gold-dim:   #8a6d2e;
+  --paper:      #f8f5ef;
+  --cream:      #ede8df;
+  --ink:        #0f1923;
+  --correct:    #1a6b3c;
+  --wrong:      #8b1a1a;
+  --font:       -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:          10px;
+  --shadow:     0 2px 12px rgba(15,25,35,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 680px; margin: 0 auto; gap: 10px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0;
+}
+#app-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#lang-btn {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer; flex-shrink: 0;
+}
+#su-nav {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0 12px 10px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+#su-nav::-webkit-scrollbar { display: none; }
+#su-nav-inner {
+  display: flex; gap: 8px;
+  max-width: 680px; margin: 0 auto; padding-top: 10px;
+}
+.su-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 7px 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .18s; min-width: 70px;
+  -webkit-tap-highlight-color: transparent;
+}
+.su-nav-btn:hover { background: rgba(255,255,255,.14); }
+.su-nav-btn.active { background: rgba(201,168,76,.18); border-color: var(--gold); }
+.su-nav-num { font-size: 13px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 3px; }
+.su-nav-title {
+  font-size: 10px; color: rgba(255,255,255,.6);
+  font-weight: 500; text-align: center; max-width: 72px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.su-nav-btn.active .su-nav-title { color: rgba(255,255,255,.9); }
+#main { max-width: 680px; margin: 0 auto; padding: 16px 14px 40px; }
+.su-header {
+  display: flex; gap: 14px; align-items: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r); padding: 16px 18px; margin-bottom: 16px;
+}
+.su-header-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--gold); color: var(--navy);
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 800;
+}
+.su-header-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: 4px; }
+.su-header-sub { font-size: 11px; color: rgba(255,255,255,.45); font-weight: 500; letter-spacing: .4px; }
+.lang-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.lang-tab {
+  flex: 1; padding: 9px 0;
+  border: 1.5px solid #ddd6ca; border-radius: 8px;
+  background: #fff; color: #888; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .18s;
+}
+.lang-tab.active { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+.section-heading {
+  background: linear-gradient(135deg, #e8f0f8, #f0f4f9);
+  color: var(--navy); font-size: 15px; font-weight: 700;
+  padding: 10px 14px; border-radius: 8px;
+  margin: 20px 0 10px 0; border-left: 3px solid var(--navy-mid);
+}
+.section-heading:first-child { margin-top: 0; }
+.concept-block {
+  background: #fff; border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--navy-mid); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.concept-block .concept-title { font-weight: 700; color: var(--navy-mid); margin-bottom: 5px; font-size: 14px; }
+.concept-block p { font-size: 14px; color: #333; }
+.key-term { font-weight: 700; color: var(--gold-dim); }
+.term-block {
+  background: #fff; border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--gold); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.term-block p { font-size: 14px; color: #333; }
+.trap-block {
+  background: #fff5f5; border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--wrong); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.trap-label {
+  display: inline-block; background: var(--wrong); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.trap-block p { font-size: 14px; color: #4a1a1a; }
+.tip-block {
+  background: #f0faf4; border: 1px solid #b8e0c8;
+  border-left: 3px solid var(--correct); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; font-size: 14px; color: #1a3a28;
+}
+.su-bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 16px; border-top: 1px solid #e8e2d8;
+}
+.su-prev-btn, .su-next-btn {
+  background: var(--navy); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .18s;
+}
+.su-prev-btn:hover, .su-next-btn:hover { opacity: .85; }
+.su-counter { font-size: 13px; color: #888; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+    <div id="app-title">Unit 4 · Xülasə</div>
+    <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+  </div>
+</div>
+
+<div id="su-nav">
+  <div id="su-nav-inner">
+    <button class="su-nav-btn" id="nav-su-4-1" onclick="showSubunit('su-4-1')">
+      <span class="su-nav-num">4.1</span>
+      <span class="su-nav-title" data-en="Advisory Services" data-az="Məsləhət Xidmətləri" data-tr="Danışmanlık Hizmetleri">Advisory Services</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-4-2" onclick="showSubunit('su-4-2')">
+      <span class="su-nav-num">4.2</span>
+      <span class="su-nav-title" data-en="Auditor Responsibilities" data-az="Auditor Məsuliyyəti" data-tr="Denetçi Sorumlulukları">Auditor Responsibilities</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-4-3" onclick="showSubunit('su-4-3')">
+      <span class="su-nav-num">4.3</span>
+      <span class="su-nav-title" data-en="Benchmarking" data-az="Müqayisəli Analiz" data-tr="Kıyaslama">Benchmarking</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-4-4" onclick="showSubunit('su-4-4')">
+      <span class="su-nav-num">4.4</span>
+      <span class="su-nav-title" data-en="Other Advisory" data-az="Digər Məsləhət" data-tr="Diğer Danışmanlık">Other Advisory</span>
+    </button>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- ══ SUBUNIT 4.1 ══ -->
+  <div class="subunit-summary" id="su-4-1" style="display:block">
+    <div class="su-header">
+      <div class="su-header-num">4.1</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Overview of Advisory Services" data-az="Məsləhət Xidmətlərinə Ümumi Baxış" data-tr="Danışmanlık Hizmetlerine Genel Bakış">Overview of Advisory Services</div>
+        <div class="su-header-sub">Unit 4 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-4-1','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-4-1','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-4-1','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Nature of Advisory Services</div>
+        <p><strong class="key-term">Advisory (consulting) services</strong> are specialized consultations intended to add value and improve an organization's governance, risk management, and control processes. Crucially, auditors provide guidance and insight <strong class="key-term">without offering formal assurance evaluations</strong> or taking on any management responsibilities.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Determining the Scope</div>
+        <p>Unlike assurance engagements, the nature and details of an advisory engagement are not dictated solely by the internal auditor; they are <strong class="key-term">subject to agreement with the engagement client</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Blended Engagements</div>
+        <p>Assurance and advisory services are not mutually exclusive. Organizations can utilize <strong class="key-term">blended engagements</strong> that combine elements of both, provided the auditor exercises due professional care to ensure independence and objectivity are not compromised.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Advisory (Consulting) Services</strong> — Services performed generally at the specific request of an engagement client to offer advice and guidance without assuming management responsibility.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">The Two Parties</strong> — Advisory services involve only two participants: the <strong class="key-term">internal auditor</strong> (who offers the advice) and the <strong class="key-term">engagement client</strong> (who seeks and receives the advice).</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Blended Engagement</strong> — An engagement that includes elements of both assurance and advisory services.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The four main categories of advisory engagements: <strong>Formal</strong> (planned), <strong>Informal</strong> (routine meetings/committees), <strong>Special</strong> (mergers or system conversions), and <strong>Emergency</strong> (post-disaster recovery).</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>If management <em>actually implements</em> the auditor's recommendations, objectivity is <strong>not impaired</strong> — management makes the ultimate choice to adopt the advice.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p><strong>Reviewing systems of control before implementation</strong> is a valid advisory activity, but <strong>designing or installing them crosses the line</strong> into management responsibility.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Memorize the <strong>"party rule"</strong>: Assurance = <strong>three parties</strong>; Advisory = <strong>two parties</strong>.</div>
+      <div class="tip-block">✅ Always associate the scope of an advisory engagement as being <strong>set jointly with the client</strong>.</div>
+      <div class="tip-block">✅ Auditors should generally not agree to advisory engagements designed to <strong>bypass or circumvent assurance requirements</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Məsləhət Xidmətlərinin Mahiyyəti</div>
+        <p><strong class="key-term">Məsləhət (konsaltinq) xidmətləri (Advisory / Consulting Services)</strong> təşkilatın idarəetmə, risk idarəetməsi və nəzarət proseslərinə dəyər qatmaq üçün nəzərdə tutulmuş ixtisaslaşmış konsultasiyalardır. Auditorlar <strong class="key-term">rəsmi əminlik qiymətləndirilmələri təqdim etmədən (Without Formal Assurance)</strong> istiqamət və baxış təmin edirlər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Əhatə Dairəsinin Müəyyən Edilməsi</div>
+        <p>Məsləhət tapşırığının xarakteri, həcmi və təfərrüatları yalnız daxili auditor tərəfindən diktə olunmur; onlar <strong class="key-term">tapşırıq müştərisi ilə razılaşmaya tabedir (Subject to Agreement with the Client)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Qarışıq Tapşırıqlar</div>
+        <p>Əminlik və məsləhət xidmətləri qarşılıqlı istisna deyil. Auditor müstəqillik və obyektivliyin pozulmamasını təmin etmək şərtilə, hər ikisinin elementlərini birləşdirən <strong class="key-term">qarışıq tapşırıqlardan (Blended Engagements)</strong> istifadə edə bilər.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Məsləhət (Konsaltinq) Xidmətləri</strong> — Rəhbərlik məsuliyyəti üzərinə götürmədən məsləhət və istiqamət təklif etmək üçün adətən tapşırıq müştərisinin xüsusi sorğusu ilə həyata keçirilən xidmətlər.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">İki Tərəf (Two Parties)</strong> — Məsləhət xidmətləri yalnız iki iştirakçını əhatə edir: <strong class="key-term">daxili auditor</strong> (məsləhəti təklif edən) və <strong class="key-term">tapşırıq müştərisi</strong> (məsləhət axtaran və alan).</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Qarışıq Tapşırıq (Blended Engagement)</strong> — Həm əminlik, həm də məsləhət xidmətlərinin elementlərini ehtiva edən tapşırıq.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Məsləhət tapşırıqlarının dörd əsas kateqoriyası: <strong>Rəsmi (Formal)</strong> — planlaşdırılmış; <strong>Qeyri-rəsmi (Informal)</strong> — adi görüşlər; <strong>Xüsusi (Special)</strong> — birləşmələr/sistem çevrilmələri; <strong>Təcili (Emergency)</strong> — fəlakətdən sonrakı bərpa.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Rəhbərlik auditorun tövsiyə etdiyi dəyişiklikləri faktiki tətbiq etsə belə, auditorun <strong>obyektivliyi pozulmur</strong> — rəhbərlik məsləhəti qəbul etmək barədə yekun seçimi özü edir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p><strong>Tətbiqdən əvvəl nəzarət sistemlərinin nəzərdən keçirilməsi (Reviewing)</strong> etibarlı məsləhət fəaliyyətidir, lakin <strong>onların dizayn edilməsi və ya quraşdırılması (Designing / Installing)</strong> rəhbərlik məsuliyyətinə keçir.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>\"Tərəf qaydasını\" (Party Rule)</strong> əzbərləyin: Əminlik = <strong>üç tərəf (Three Parties)</strong>; Məsləhət = <strong>iki tərəf (Two Parties)</strong>.</div>
+      <div class="tip-block">✅ Məsləhət tapşırığının əhatə dairəsini həmişə <strong>müştəri ilə birlikdə müəyyən edilmiş (Set Jointly with the Client)</strong> kimi əlaqələndirin.</div>
+      <div class="tip-block">✅ Auditorlar əminlik tələblərindən <strong>yan keçmək üçün (Bypass Rules)</strong> nəzərdə tutulmuş məsləhət tapşırıqlarına razılıq verməməlidir.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Danışmanlık Hizmetlerinin Doğası</div>
+        <p><strong class="key-term">Danışmanlık (konsültasyon) hizmetleri</strong>, kuruluşun yönetişim, risk yönetimi ve kontrol süreçlerine değer katmak için tasarlanmış uzmanlaşmış istişarelerdir. Denetçiler <strong class="key-term">resmi güvence değerlendirmeleri sunmadan (Without Formal Assurance)</strong> rehberlik sağlar.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Kapsamın Belirlenmesi</div>
+        <p>Danışmanlık görevinin niteliği ve ayrıntıları yalnızca iç denetçi tarafından dikte edilmez; bunlar <strong class="key-term">görev müşterisi ile anlaşmaya tabidir (Subject to Agreement with the Client)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Karma Görevler</div>
+        <p>Güvence ve danışmanlık hizmetleri birbirini dışlamaz. Denetçi bağımsızlık ve objektifliği korumak koşuluyla her ikisinin unsurlarını birleştiren <strong class="key-term">karma görevlerden (Blended Engagements)</strong> yararlanabilir.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Danışmanlık (Konsültasyon) Hizmetleri</strong> — Yönetim sorumluluğu üstlenmeden tavsiye ve rehberlik sunmak için genellikle görev müşterisinin özel talebi üzerine gerçekleştirilen hizmetler.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">İki Taraf (Two Parties)</strong> — Danışmanlık hizmetleri yalnızca iki katılımcıyı içerir: <strong class="key-term">iç denetçi</strong> (tavsiyeyi sunan) ve <strong class="key-term">görev müşterisi</strong> (tavsiyeyi arayan ve alan).</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Karma Görev (Blended Engagement)</strong> — Hem güvence hem de danışmanlık hizmetlerinin unsurlarını içeren görev.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Danışmanlık görevlerinin dört ana kategorisi: <strong>Resmi (Formal)</strong> — planlanmış; <strong>Gayri resmi (Informal)</strong> — rutin toplantılar; <strong>Özel (Special)</strong> — birleşmeler/sistem dönüşümleri; <strong>Acil (Emergency)</strong> — afet sonrası kurtarma.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Yönetim denetçinin önerilerini gerçekten uygulasa bile, objektiflik <strong>bozulmaz</strong> — yönetim tavsiyeyi benimseme konusunda nihai seçimi kendisi yapar.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p><strong>Uygulamadan önce kontrol sistemlerinin gözden geçirilmesi (Reviewing)</strong> geçerli bir danışmanlık faaliyetidir, ancak <strong>onların tasarlanması veya kurulması (Designing / Installing)</strong> yönetim sorumluluğu sınırını aşar.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>"Taraf kuralını" (Party Rule)</strong> ezberleyin: Güvence = <strong>üç taraf (Three Parties)</strong>; Danışmanlık = <strong>iki taraf (Two Parties)</strong>.</div>
+      <div class="tip-block">✅ Danışmanlık görevinin kapsamını her zaman <strong>müşteriyle birlikte belirlenmiş (Set Jointly with the Client)</strong> olarak ilişkilendirin.</div>
+      <div class="tip-block">✅ Denetçiler güvence gerekliliklerini atlamak için tasarlanmış danışmanlık görevlerini <strong>kabul etmemelidir</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <div></div>
+      <span class="su-counter">1 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 4.2 ══ -->
+  <div class="subunit-summary" id="su-4-2" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">4.2</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Internal Auditor Responsibilities" data-az="Daxili Auditorun Məsuliyyətləri" data-tr="İç Denetçinin Sorumlulukları">Internal Auditor Responsibilities</div>
+        <div class="su-header-sub">Unit 4 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-4-2','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-4-2','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-4-2','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Navigating Previous Responsibilities</div>
+        <p>Internal auditors <strong class="key-term">are allowed</strong> to provide advisory services relating to operations they previously managed. However, if there are any potential impairments to independence or objectivity, they must <strong class="key-term">disclose them to the client</strong> prior to accepting the engagement.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">The "Cooling-Off" Period</div>
+        <p>To protect objectivity, an internal auditor cannot immediately provide an <strong class="key-term">assurance service</strong> on an area where they just completed a formal advisory engagement. They must observe a <strong class="key-term">one-year cooling-off period</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Due Professional Care in Advisory</div>
+        <p>Before accepting an advisory engagement, the <strong class="key-term">CAE</strong> must carefully evaluate the client's motivations, the potential benefits, and the impact on the existing audit plan. If staff lacks the required knowledge or skills, the CAE must <strong class="key-term">decline the engagement</strong> or obtain competent advice.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Mandatory Escalation of Risks</div>
+        <p>If auditors discover <strong class="key-term">significant risk exposures or material control weaknesses</strong> during an advisory engagement, they must communicate these issues to <strong class="key-term">senior management and the board</strong>.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Cooling-Off Period</strong> — A mandatory one-year timeframe where internal auditors must refrain from providing assurance services immediately following a formal advisory engagement in that same area.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Due Professional Care (Advisory)</strong> — Evaluating an advisory request by considering the client's motivations, cost versus potential benefits, and the resources and skills required.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The distinct rules for <strong>auditing areas where an auditor previously worked</strong>: advisory is allowed (with disclosure), but assurance requires a one-year wait.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>If CAE lacks skills for an engagement: <strong>advisory → must decline</strong>. <strong>Assurance → generally must not be declined</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Even though advisory reports are customized for the client, the <strong>CAE must still communicate overall results and any significant control issues to the board</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Memorize the two <strong>"1-year" rules</strong>: 1 year after <strong>leaving a department</strong> before doing assurance there; 1 year after <strong>completing advisory</strong> before doing assurance there.</div>
+      <div class="tip-block">✅ <strong>"Advisory skills shortage"</strong> → required action: <strong>Decline</strong>.</div>
+      <div class="tip-block">✅ Auditor finds a major control flaw during consulting → required action: <strong>escalate to senior management and the board</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Əvvəlki Məsuliyyətlərdə Naviqasiya</div>
+        <p>Daxili auditorlara əvvəllər idarə etdikləri əməliyyatlarla bağlı məsləhət xidmətləri göstərməyə <strong class="key-term">icazə verilir (Allowed)</strong>. Lakin müstəqillik və ya obyektivliyə hər hansı potensial pozulma varsa, tapşırığı qəbul etməzdən əvvəl bunları <strong class="key-term">müştəriyə açıqlamalıdırlar (Disclose to the Client)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">\"Soyuma\" Dövrü</div>
+        <p>Daxili auditor rəsmi məsləhət tapşırığını yekunlaşdırdığı sahədə dərhal <strong class="key-term">əminlik xidməti (Assurance Service)</strong> göstərə bilməz. <strong class="key-term">Bir illik soyuma dövrü (One-Year Cooling-Off Period)</strong> gözləməlidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Məsləhətdə Lazımi Peşəkar Diqqət</div>
+        <p>Məsləhət tapşırığını qəbul etməzdən əvvəl <strong class="key-term">Baş Audit İcraçısı (CAE)</strong> müştərinin motivasiyalarını, potensial faydaları qiymətləndirməlidir. Daxili audit işçilərinin tələb olunan bacarıqları çatışmırsa, Baş Audit İcraçısı (CAE) <strong class="key-term">tapşırığı rədd etməlidir (Decline)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Risklərin Məcburi Eskalasiyası</div>
+        <p>Məsləhət tapşırığı zamanı <strong class="key-term">əhəmiyyətli risk təsirləri və ya əhəmiyyətli nəzarət zəiflikləri</strong> aşkar edilərsə, bu məsələlər <strong class="key-term">yüksək rəhbərliyə və İdarə Heyətinə (Senior Management and the Board)</strong> çatdırılmalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Soyuma Dövrü (Cooling-Off Period)</strong> — Daxili auditorların eyni sahədə rəsmi məsləhət tapşırığından dərhal sonra əminlik xidmətləri göstərməkdən çəkinməli olduğu məcburi bir illik zaman çərçivəsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Lazımi Peşəkar Diqqət — Məsləhət (Due Professional Care — Advisory)</strong> — Müştərinin motivasiyalarını, xərc ilə potensial faydalar nisbətini və tələb olunan resursları nəzərə alaraq məsləhət sorğusunun qiymətləndirilməsi.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p><strong>Auditorun əvvəllər işlədiyi sahələrin audit edilməsi</strong> üçün fərqli qaydalar: məsləhət icazə verilir (açıqlama ilə), lakin əminlik bir il gözləmə tələb edir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Baş Audit İcraçısı tələb olunan bacarıqlara malik deyilsə: <strong>məsləhət tapşırığı → rədd etməlidir</strong>; <strong>əminlik tapşırığı → ümumiyyətlə rədd edilməməlidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Məsləhət hesabatları müştəri üçün hazırlansa da, <strong>Baş Audit İcraçısı (CAE) ümumi nəticələri və əhəmiyyətli nəzarət məsələlərini İdarə Heyətinə (Board) çatdırmalıdır</strong>.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ İki <strong>\"1 illik\" qaydanı</strong> əzbərləyin: <strong>Şöbədən ayrıldıqdan</strong> sonra orada əminlik aparmaq üçün 1 il; <strong>Məsləhət tapşırığını tamamladıqdan</strong> sonra orada əminlik aparmaq üçün 1 il.</div>
+      <div class="tip-block">✅ <strong>\"Məsləhət üçün bacarıq çatışmazlığı\"</strong> → tələb olunan hərəkət: <strong>Rədd etmək (Decline)</strong>.</div>
+      <div class="tip-block">✅ Auditor konsaltinq tapşırığı zamanı əsas nəzarət qüsuru aşkar edərsə → <strong>yüksək rəhbərliyə və İdarə Heyətinə eskalasiya etmək</strong>.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Önceki Sorumlulukların Yönetimi</div>
+        <p>İç denetçilerin daha önce yönettikleri faaliyetlerle ilgili danışmanlık hizmetleri sunmalarına <strong class="key-term">izin verilir (Allowed)</strong>. Ancak bağımsızlık veya objektifliğe potansiyel bozulma varsa, görevi kabul etmeden önce bunları <strong class="key-term">müşteriye bildirmelidirler (Disclose to the Client)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">"Soğuma" Dönemi</div>
+        <p>İç denetçi, resmi danışmanlık görevini tamamladığı alanda hemen <strong class="key-term">güvence hizmeti (Assurance Service)</strong> sağlayamaz. <strong class="key-term">Bir yıllık soğuma dönemi (One-Year Cooling-Off Period)</strong> gözlemlemelidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Danışmanlıkta Gerekli Mesleki Özen</div>
+        <p>Danışmanlık görevini kabul etmeden önce <strong class="key-term">Denetim Yöneticisi (CAE)</strong> müşterinin motivasyonlarını ve potansiyel faydaları dikkatle değerlendirmelidir. Personel gerekli becerilere sahip değilse, Denetim Yöneticisi (CAE) <strong class="key-term">görevi reddetmelidir (Decline)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Risklerin Zorunlu Eskalasyonu</div>
+        <p>Danışmanlık görevi sırasında <strong class="key-term">önemli risk etkileri veya önemli kontrol zayıflıkları</strong> keşfedilirse, bu konular <strong class="key-term">üst yönetime ve Yönetim Kuruluna (Senior Management and the Board)</strong> bildirilmelidir.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Soğuma Dönemi (Cooling-Off Period)</strong> — İç denetçilerin aynı alanda resmi danışmanlık görevinden hemen sonra güvence hizmetleri sunmaktan kaçınması gereken zorunlu bir yıllık zaman çerçevesi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Gerekli Mesleki Özen — Danışmanlık (Due Professional Care — Advisory)</strong> — Müşterinin motivasyonlarını, maliyet ile potansiyel faydalar oranını ve gerekli kaynakları dikkate alarak danışmanlık talebinin değerlendirilmesi.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p><strong>Denetçinin daha önce çalıştığı alanlar için farklı kurallar</strong>: danışmanlığa izin verilir (bildirim ile), ancak güvence bir yıl bekleme gerektirir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Denetim Yöneticisi gerekli becerilere sahip değilse: <strong>danışmanlık → reddetmelidir</strong>; <strong>güvence → genellikle reddedilmemelidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Danışmanlık raporları müşteri için özelleştirilmiş olsa da, <strong>Denetim Yöneticisi (CAE) genel sonuçları ve önemli kontrol konularını Yönetim Kuruluna (Board) bildirmelidir</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ İki <strong>"1 yıllık" kuralı</strong> ezberleyin: <strong>Departmandan ayrıldıktan</strong> sonra orada güvence için 1 yıl; <strong>Danışmanlık tamamlandıktan</strong> sonra orada güvence için 1 yıl.</div>
+      <div class="tip-block">✅ <strong>"Danışmanlık için beceri eksikliği"</strong> → gereken eylem: <strong>Reddetmek (Decline)</strong>.</div>
+      <div class="tip-block">✅ Denetçi konsültasyon sırasında büyük kontrol kusuru keşfederse → <strong>üst yönetime ve Yönetim Kuruluna eskalasyon</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">2 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 4.3 ══ -->
+  <div class="subunit-summary" id="su-4-3" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">4.3</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Benchmarking" data-az="Müqayisəli Analiz" data-tr="Kıyaslama">Benchmarking</div>
+        <div class="su-header-sub">Unit 4 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-4-3','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-4-3','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-4-3','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Purpose of Benchmarking</div>
+        <p>Organizations use <strong class="key-term">benchmarking</strong> to compare their current performance against industry leaders or best practices using specific, measurable reference points. The ultimate objective is to <strong class="key-term">identify performance gaps</strong> and implement actions to achieve organizational improvement.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">The Five-Phase Process</div>
+        <p>A successful benchmarking project follows: <strong class="key-term">1) Select and prioritize</strong> based on critical success factors → <strong class="key-term">2) Organize teams</strong> to document internal processes → <strong class="key-term">3) Research</strong> best-in-class practices → <strong class="key-term">4) Analyze</strong> data to find gaps → <strong class="key-term">5) Implement</strong> necessary changes.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Internal Audit's Role</div>
+        <p>During benchmarking, internal auditors act as <strong class="key-term">facilitators or advisors</strong> — helping identify appropriate metrics, evaluating the benchmarking framework, or assisting with implementation. They do not take on management's operational responsibilities.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Benchmarking</strong> — The use of reference points to compare an organization's current performance with that of other entities applying leading or best practices.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Internal Benchmarking</strong> — Comparing performance among different departments, branches, or areas within the same organization.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Competitive (External) Benchmarking</strong> — Comparing performance against direct competitors or peers within the same industry.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Functional (Generic) Benchmarking</strong> — Comparing specific business processes against organizations in completely different industries to foster innovation.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Strategic Benchmarking</strong> — Reviewing business approaches and models to enhance priorities and strategic planning.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The distinct differences between <strong>competitive benchmarking</strong> (same industry) and <strong>functional benchmarking</strong> (different industry).</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Before looking at external companies, the team must <strong>thoroughly investigate and document their own internal processes first</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Internal benchmarking's major weakness: comparing yourself to internal peers might <strong>hide the fact that the entire organization is falling behind external competitors</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ <strong>Phase 3</strong> (Researching best-in-class practices) = the <strong>most difficult phase</strong>.</div>
+      <div class="tip-block">✅ <strong>Phase 5</strong> (Implementation) = the phase that relies most on <strong>leadership</strong>.</div>
+      <div class="tip-block">✅ Competitors refuse to share data → solution: <strong>purchase data from specialist providers</strong> or use <strong>anonymized third-party data pools</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Müqayisəli Analizin Məqsədi</div>
+        <p>Təşkilatlar öz cari fəaliyyətlərini sənaye liderləri və ya ən yaxşı təcrübələrlə müqayisə etmək üçün <strong class="key-term">müqayisəli analizdən (Benchmarking)</strong> istifadə edirlər. Əsas məqsəd <strong class="key-term">fəaliyyət boşluqlarını müəyyən etmək (Identify Performance Gaps)</strong> və təşkilati təkmilləşdirməyə nail olmaqdır.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Beş Mərhələli Proses</div>
+        <p>Uğurlu layihə ardıcıllığı: <strong class="key-term">1) Seçmə və prioritetləşdirmə</strong> → <strong class="key-term">2) Komandaların təşkili</strong> — daxili prosesləri sənədləşdirmək → <strong class="key-term">3) Araşdırma</strong> — ən yaxşı təcrübələr → <strong class="key-term">4) Təhlil</strong> — boşluqların tapılması → <strong class="key-term">5) Tətbiq</strong> — zəruri dəyişikliklər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Daxili Auditin Rolu</div>
+        <p>Müqayisəli analiz zamanı daxili auditorlar <strong class="key-term">fasilitator və ya məsləhətçi (Facilitators or Advisors)</strong> kimi fəaliyyət göstərirlər — müvafiq göstəricilərin müəyyən edilməsinə kömək edirlər. Rəhbərlik məsuliyyətini üzərlərinə götürmürlər.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Müqayisəli Analiz (Benchmarking)</strong> — Təşkilatın cari fəaliyyətini qabaqcıl və ya ən yaxşı təcrübələri tətbiq edən digər qurumlarla müqayisə etmək üçün istinad nöqtələrinin istifadəsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Daxili Müqayisəli Analiz (Internal Benchmarking)</strong> — Eyni təşkilat daxilindəki fərqli şöbələr arasında fəaliyyətin müqayisəsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Rəqabət Müqayisəli Analizi (Competitive / External Benchmarking)</strong> — Eyni sənaye daxilindəki birbaşa rəqiblərlə fəaliyyətin müqayisəsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Funksional Müqayisəli Analiz (Functional / Generic Benchmarking)</strong> — İnnovasiyanı təşviq etmək üçün tamamilə fərqli sənayələrdəki təşkilatlarla xüsusi biznes proseslərinin müqayisəsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Strateji Müqayisəli Analiz (Strategic Benchmarking)</strong> — Prioritetləri və strateji planlaşdırmanı təkmilləşdirmək üçün biznes yanaşmalarının nəzərdən keçirilməsi.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p><strong>Rəqabət müqayisəli analizi</strong> — eyni sənaye ilə <strong>funksional müqayisəli analiz</strong> — fərqli sənaye arasındakı fərqlər.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Xarici şirkətlərə baxmazdan əvvəl komanda <strong>öz daxili proseslərini hərtərəfli araşdırmalı və sənədləşdirməlidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Daxili müqayisəli analizin əsas zəifliyi: daxili həmyaşıdlarla müqayisə <strong>bütün təşkilatın əslində xarici rəqiblərdən geri qaldığını gizlədə bilər</strong>.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>3-cü Mərhələ</strong> (Ən yaxşı təcrübələrin araşdırılması) = <strong>ən çətin mərhələ</strong>.</div>
+      <div class="tip-block">✅ <strong>5-ci Mərhələ</strong> (Tətbiq) = ən çox <strong>liderliyə (Leadership)</strong> etibar edən mərhələ.</div>
+      <div class="tip-block">✅ Rəqiblər məlumat paylaşmaqdan imtina edərsə → həll: <strong>ixtisaslaşmış təminatçılardan məlumat almaq</strong> və ya <strong>anonimləşdirilmiş üçüncü tərəf məlumat hovuzlarından</strong> istifadə.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Kıyaslamanın Amacı</div>
+        <p>Kuruluşlar mevcut performanslarını sektör liderleri veya en iyi uygulamalarla karşılaştırmak için <strong class="key-term">kıyaslamadan (Benchmarking)</strong> yararlanır. Nihai amaç <strong class="key-term">performans boşluklarını belirlemek (Identify Performance Gaps)</strong> ve kurumsal iyileştirme sağlamaktır.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Beş Aşamalı Süreç</div>
+        <p>Başarılı bir kıyaslama projesi: <strong class="key-term">1) Seçme ve önceliklendirme</strong> → <strong class="key-term">2) Ekiplerin organizasyonu</strong> — iç süreçleri belgelemek → <strong class="key-term">3) Araştırma</strong> — en iyi uygulamalar → <strong class="key-term">4) Analiz</strong> — boşlukları bulmak → <strong class="key-term">5) Uygulama</strong> — gerekli değişiklikler.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İç Denetimin Rolü</div>
+        <p>Kıyaslama sırasında iç denetçiler <strong class="key-term">kolaylaştırıcı veya danışman (Facilitators or Advisors)</strong> olarak hareket eder. Yönetim sorumluluğunu üstlenmezler.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Kıyaslama (Benchmarking)</strong> — Kuruluşun mevcut performansını öncü veya en iyi uygulamaları uygulayan diğer kuruluşlarla karşılaştırmak için referans noktalarının kullanılması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">İç Kıyaslama (Internal Benchmarking)</strong> — Aynı kuruluş içindeki farklı departmanlar arasında performans karşılaştırması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Rekabetçi (Dış) Kıyaslama (Competitive / External Benchmarking)</strong> — Aynı sektördeki doğrudan rakiplerle performans karşılaştırması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Fonksiyonel (Genel) Kıyaslama (Functional / Generic Benchmarking)</strong> — İnovasyonu teşvik etmek için tamamen farklı sektörlerdeki kuruluşlarla iş süreçlerinin karşılaştırılması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Stratejik Kıyaslama (Strategic Benchmarking)</strong> — Öncelikleri ve stratejik planlamayı geliştirmek için iş yaklaşımlarının gözden geçirilmesi.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p><strong>Rekabetçi kıyaslama</strong> — aynı sektör ile <strong>fonksiyonel kıyaslama</strong> — farklı sektör arasındaki belirgin farklar.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Dış şirketlere bakmadan önce ekip <strong>önce kendi iç süreçlerini kapsamlı şekilde araştırmalı ve belgelemelidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>İç kıyaslamanın temel zayıflığı: iç eşdeğerlerle karşılaştırma <strong>tüm kuruluşun aslında dış rakiplerin gerisinde kaldığını gizleyebilir</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>3. Aşama</strong> (Sınıfının en iyisi uygulamaların araştırılması) = <strong>en zor aşama</strong>.</div>
+      <div class="tip-block">✅ <strong>5. Aşama</strong> (Uygulama) = en çok <strong>liderliğe (Leadership)</strong> dayanan aşama.</div>
+      <div class="tip-block">✅ Rakipler veri paylaşmayı reddederse → çözüm: <strong>uzman sağlayıcılardan veri satın almak</strong> veya <strong>anonimleştirilmiş üçüncü taraf veri havuzlarını</strong> kullanmak.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">3 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 4.4 ══ -->
+  <div class="subunit-summary" id="su-4-4" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">4.4</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Other Advisory Services" data-az="Digər Məsləhət Xidmətləri" data-tr="Diğer Danışmanlık Hizmetleri">Other Advisory Services</div>
+        <div class="su-header-sub">Unit 4 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-4-4','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-4-4','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-4-4','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Training &amp; Ethics</div>
+        <p>Internal auditors add value by training staff on risks (such as facilitating Control Self-Assessments / CSA) and supporting the organization's <strong class="key-term">ethical culture</strong>, which is considered the most important <strong class="key-term">"soft control"</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Due Diligence Auditing</div>
+        <p>When organizations undergo major transactions like mergers, auditors help verify the <strong class="key-term">business justification</strong>. This is an <strong class="key-term">advisory service</strong> if they simply provide counsel, but becomes an <strong class="key-term">assurance service</strong> if they issue an independent assessment.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Business Process Reengineering (BPR)</div>
+        <p>Using tools like <strong class="key-term">process mapping (flowcharting)</strong>, auditors help visualize workflows to eliminate non-value-adding tasks. <strong class="key-term">BPR</strong> involves <strong class="key-term">radically redesigning</strong> core processes — unlike continuous improvement which makes incremental tweaks.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">System Development Reviews</div>
+        <p>Auditors should be involved <strong class="key-term">throughout the entire life cycle</strong> of creating or acquiring new IT systems. Early involvement ensures appropriate controls and audit trails are integrated from the very beginning, preventing expensive modifications later.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Due Diligence</strong> — A service verifying the business justification for a major transaction, such as a business combination or divestiture.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Business Process Mapping</strong> — A simple form of flowcharting used to visualize a business process, identify where value is added, and eliminate unnecessary tasks.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Reengineering (BPR)</strong> — Process innovation and core process redesign that focuses on outcomes and simplification, rather than just modifying existing systems.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>In reengineering, auditors can recommend functions and develop audit plans, but <strong>must not become directly involved in the implementation</strong> — this impairs independence.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p><strong>Evaluating how well</strong> a company achieved its KPI targets = <em>assurance</em>. <strong>Helping them identify</strong> the right KPIs to use = <em>advisory</em>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>The exam strictly distinguishes <strong>reengineering (radical core redesign)</strong> from simple <strong>continuous improvement</strong> or <strong>downsizing</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always identify <strong>"ethical culture"</strong> as the organization's <strong>most important soft control</strong>.</div>
+      <div class="tip-block">✅ Primary goal of business process mapping → look for <strong>"enhancing outcomes"</strong> or <strong>"eliminating non-value-adding activities"</strong>.</div>
+      <div class="tip-block">✅ Early auditor involvement in IT projects ensures <strong>controls are built-in by design</strong> and enables <strong>early identification of risks</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Təlim və Etika</div>
+        <p>Daxili auditorlar işçilərə risklər barədə təlim verməklə (Nəzarətin Özünüqiymətləndirilməsi / CSA) və təşkilatın <strong class="key-term">etik mədəniyyətini (Ethical Culture)</strong> dəstəkləməklə dəyər yaradır — bu, ən vacib <strong class="key-term">\"yumşaq nəzarət\" (Soft Control)</strong> hesab olunur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Lazımi Araşdırma Auditi</div>
+        <p>Təşkilatlar böyük əməliyyatlar keçirdikdə auditorlar <strong class="key-term">biznes əsaslandırmasını (Business Justification)</strong> yoxlamağa kömək edir. Sadəcə məsləhət verirsə — <strong class="key-term">məsləhət xidməti (Advisory Service)</strong>; müstəqil qiymətləndirmə verirsə — <strong class="key-term">əminlik xidməti (Assurance Service)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Biznes Proseslərinin Yenidən Mühəndisliyi (BPR)</div>
+        <p><strong class="key-term">Proses xəritələmə / axın diaqramı (Process Mapping / Flowcharting)</strong> istifadə edərək auditorlar dəyər yaratmayan tapşırıqları aradan qaldırmağa kömək edirlər. <strong class="key-term">BPR</strong> əsas proseslərin <strong class="key-term">kökündən yenidən dizayn edilməsini (Radically Redesigning)</strong> əhatə edir — davamlı kiçik düzəlişlərdən fərqli olaraq.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Sistem İnkişafının Nəzərdən Keçirilməsi</div>
+        <p>Auditorlar yeni İT sistemlərinin yaradılmasının <strong class="key-term">bütün həyat dövrü boyunca (Throughout the Entire Life Cycle)</strong> iştirak etməlidirlər. Erkən iştirak müvafiq nəzarətlərin lap əvvəldən inteqrasiya olunmasını təmin edir.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Lazımi Araşdırma (Due Diligence)</strong> — Birləşmə və ya ayrılma kimi böyük əməliyyatın biznes əsaslandırmasını yoxlayan xidmət.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Biznes Prosesinin Xəritələnməsi (Business Process Mapping)</strong> — Biznes prosesini vizuallaşdırmaq, dəyərin harada əlavə edildiyini müəyyən etmək və lazımsız tapşırıqları aradan qaldırmaq üçün istifadə olunan sadə axın diaqramı forması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Yenidən Mühəndislik / BPR (Reengineering)</strong> — Mövcud sistemləri sadəcə dəyişdirmək əvəzinə, nəticələrə fokuslanmış proses innovasiyası və əsas prosesin yenidən dizaynı.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Yenidən mühəndislikdə auditorlar funksiyalar tövsiyə edə bilər, lakin <strong>tətbiqdə birbaşa iştirak etməməlidirlər (Must Not Implement)</strong> — bu müstəqilliyi pozur.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Şirkətin KPI hədəflərinə <strong>nə dərəcədə nail olduğunu qiymətləndirmək</strong> = <em>əminlik (Assurance)</em>. Onlara <strong>düzgün KPI-ları müəyyən etməyə kömək etmək</strong> = <em>məsləhət (Advisory)</em>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>İmtahan ciddi şəkildə fərqləndirir: <strong>yenidən mühəndislik (BPR) — kökündən əsas yenidən dizayn</strong> ilə sadə <strong>davamlı təkmilləşdirmə (Continuous Improvement)</strong> arasında.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>\"Etik mədəniyyəti\" (Ethical Culture)</strong> həmişə təşkilatın <strong>ən vacib yumşaq nəzarəti (Most Important Soft Control)</strong> kimi müəyyən edin.</div>
+      <div class="tip-block">✅ Biznes prosesinin xəritələnməsinin əsas məqsədi → <strong>\"nəticələrin təkmilləşdirilməsi\"</strong> və ya <strong>\"dəyər yaratmayan fəaliyyətlərin aradan qaldırılması\"</strong>.</div>
+      <div class="tip-block">✅ İT layihələrindəki erkən iştirak <strong>nəzarətlərin dizayn mərhələsində qurulmasını (Controls Built-in by Design)</strong> və <strong>risklərin erkən müəyyən edilməsini</strong> təmin edir.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Eğitim ve Etik</div>
+        <p>İç denetçiler, personeli riskler hakkında eğiterek (Kontrol Öz Değerlendirmesi / CSA kolaylaştırma) ve kuruluşun <strong class="key-term">etik kültürünü (Ethical Culture)</strong> destekleyerek değer katarlar — bu, en önemli <strong class="key-term">"yumuşak kontrol" (Soft Control)</strong> kabul edilir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Gerekli Özen Denetimi</div>
+        <p>Kuruluşlar büyük işlemler gerçekleştirdiğinde, denetçiler <strong class="key-term">iş gerekçesini (Business Justification)</strong> doğrulamaya yardımcı olur. Sadece danışmanlık veriyorsa — <strong class="key-term">danışmanlık hizmeti (Advisory Service)</strong>; bağımsız değerlendirme veriyorsa — <strong class="key-term">güvence hizmeti (Assurance Service)</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İş Süreçlerinin Yeniden Mühendisliği (BPR)</div>
+        <p><strong class="key-term">Süreç haritalama / akış şeması (Process Mapping / Flowcharting)</strong> araçları kullanarak denetçiler değer katmayan görevleri ortadan kaldırmaya yardımcı olur. <strong class="key-term">BPR</strong>, temel süreçlerin <strong class="key-term">kökten yeniden tasarlanmasını (Radically Redesigning)</strong> içerir — sürekli küçük iyileştirmelerden farklı olarak.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Sistem Geliştirme İncelemeleri</div>
+        <p>Denetçiler yeni BT sistemlerinin <strong class="key-term">tüm yaşam döngüsü boyunca (Throughout the Entire Life Cycle)</strong> yer almalıdır. Erken katılım, kontrollerin en başından entegre edilmesini sağlar.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Gerekli Özen (Due Diligence)</strong> — Birleşme veya elden çıkarma gibi büyük bir işlemin iş gerekçesini doğrulayan hizmet.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">İş Süreci Haritalama (Business Process Mapping)</strong> — Bir iş sürecini görselleştirmek ve gereksiz görevleri ortadan kaldırmak için kullanılan basit bir akış şeması biçimi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Yeniden Mühendislik / BPR (Reengineering)</strong> — Mevcut sistemleri sadece değiştirmek yerine sonuçlara odaklanan süreç inovasyonu ve temel süreç yeniden tasarımı.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Yeniden mühendislikte denetçiler fonksiyonlar önerebilir, ancak <strong>uygulamaya doğrudan dahil olmamalıdırlar (Must Not Implement)</strong> — bu bağımsızlığı bozar.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Şirketin KPI hedeflerine <strong>ne kadar iyi ulaştığını değerlendirmek</strong> = <em>güvence (Assurance)</em>. Onlara <strong>doğru KPI'ları belirlemeye yardımcı olmak</strong> = <em>danışmanlık (Advisory)</em>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Sınav kesinlikle ayırır: <strong>yeniden mühendislik (BPR) — kökten temel yeniden tasarım</strong> ile basit <strong>sürekli iyileştirme (Continuous Improvement)</strong> arasında.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>"Etik kültürü" (Ethical Culture)</strong> her zaman kuruluşun <strong>en önemli yumuşak kontrolü (Most Important Soft Control)</strong> olarak tanımlayın.</div>
+      <div class="tip-block">✅ İş süreci haritalamının temel amacı → <strong>"sonuçların iyileştirilmesi"</strong> veya <strong>"değer katmayan faaliyetlerin ortadan kaldırılması"</strong>.</div>
+      <div class="tip-block">✅ BT projelerinde erken katılım <strong>kontrollerin tasarım aşamasında yerleştirilmesini (Controls Built-in by Design)</strong> ve <strong>risklerin erken belirlenmesini</strong> sağlar.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">4 / 4</span>
+      <div></div>
+    </div>
+  </div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS = ["su-4-1", "su-4-2", "su-4-3", "su-4-4"];
+let currentSU = SUBUNIT_IDS[0];
+let globalLang = 'en';
+
+function showSubunit(id) {
+  SUBUNIT_IDS.forEach(sid => {
+    document.getElementById(sid).style.display = 'none';
+    document.getElementById('nav-' + sid).classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('nav-' + id).classList.add('active');
+  currentSU = id;
+  document.getElementById('nav-' + id).scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  applyLangToSubunit(id, globalLang);
+}
+
+function showLang(unitId, lang) {
+  globalLang = lang;
+  const unit = document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+  unit.querySelector('.lang-content.' + lang).classList.add('active');
+  const tabs = unit.querySelectorAll('.lang-tab');
+  const langMap = {'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  const labels = {'en':'AZ','az':'TR','tr':'EN'};
+  document.getElementById('lang-btn').textContent = labels[lang];
+}
+
+function applyLangToSubunit(id, lang) {
+  showLang(id, lang);
+  const su = document.getElementById(id);
+  const titleEl = su.querySelector('.su-header-title');
+  if(titleEl) titleEl.textContent = titleEl.dataset[lang] || titleEl.dataset.en;
+  const navBtn = document.getElementById('nav-' + id);
+  const navTitle = navBtn.querySelector('.su-nav-title');
+  if(navTitle) navTitle.textContent = navTitle.dataset[lang] || navTitle.dataset.en;
+}
+
+function toggleGlobalLang() {
+  const langs = ['en', 'az', 'tr'];
+  const labels = ['AZ', 'TR', 'EN'];
+  const idx = langs.indexOf(globalLang);
+  globalLang = langs[(idx + 1) % 3];
+  document.getElementById('lang-btn').textContent = labels[(idx + 1) % 3];
+  applyLangToSubunit(currentSU, globalLang);
+  SUBUNIT_IDS.forEach(sid => {
+    const btn = document.getElementById('nav-' + sid);
+    const t = btn.querySelector('.su-nav-title');
+    if(t) t.textContent = t.dataset[globalLang] || t.dataset.en;
+  });
+  const titleMap = {en:'Unit 4 · Summary', az:'Unit 4 · Xülasə', tr:'Unit 4 · Özet'};
+  document.getElementById('app-title').textContent = titleMap[globalLang];
+}
+
+function nextSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx < SUBUNIT_IDS.length - 1) showSubunit(SUBUNIT_IDS[idx + 1]);
+}
+
+function prevSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx > 0) showSubunit(SUBUNIT_IDS[idx - 1]);
+}
+
+document.getElementById('nav-' + SUBUNIT_IDS[0]).classList.add('active');
+</script>
+</body>
+</html>

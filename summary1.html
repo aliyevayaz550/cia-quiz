@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 1 Summary</title>
+<style>
+:root {
+  --navy:       #1a2e4a;
+  --navy-mid:   #2e4d72;
+  --gold:       #c9a84c;
+  --gold-dim:   #8a6d2e;
+  --paper:      #f8f5ef;
+  --cream:      #ede8df;
+  --ink:        #0f1923;
+  --correct:    #1a6b3c;
+  --wrong:      #8b1a1a;
+  --font:       -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:          10px;
+  --shadow:     0 2px 12px rgba(15,25,35,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 680px; margin: 0 auto; gap: 10px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; transition: background .2s; flex-shrink: 0;
+}
+#app-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#lang-btn {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── SUBUNIT NAV STRIP ───────────────────────────────── */
+#su-nav {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0 12px 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#su-nav::-webkit-scrollbar { display: none; }
+#su-nav-inner {
+  display: flex; gap: 8px;
+  max-width: 680px; margin: 0 auto;
+  padding-top: 10px;
+}
+.su-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 7px 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .18s; min-width: 70px;
+  -webkit-tap-highlight-color: transparent;
+}
+.su-nav-btn:hover { background: rgba(255,255,255,.14); }
+.su-nav-btn.active {
+  background: rgba(201,168,76,.18);
+  border-color: var(--gold);
+}
+.su-nav-num {
+  font-size: 13px; font-weight: 800;
+  color: var(--gold); line-height: 1; margin-bottom: 3px;
+}
+.su-nav-title {
+  font-size: 10px; color: rgba(255,255,255,.6);
+  font-weight: 500; text-align: center;
+  max-width: 72px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.su-nav-btn.active .su-nav-title { color: rgba(255,255,255,.9); }
+
+/* ── MAIN CONTENT ────────────────────────────────────── */
+#main {
+  max-width: 680px; margin: 0 auto;
+  padding: 16px 14px 40px;
+}
+
+/* ── SUBUNIT HEADER ──────────────────────────────────── */
+.su-header {
+  display: flex; gap: 14px; align-items: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r); padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.su-header-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--gold); color: var(--navy);
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 800;
+}
+.su-header-title {
+  font-size: 16px; font-weight: 700; color: #fff;
+  line-height: 1.35; margin-bottom: 4px;
+}
+.su-header-sub {
+  font-size: 11px; color: rgba(255,255,255,.45);
+  font-weight: 500; letter-spacing: .4px;
+}
+
+/* ── LANG TABS ───────────────────────────────────────── */
+.lang-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+}
+.lang-tab {
+  flex: 1; padding: 9px 0;
+  border: 1.5px solid #ddd6ca;
+  border-radius: 8px;
+  background: #fff;
+  color: #888; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .18s;
+}
+.lang-tab.active {
+  background: var(--navy); color: var(--gold);
+  border-color: var(--navy);
+}
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+
+/* ── SECTION HEADINGS ────────────────────────────────── */
+.section-heading {
+  background: linear-gradient(135deg, #e8f0f8, #f0f4f9);
+  color: var(--navy);
+  font-size: 15px; font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 20px 0 10px 0;
+  border-left: 3px solid var(--navy-mid);
+}
+.section-heading:first-child { margin-top: 0; }
+
+/* ── CONCEPT BLOCKS ──────────────────────────────────── */
+.concept-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--navy-mid);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.concept-block .concept-title {
+  font-weight: 700; color: var(--navy-mid);
+  margin-bottom: 5px; font-size: 14px;
+}
+.concept-block p { font-size: 14px; color: #333; }
+
+/* ── KEY TERMS ───────────────────────────────────────── */
+.key-term { font-weight: 700; color: var(--gold-dim); }
+.term-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.term-block p { font-size: 14px; color: #333; }
+
+/* ── EXAM TRAPS ──────────────────────────────────────── */
+.trap-block {
+  background: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--wrong);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.trap-label {
+  display: inline-block;
+  background: var(--wrong); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.trap-block p { font-size: 14px; color: #4a1a1a; }
+
+/* ── EXAM TIPS ───────────────────────────────────────── */
+.tip-block {
+  background: #f0faf4;
+  border: 1px solid #b8e0c8;
+  border-left: 3px solid var(--correct);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  font-size: 14px; color: #1a3a28;
+}
+
+/* ── BOTTOM NAV ──────────────────────────────────────── */
+.su-bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 16px;
+  border-top: 1px solid #e8e2d8;
+}
+.su-prev-btn, .su-next-btn {
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .18s;
+}
+.su-prev-btn:hover, .su-next-btn:hover { opacity: .85; }
+.su-counter {
+  font-size: 13px; color: #888; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+    <div id="app-title">Unit 1 · Xülasə</div>
+    <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+  </div>
+</div>
+
+<div id="su-nav">
+  <div id="su-nav-inner">
+    
+    <button class="su-nav-btn" id="nav-su-1-1" onclick="showSubunit('su-1-1')" data-en="1.1 Purpose of Internal Auditing" data-az="1.1 Daxili Auditin Məqsədi" data-tr="1.1 İç Denetimin Amacı">
+      <span class="su-nav-num">1.1</span>
+      <span class="su-nav-title" data-en="Purpose of Internal Auditing" data-az="Daxili Auditin Məqsədi" data-tr="İç Denetimin Amacı">Purpose of Internal Auditing</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-1-2" onclick="showSubunit('su-1-2')" data-en="1.2 Internal Audit Charter" data-az="1.2 Daxili Audit Nizamnaməsi" data-tr="1.2 İç Denetim Tüzüğü">
+      <span class="su-nav-num">1.2</span>
+      <span class="su-nav-title" data-en="Internal Audit Charter" data-az="Daxili Audit Nizamnaməsi" data-tr="İç Denetim Tüzüğü">Internal Audit Charter</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-1-3" onclick="showSubunit('su-1-3')" data-en="1.3 Impairment of Independence" data-az="1.3 Müstəqilliyin Pozulması" data-tr="1.3 Bağımsızlığın Zedelenmesi">
+      <span class="su-nav-num">1.3</span>
+      <span class="su-nav-title" data-en="Impairment of Independence" data-az="Müstəqilliyin Pozulması" data-tr="Bağımsızlığın Zedelenmesi">Impairment of Independence</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-1-4" onclick="showSubunit('su-1-4')" data-en="1.4 Role in Risk Management" data-az="1.4 Risk İdarəetməsindəki Rolu" data-tr="1.4 Risk Yönetimindeki Rolü">
+      <span class="su-nav-num">1.4</span>
+      <span class="su-nav-title" data-en="Role in Risk Management" data-az="Risk İdarəetməsindəki Rolu" data-tr="Risk Yönetimindeki Rolü">Role in Risk Management</span>
+    </button>
+  </div>
+</div>
+
+<div id="main">
+  
+  <!-- ══ SUBUNIT 1.1 ══ -->
+  <div class="subunit-summary" id="su-1-1" style="display:block">
+    <div class="su-header">
+      <div class="su-header-num">1.1</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Purpose of Internal Auditing" data-az="Daxili Auditin Məqsədi" data-tr="İç Denetimin Amacı">Purpose of Internal Auditing</div>
+        <div class="su-header-sub">Unit 1 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-1-1','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-1-1','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-1-1','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">The True Purpose of Internal Audit</div>
+<p>Internal auditing goes beyond basic compliance checking; it is designed to <strong class="key-term">add value and improve an organization's operations</strong>. It achieves this by bringing a systematic and disciplined approach to evaluating and improving three critical areas: <strong class="key-term">governance, risk management, and control processes</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Creating and Adding Value</div>
+<p>The internal audit function creates value by offering the board and management <strong class="key-term">independent, risk-based, and objective assurance, advice, insight, and foresight</strong>. This directly supports the successful achievement of organizational objectives, improves decision-making, and builds credibility with stakeholders.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Conditions for Maximum Effectiveness</div>
+<p>Internal audit must be performed by skilled professionals who conform strictly to the <strong class="key-term">Global Internal Audit Standards</strong>. The function must remain completely <strong class="key-term">independent</strong> through direct accountability to the board, while auditors must maintain an unbiased, <strong class="key-term">objective</strong> mindset free from undue influence.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Internal Auditing</strong> — An independent, objective assurance and advisory service designed to add value and improve an organization's operations.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Target Processes</strong> — The three specific organizational processes internal audit is mandated to evaluate and improve: governance, risk management, and control.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Value Creation Elements</strong> — The specific outputs internal audit provides: independent, risk-based, and objective assurance, advice, insight, and foresight.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The exact components of the internal audit definition — specifically the <strong>dual nature of services</strong> (assurance and advisory) and the <strong>three targeted processes</strong> (governance, risk management, control).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Questions about the "primary goal" of internal auditing often include distractors like <em>"catching fraud"</em> or <em>"ensuring absolute compliance."</em> These sound plausible but the correct answer always anchors to: <strong>to add value and improve operations</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates often assume internal auditors are responsible for <em>implementing controls</em> or <em>managing risks</em>. The role is strictly to <strong>evaluate and improve</strong> these processes, not execute them.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the "Big Three" processes that internal audit evaluates: <strong>Governance, Risk Management, and Control (GRC)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always distinguish between the two core service types: <strong>assurance</strong> and <strong>advisory</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember the dual requirement: <strong>"Independent"</strong> = function's reporting structure to the board. <strong>"Objective"</strong> = auditor's unbiased mental attitude.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Daxili Auditin Əsl Məqsədi</div>
+<p>Daxili audit sadəcə uyğunluq yoxlamasından kənara çıxır; onun məqsədi <strong class="key-term">dəyər yaratmaq və təşkilatın əməliyyatlarını təkmilləşdirməkdir</strong>. Buna üç kritik sahəni qiymətləndirmək və təkmilləşdirmək üçün sistematik və intizamlı yanaşma tətbiq etməklə nail olunur: <strong class="key-term">idarəetmə (governance), risk idarəetməsi və nəzarət prosesləri</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Dəyər Yaratmaq</div>
+<p>Daxili audit funksiyası idarə heyətinə və rəhbərliyə <strong class="key-term">müstəqil, riskə əsaslanan və obyektiv əminlik (assurance), məsləhət (advice), anlayış (insight) və uzaqgörənlik (foresight)</strong> təqdim etməklə dəyər yaradır. Bu, təşkilatın məqsədlərinə uğurla nail olmasını dəstəkləyir, qərar qəbulunu yaxşılaşdırır və maraqlı tərəflər qarşısında etibarlılıq yaradır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Maksimum Effektivlik Şərtləri</div>
+<p>Daxili audit <strong class="key-term">Qlobal Daxili Audit Standartlarına</strong> ciddi şəkildə riayət edən peşəkarlar tərəfindən həyata keçirilməlidir. Funksiya idarə heyətinə birbaşa hesabatlılıq vasitəsilə tam <strong class="key-term">müstəqil (independent)</strong> qalmalı, auditorlar isə hər hansı təsirdən azad, qərəzsiz, <strong class="key-term">obyektiv</strong> düşüncə tərzini qorumalıdır.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Daxili Audit (Internal Auditing)</strong> — Təşkilatın əməliyyatlarına dəyər qatmaq və onları təkmilləşdirmək üçün nəzərdə tutulmuş müstəqil, obyektiv əminlik və məsləhət xidməti.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Hədəf Proseslər (Target Processes)</strong> — Daxili auditin qiymətləndirmək və təkmilləşdirmək üçün vəzifələndirildiyi üç spesifik proses: governance, risk idarəetməsi və nəzarət (control).</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Dəyər Yaratma Elementləri (Value Creation Elements)</strong> — Daxili auditin təqdim etdiyi spesifik nəticələr: müstəqil, riskə əsaslanan və obyektiv assurance, advice, insight və foresight.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Daxili audit tərifinin dəqiq komponentləri — xüsusilə <strong>xidmətlərin ikili xarakteri</strong> (assurance və advisory) və <strong>üç hədəf proses</strong> (governance, risk management, control).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>Daxili auditin "əsas məqsədi" haqqında suallar tez-tez <em>"fırıldaqçılığın aşkarlanması"</em> və ya <em>"mütləq uyğunluğun təmin edilməsi"</em> kimi yanlış yönləndirici cavablar ehtiva edir. Düzgün cavab həmişə: <strong>dəyər yaratmaq və əməliyyatları təkmilləşdirmək</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər tez-tez düşünür ki, daxili auditorlar <em>nəzarətləri tətbiq etməyə</em> və ya <em>riskləri idarə etməyə</em> cavabdehdir. Rol ciddi şəkildə bu prosesləri <strong>qiymətləndirmək və təkmilləşdirməklə</strong> məhdudlaşır, onları icra etməklə deyil.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Daxili auditin qiymətləndirdiyi "Böyük Üçlük" prosesləri əzbərləyin: <strong>Governance, Risk Management və Control (GRC)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İki əsas xidmət növünü həmişə fərqləndirin: <strong>assurance</strong> və <strong>advisory</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İkili tələbi xatırlayın: <strong>"Independent"</strong> = funksiyanın idarə heyətinə hesabatlılıq strukturu. <strong>"Objective"</strong> = auditorun qərəzsiz düşüncə tərzi.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">İç Denetimin Gerçek Amacı</div>
+<p>İç denetim, basit bir uyum kontrolünün ötesine geçer; amacı <strong class="key-term">değer katmak ve kuruluşun faaliyetlerini iyileştirmektir</strong>. Bunu üç kritik alanı değerlendirmek ve geliştirmek için sistematik ve disiplinli bir yaklaşım sunarak gerçekleştirir: <strong class="key-term">yönetişim (governance), risk yönetimi ve kontrol süreçleri</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Değer Yaratmak</div>
+<p>İç denetim fonksiyonu, yönetim kuruluna ve üst yönetime <strong class="key-term">bağımsız, risk temelli ve objektif güvence (assurance), danışmanlık (advice), içgörü (insight) ve öngörü (foresight)</strong> sunarak değer yaratır. Bu, kurumsal hedeflere başarılı bir şekilde ulaşılmasını destekler, karar alma sürecini iyileştirir ve paydaşlar nezdinde güvenilirlik oluşturur.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Maksimum Etkinlik Koşulları</div>
+<p>İç denetim, <strong class="key-term">Küresel İç Denetim Standartlarına</strong> sıkı sıkıya uyan yetkin profesyoneller tarafından yürütülmelidir. Fonksiyon, yönetim kuruluna doğrudan hesap verebilirlik yoluyla tam <strong class="key-term">bağımsız (independent)</strong> kalmalı; denetçiler ise herhangi bir etkiden uzak, tarafsız ve <strong class="key-term">objektif</strong> bir zihinsel tutumu korumalıdır.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">İç Denetim (Internal Auditing)</strong> — Kuruluşun faaliyetlerine değer katmak ve onları iyileştirmek için tasarlanmış bağımsız, objektif güvence ve danışmanlık hizmeti.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Hedef Süreçler (Target Processes)</strong> — İç denetimin değerlendirmek ve iyileştirmekle görevlendirildiği üç belirli süreç: governance, risk yönetimi ve kontrol (control).</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Değer Yaratma Unsurları (Value Creation Elements)</strong> — İç denetimin sunduğu spesifik çıktılar: bağımsız, risk temelli ve objektif assurance, advice, insight ve foresight.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>İç denetim tanımının tam bileşenleri — özellikle <strong>hizmetlerin ikili doğası</strong> (assurance ve advisory) ve <strong>üç hedef süreç</strong> (governance, risk management, control).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>İç denetimin "temel amacı" hakkındaki sorular sıklıkla <em>"hile tespiti"</em> veya <em>"mutlak uyumun sağlanması"</em> gibi yanıltıcı seçenekler içerir. Doğru cevap her zaman şuna dayanmalıdır: <strong>değer katmak ve faaliyetleri iyileştirmek</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar sıklıkla iç denetçilerin <em>kontrolleri uygulamaktan</em> veya <em>riskleri yönetmekten</em> sorumlu olduğunu düşünür. Rol kesinlikle bu süreçleri <strong>değerlendirmek ve iyileştirmekle</strong> sınırlıdır, yürütmekle değil.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İç denetimin değerlendirdiği "Büyük Üçlü" süreçleri ezberleyin: <strong>Governance, Risk Management ve Control (GRC)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İki temel hizmet türünü her zaman ayırt edin: <strong>assurance</strong> ve <strong>advisory</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İkili gerekliliği hatırlayın: <strong>"Independent"</strong> = fonksiyonun yönetim kuruluna raporlama yapısı. <strong>"Objective"</strong> = denetçinin tarafsız zihinsel tutumu.
+    </div>
+</div>
+
+    <!-- Bottom navigation -->
+    <div class="su-bottom-nav">
+      <div></div>
+      <span class="su-counter">1 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <!-- ══ SUBUNIT 1.2 ══ -->
+  <div class="subunit-summary" id="su-1-2" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">1.2</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Internal Audit Charter" data-az="Daxili Audit Nizamnaməsi" data-tr="İç Denetim Tüzüğü">Internal Audit Charter</div>
+        <div class="su-header-sub">Unit 1 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-1-2','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-1-2','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-1-2','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">Mandatory Content of the Charter</div>
+<p>The <strong class="key-term">charter</strong> is the foundational document that formally defines internal audit's existence and authority. According to <strong class="key-term">Standard 6.2</strong>, it must specify: the purpose of internal auditing, commitment to the <strong class="key-term">Global Internal Audit Standards</strong>, the <strong class="key-term">audit mandate</strong> (including scope and services), and the function's organizational position and reporting relationships.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Development and Approval Process</div>
+<p>The <strong class="key-term">Chief Audit Executive (CAE)</strong> is responsible for drafting, maintaining, and periodically reviewing the charter. While <strong class="key-term">senior management</strong> reviews and provides input to ensure alignment with expectations, the <strong class="key-term">Board (or Audit Committee)</strong> holds the authority for the final approval.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Ensuring Access and Authority</div>
+<p>A critical function of the charter is empowering internal audit to do its job effectively. It explicitly establishes <strong class="key-term">unrestricted access</strong> to all data, records, personnel, and physical properties necessary to fulfill the audit mandate — providing crucial backing when conflicts arise with auditees.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Internal Audit Charter</strong> — A formal document prepared by the CAE and given final approval by the board that specifies the internal audit function's purpose, adherence to standards, mandate, and organizational position.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Internal Audit Mandate</strong> — The specific authority, role, and responsibilities granted to the internal audit function, which must be clearly documented within the charter.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Unrestricted Access</strong> — The explicit right documented in the charter allowing internal auditors to review any data, records, personnel, and physical properties required to perform their engagements.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The specific lifecycle roles regarding the charter — specifically <strong>who writes it</strong> (CAE), <strong>who gives input</strong> (senior management), and <strong>who has final sign-off authority</strong> (the Board).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Exam questions often try to trick candidates into stating that the <em>CEO or Senior Management</em> has final approval over the charter. While senior management approves from an operational standpoint, the <strong>Board must give the final acceptance</strong> to guarantee the function's independence.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates sometimes assume the charter is a "set it and forget it" document. The exam expects you to know that the <strong>CAE must periodically review the charter</strong> and propose updates if organizational strategies, risks, or management changes occur.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the <strong>"Charter Lifecycle"</strong>: 1) Written by CAE ➔ 2) Approved by Senior Management ➔ 3) Accepted (final) by the Board ➔ 4) Communicated to clients ➔ 5) Reviewed periodically.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> If a question asks where the internal audit's <strong>functional reporting relationship</strong> and <strong>scope of services</strong> are formally defined, the answer is always the <strong>Internal Audit Charter</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember that the charter must document <strong>"safeguards"</strong> if the CAE takes on any non-audit roles outside of internal auditing.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Nizamnamənin Məcburi Məzmunu</div>
+<p><strong class="key-term">Nizamnamə (Charter)</strong> daxili auditin mövcudluğunu və səlahiyyətini rəsmi şəkildə müəyyən edən əsas sənəddir. <strong class="key-term">Standart 6.2</strong>-yə əsasən, bu sənəd aşağıdakıları dəqiqləşdirməlidir: daxili auditin məqsədi, <strong class="key-term">Qlobal Daxili Audit Standartlarına (Global Internal Audit Standards)</strong> bağlılıq, <strong class="key-term">audit mandatı (Audit Mandate)</strong> (əhatə dairəsi və xidmətlər daxil olmaqla) və funksiyanın təşkilati mövqeyi və hesabatlılıq münasibətləri.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Hazırlanma və Təsdiq Prosesi</div>
+<p><strong class="key-term">Baş Audit İcraçısı (CAE)</strong> nizamnamənin hazırlanması, saxlanması və vaxtaşırı nəzərdən keçirilməsinə cavabdehdir. <strong class="key-term">Yüksək Rəhbərlik (Senior Management)</strong> gözləntilərlə uyğunluğu təmin etmək üçün nəzərdən keçirir və rəy bildirir, lakin <strong class="key-term">İdarə Heyəti (Board)</strong> və ya <strong class="key-term">Audit Komitəsi (Audit Committee)</strong> yekun təsdiq səlahiyyətinə malikdir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Giriş və Səlahiyyətin Təmin Edilməsi</div>
+<p>Nizamnamənin kritik funksiyası daxili audit fəaliyyətini effektiv işləmək üçün səlahiyyətləndirməkdir. O, audit mandatını yerinə yetirmək üçün lazım olan bütün məlumat, qeydlər, işçilər və fiziki əmlaka <strong class="key-term">məhdudiyyətsiz giriş (Unrestricted Access)</strong> hüququnu açıq şəkildə müəyyən edir — audit olunanlarla münaqişə yarandıqda mühüm dəstək təmin edir.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Daxili Audit Nizamnaməsi (Internal Audit Charter)</strong> — Baş Audit İcraçısı (CAE) tərəfindən hazırlanan və İdarə Heyəti (Board) tərəfindən yekun təsdiq alan rəsmi sənəd; daxili audit funksiyasının məqsədini, standartlara riayətini, mandatını və təşkilati mövqeyini müəyyən edir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Daxili Audit Mandatı (Internal Audit Mandate)</strong> — Daxili audit funksiyasına verilən xüsusi səlahiyyət, rol və məsuliyyətlər; nizamnamə daxilində aydın şəkildə sənədləşdirilməlidir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Məhdudiyyətsiz Giriş (Unrestricted Access)</strong> — Daxili auditorların öz tapşırıqlarını yerinə yetirmək üçün lazım olan istənilən məlumat, qeydlər, işçilər və fiziki əmlakı nəzərdən keçirmək hüququ; nizamnamədə açıq şəkildə sənədləşdirilir.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Nizamnamə ilə bağlı spesifik həyat dövrü rolları — konkret olaraq <strong>kim yazır</strong> (Baş Audit İcraçısı / CAE), <strong>kim rəy verir</strong> (Yüksək Rəhbərlik / Senior Management) və <strong>kimin yekun təsdiq səlahiyyəti var</strong> (İdarə Heyəti / Board).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>İmtahan sualları tez-tez namizədləri <em>Baş İcraçı Direktor (CEO) və ya Yüksək Rəhbərliyin (Senior Management)</em> nizamnamə üzərində yekun təsdiq səlahiyyəti olduğunu söyləməyə yönləndirir. Yüksək Rəhbərlik əməliyyat baxımından təsdiq etsə də, funksiyanın müstəqilliyini təmin etmək üçün <strong>İdarə Heyəti (Board) yekun qəbul etməlidir</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər bəzən nizamnamənin "bir dəfə yazılıb rəfə qoyulan" sənəd olduğunu düşünür. İmtahan sizdən bilməyinizi gözləyir ki, <strong>Baş Audit İcraçısı (CAE) nizamnaməni vaxtaşırı nəzərdən keçirməli</strong> və təşkilati strategiyalar, risklər və ya rəhbərlik dəyişiklikləri baş verdikdə yeniliklər təklif etməlidir.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>"Nizamnamə Həyat Dövrüsü"nü (Charter Lifecycle)</strong> əzbərləyin: 1) Baş Audit İcraçısı (CAE) yazır ➔ 2) Yüksək Rəhbərlik (Senior Management) təsdiq edir ➔ 3) İdarə Heyəti (Board) yekun qəbul edir ➔ 4) Müştərilərə çatdırılır ➔ 5) Vaxtaşırı nəzərdən keçirilir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Sual daxili auditin <strong>funksional hesabatlılıq münasibəti (Functional Reporting Relationship)</strong> və <strong>xidmət əhatə dairəsinin (Scope of Services)</strong> harada rəsmi şəkildə müəyyən edildiyini soruşursa, cavab həmişə <strong>Daxili Audit Nizamnaməsidir (Internal Audit Charter)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, Baş Audit İcraçısı (CAE) daxili auditdən kənar hər hansı qeyri-audit rolları üzərinə götürərsə, nizamnamə <strong>mühafizə tədbirlərini (Safeguards)</strong> sənədləşdirməlidir.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Yönetmeliğin Zorunlu İçeriği</div>
+<p><strong class="key-term">Yönetmelik (Charter)</strong>, iç denetimin varlığını ve yetkisini resmi olarak tanımlayan temel belgedir. <strong class="key-term">Standart 6.2</strong>'ye göre şunları belirtmelidir: iç denetimin amacı, <strong class="key-term">Küresel İç Denetim Standartlarına (Global Internal Audit Standards)</strong> bağlılık, <strong class="key-term">denetim yetkisi (Audit Mandate)</strong> (kapsam ve hizmetler dahil) ve fonksiyonun organizasyonel konumu ve raporlama ilişkileri.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Hazırlama ve Onay Süreci</div>
+<p><strong class="key-term">Denetim Yöneticisi (CAE)</strong>, yönetmeliği hazırlamak, güncel tutmak ve periyodik olarak gözden geçirmekle sorumludur. <strong class="key-term">Üst Yönetim (Senior Management)</strong>, beklentileriyle uyumunu sağlamak için inceler ve görüş bildirir; ancak <strong class="key-term">Yönetim Kurulu (Board)</strong> veya <strong class="key-term">Denetim Komitesi (Audit Committee)</strong> nihai onay yetkisine sahiptir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Erişim ve Yetkinin Sağlanması</div>
+<p>Yönetmeliğin kritik işlevi, iç denetim faaliyetini etkin çalışması için yetkilendirmektir. Denetim yetkisini yerine getirmek için gereken tüm veri, kayıt, personel ve fiziksel varlıklara <strong class="key-term">sınırsız erişim (Unrestricted Access)</strong> hakkını açıkça belirler — denetlenenlerle çatışma yaşandığında güçlü bir dayanak sağlar.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">İç Denetim Yönetmeliği (Internal Audit Charter)</strong> — Denetim Yöneticisi (CAE) tarafından hazırlanan ve Yönetim Kurulu (Board) tarafından nihai olarak onaylanan resmi belge; iç denetim fonksiyonunun amacını, standartlara uyumunu, yetkisini ve organizasyonel konumunu belirler.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">İç Denetim Yetkisi (Internal Audit Mandate)</strong> — İç denetim fonksiyonuna verilen özel yetki, rol ve sorumluluklar; yönetmelik içinde açıkça belgelenmelidir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Sınırsız Erişim (Unrestricted Access)</strong> — İç denetçilerin görevlerini yerine getirmek için gereken her türlü veri, kayıt, personel ve fiziksel varlığı inceleme hakkı; yönetmelikte açıkça belgelenir.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Yönetmelik ile ilgili belirli yaşam döngüsü rolleri — özellikle <strong>kim yazar</strong> (Denetim Yöneticisi / CAE), <strong>kim görüş bildirir</strong> (Üst Yönetim / Senior Management) ve <strong>kimin nihai onay yetkisi var</strong> (Yönetim Kurulu / Board).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sınav soruları sıklıkla adayları <em>Genel Müdür (CEO) veya Üst Yönetimin (Senior Management)</em> yönetmelik üzerinde nihai onay yetkisine sahip olduğunu söylemeye yönlendirir. Üst Yönetim operasyonel açıdan onaylasa da, fonksiyonun bağımsızlığını garanti altına almak için <strong>Yönetim Kurulu (Board) nihai kabul yetkisine sahiptir</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar bazen yönetmeliğin "bir kez yazılıp rafa kaldırılan" bir belge olduğunu varsayar. Sınav, <strong>Denetim Yöneticisinin (CAE) yönetmeliği periyodik olarak gözden geçirmesi</strong> ve kurumsal stratejiler, riskler veya yönetim değişiklikleri olduğunda güncellemeler önermesi gerektiğini bilmenizi bekler.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>"Yönetmelik Yaşam Döngüsü"nü (Charter Lifecycle)</strong> ezberleyin: 1) Denetim Yöneticisi (CAE) yazar ➔ 2) Üst Yönetim (Senior Management) onaylar ➔ 3) Yönetim Kurulu (Board) nihai kabul eder ➔ 4) Müşterilere iletilir ➔ 5) Periyodik olarak gözden geçirilir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Bir soru iç denetimin <strong>fonksiyonel raporlama ilişkisi (Functional Reporting Relationship)</strong> ve <strong>hizmet kapsamının (Scope of Services)</strong> nerede resmi olarak tanımlandığını sorarsa, cevap her zaman <strong>İç Denetim Yönetmeliğidir (Internal Audit Charter)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Denetim Yöneticisi (CAE), iç denetim dışında herhangi bir denetim dışı rol üstlenirse, yönetmeliğin <strong>koruma önlemlerini (Safeguards)</strong> belgelemesi gerektiğini unutmayın.
+    </div>
+</div>
+
+    <!-- Bottom navigation -->
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">2 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <!-- ══ SUBUNIT 1.3 ══ -->
+  <div class="subunit-summary" id="su-1-3" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">1.3</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Impairment of Independence" data-az="Müstəqilliyin Pozulması" data-tr="Bağımsızlığın Zedelenmesi">Impairment of Independence</div>
+        <div class="su-header-sub">Unit 1 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-1-3','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-1-3','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-1-3','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">The Dual-Reporting Structure</div>
+<p>To guarantee independence, the CAE must maintain two distinct reporting lines. <strong class="key-term">Functional reporting</strong> goes directly to the <strong class="key-term">board (or audit committee)</strong> to provide ultimate authority and protect against interference. <strong class="key-term">Administrative reporting</strong> typically goes to the <strong class="key-term">CEO</strong> to handle day-to-day operations. This structure prevents management from using operational control to suppress or influence audit findings.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Managing Nonaudit Roles</div>
+<p>While the primary job is auditing, CAEs sometimes take on additional <strong class="key-term">nonaudit duties</strong> like risk management or compliance. Because this creates an <strong class="key-term">impairment</strong>, the internal audit charter must clearly outline protective <strong class="key-term">safeguards</strong>, such as contracting an independent external assurance provider to audit those specific areas.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Handling Temporary Impairments</div>
+<p>If a CAE temporarily takes over a nonaudit function, they cannot objectively audit that area. To maintain integrity, an <strong class="key-term">independent third party</strong> must oversee assurance activities for that specific area both during the temporary assignment and for a full <strong class="key-term">12 months after</strong> the CAE transfers the duties back to management.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Independence</strong> — The freedom from conditions that may impair the ability of the internal audit function to carry out its responsibilities in an unbiased manner.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Functional Reporting</strong> — The ultimate source of audit independence and authority, involving direct reporting to the board for critical approvals like the charter, audit plans, and CAE compensation.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Administrative Reporting</strong> — The daily organizational reporting line, usually to the CEO, which facilitates day-to-day operations like HR administration and internal communications.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The exact division of tasks between <strong>functional reporting</strong> (Board) and <strong>administrative reporting</strong> (CEO).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Exam scenarios often feature management <em>cutting the audit budget</em> or <em>denying access to records</em>. These seem like basic operational constraints, but the exam requires you to explicitly classify these as <strong>impairments to independence (interference)</strong> that the CAE must disclose to the board.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates frequently assume a CAE is <em>strictly forbidden</em> from ever doing nonaudit work. The correct approach: they <strong>can</strong> take on these roles, provided that appropriate <strong>safeguards and independent alternative oversight</strong> are established.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always link <strong>"Functional Reporting" → Board</strong> and <strong>"Administrative Reporting" → CEO / Senior Management</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the <strong>"12-month rule"</strong>: temporary nonaudit duties require independent oversight for a full year after the CAE completes them.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember that the CAE must <strong>confirm the internal audit function's organizational independence</strong> to the board <strong>at least annually</strong>.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">İkili Hesabatlılıq Strukturu</div>
+<p>Müstəqilliyi təmin etmək üçün Baş Audit İcraçısı (CAE) iki fərqli hesabatlılıq xəttini saxlamalıdır. <strong class="key-term">Funksional hesabatlılıq (Functional Reporting)</strong> birbaşa <strong class="key-term">İdarə Heyətinə (Board)</strong> və ya <strong class="key-term">Audit Komitəsinə (Audit Committee)</strong> yönəlir — ali səlahiyyət təmin edir və müdaxilədən qoruyur. <strong class="key-term">İnzibati hesabatlılıq (Administrative Reporting)</strong> isə adətən <strong class="key-term">Baş İcraçı Direktora (CEO)</strong> yönəlir — gündəlik əməliyyatları idarə etmək üçün. Bu struktur rəhbərliyin əməliyyat nəzarətindən istifadə edərək audit nəticələrini gizlətməsinin və ya təsir etməsinin qarşısını alır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Qeyri-audit Rollarının İdarə Edilməsi</div>
+<p>Əsas vəzifə audit olsa da, Baş Audit İcraçısı (CAE) bəzən risk idarəetməsi və ya uyğunluq kimi əlavə <strong class="key-term">qeyri-audit vəzifələri (Nonaudit Duties)</strong> üzərinə götürür. Bu, <strong class="key-term">pozulma (Impairment)</strong> yaratdığı üçün daxili audit nizamnaməsi (Charter) mühafizə edici <strong class="key-term">qoruma tədbirlərini (Safeguards)</strong> aydın şəkildə göstərməlidir — məsələn, həmin konkret sahələri audit etmək üçün müstəqil xarici əminlik təminatçısı ilə müqavilə bağlamaq.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Müvəqqəti Pozulmaların İdarə Edilməsi</div>
+<p>Baş Audit İcraçısı (CAE) müvəqqəti olaraq qeyri-audit funksiyasını üzərinə götürərsə, həmin sahəni obyektiv şəkildə audit edə bilməz. Bütövlüyü qorumaq üçün <strong class="key-term">müstəqil üçüncü tərəf (Independent Third Party)</strong> həm müvəqqəti təyinat zamanı, həm də Baş Audit İcraçısının (CAE) vəzifələri rəhbərliyə geri qaytarmasından sonra tam <strong class="key-term">12 ay ərzində</strong> həmin konkret sahə üzrə əminlik fəaliyyətlərinə nəzarət etməlidir.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Müstəqillik (Independence)</strong> — Daxili audit funksiyasının öz məsuliyyətlərini qərəzsiz şəkildə yerinə yetirmə qabiliyyətini pozacaq şərtlərdən azad olmaq.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Funksional Hesabatlılıq (Functional Reporting)</strong> — Audit müstəqilliyinin və səlahiyyətinin əsas mənbəyi; nizamnamə (Charter), audit planları və Baş Audit İcraçısının (CAE) kompensasiyası kimi kritik təsdiqləmələr üçün birbaşa İdarə Heyətinə (Board) hesabatlılığı əhatə edir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">İnzibati Hesabatlılıq (Administrative Reporting)</strong> — Gündəlik təşkilati hesabatlılıq xətti, adətən Baş İcraçı Direktora (CEO) yönəlir; kadr idarəetməsi və daxili kommunikasiya kimi gündəlik əməliyyatları asanlaşdırır.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p><strong>Funksional hesabatlılıq (Functional Reporting)</strong> — İdarə Heyəti (Board) və <strong>İnzibati hesabatlılıq (Administrative Reporting)</strong> — Baş İcraçı Direktor (CEO) arasında vəzifələrin dəqiq bölüşdürülməsi.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>İmtahan ssenariləri tez-tez rəhbərliyin <em>audit büdcəsini kəsməsini</em> və ya <em>qeydlərə girişi rədd etməsini</em> əks etdirir. Bunlar adi əməliyyat məhdudiyyətləri kimi görünür, lakin imtahan sizdən bunları <strong>müstəqilliyə pozulma (müdaxilə / Interference)</strong> olaraq açıq şəkildə təsnif etməyinizi və Baş Audit İcraçısının (CAE) bunu İdarə Heyətinə (Board) açıqlamasını tələb edir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər tez-tez düşünür ki, Baş Audit İcraçısına (CAE) qeyri-audit işi görmək <em>qəti qadağandır</em>. Düzgün yanaşma: onlar bu rolları üzərlərinə <strong>götürə bilərlər</strong>, bir şərtlə ki, müvafiq <strong>qoruma tədbirləri (Safeguards) və müstəqil alternativ nəzarət</strong> qurulsun.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Həmişə əlaqələndirin: <strong>"Funksional Hesabatlılıq (Functional Reporting)" → İdarə Heyəti (Board)</strong> və <strong>"İnzibati Hesabatlılıq (Administrative Reporting)" → Baş İcraçı Direktor (CEO) / Yüksək Rəhbərlik (Senior Management)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>"12 ay qaydası"nı (12-Month Rule)</strong> əzbərləyin: müvəqqəti qeyri-audit vəzifələri, Baş Audit İcraçısı (CAE) onları tamamladıqdan sonra tam bir il müstəqil nəzarət tələb edir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, Baş Audit İcraçısı (CAE) daxili audit funksiyasının <strong>təşkilati müstəqilliyini (Organizational Independence)</strong> İdarə Heyətinə (Board) <strong>ən azı ildə bir dəfə</strong> təsdiqləməlidir.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">İkili Raporlama Yapısı</div>
+<p>Bağımsızlığı garanti altına almak için Denetim Yöneticisi (CAE) iki ayrı raporlama hattını sürdürmelidir. <strong class="key-term">Fonksiyonel raporlama (Functional Reporting)</strong> doğrudan <strong class="key-term">Yönetim Kuruluna (Board)</strong> veya <strong class="key-term">Denetim Komitesine (Audit Committee)</strong> yapılır — nihai yetki sağlar ve müdahaleden korur. <strong class="key-term">İdari raporlama (Administrative Reporting)</strong> ise genellikle <strong class="key-term">Genel Müdüre (CEO)</strong> yapılır — günlük operasyonları yönetmek için. Bu yapı, yönetimin operasyonel kontrolü kullanarak denetim bulgularını bastırmasını veya etkilemesini engeller.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Denetim Dışı Rollerin Yönetimi</div>
+<p>Temel görev denetim olsa da, Denetim Yöneticisi (CAE) bazen risk yönetimi veya uyum gibi ek <strong class="key-term">denetim dışı görevler (Nonaudit Duties)</strong> üstlenir. Bu bir <strong class="key-term">bozulma (Impairment)</strong> yarattığı için iç denetim yönetmeliği (Charter) koruyucu <strong class="key-term">güvence önlemlerini (Safeguards)</strong> açıkça belirtmelidir — örneğin, ilgili alanları denetlemek üzere bağımsız bir dış güvence sağlayıcısıyla sözleşme yapmak.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Geçici Bozulmaların Yönetimi</div>
+<p>Denetim Yöneticisi (CAE) geçici olarak bir denetim dışı fonksiyonu devralırsa, o alanı objektif olarak denetleyemez. Bütünlüğü korumak için <strong class="key-term">bağımsız üçüncü taraf (Independent Third Party)</strong>, hem geçici görev süresince hem de Denetim Yöneticisinin (CAE) görevleri yönetime geri devretmesinden sonra tam <strong class="key-term">12 ay boyunca</strong> ilgili alan için güvence faaliyetlerini yönetmelidir.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Bağımsızlık (Independence)</strong> — İç denetim fonksiyonunun sorumluluklarını tarafsız bir şekilde yerine getirme kapasitesini bozabilecek koşullardan muaf olma durumu.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Fonksiyonel Raporlama (Functional Reporting)</strong> — Denetim bağımsızlığının ve yetkisinin nihai kaynağı; yönetmelik (Charter), denetim planları ve Denetim Yöneticisinin (CAE) ücretlendirmesi gibi kritik onaylar için doğrudan Yönetim Kuruluna (Board) raporlamayı kapsar.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">İdari Raporlama (Administrative Reporting)</strong> — Günlük organizasyonel raporlama hattı, genellikle Genel Müdüre (CEO) yöneliktir; insan kaynakları yönetimi ve iç iletişim gibi günlük operasyonları kolaylaştırır.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p><strong>Fonksiyonel raporlama (Functional Reporting)</strong> — Yönetim Kurulu (Board) ve <strong>İdari raporlama (Administrative Reporting)</strong> — Genel Müdür (CEO) arasındaki görev dağılımının tam ayrımı.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sınav senaryoları sıklıkla yönetimin <em>denetim bütçesini kesmesini</em> veya <em>kayıtlara erişimi engellemesini</em> içerir. Bunlar sıradan operasyonel kısıtlamalar gibi görünür, ancak sınav bunları <strong>bağımsızlığa bozulma (müdahale / Interference)</strong> olarak açıkça sınıflandırmanızı ve Denetim Yöneticisinin (CAE) bunu Yönetim Kuruluna (Board) bildirmesini gerektirir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar sıklıkla Denetim Yöneticisinin (CAE) denetim dışı çalışma yapmasının <em>kesinlikle yasak</em> olduğunu varsayar. Doğru yaklaşım: uygun <strong>güvence önlemleri (Safeguards) ve bağımsız alternatif gözetim</strong> sağlandığı takdirde bu rolleri <strong>üstlenebilirler</strong>.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Her zaman ilişkilendirin: <strong>"Fonksiyonel Raporlama (Functional Reporting)" → Yönetim Kurulu (Board)</strong> ve <strong>"İdari Raporlama (Administrative Reporting)" → Genel Müdür (CEO) / Üst Yönetim (Senior Management)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>"12 ay kuralı"nı (12-Month Rule)</strong> ezberleyin: geçici denetim dışı görevler, Denetim Yöneticisi (CAE) bunları tamamladıktan sonra tam bir yıl bağımsız gözetim gerektirir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, Denetim Yöneticisi (CAE) iç denetim fonksiyonunun <strong>kurumsal bağımsızlığını (Organizational Independence)</strong> Yönetim Kuruluna (Board) <strong>en az yılda bir kez</strong> teyit etmelidir.
+    </div>
+</div>
+
+    <!-- Bottom navigation -->
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">3 / 4</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <!-- ══ SUBUNIT 1.4 ══ -->
+  <div class="subunit-summary" id="su-1-4" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">1.4</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Role in Risk Management" data-az="Risk İdarəetməsindəki Rolu" data-tr="Risk Yönetimindeki Rolü">Role in Risk Management</div>
+        <div class="su-header-sub">Unit 1 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-1-4','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-1-4','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-1-4','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">Understanding Organizational Risk</div>
+<p>To plan strategically and effectively, the <strong class="key-term">Chief Audit Executive (CAE)</strong> must thoroughly understand the organization's governance, risk management, and control processes. This involves gathering information broadly from board discussions, recent risk assessments, and external auditors to determine if the organization has defined its <strong class="key-term">risk appetite</strong> and implemented a proper risk strategy.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">The Three Lines Model Framework</div>
+<p>The <strong class="key-term">Three Lines Model</strong> coordinates how an organization manages risk and promotes strong governance by outlining three distinct roles. It fosters a culture of transparency, prevents confusion about responsibilities, and avoids siloed operations by ensuring all parts of the organization work together to protect organizational value.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Roles within the Three Lines</div>
+<p>Management encompasses the <strong class="key-term">First Line</strong> (staff delivering products/services who directly own and manage risks daily) and the <strong class="key-term">Second Line</strong> (specialists providing expertise, monitoring, and support, such as compliance or ERM teams). <strong class="key-term">Internal Audit</strong> acts as the <strong class="key-term">Third Line</strong>, providing the governing body and management with independent, objective assurance on the effectiveness of the first two lines.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Risk</strong> — The possibility of an event occurring that impacts the achievement of objectives, representing either a negative threat or a positive opportunity.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk Management</strong> — A process to identify, assess, manage, and control potential events to provide reasonable assurance that organizational objectives will be achieved.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk Appetite</strong> — The specific types and amount of risk an organization is willing to accept in pursuit of its strategies and objectives.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">The Three Lines Model</strong> — An IIA framework clarifying how specific risk management and control duties should be assigned and coordinated across the governing body, management, and internal audit.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The exact division of responsibilities among the <strong>First, Second, and Third Lines</strong>, as well as the overarching role of the <strong>Governing Body</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Exam questions often try to blur the lines between the <strong>Second and Third Lines</strong>. Remember: Second Line functions (like compliance or IT security) assist with risk management and report to <em>management</em>, whereas the Third Line (Internal Audit) provides independent assurance and reports to the <em>board</em>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates mistakenly assume internal auditors are responsible for <em>identifying the organization's initial risks</em> or <em>defining its risk appetite</em>. Management (First Line) directly manages risk, while the CAE merely <strong>assesses the maturity</strong> of those management processes.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the shortcut for the Three Lines: <strong>1st Line = "Doers"</strong> (own/manage risk), <strong>2nd Line = "Monitors"</strong> (oversee/support), <strong>3rd Line = "Assurers"</strong> (independent validation).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember that the <strong>Governing Body (Board)</strong> sits above the three lines, providing integrity, leadership, and oversight while establishing the internal audit function.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always define <strong>risk</strong> as having both <strong>impact and likelihood</strong>, and remember it can be both negative (threat) or positive (opportunity).
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Təşkilati Riskin Anlaşılması</div>
+<p>Strateji və effektiv planlaşdırma üçün <strong class="key-term">Baş Audit İcraçısı (CAE)</strong> təşkilatın idarəetmə (Governance), risk idarəetməsi (Risk Management) və nəzarət (Control) proseslərini hərtərəfli başa düşməlidir. Bu, təşkilatın <strong class="key-term">risk iştahını (Risk Appetite)</strong> müəyyən edib-etmədiyini və düzgün risk strategiyası tətbiq edib-etmədiyini müəyyənləşdirmək üçün İdarə Heyəti (Board) müzakirələri, son risk qiymətləndirmələri və xarici auditorlardan geniş məlumat toplamağı əhatə edir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üç Xətt Modeli Çərçivəsi</div>
+<p><strong class="key-term">Üç Xətt Modeli (Three Lines Model)</strong> təşkilatın riski necə idarə etdiyini koordinasiya edir və üç fərqli rol müəyyən edərək güclü idarəetməni təşviq edir. Şəffaflıq mədəniyyəti yaradır, məsuliyyətlər barədə qarışıqlığın qarşısını alır və təşkilatın bütün hissələrinin təşkilati dəyəri qorumaq üçün birlikdə işləməsini təmin edərək təcrid olunmuş əməliyyatlardan qaçınır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üç Xətt Daxilində Rollar</div>
+<p>Rəhbərlik <strong class="key-term">Birinci Xətti (First Line)</strong> (məhsul/xidmət təqdim edən və gündəlik riskləri birbaşa idarə edən işçilər) və <strong class="key-term">İkinci Xətti (Second Line)</strong> (uyğunluq və ya Müəssisə Risk İdarəetməsi / ERM komandaları kimi ekspertiza, monitorinq və dəstək təmin edən mütəxəssislər) əhatə edir. <strong class="key-term">Daxili Audit (Internal Audit)</strong> isə <strong class="key-term">Üçüncü Xətt (Third Line)</strong> kimi fəaliyyət göstərir — idarəetmə orqanına və rəhbərliyə ilk iki xəttin effektivliyi barədə müstəqil, obyektiv əminlik (Assurance) təqdim edir.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Risk (Risk)</strong> — Məqsədlərin həyata keçirilməsinə təsir edən hadisənin baş vermə ehtimalı; mənfi təhdid və ya müsbət fürsət ola bilər.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk İdarəetməsi (Risk Management)</strong> — Təşkilat məqsədlərinə nail olunacağına dair ağlabatan əminlik (Reasonable Assurance) təmin etmək üçün potensial hadisələri müəyyənləşdirmək, qiymətləndirmək, idarə etmək və nəzarətdə saxlamaq prosesi.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk İştahı (Risk Appetite)</strong> — Təşkilatın strategiya və məqsədlərinə nail olmaq üçün qəbul etməyə hazır olduğu riskin konkret növləri və miqdarı.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Üç Xətt Modeli (Three Lines Model)</strong> — Konkret risk idarəetməsi və nəzarət vəzifələrinin idarəetmə orqanı, rəhbərlik və daxili audit arasında necə paylanmalı və koordinasiya edilməli olduğunu aydınlaşdıran DDA (IIA) çərçivəsi.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p><strong>Birinci (First Line), İkinci (Second Line) və Üçüncü Xətt (Third Line)</strong> arasındakı məsuliyyətlərin dəqiq bölgüsü, eləcə də <strong>İdarəetmə Orqanının (Governing Body)</strong> üstün rolu.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>İmtahan sualları tez-tez <strong>İkinci və Üçüncü Xətt</strong> arasındakı sərhədləri bulanıqlaşdırmağa çalışır. Unutmayın: İkinci Xətt funksiyaları (uyğunluq, İT təhlükəsizliyi kimi) risk idarəetməsinə kömək edir və <em>rəhbərliyə</em> hesabat verir; Üçüncü Xətt (Daxili Audit) isə müstəqil əminlik (Assurance) təqdim edir və <em>İdarə Heyətinə (Board)</em> hesabat verir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər səhvən daxili auditorların təşkilatın <em>ilkin risklərini müəyyənləşdirməyə</em> və ya <em>risk iştahını (Risk Appetite) təyin etməyə</em> cavabdeh olduğunu düşünür. Rəhbərlik (Birinci Xətt / First Line) riski birbaşa idarə edir, Baş Audit İcraçısı (CAE) isə yalnız həmin idarəetmə proseslərinin <strong>yetkinliyini qiymətləndirir (Assesses the Maturity)</strong>.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Üç Xətt üçün qısa formulu əzbərləyin: <strong>1-ci Xətt = "İcraçılar" (Doers)</strong> — riski idarə edir, <strong>2-ci Xətt = "Monitorlar" (Monitors)</strong> — nəzarət/dəstək edir, <strong>3-cü Xətt = "Əminlik Verənlər" (Assurers)</strong> — müstəqil təsdiqləmə.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, <strong>İdarəetmə Orqanı / İdarə Heyəti (Governing Body / Board)</strong> üç xəttin üstündə dayanır — bütövlük, liderlik və nəzarət təmin edir, eyni zamanda daxili audit funksiyasını təsis edir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Riski (Risk)</strong> həmişə həm <strong>təsir (Impact)</strong>, həm də <strong>ehtimal (Likelihood)</strong> ilə müəyyən edin və unutmayın ki, risk həm mənfi (təhdid), həm də müsbət (fürsət) ola bilər.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Kurumsal Riskin Anlaşılması</div>
+<p>Stratejik ve etkin planlama için <strong class="key-term">Denetim Yöneticisi (CAE)</strong> kuruluşun yönetişim (Governance), risk yönetimi (Risk Management) ve kontrol (Control) süreçlerini kapsamlı şekilde anlamalıdır. Bu, kuruluşun <strong class="key-term">risk iştahını (Risk Appetite)</strong> tanımlayıp tanımlamadığını ve uygun bir risk stratejisi uygulayıp uygulamadığını belirlemek için Yönetim Kurulu (Board) tartışmalarından, güncel risk değerlendirmelerinden ve dış denetçilerden geniş kapsamlı bilgi toplamayı içerir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üç Hat Modeli Çerçevesi</div>
+<p><strong class="key-term">Üç Hat Modeli (Three Lines Model)</strong>, kuruluşun riski nasıl yönettiğini koordine eder ve üç ayrı rol belirleyerek güçlü yönetişimi teşvik eder. Şeffaflık kültürü oluşturur, sorumluluklar hakkında karışıklığı önler ve kuruluşun tüm bölümlerinin kurumsal değeri korumak için birlikte çalışmasını sağlayarak silo operasyonlarından kaçınır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üç Hat İçindeki Roller</div>
+<p>Yönetim, <strong class="key-term">Birinci Hattı (First Line)</strong> (ürün/hizmet sunan ve riskleri günlük olarak doğrudan sahiplenen ve yöneten çalışanlar) ve <strong class="key-term">İkinci Hattı (Second Line)</strong> (uyum veya Kurumsal Risk Yönetimi / ERM ekipleri gibi uzmanlık, izleme ve destek sağlayan uzmanlar) kapsar. <strong class="key-term">İç Denetim (Internal Audit)</strong> ise <strong class="key-term">Üçüncü Hat (Third Line)</strong> olarak görev yapar — yönetim organına ve yönetime ilk iki hattın etkinliği hakkında bağımsız, objektif güvence (Assurance) sağlar.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Risk (Risk)</strong> — Hedeflerin gerçekleştirilmesini etkileyen bir olayın meydana gelme olasılığı; olumsuz bir tehdit veya olumlu bir fırsat olabilir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk Yönetimi (Risk Management)</strong> — Kurumsal hedeflere ulaşılacağına dair makul güvence (Reasonable Assurance) sağlamak için potansiyel olayları belirleme, değerlendirme, yönetme ve kontrol altına alma süreci.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Risk İştahı (Risk Appetite)</strong> — Kuruluşun strateji ve hedeflerine ulaşmak için kabul etmeye hazır olduğu riskin belirli türleri ve miktarı.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Üç Hat Modeli (Three Lines Model)</strong> — Belirli risk yönetimi ve kontrol görevlerinin yönetim organı, yönetim ve iç denetim arasında nasıl atanması ve koordine edilmesi gerektiğini açıklayan UDD (IIA) çerçevesi.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p><strong>Birinci (First Line), İkinci (Second Line) ve Üçüncü Hat (Third Line)</strong> arasındaki sorumluluk dağılımının tam ayrımı, ayrıca <strong>Yönetim Organının (Governing Body)</strong> kapsayıcı rolü.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sınav soruları sıklıkla <strong>İkinci ve Üçüncü Hat</strong> arasındaki sınırları bulanıklaştırmaya çalışır. Unutmayın: İkinci Hat fonksiyonları (uyum, BT güvenliği gibi) risk yönetimine yardımcı olur ve <em>yönetime</em> rapor verir; Üçüncü Hat (İç Denetim) ise bağımsız güvence (Assurance) sağlar ve <em>Yönetim Kuruluna (Board)</em> rapor verir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar yanlışlıkla iç denetçilerin kuruluşun <em>başlangıç risklerini belirleme</em> veya <em>risk iştahını (Risk Appetite) tanımlama</em> sorumluluğuna sahip olduğunu varsayar. Yönetim (Birinci Hat / First Line) riski doğrudan yönetir, Denetim Yöneticisi (CAE) ise yalnızca bu yönetim süreçlerinin <strong>olgunluğunu değerlendirir (Assesses the Maturity)</strong>.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Üç Hat için kısa formülü ezberleyin: <strong>1. Hat = "Yapanlar" (Doers)</strong> — riski sahiplenir/yönetir, <strong>2. Hat = "İzleyiciler" (Monitors)</strong> — gözetim/destek sağlar, <strong>3. Hat = "Güvence Verenler" (Assurers)</strong> — bağımsız doğrulama.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, <strong>Yönetim Organı / Yönetim Kurulu (Governing Body / Board)</strong> üç hattın üzerinde yer alır — dürüstlük, liderlik ve gözetim sağlar, aynı zamanda iç denetim fonksiyonunu kurar.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Riski (Risk)</strong> her zaman hem <strong>etki (Impact)</strong> hem de <strong>olasılık (Likelihood)</strong> ile tanımlayın ve riskin hem olumsuz (tehdit) hem de olumlu (fırsat) olabileceğini unutmayın.
+    </div>
+</div>
+
+    <!-- Bottom navigation -->
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">4 / 4</span>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUBUNIT_IDS = ["su-1-1", "su-1-2", "su-1-3", "su-1-4"];
+let currentSU = SUBUNIT_IDS[0];
+let globalLang = 'en';
+
+function showSubunit(id) {
+  SUBUNIT_IDS.forEach(sid => {
+    document.getElementById(sid).style.display = 'none';
+    document.getElementById('nav-' + sid).classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('nav-' + id).classList.add('active');
+  currentSU = id;
+  // Scroll nav button into view
+  document.getElementById('nav-' + id).scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Apply current global lang
+  applyLangToSubunit(id, globalLang);
+}
+
+function showLang(unitId, lang) {
+  globalLang = lang;
+  const unit = document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+  unit.querySelector('.lang-content.' + lang).classList.add('active');
+  const tabs = unit.querySelectorAll('.lang-tab');
+  const langMap = {'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  // Sync top lang button label
+  const labels = {'en':'AZ','az':'TR','tr':'EN'};
+  document.getElementById('lang-btn').textContent = labels[lang];
+}
+
+function applyLangToSubunit(id, lang) {
+  showLang(id, lang);
+  // Update header title
+  const su = document.getElementById(id);
+  const titleEl = su.querySelector('.su-header-title');
+  if(titleEl) titleEl.textContent = titleEl.dataset[lang] || titleEl.dataset.en;
+  // Update nav title
+  const navBtn = document.getElementById('nav-' + id);
+  const navTitle = navBtn.querySelector('.su-nav-title');
+  if(navTitle) navTitle.textContent = navTitle.dataset[lang] || navTitle.dataset.en;
+}
+
+function toggleGlobalLang() {
+  const langs = ['en', 'az', 'tr'];
+  const labels = ['AZ', 'TR', 'EN'];
+  const idx = langs.indexOf(globalLang);
+  globalLang = langs[(idx + 1) % 3];
+  document.getElementById('lang-btn').textContent = labels[(idx + 1) % 3];
+  // Apply to current visible subunit
+  applyLangToSubunit(currentSU, globalLang);
+  // Update all nav titles
+  SUBUNIT_IDS.forEach(sid => {
+    const btn = document.getElementById('nav-' + sid);
+    const t = btn.querySelector('.su-nav-title');
+    if(t) t.textContent = t.dataset[globalLang] || t.dataset.en;
+  });
+  // Update page title
+  document.getElementById('app-title').textContent =
+    globalLang === 'az' ? 'Unit 1 · Xülasə' :
+    globalLang === 'tr' ? 'Unit 1 · Özet' : 'Unit 1 · Summary';
+}
+
+function nextSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx < SUBUNIT_IDS.length - 1) showSubunit(SUBUNIT_IDS[idx + 1]);
+}
+
+function prevSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx > 0) showSubunit(SUBUNIT_IDS[idx - 1]);
+}
+
+// Init: mark first nav as active
+document.getElementById('nav-' + SUBUNIT_IDS[0]).classList.add('active');
+</script>
+</body>
+</html>

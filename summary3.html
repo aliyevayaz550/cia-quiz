@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 3 Summary</title>
+<style>
+:root {
+  --navy:       #1a2e4a;
+  --navy-mid:   #2e4d72;
+  --gold:       #c9a84c;
+  --gold-dim:   #8a6d2e;
+  --paper:      #f8f5ef;
+  --cream:      #ede8df;
+  --ink:        #0f1923;
+  --correct:    #1a6b3c;
+  --wrong:      #8b1a1a;
+  --font:       -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:          10px;
+  --shadow:     0 2px 12px rgba(15,25,35,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 680px; margin: 0 auto; gap: 10px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; transition: background .2s; flex-shrink: 0;
+}
+#app-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#lang-btn {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── SUBUNIT NAV STRIP ───────────────────────────────── */
+#su-nav {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0 12px 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#su-nav::-webkit-scrollbar { display: none; }
+#su-nav-inner {
+  display: flex; gap: 8px;
+  max-width: 680px; margin: 0 auto;
+  padding-top: 10px;
+}
+.su-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 7px 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .18s; min-width: 70px;
+  -webkit-tap-highlight-color: transparent;
+}
+.su-nav-btn:hover { background: rgba(255,255,255,.14); }
+.su-nav-btn.active {
+  background: rgba(201,168,76,.18);
+  border-color: var(--gold);
+}
+.su-nav-num {
+  font-size: 13px; font-weight: 800;
+  color: var(--gold); line-height: 1; margin-bottom: 3px;
+}
+.su-nav-title {
+  font-size: 10px; color: rgba(255,255,255,.6);
+  font-weight: 500; text-align: center;
+  max-width: 72px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.su-nav-btn.active .su-nav-title { color: rgba(255,255,255,.9); }
+
+/* ── MAIN CONTENT ────────────────────────────────────── */
+#main {
+  max-width: 680px; margin: 0 auto;
+  padding: 16px 14px 40px;
+}
+
+/* ── SUBUNIT HEADER ──────────────────────────────────── */
+.su-header {
+  display: flex; gap: 14px; align-items: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r); padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.su-header-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--gold); color: var(--navy);
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 800;
+}
+.su-header-title {
+  font-size: 16px; font-weight: 700; color: #fff;
+  line-height: 1.35; margin-bottom: 4px;
+}
+.su-header-sub {
+  font-size: 11px; color: rgba(255,255,255,.45);
+  font-weight: 500; letter-spacing: .4px;
+}
+
+/* ── LANG TABS ───────────────────────────────────────── */
+.lang-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+}
+.lang-tab {
+  flex: 1; padding: 9px 0;
+  border: 1.5px solid #ddd6ca;
+  border-radius: 8px;
+  background: #fff;
+  color: #888; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .18s;
+}
+.lang-tab.active {
+  background: var(--navy); color: var(--gold);
+  border-color: var(--navy);
+}
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+
+/* ── SECTION HEADINGS ────────────────────────────────── */
+.section-heading {
+  background: linear-gradient(135deg, #e8f0f8, #f0f4f9);
+  color: var(--navy);
+  font-size: 15px; font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 20px 0 10px 0;
+  border-left: 3px solid var(--navy-mid);
+}
+.section-heading:first-child { margin-top: 0; }
+
+/* ── CONCEPT BLOCKS ──────────────────────────────────── */
+.concept-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--navy-mid);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.concept-block .concept-title {
+  font-weight: 700; color: var(--navy-mid);
+  margin-bottom: 5px; font-size: 14px;
+}
+.concept-block p { font-size: 14px; color: #333; }
+
+/* ── KEY TERMS ───────────────────────────────────────── */
+.key-term { font-weight: 700; color: var(--gold-dim); }
+.term-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.term-block p { font-size: 14px; color: #333; }
+
+/* ── EXAM TRAPS ──────────────────────────────────────── */
+.trap-block {
+  background: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--wrong);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.trap-label {
+  display: inline-block;
+  background: var(--wrong); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.trap-block p { font-size: 14px; color: #4a1a1a; }
+
+/* ── EXAM TIPS ───────────────────────────────────────── */
+.tip-block {
+  background: #f0faf4;
+  border: 1px solid #b8e0c8;
+  border-left: 3px solid var(--correct);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  font-size: 14px; color: #1a3a28;
+}
+
+/* ── BOTTOM NAV ──────────────────────────────────────── */
+.su-bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 16px;
+  border-top: 1px solid #e8e2d8;
+}
+.su-prev-btn, .su-next-btn {
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .18s;
+}
+.su-prev-btn:hover, .su-next-btn:hover { opacity: .85; }
+.su-counter {
+  font-size: 13px; color: #888; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+    <div id="app-title">Unit 3 · Xülasə</div>
+    <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+  </div>
+</div>
+
+<div id="su-nav">
+  <div id="su-nav-inner">
+    <button class="su-nav-btn" id="nav-su-3-1" onclick="showSubunit('su-3-1')">
+      <span class="su-nav-num">3.1</span>
+      <span class="su-nav-title" data-en="Operational Auditing" data-az="Əməliyyat Auditi" data-tr="Faaliyet Denetimi">Operational Auditing</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-3-2" onclick="showSubunit('su-3-2')">
+      <span class="su-nav-num">3.2</span>
+      <span class="su-nav-title" data-en="Compliance Auditing" data-az="Uyğunluq Auditi" data-tr="Uyum Denetimi">Compliance Auditing</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-3-3" onclick="showSubunit('su-3-3')">
+      <span class="su-nav-num">3.3</span>
+      <span class="su-nav-title" data-en="Financial Audits" data-az="Maliyyə Auditləri" data-tr="Finansal Denetimler">Financial Audits</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-3-4" onclick="showSubunit('su-3-4')">
+      <span class="su-nav-num">3.4</span>
+      <span class="su-nav-title" data-en="Management Reporting" data-az="Rəhbərlik Hesabatlılığı" data-tr="Yönetim Raporlaması">Management Reporting</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-3-5" onclick="showSubunit('su-3-5')">
+      <span class="su-nav-num">3.5</span>
+      <span class="su-nav-title" data-en="Culture Audit" data-az="Mədəniyyət Auditi" data-tr="Kültür Denetimi">Culture Audit</span>
+    </button>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- ══ SUBUNIT 3.1 ══ -->
+  <div class="subunit-summary" id="su-3-1" style="display:block">
+    <div class="su-header">
+      <div class="su-header-num">3.1</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Operational Auditing" data-az="Əməliyyat Auditi" data-tr="Faaliyet Denetimi">Operational Auditing</div>
+        <div class="su-header-sub">Unit 3 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-3-1','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-3-1','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-3-1','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Purpose of Operational Audits</div>
+        <p>These engagements assess how <strong class="key-term">efficiently and effectively</strong> an organization runs its operations. They evaluate how resources are used and identify the root causes of any operational inefficiencies.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Process (Functional) Engagements</div>
+        <p><strong class="key-term">Process engagements</strong> follow a specific process (like purchasing or safety practices) as it <strong class="key-term">crosses multiple organizational lines</strong>, service units, and geographic locations. They tend to be challenging to execute because of their broad scope and the often-conflicting objectives of the different organizational units involved.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Program-Results Engagements</div>
+        <p><strong class="key-term">Program-results engagements</strong> assess specific, funded activities that are <strong class="key-term">not part of continuing operations</strong>, such as an expansion or the rollout of a new information system. Because the benefits often cannot be quantified financially, auditors must ensure <strong class="key-term">clear objectives and standards</strong> are provided at the very beginning of the project to properly measure its success.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Operational Audit</strong> — An engagement that evaluates the efficiency (economy) and effectiveness of organizational operations.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Productivity Ratio</strong> — A specific performance measure comparing output relative to input.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Operating Ratio</strong> — A metric that measures overall operational efficiency, calculated by dividing total operating expenses by net sales.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The fundamental objective of an operational audit. The correct answer will always highlight assessing <strong>"efficiency and effectiveness"</strong> — not verifying GAAP compliance or regulatory adherence.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Scenarios will ask you to identify the <em>type</em> of operational audit. If the scenario involves <strong>ongoing tasks</strong> like handling scrap or developing budgets → <strong>process (functional) engagement</strong>. If it involves a <strong>one-off project</strong> like a new IT system → <strong>program-results engagement</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Candidates often assume a program's success is always measured by <em>financial return</em>. The exam explicitly notes that special concern is given to measuring <strong>non-financial effectiveness</strong> based on initial objectives.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always associate <strong>"Process engagements"</strong> with activities that <strong>cross organizational lines</strong>.</div>
+      <div class="tip-block">✅ Link <strong>"Program-results engagements"</strong> exclusively to <strong>funded activities outside of continuous, day-to-day operations</strong>.</div>
+      <div class="tip-block">✅ Memorize the exact definitions of the four efficiency measures: <strong>Productivity Ratio, Productivity Index, Resource Usage Rate, and Operating Ratio</strong>.</div>
+    </div>
+
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Əməliyyat Auditlərinin Məqsədi</div>
+        <p>Bu tapşırıqlar təşkilatın öz əməliyyatlarını nə qədər <strong class="key-term">səmərəli (Efficiently) və effektiv (Effectively)</strong> idarə etdiyini qiymətləndirir. Resursların necə istifadə edildiyini araşdırır və istənilən əməliyyat qeyri-effektivliyinin əsas səbəblərini müəyyən edir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Proses (Funksional) Tapşırıqları</div>
+        <p><strong class="key-term">Proses tapşırıqları (Process / Functional Engagements)</strong> müəyyən bir prosesi (satınalma və ya təhlükəsizlik təcrübələri kimi) <strong class="key-term">çoxsaylı təşkilati xətləri keçdiyi (Crosses Organizational Lines)</strong>, xidmət vahidləri və coğrafi ərazilər boyunca izləyir. Geniş əhatə dairəsi və cəlb olunan fərqli təşkilati vahidlərin tez-tez ziddiyyətli məqsədləri səbəbindən icra edilməsi çətin olur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Proqram Nəticələri Tapşırıqları</div>
+        <p><strong class="key-term">Proqram nəticələri tapşırıqları (Program-Results Engagements)</strong> genişləndirmə və ya yeni informasiya sisteminin tətbiqi kimi <strong class="key-term">davamlı əməliyyatların bir hissəsi olmayan (Not Part of Continuing Operations)</strong> xüsusi, maliyyələşdirilmiş fəaliyyətləri qiymətləndirir. Faydalar çox vaxt maliyyə baxımından kəmiyyətləşdirilə bilmədiyindən, auditorlar uğuru düzgün ölçmək üçün layihənin lap əvvəlində <strong class="key-term">aydın məqsədlər və standartların (Clear Objectives and Standards)</strong> təmin edilməsini təmin etməlidir.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Əməliyyat Auditi (Operational Audit)</strong> — Təşkilati əməliyyatların səmərəliliyini (qənaətini) və effektivliyini qiymətləndirən tapşırıq.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Məhsuldarlıq Nisbəti (Productivity Ratio)</strong> — Çıxışı girdiyə nisbətən müqayisə edən xüsusi fəaliyyət göstəricisi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Əməliyyat Nisbəti (Operating Ratio)</strong> — Ümumi əməliyyat xərclərini xalis satışlara bölməklə hesablanan ümumi əməliyyat səmərəliliyini ölçən göstərici.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Əməliyyat auditinin əsas məqsədi. Düzgün cavab həmişə <strong>\"səmərəlilik və effektivliyin\" (Efficiency and Effectiveness)</strong> qiymətləndirilməsini vurğulayacaq — GAAP uyğunluğunun yoxlanılmasını deyil.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Ssenarilər əməliyyat auditinin <em>növünü</em> müəyyən etməyinizi istəyəcək. Ssenari <strong>davamlı tapşırıqları</strong> əhatə edirsə → <strong>Proses tapşırığı (Process Engagement)</strong>. <strong>Birdəfəlik layihəni</strong> əhatə edirsə → <strong>Proqram nəticələri tapşırığı (Program-Results Engagement)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Namizədlər tez-tez proqramın uğurunun həmişə <em>maliyyə gəliri</em> ilə ölçüldüyünü düşünür. İmtahan açıq şəkildə qeyd edir ki, ilkin məqsədlər əsasında <strong>qeyri-maliyyə effektivliyinin (Non-Financial Effectiveness)</strong> ölçülməsinə xüsusi diqqət yetirilir.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>\"Proses tapşırıqlarını\" (Process Engagements)</strong> həmişə <strong>təşkilati xətləri keçən (Cross Organizational Lines)</strong> fəaliyyətlərlə əlaqələndirin.</div>
+      <div class="tip-block">✅ <strong>\"Proqram nəticələri tapşırıqlarını\" (Program-Results Engagements)</strong> yalnız <strong>davamlı gündəlik əməliyyatlar xaricindəki maliyyələşdirilmiş fəaliyyətlərlə</strong> əlaqələndirin.</div>
+      <div class="tip-block">✅ Dörd səmərəlilik göstəricisinin dəqiq təriflərini əzbərləyin: <strong>Məhsuldarlıq Nisbəti, Məhsuldarlıq İndeksi, Resurs İstifadə Dərəcəsi və Əməliyyat Nisbəti</strong>.</div>
+    </div>
+
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Faaliyet Denetimlerinin Amacı</div>
+        <p>Bu görevler, kuruluşun faaliyetlerini ne kadar <strong class="key-term">verimli (Efficiently) ve etkili (Effectively)</strong> yürüttüğünü değerlendirir. Kaynakların nasıl kullanıldığını inceler ve herhangi bir operasyonel verimsizliğin temel nedenlerini belirler.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Süreç (Fonksiyonel) Görevleri</div>
+        <p><strong class="key-term">Süreç görevleri (Process / Functional Engagements)</strong>, belirli bir süreci <strong class="key-term">birden fazla organizasyonel hattı geçerken (Crosses Organizational Lines)</strong> takip eder. Geniş kapsamları ve çelişen hedefleri nedeniyle yürütülmesi zor olma eğilimindedir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Program Sonuçları Görevleri</div>
+        <p><strong class="key-term">Program sonuçları görevleri (Program-Results Engagements)</strong>, <strong class="key-term">süregelen faaliyetlerin parçası olmayan (Not Part of Continuing Operations)</strong> belirli, finanse edilen faaliyetleri değerlendirir. Faydalar finansal olarak ölçülemediğinden, başarıyı ölçmek için projenin en başında <strong class="key-term">açık hedefler ve standartların (Clear Objectives and Standards)</strong> sağlanması şarttır.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Faaliyet Denetimi (Operational Audit)</strong> — Organizasyonel faaliyetlerin verimliliğini ve etkinliğini değerlendiren görev.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Verimlilik Oranı (Productivity Ratio)</strong> — Çıktıyı girdiye göre karşılaştıran özel performans ölçütü.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Faaliyet Oranı (Operating Ratio)</strong> — Toplam faaliyet giderlerinin net satışlara bölünmesiyle hesaplanan genel operasyonel verimliliği ölçen metrik.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Faaliyet denetiminin temel amacı. Doğru cevap her zaman <strong>"verimlilik ve etkinliğin" (Efficiency and Effectiveness)</strong> değerlendirilmesini vurgulayacaktır.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Senaryo <strong>devam eden görevleri</strong> içeriyorsa → <strong>Süreç görevi (Process Engagement)</strong>. <strong>Tek seferlik projeyi</strong> içeriyorsa → <strong>Program sonuçları görevi (Program-Results Engagement)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Adaylar programın başarısının her zaman <em>finansal getiri</em> ile ölçüldüğünü varsayar. Sınav, başlangıç hedeflerine dayalı <strong>finansal olmayan etkinliğin (Non-Financial Effectiveness)</strong> ölçülmesine özel dikkat gösterildiğini belirtir.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>"Süreç görevlerini" (Process Engagements)</strong> her zaman <strong>organizasyonel hatları geçen</strong> faaliyetlerle ilişkilendirin.</div>
+      <div class="tip-block">✅ <strong>"Program sonuçları görevlerini"</strong> yalnızca <strong>süregelen günlük operasyonlar dışındaki finanse edilen faaliyetlerle</strong> ilişkilendirin.</div>
+      <div class="tip-block">✅ Dört verimlilik ölçütünün tam tanımlarını ezberleyin: <strong>Verimlilik Oranı, Verimlilik Endeksi, Kaynak Kullanım Oranı ve Faaliyet Oranı</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <div></div>
+      <span class="su-counter">1 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 3.2 ══ -->
+  <div class="subunit-summary" id="su-3-2" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">3.2</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Compliance Auditing" data-az="Uyğunluq Auditi" data-tr="Uyum Denetimi">Compliance Auditing</div>
+        <div class="su-header-sub">Unit 3 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-3-2','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-3-2','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-3-2','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Purpose of Compliance Audits</div>
+        <p>These engagements verify that an organization is adhering to both <strong class="key-term">internal guidelines</strong> (policies, procedures) and <strong class="key-term">external requirements</strong> (laws, regulations, contracts). By evaluating these controls, internal auditors help prevent legal issues, safeguard the organization's reputation, and confirm it is functioning within ethical parameters.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Structuring the Compliance Program</div>
+        <p>An effective program requires a clear <strong class="key-term">code of conduct</strong>, targeted interactive training, and financial incentives that do not inadvertently reward misconduct. Accountability must be established at the top, with a <strong class="key-term">chief compliance officer</strong> reporting directly to the <strong class="key-term">CEO</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Monitoring and Reporting Mechanisms</div>
+        <p>Organizations must use multiple monitoring systems, such as <strong class="key-term">hotlines</strong>, to detect unethical or illegal behavior. These systems must be backed by a strict <strong class="key-term">non-retaliation policy</strong>, and the organization must consistently discipline anyone involved in misconduct — including managers who fail to report issues they should have known about.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Compliance</strong> — The adherence to organizational policies, plans, procedures, laws, regulations, contracts, and other requirements.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Compliance Program</strong> — A formal system that assists organizations in preventing unintended employee violations, detecting illegal acts, and discouraging intentional misconduct.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Non-Retaliation Policy</strong> — A workplace policy that protects employees from negative consequences after reporting misconduct or participating in related investigations.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Ombudsperson</strong> — An on-site official assigned to confidentially receive, guide, and investigate employee complaints, often resulting in higher employee trust than a company attorney.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The distinction between a <strong>standard compliance audit</strong> and a <strong>third-party audit</strong>. A compliance audit focuses on the <em>organization's own adherence</em> to laws or policies; a third-party audit focuses on an <em>external party's adherence</em> to contract terms.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Questions often test the <em>reporting structure</em> for compliance personnel. Distractors might suggest they report to Internal Audit or Legal. The correct answer: the <strong>chief compliance officer should report directly to the CEO</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Candidates sometimes assume the most secure, off-site hotline run by an attorney is the best reporting method. Employees actually prefer an <strong>in-house representative or ombudsperson</strong> backed by a non-retaliation policy.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Memorize the three primary functions of a compliance program: <strong>1) prevent unintended violations, 2) detect illegal acts, 3) discourage intentional violations</strong>.</div>
+      <div class="tip-block">✅ Compliance training must be <strong>specifically targeted</strong> to the functional subunits most likely to encounter those rules — not generic.</div>
+      <div class="tip-block">✅ Management's failure to discipline leaders who <strong>"knew or should have known"</strong> about misconduct indicates a lack of <strong>due diligence</strong> and can render the whole compliance program legally ineffective.</div>
+    </div>
+
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Uyğunluq Auditlərinin Məqsədi</div>
+        <p>Bu tapşırıqlar təşkilatın həm <strong class="key-term">daxili qaydalar (Internal Guidelines)</strong> (siyasətlər, prosedurlar), həm də <strong class="key-term">xarici tələblərə (External Requirements)</strong> (qanunlar, qaydalar, müqavilələr) riayət edib-etmədiyini yoxlayır. Daxili auditorlar hüquqi problemlərin qarşısını almağa, reputasiyanı qorumağa və etik parametrlər daxilində fəaliyyəti təsdiqləməyə kömək edir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Uyğunluq Proqramının Strukturlaşdırılması</div>
+        <p>Effektiv proqram aydın <strong class="key-term">davranış kodeksi (Code of Conduct)</strong>, hədəfli interaktiv təlim tələb edir. <strong class="key-term">Baş uyğunluq məmuru (Chief Compliance Officer)</strong> birbaşa <strong class="key-term">Baş İcraçı Direktora (CEO)</strong> hesabat verməlidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Monitorinq və Hesabat Mexanizmləri</div>
+        <p>Təşkilatlar etik olmayan davranışı aşkar etmək üçün <strong class="key-term">qaynar xəttlər (Hotlines)</strong> kimi çoxsaylı monitorinq sistemlərindən istifadə etməlidir. Bu sistemlər ciddi <strong class="key-term">qisassızlıq siyasəti (Non-Retaliation Policy)</strong> ilə dəstəklənməli, qeyri-düzgün davranışda iştirak edən hər kəs ardıcıl olaraq intizamlı cəzalandırılmalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Uyğunluq (Compliance)</strong> — Təşkilati siyasətlərə, planlara, prosedurlara, qanunlara, qaydalara, müqavilələrə və digər tələblərə riayət.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Uyğunluq Proqramı (Compliance Program)</strong> — Təşkilatlara işçilərin qəsdən olmayan pozuntularının qarşısını almaqda, qanunsuz hərəkətləri aşkar etməkdə və qəsdli qeyri-düzgün davranışları çəkindirməkdə kömək edən rəsmi sistem.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Qisassızlıq Siyasəti (Non-Retaliation Policy)</strong> — İşçiləri qeyri-düzgün davranışı bildirdikdən sonra mənfi nəticələrdən qoruyan iş yeri siyasəti.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Ombudsman (Ombudsperson)</strong> — İşçi şikayətlərini məxfi şəkildə qəbul etmək, yönləndirmək və araşdırmaq üçün təyin edilmiş yerüstü rəsmi şəxs.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p><strong>Standart uyğunluq auditi</strong> ilə <strong>üçüncü tərəf auditi (Third-Party Audit)</strong> arasındakı fərq. Uyğunluq auditi — təşkilatın öz riayətinə; üçüncü tərəf auditi — xarici tərəfin müqavilə şərtlərinə riayətinə fokuslanır.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Uyğunluq personalının hesabatlılıq strukturu tez-tez test edilir. Düzgün cavab: <strong>baş uyğunluq məmuru (CCO) birbaşa CEO-ya hesabat verməlidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>İşçilər xarici qaynar xəttlərə az etibar edir; əslində <strong>qisassızlıq siyasəti ilə dəstəklənmiş daxili nümayəndəni və ya ombudsmanı</strong> üstün tuturlar.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ Uyğunluq proqramının üç əsas funksiyasını əzbərləyin: <strong>1) qəsdən olmayan pozuntuların qarşısını almaq, 2) qanunsuz hərəkətləri aşkar etmək, 3) qəsdli pozuntuları çəkindirmək</strong>.</div>
+      <div class="tip-block">✅ Uyğunluq təlimi ümumi deyil, <strong>həmin qaydalara ən çox rast gələcək funksional alt bölmələrə xüsusi olaraq hədəflənmiş</strong> olmalıdır.</div>
+      <div class="tip-block">✅ <strong>\"Bilən və ya bilməli olan\" (Knew or Should Have Known)</strong> liderlərin intizamlı cəzalandırılmaması <strong>lazımi diqqətin (Due Diligence)</strong> çatışmazlığını göstərir.</div>
+    </div>
+
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Uyum Denetimlerinin Amacı</div>
+        <p>Bu görevler, kuruluşun hem <strong class="key-term">iç kurallara (Internal Guidelines)</strong> hem de <strong class="key-term">dış gerekliliklere (External Requirements)</strong> uyup uymadığını doğrular. İç denetçiler hukuki sorunları önlemeye ve etik parametreler dahilinde faaliyet gösterildiğini teyit etmeye yardımcı olur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Uyum Programının Yapılandırılması</div>
+        <p>Etkili bir program, açık bir <strong class="key-term">davranış kuralları (Code of Conduct)</strong> ve hedefli eğitim gerektirir. <strong class="key-term">Baş uyum görevlisi (Chief Compliance Officer)</strong> doğrudan <strong class="key-term">Genel Müdüre (CEO)</strong> rapor vermelidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İzleme ve Raporlama Mekanizmaları</div>
+        <p>Kuruluşlar <strong class="key-term">ihbar hatları (Hotlines)</strong> gibi izleme sistemleri kullanmalıdır. Bu sistemler sıkı bir <strong class="key-term">misilleme yapmama politikası (Non-Retaliation Policy)</strong> ile desteklenmeli ve suistimale karışan herkes disipline edilmelidir.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Uyum (Compliance)</strong> — Organizasyonel politikalara, yasalara, düzenlemelere, sözleşmelere ve diğer gerekliliklere uyma.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Uyum Programı (Compliance Program)</strong> — Kasıtsız ihlalleri önleme, yasa dışı eylemleri tespit etme ve kasıtlı suistimali caydırmada yardımcı olan resmi sistem.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Misilleme Yapmama Politikası (Non-Retaliation Policy)</strong> — Çalışanları suistimali bildirdikten sonra olumsuz sonuçlardan koruyan işyeri politikası.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Ombudsman (Ombudsperson)</strong> — Çalışan şikayetlerini gizli bir şekilde almak ve araştırmak üzere atanan yerinde yetkili.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p><strong>Standart uyum denetimi</strong> ile <strong>üçüncü taraf denetimi</strong> arasındaki ayrım. Uyum denetimi kuruluşun kendi uyumuna; üçüncü taraf denetimi dış tarafın sözleşme uyumuna odaklanır.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Doğru cevap: <strong>baş uyum görevlisi (CCO) doğrudan CEO'ya rapor vermelidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Çalışanlar dış ihbar hatlarına az güvenir; <strong>misilleme yapmama politikası ile desteklenen kurum içi ombudsmanı</strong> tercih ederler.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ Uyum programının üç temel işlevi: <strong>1) kasıtsız ihlalleri önlemek, 2) yasa dışı eylemleri tespit etmek, 3) kasıtlı ihlalleri caydırmak</strong>.</div>
+      <div class="tip-block">✅ Uyum eğitimi <strong>ilgili fonksiyonel alt birimlere özel olarak hedeflenmiş</strong> olmalıdır.</div>
+      <div class="tip-block">✅ <strong>"Bilen veya bilmesi gereken"</strong> liderleri disipline etmemek <strong>gerekli özenin (Due Diligence)</strong> eksikliğini gösterir.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">2 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 3.3 ══ -->
+  <div class="subunit-summary" id="su-3-3" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">3.3</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Financial Audits" data-az="Maliyyə Auditləri" data-tr="Finansal Denetimler">Financial Audits</div>
+        <div class="su-header-sub">Unit 3 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-3-3','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-3-3','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-3-3','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Internal Auditor's Role</div>
+        <p>Internal auditors do not replicate the full financial statement audits performed by external auditors. Instead, they evaluate the effectiveness of <strong class="key-term">internal controls over specific accounting cycles</strong> to reduce the risks of fraud or reporting errors before the external audit occurs.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Evaluating Assertions and Risks</div>
+        <p>Management makes specific <strong class="key-term">assertions</strong> regarding the measurement, presentation, and disclosure of financial information. Internal auditors test these assertions by assessing both the <strong class="key-term">inherent risk</strong> and <strong class="key-term">control risk</strong> within accounting cycles, specifically looking for vulnerabilities like premature revenue recognition or failure to accrue payables.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Detecting Fraud vs. Error</div>
+        <p>Engagements provide <strong class="key-term">reasonable assurance</strong> that financial statements are free of material misstatements. Auditors must recognize that standard procedures used to detect unintentional <strong class="key-term">errors</strong> are often not effective at catching intentional <strong class="key-term">fraud</strong>, especially since perpetrators actively conceal their tracks.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Accounting Cycle</strong> — A functional grouping of organizational transactions (such as "order to cash" or "purchase to pay") that generates the flows and balances reported in financial statements.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Fraudulent Financial Reporting</strong> — Intentional misstatements or omissions designed to deceive users, such as altering accounting documents or intentionally misapplying accounting principles.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Misappropriation of Assets</strong> — A type of fraud involving theft, embezzlement, or actions causing an organization to pay for items or services it did not actually receive.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The exact <strong>division of labor</strong> between internal and external auditors regarding financial reporting.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Scenarios often try to <strong>flip the direction</strong> of the misstatement. Remember: <strong>overstating</strong> (revenues and assets) and <strong>understating</strong> (expenses and liabilities).</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Candidates often assume internal auditors audit the <em>final financial statements</em> directly. Internal auditors focus exclusively on the <strong>internal controls over financial reporting</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always use <strong>"intent"</strong> to distinguish between an <strong>error</strong> (unintentional) and <strong>fraud</strong> (intentional).</div>
+      <div class="tip-block">✅ <strong>Management fraud</strong> is significantly harder to detect because management can <strong>override established control procedures</strong>.</div>
+      <div class="tip-block">✅ If an internal auditor discovers an error, their initial responsibility is to <strong>assess the risk of misrepresentation</strong>; only report errors with a <strong>material effect</strong> on the financial statements.</div>
+    </div>
+
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Daxili Auditorun Rolu</div>
+        <p>Daxili auditorlar xarici auditorların apardığı tam maliyyə hesabatı auditlərini təkrarlamır. Xarici audit baş verməzdən əvvəl fırıldaqçılıq və xəta risklərini azaltmaq üçün <strong class="key-term">xüsusi mühasibat dövrləri üzrə daxili nəzarətlərin (Internal Controls over Accounting Cycles)</strong> effektivliyini qiymətləndirirlər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İddiaların və Risklərin Qiymətləndirilməsi</div>
+        <p>Rəhbərlik maliyyə məlumatlarının ölçülməsi, təqdim edilməsi ilə bağlı xüsusi <strong class="key-term">iddialar (Assertions)</strong> irəli sürür. Daxili auditorlar həm <strong class="key-term">xas riski (Inherent Risk)</strong>, həm də <strong class="key-term">nəzarət riskini (Control Risk)</strong> qiymətləndirərək bu iddiaları test edir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Fırıldaqçılıq və Xəta Arasında Fərq</div>
+        <p>Tapşırıqlar maliyyə hesabatlarının əhəmiyyətli yanlış ifadələrdən azad olduğuna dair <strong class="key-term">ağlabatan əminlik (Reasonable Assurance)</strong> təmin edir. Qəsdən olmayan <strong class="key-term">xətaları (Errors)</strong> aşkar etmək üçün istifadə olunan standart prosedurlar qəsdli <strong class="key-term">fırıldaqçılığı (Fraud)</strong> tutmaq üçün çox vaxt effektiv deyil.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Mühasibat Dövrü (Accounting Cycle)</strong> — Maliyyə hesabatlarında əks olunan axınları yaradan təşkilati əməliyyatların funksional qruplaşdırılması (məs., "sifarişdən nağda qədər / Order to Cash").</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Saxta Maliyyə Hesabatlılığı (Fraudulent Financial Reporting)</strong> — İstifadəçiləri aldatmaq üçün hazırlanmış qəsdli yanlış ifadələr; mühasibat sənədlərinin dəyişdirilməsi və ya mühasibat prinsiplərinin qəsdən yanlış tətbiqi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Aktivlərin Mənimsənilməsi (Misappropriation of Assets)</strong> — Oğurluq, mənimsəmə və ya təşkilatın faktiki olaraq almadığı mal üçün ödəmə etməsinə səbəb olan fırıldaqçılıq növü.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Maliyyə hesabatlılığı ilə bağlı daxili və xarici auditorlar arasındakı dəqiq <strong>vəzifə bölgüsü (Division of Labor)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Standart risklər: <strong>şişirtmə (Overstating)</strong> — gəlirlər və aktivlər üçün; <strong>azaldma (Understating)</strong> — xərclər və öhdəliklər üçün.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Daxili auditorlar <em>yekun maliyyə hesabatlarını</em> birbaşa audit etmir. Onlar yalnız <strong>maliyyə hesabatlılığı üzrə daxili nəzarətlərə (Internal Controls over Financial Reporting)</strong> fokuslanır.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>Xəta (Error)</strong> (qəsdən olmayan) ilə <strong>fırıldaqçılıq (Fraud)</strong> (qəsdli) arasında fərq qoymaq üçün həmişə <strong>\"niyyət\" (Intent)</strong> meyarından istifadə edin.</div>
+      <div class="tip-block">✅ <strong>Rəhbərlik fırıldaqçılığı (Management Fraud)</strong> işçi fırıldaqçılığından çətin aşkar olunur — rəhbərliyin <strong>nəzarət prosedurlarını keçmək (Override)</strong> səlahiyyəti var.</div>
+      <div class="tip-block">✅ Daxili auditor xəta aşkar edərsə, ilkin məsuliyyəti <strong>yanlış təqdimetmə riskini qiymətləndirməkdir</strong>; yalnız <strong>əhəmiyyətli təsiri (Material Effect)</strong> olan xətaları bildirin.</div>
+    </div>
+
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">İç Denetçinin Rolü</div>
+        <p>İç denetçiler dış denetçilerin finansal tablo denetimlerini tekrarlamaz. Dış denetim gerçekleşmeden önce hile ve raporlama hataları risklerini azaltmak için <strong class="key-term">belirli muhasebe döngüleri üzerindeki iç kontrollerin</strong> etkinliğini değerlendirir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İddiaların ve Risklerin Değerlendirilmesi</div>
+        <p>Yönetim finansal bilgilerin sunumuna ilişkin <strong class="key-term">iddialar (Assertions)</strong> ileri sürer. İç denetçiler hem <strong class="key-term">doğal riski (Inherent Risk)</strong> hem de <strong class="key-term">kontrol riskini (Control Risk)</strong> değerlendirerek bu iddiaları test eder.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Hile ve Hata Arasındaki Fark</div>
+        <p>Kasıtsız <strong class="key-term">hataları (Errors)</strong> tespit etmek için kullanılan standart prosedürler kasıtlı <strong class="key-term">hileyi (Fraud)</strong> yakalamak için genellikle etkili değildir — özellikle faillerin izlerini aktif olarak gizlediği düşünüldüğünde.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Muhasebe Döngüsü (Accounting Cycle)</strong> — Finansal tablolarda raporlanan akışları oluşturan organizasyonel işlemlerin fonksiyonel gruplaması (örn. "siparişten tahsilata / Order to Cash").</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Hileli Finansal Raporlama (Fraudulent Financial Reporting)</strong> — Kullanıcıları aldatmak için tasarlanmış kasıtlı yanlışlıklar; muhasebe belgelerinin değiştirilmesi veya muhasebe ilkelerinin kasıtlı yanlış uygulanması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Varlıkların Kötüye Kullanımı (Misappropriation of Assets)</strong> — Hırsızlık, zimmete geçirme veya kuruluşun gerçekte almadığı mal için ödeme yapmasına neden olan hile türü.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Finansal raporlama konusunda iç ve dış denetçiler arasındaki tam <strong>görev dağılımı (Division of Labor)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Standart riskler: <strong>abartma (Overstating)</strong> — gelirler ve varlıklar; <strong>eksik gösterme (Understating)</strong> — giderler ve yükümlülükler.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>İç denetçiler <em>nihai finansal tabloları</em> doğrudan denetlemez. Yalnızca <strong>finansal raporlama üzerindeki iç kontrollere</strong> odaklanırlar.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>Hata</strong> (kasıtsız) ile <strong>hile</strong> (kasıtlı) arasında ayrım için her zaman <strong>"niyet" (Intent)</strong> kriterini kullanın.</div>
+      <div class="tip-block">✅ <strong>Yönetim hilesi</strong> çalışan hilesinden daha zor tespit edilir; yönetimin <strong>kontrol prosedürlerini geçersiz kılma (Override)</strong> yetkisi vardır.</div>
+      <div class="tip-block">✅ Hata keşfedilirse, ilk sorumluluk <strong>yanlış beyan riskini değerlendirmektir</strong>; yalnızca <strong>önemli etkisi (Material Effect)</strong> olan hataları raporlayın.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">3 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 3.4 ══ -->
+  <div class="subunit-summary" id="su-3-4" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">3.4</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Management Reporting" data-az="Rəhbərlik Hesabatlılığı" data-tr="Yönetim Raporlaması">Management Reporting</div>
+        <div class="su-header-sub">Unit 3 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-3-4','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-3-4','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-3-4','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Purpose of Management Reports</div>
+        <p>These are confidential, internal reports used by managers and executives to evaluate business segments, measure progress against <strong class="key-term">Key Performance Indicators (KPIs)</strong>, and make strategic decisions. They serve as a form of <strong class="key-term">business intelligence</strong> to indicate what should change or where investments are needed.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Freedom from External Rules</div>
+        <p>Unlike financial or regulatory reports, management reports contain <strong class="key-term">proprietary data</strong> and are entirely <strong class="key-term">exempt from external frameworks</strong> like U.S. GAAP or IFRS. They have no imposed external data specifications or deadlines, operating only on timelines decided internally by management.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Internal Audit's Role</div>
+        <p>Internal auditors <strong class="key-term">do not create</strong> these reports; instead, they evaluate the management reporting process to assess its effectiveness. The auditor's goal is to assure that these reports are <strong class="key-term">accurate, relevant to decision-makers, and successfully meeting their intended objectives</strong>.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Management Reports</strong> — Confidential, internal documents containing financial and operational data that help managers monitor their departments, establish benchmarks, and create action plans.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>The stark differences between <strong>management reporting</strong> (internal, flexible, no external rules) and <strong>external financial reporting</strong> (governed by GAAP/IFRS, strict deadlines).</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Management reports are <strong>totally flexible and exempt from external data specifications</strong> like GAAP.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p><strong>Management creates the reports</strong>; internal audit merely <strong>evaluates the process</strong> to assure the reports' reliability and relevance.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always associate management reports with <strong>"internal use only"</strong> and <strong>"proprietary information"</strong>.</div>
+      <div class="tip-block">✅ To be effective, management reports must be clear, frequent, and specifically designed to <strong>"induce prompt action"</strong>.</div>
+      <div class="tip-block">✅ Rules/deadlines governing management reporting? Answer: <strong>whatever management decides internally</strong> — no external standards apply.</div>
+    </div>
+
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Rəhbərlik Hesabatlarının Məqsədi</div>
+        <p>Bunlar menecerlər tərəfindən biznes seqmentlərini qiymətləndirmək, <strong class="key-term">Əsas Fəaliyyət Göstəricilərinə (KPIs)</strong> qarşı irəliləyişi ölçmək üçün istifadə olunan məxfi, daxili hesabatlardır. Nəyin dəyişməli olduğunu göstərən <strong class="key-term">biznes kəşfiyyatı (Business Intelligence)</strong> forması kimi xidmət edirlər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Xarici Qaydalardan Azadlıq</div>
+        <p>Rəhbərlik hesabatları <strong class="key-term">mülkiyyət məlumatları (Proprietary Data)</strong> ehtiva edir və ABŞ GAAP və ya IFRS kimi <strong class="key-term">xarici çərçivələrdən tamamilə azaddır</strong>. Heç bir tətbiq edilmiş xarici məlumat spesifikasiyası və ya müddəti yoxdur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Daxili Auditin Rolu</div>
+        <p>Daxili auditorlar bu hesabatları <strong class="key-term">yaratmır</strong>; rəhbərlik hesabatlılığı prosesini qiymətləndirir. Məqsəd hesabatların <strong class="key-term">dəqiq, qərar qəbul edənlərə uyğun və nəzərdə tutulan məqsədlərə nail olan</strong> olduğunu təmin etməkdir.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Rəhbərlik Hesabatları (Management Reports)</strong> — Menecerlərə şöbələrini izləməkdə, əsas göstəricilər müəyyən etməkdə kömək edən maliyyə və əməliyyat məlumatlarını ehtiva edən məxfi, daxili sənədlər.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p><strong>Rəhbərlik hesabatlılığı</strong> (daxili, çevik, xarici qaydalar yoxdur) ilə <strong>xarici maliyyə hesabatlılığı</strong> (GAAP/IFRS ilə tənzimlənir, ciddi müddətlər) arasındakı fərqlər.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Rəhbərlik hesabatları GAAP kimi <strong>xarici məlumat spesifikasiyalarından tamamilə çevik və azaddır</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p><strong>Rəhbərlik hesabatları yaradır</strong>, daxili audit isə yalnızca hesabatların etibarlılığını təmin etmək üçün <strong>prosesi qiymətləndirir</strong>.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ Rəhbərlik hesabatlarını həmişə <strong>\"yalnız daxili istifadə üçün\" (Internal Use Only)</strong> və <strong>\"mülkiyyət məlumatı\" (Proprietary Information)</strong> ilə əlaqələndirin.</div>
+      <div class="tip-block">✅ Effektiv olmaq üçün rəhbərlik hesabatları <strong>\"tez tədbirə sövq etmək\" (Induce Prompt Action)</strong> üçün dizayn edilmiş olmalıdır.</div>
+      <div class="tip-block">✅ Rəhbərlik hesabatlılığını tənzimləyən qaydalar soruşulursa — cavab həmişə <strong>rəhbərliyin daxili olaraq qərar verdiyi hər şeydir</strong>.</div>
+    </div>
+
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Yönetim Raporlarının Amacı</div>
+        <p>Bunlar, yöneticiler tarafından iş segmentlerini değerlendirmek ve <strong class="key-term">Temel Performans Göstergelerine (KPIs)</strong> karşı ilerlemeyi ölçmek için kullanılan gizli, iç raporlardır. Neyin değişmesi gerektiğini gösteren <strong class="key-term">iş zekâsı (Business Intelligence)</strong> biçimi olarak hizmet eder.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Dış Kurallardan Muafiyet</div>
+        <p>Yönetim raporları <strong class="key-term">tescilli veriler (Proprietary Data)</strong> içerir ve ABD GAAP veya UFRS gibi <strong class="key-term">dış çerçevelerden tamamen muaftır</strong>. Dayatılmış dış veri özellikleri veya son tarihler yoktur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İç Denetimin Rolü</div>
+        <p>İç denetçiler bu raporları <strong class="key-term">oluşturmaz</strong>; yönetim raporlama sürecini etkinliğini değerlendirmek için inceler. Raporların <strong class="key-term">doğru, karar vericilere uygun ve amaçlanan hedeflere ulaşıyor</strong> olduğunu güvence altına alır.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Yönetim Raporları (Management Reports)</strong> — Yöneticilerin departmanlarını izlemesine ve eylem planları oluşturmasına yardımcı olan finansal ve operasyonel veriler içeren gizli, iç belgeler.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p><strong>Yönetim raporlaması</strong> (dahili, esnek, dış kurallar yok) ile <strong>dış finansal raporlama</strong> (GAAP/UFRS ile düzenlenir, sıkı son tarihler) arasındaki keskin farklar.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Yönetim raporları GAAP gibi <strong>dış veri özelliklerinden tamamen esnek ve muaftırlar</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p><strong>Yönetim raporları oluşturur</strong>; iç denetim yalnızca raporların güvenilirliğini sağlamak için <strong>süreci değerlendirir</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ Yönetim raporlarını her zaman <strong>"yalnızca dahili kullanım"</strong> ve <strong>"tescilli bilgi"</strong> ifadeleriyle ilişkilendirin.</div>
+      <div class="tip-block">✅ Etkili olması için yönetim raporları özellikle <strong>"hızlı eylem sağlamak" (Induce Prompt Action)</strong> için tasarlanmış olmalıdır.</div>
+      <div class="tip-block">✅ Yönetim raporlamasını düzenleyen kurallar/son tarihler? Cevap: <strong>yönetimin dahili olarak karar verdiği her şey</strong> — dış standart uygulanmaz.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">4 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 3.5 ══ -->
+  <div class="subunit-summary" id="su-3-5" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">3.5</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Organizational Culture Audit" data-az="Mədəniyyət Auditi" data-tr="Kültür Denetimi">Organizational Culture Audit</div>
+        <div class="su-header-sub">Unit 3 · CIA Part 1</div>
+      </div>
+    </div>
+
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-3-5','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-3-5','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-3-5','tr')">TR</button>
+    </div>
+
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Culture vs. Conduct</div>
+        <p>The IIA distinguishes the intangible concept of <strong class="key-term">culture</strong> (invisible belief systems, values, and norms) from <strong class="key-term">conduct</strong>, which is the tangible manifestation of that culture through employee actions and decisions.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">The Impact of Culture</div>
+        <p>Culture directly affects an organization's <strong class="key-term">risk profile</strong> and <strong class="key-term">internal control environment</strong>. A strong culture increases productivity and retention, while a poor culture is often the root cause of serious business challenges.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Tone at the Top</div>
+        <p>Leadership has the strongest influence on organizational culture. Senior leaders and the board must actively shape culture by consistently communicating and modeling desired behaviors through <strong class="key-term">"Tone at the Top"</strong>; otherwise, a detrimental culture may develop by default.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Audit Approaches</div>
+        <p>A <strong class="key-term">culture audit</strong> evaluates how well actual organizational behaviors align with stated values. Auditors can approach this in three specific ways: <strong class="key-term">1) Integrate</strong> it into other assurance engagements, <strong class="key-term">2) Target</strong> specific key processes, or <strong class="key-term">3) Top-down</strong> approach through all organizational layers.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Organizational Culture</strong> — The shared set of invisible values, beliefs, norms, and preferences of individuals in an organization.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Conduct</strong> — The tangible manifestation of culture through the actions, behaviors, and decisions of individuals.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Culture Audit</strong> — A comprehensive evaluation of how an organization's actual behaviors align with its stated values, and how that impacts overall organizational success.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>Red flags indicating a poor culture: <strong>high employee turnover</strong>, <strong>high absence rates</strong>, and <strong>frequent employee grievances</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>An open culture <strong>without proper governance</strong> can actually encourage misconduct and cause reputational damage.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Culture audits don't rely solely on surveys. Auditors must gather data from <strong>multiple diverse sources</strong>: exit interviews, ethics hotlines, focus groups, and extensive document reviews.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always differentiate between the <strong>"invisible" (Culture)</strong> and the <strong>"tangible" (Conduct)</strong>.</div>
+      <div class="tip-block">✅ Memorize the three approaches to auditing culture: <strong>1) Integrate, 2) Target, 3) Top-down</strong>.</div>
+      <div class="tip-block">✅ If asked for the <strong>primary driver</strong> of organizational culture, always look for answers related to <strong>"Tone at the Top"</strong> or senior leadership behavior.</div>
+    </div>
+
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Mədəniyyət və Davranış</div>
+        <p>DDA (IIA) qeyri-maddi <strong class="key-term">mədəniyyət (Culture)</strong> anlayışını (görünməz inam sistemləri, dəyərlər və normalar) <strong class="key-term">davranışdan (Conduct)</strong> fərqləndirir — davranış həmin mədəniyyətin işçi hərəkətləri vasitəsilə maddi təzahürüdür.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Mədəniyyətin Təsiri</div>
+        <p>Mədəniyyət təşkilatın <strong class="key-term">risk profilinə (Risk Profile)</strong> və <strong class="key-term">daxili nəzarət mühitinə (Internal Control Environment)</strong> birbaşa təsir edir. Güclü mədəniyyət məhsuldarlığı artırır, zəif mədəniyyət isə ciddi biznes problemlərinin əsas səbəbidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Yuxarıdan Ton</div>
+        <p>Liderlik təşkilat mədəniyyətinə ən güclü təsir göstərir. Yüksək rəhbərlər arzu olunan davranışları ardıcıl şəkildə nümunə göstərərək <strong class="key-term">\"Yuxarıdan Ton\" (Tone at the Top)</strong> vasitəsilə mədəniyyəti fəal şəkildə formalaşdırmalıdır.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Audit Yanaşmaları</div>
+        <p><strong class="key-term">Mədəniyyət auditi (Culture Audit)</strong> faktiki davranışların elan edilmiş dəyərlərlə uyğunluğunu qiymətləndirir. Üç yanaşma: <strong class="key-term">1) İnteqrasiya (Integrate)</strong> — digər tapşırıqlara daxil etmək; <strong class="key-term">2) Hədəfləmə (Target)</strong> — xüsusi proseslərə yönəlmək; <strong class="key-term">3) Yuxarıdan-aşağı (Top-down)</strong> — bütün təbəqələr boyunca.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Təşkilat Mədəniyyəti (Organizational Culture)</strong> — Təşkilatdakı fərdlərin paylaşılan görünməz dəyərləri, inancları, normaları və üstünlükləri toplusu.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Davranış (Conduct)</strong> — Mədəniyyətin fərdlərin hərəkətləri və qərarları vasitəsilə maddi təzahürü.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Mədəniyyət Auditi (Culture Audit)</strong> — Təşkilatın faktiki davranışlarının elan edilmiş dəyərlərlə uyğunluğunun hərtərəfli qiymətləndirilməsi.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Zəif mədəniyyəti göstərən əlamətlər: <strong>yüksək işçi axını (High Employee Turnover)</strong>, <strong>yüksək işə gəlməmə dərəcələri (High Absence Rates)</strong> və <strong>tez-tez işçi şikayətləri (Frequent Employee Grievances)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p><strong>Düzgün idarəetmə olmadan (Without Proper Governance)</strong> açıq mədəniyyət əslində qeyri-düzgün davranışı təşviq edə bilər.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Mədəniyyət auditləri yalnız işçi sorğularına əsaslanmır. Auditorlar <strong>çoxsaylı müxtəlif mənbələrdən (Multiple Diverse Sources)</strong> məlumat toplamalıdır: işdən çıxma müsahibələri, etika qaynar xətləri, fokus qrupları.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ Həmişə <strong>\"görünməz\" olanı — Mədəniyyəti (Culture)</strong> <strong>\"maddi\" olandan — Davranışdan (Conduct)</strong> fərqləndirin.</div>
+      <div class="tip-block">✅ Mədəniyyəti audit etməyin üç yanaşmasını əzbərləyin: <strong>1) İnteqrasiya, 2) Hədəfləmə, 3) Yuxarıdan-aşağı</strong>.</div>
+      <div class="tip-block">✅ Təşkilat mədəniyyətinin <strong>əsas hərəkətverici qüvvəsi</strong> soruşulursa, həmişə <strong>\"Yuxarıdan Ton\" (Tone at the Top)</strong> ilə bağlı cavabları axtarın.</div>
+    </div>
+
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Kültür ve Davranış</div>
+        <p>UDD (IIA) soyut <strong class="key-term">kültür (Culture)</strong> kavramını (görünmez inanç sistemleri, değerler ve normlar) <strong class="key-term">davranıştan (Conduct)</strong> ayırır — davranış, bu kültürün çalışan eylemleri aracılığıyla somut tezahürüdür.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Kültürün Etkisi</div>
+        <p>Kültür, kuruluşun <strong class="key-term">risk profilini (Risk Profile)</strong> ve <strong class="key-term">iç kontrol ortamını (Internal Control Environment)</strong> doğrudan etkiler. Güçlü kültür verimliliği artırır; zayıf kültür ciddi iş sorunlarının temel nedenidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Üst Yönetim Tonu</div>
+        <p>Liderlik, kurum kültürü üzerinde en güçlü etkiye sahiptir. Üst düzey liderler arzu edilen davranışları tutarlı bir şekilde modelleyerek <strong class="key-term">"Üst Yönetim Tonu" (Tone at the Top)</strong> aracılığıyla kültürü aktif olarak şekillendirmelidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Denetim Yaklaşımları</div>
+        <p><strong class="key-term">Kültür denetimi (Culture Audit)</strong>, gerçek davranışların beyan edilen değerlerle uyumunu değerlendirir. Üç yaklaşım: <strong class="key-term">1) Entegrasyon (Integrate)</strong> — diğer görevlere dahil etmek; <strong class="key-term">2) Hedefleme (Target)</strong> — belirli süreçlere yönelmek; <strong class="key-term">3) Yukarıdan aşağı (Top-down)</strong> — tüm katmanlar boyunca.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Kurum Kültürü (Organizational Culture)</strong> — Kuruluştaki bireylerin paylaşılan görünmez değerleri, inançları, normları ve tercihleri bütünü.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Davranış (Conduct)</strong> — Kültürün bireylerin eylemleri ve kararları aracılığıyla somut tezahürü.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Kültür Denetimi (Culture Audit)</strong> — Kuruluşun gerçek davranışlarının beyan edilen değerlerle uyumunun kapsamlı değerlendirmesi.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Zayıf kültürün belirgin uyarı işaretleri: <strong>yüksek çalışan devir hızı (High Employee Turnover)</strong>, <strong>yüksek devamsızlık oranları (High Absence Rates)</strong> ve <strong>sık çalışan şikayetleri (Frequent Employee Grievances)</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p><strong>Uygun yönetişim olmadan (Without Proper Governance)</strong> açık kültür suistimali teşvik edebilir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Kültür denetimleri yalnızca anketlere dayanmaz. Denetçiler <strong>birden fazla çeşitli kaynaktan</strong> veri toplamalıdır: çıkış mülakatları, etik ihbar hatları, odak grupları.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ Her zaman <strong>"görünmez" olanı (Kültür)</strong> <strong>"somut" olandan (Davranış)</strong> ayırın.</div>
+      <div class="tip-block">✅ Kültürü denetlemenin üç yaklaşımını ezberleyin: <strong>1) Entegrasyon, 2) Hedefleme, 3) Yukarıdan aşağı</strong>.</div>
+      <div class="tip-block">✅ Kurum kültürünün <strong>temel itici gücü</strong> sorulursa, her zaman <strong>"Üst Yönetim Tonu" (Tone at the Top)</strong> ile ilgili cevapları arayın.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">5 / 5</span>
+      <div></div>
+    </div>
+  </div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS = ["su-3-1", "su-3-2", "su-3-3", "su-3-4", "su-3-5"];
+let currentSU = SUBUNIT_IDS[0];
+let globalLang = 'en';
+
+function showSubunit(id) {
+  SUBUNIT_IDS.forEach(sid => {
+    document.getElementById(sid).style.display = 'none';
+    document.getElementById('nav-' + sid).classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('nav-' + id).classList.add('active');
+  currentSU = id;
+  document.getElementById('nav-' + id).scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  applyLangToSubunit(id, globalLang);
+}
+
+function showLang(unitId, lang) {
+  globalLang = lang;
+  const unit = document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+  unit.querySelector('.lang-content.' + lang).classList.add('active');
+  const tabs = unit.querySelectorAll('.lang-tab');
+  const langMap = {'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  const labels = {'en':'AZ','az':'TR','tr':'EN'};
+  document.getElementById('lang-btn').textContent = labels[lang];
+}
+
+function applyLangToSubunit(id, lang) {
+  showLang(id, lang);
+  const su = document.getElementById(id);
+  const titleEl = su.querySelector('.su-header-title');
+  if(titleEl) titleEl.textContent = titleEl.dataset[lang] || titleEl.dataset.en;
+  const navBtn = document.getElementById('nav-' + id);
+  const navTitle = navBtn.querySelector('.su-nav-title');
+  if(navTitle) navTitle.textContent = navTitle.dataset[lang] || navTitle.dataset.en;
+}
+
+function toggleGlobalLang() {
+  const langs = ['en', 'az', 'tr'];
+  const labels = ['AZ', 'TR', 'EN'];
+  const idx = langs.indexOf(globalLang);
+  globalLang = langs[(idx + 1) % 3];
+  document.getElementById('lang-btn').textContent = labels[(idx + 1) % 3];
+  applyLangToSubunit(currentSU, globalLang);
+  SUBUNIT_IDS.forEach(sid => {
+    const btn = document.getElementById('nav-' + sid);
+    const t = btn.querySelector('.su-nav-title');
+    if(t) t.textContent = t.dataset[globalLang] || t.dataset.en;
+  });
+  const titleMap = {en:'Unit 3 · Summary', az:'Unit 3 · Xülasə', tr:'Unit 3 · Özet'};
+  document.getElementById('app-title').textContent = titleMap[globalLang];
+}
+
+function nextSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx < SUBUNIT_IDS.length - 1) showSubunit(SUBUNIT_IDS[idx + 1]);
+}
+
+function prevSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx > 0) showSubunit(SUBUNIT_IDS[idx - 1]);
+}
+
+// Init
+document.getElementById('nav-' + SUBUNIT_IDS[0]).classList.add('active');
+</script>
+</body>
+</html>

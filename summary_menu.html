@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Part 1 – Xülasə</title>
+<style>
+:root {
+  --navy:      #1a2e4a;
+  --navy-mid:  #2e4d72;
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6d2e;
+  --paper:     #f8f5ef;
+  --ink:       #0f1923;
+  --correct:   #1a6b3c;
+  --font:      -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:         12px;
+  --shadow:    0 2px 12px rgba(15,25,35,.09);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center;
+  height: 52px; max-width: 560px; margin: 0 auto; gap: 12px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0;
+}
+#page-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+}
+
+/* ── HEADER STRIP ────────────────────────────────────── */
+#header-strip {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 20px 20px 24px;
+  text-align: center;
+}
+#header-strip h2 {
+  font-size: 20px; font-weight: 800; color: #fff;
+  margin-bottom: 6px;
+}
+#header-strip p {
+  font-size: 13px; color: rgba(255,255,255,.5);
+}
+
+/* ── UNIT LIST ───────────────────────────────────────── */
+.section-label {
+  max-width: 560px; margin: 20px auto 8px;
+  padding: 0 16px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .9px; text-transform: uppercase; color: #999;
+}
+#unit-list {
+  max-width: 560px; margin: 0 auto;
+  padding: 0 14px 48px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.unit-card {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  border: 1px solid #e8e2d8;
+  padding: 16px;
+  text-decoration: none; color: var(--ink);
+  transition: transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.unit-card:active { transform: scale(.985); }
+.unit-card.locked { opacity: .45; pointer-events: none; }
+
+.unit-num {
+  width: 46px; height: 46px; flex-shrink: 0;
+  background: var(--navy); color: #fff;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800;
+}
+.unit-card.ready .unit-num { background: var(--gold-dim); }
+
+.unit-info { flex: 1; min-width: 0; }
+.unit-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.unit-sub   { font-size: 12px; color: #888; }
+
+.unit-badge {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .4px; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px; flex-shrink: 0;
+}
+.badge-ready  { background: #e8f5e9; color: var(--correct); }
+.badge-soon   { background: #eee;    color: #999; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='main.html'">← Geri</button>
+    <div id="page-title">📖 Kitabın Xülasəsi</div>
+  </div>
+</div>
+
+<div id="header-strip">
+  <h2>Kitabın Xülasəsi</h2>
+  <p>Hər Unit üçün strukturlu xülasə — AZ · EN · TR</p>
+</div>
+
+<div class="section-label">Hazır Unitlər</div>
+
+<div id="unit-list">
+
+  <a class="unit-card ready" href="summary1.html">
+    <div class="unit-num">1</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 1</div>
+      <div class="unit-sub">4 SubUnit · Purpose, Charter, Independence, Risk Mgmt</div>
+    </div>
+    <span class="unit-badge badge-ready">Hazır ✓</span>
+  </a>
+
+  <a class="unit-card ready" href="summary2.html">
+    <div class="unit-num">2</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 2</div>
+      <div class="unit-sub">6 SubUnit · Assurance, RCSA, Third Parties, Quality, Security, Performance</div>
+    </div>
+    <span class="unit-badge badge-ready">Hazır ✓</span>
+  </a>
+
+  <a class="unit-card ready" href="summary3.html">
+    <div class="unit-num">3</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 3</div>
+      <div class="unit-sub">5 SubUnit · Operational, Compliance, Financial, Management Reporting, Culture</div>
+    </div>
+    <span class="unit-badge badge-ready">Hazır ✓</span>
+  </a>
+
+  <a class="unit-card ready" href="summary4.html">
+    <div class="unit-num">4</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 4</div>
+      <div class="unit-sub">4 SubUnit · Advisory Services, Responsibilities, Benchmarking, BPR</div>
+    </div>
+    <span class="unit-badge badge-ready">Hazır ✓</span>
+  </a>
+
+  <div class="unit-card locked">
+    <div class="unit-num">5</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 5</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+  <div class="unit-card locked">
+    <div class="unit-num">6</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 6</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+  <div class="unit-card locked">
+    <div class="unit-num">7</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 7</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+  <div class="unit-card locked">
+    <div class="unit-num">8</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 8</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+  <div class="unit-card locked">
+    <div class="unit-num">9</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 9</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+  <div class="unit-card locked">
+    <div class="unit-num">10</div>
+    <div class="unit-info">
+      <div class="unit-title">Unit 10</div>
+      <div class="unit-sub">Hazırlanır...</div>
+    </div>
+    <span class="unit-badge badge-soon">Tezliklə</span>
+  </div>
+
+</div>
+
+</body>
+</html>

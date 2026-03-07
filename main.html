@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CIA Quiz">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Part 1 – Ana Menyu</title>
+<style>
+:root {
+  --navy:      #1a2e4a;
+  --navy-mid:  #2e4d72;
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6d2e;
+  --paper:     #f8f5ef;
+  --cream:     #ede8df;
+  --ink:       #0f1923;
+  --correct:   #1a6b3c;
+  --wrong:     #8b1a1a;
+  --font:      -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:         14px;
+  --shadow:    0 2px 16px rgba(15,25,35,.10);
+  --shadow-lg: 0 8px 32px rgba(15,25,35,.16);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+/* ── HERO ────────────────────────────────────────────── */
+#hero {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 52px 24px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 0%, rgba(201,168,76,.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(201,168,76,.18);
+  border: 1px solid rgba(201,168,76,.35);
+  color: var(--gold);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px;
+  margin-bottom: 16px;
+}
+#hero h1 {
+  font-size: 28px; font-weight: 800;
+  color: #fff; letter-spacing: -.5px;
+  line-height: 1.2; margin-bottom: 8px;
+}
+#hero h1 span { color: var(--gold); }
+#hero p {
+  font-size: 14px; color: rgba(255,255,255,.55);
+  margin-bottom: 28px;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 0;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px; overflow: hidden;
+  max-width: 320px; margin: 0 auto;
+}
+.hs-item {
+  flex: 1; padding: 14px 8px;
+  display: flex; flex-direction: column; align-items: center;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+.hs-item:last-child { border-right: none; }
+.hs-num {
+  font-size: 22px; font-weight: 800;
+  color: var(--gold); line-height: 1;
+}
+.hs-label {
+  font-size: 10px; color: rgba(255,255,255,.45);
+  text-transform: uppercase; letter-spacing: .6px;
+  margin-top: 4px;
+}
+
+/* ── SECTION LABEL ───────────────────────────────────── */
+.section-label {
+  max-width: 560px; margin: 24px auto 10px;
+  padding: 0 16px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .9px; text-transform: uppercase;
+  color: #999;
+}
+
+/* ── MENU CARDS ──────────────────────────────────────── */
+#menu-list {
+  max-width: 560px; margin: 0 auto;
+  padding: 0 14px 48px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.menu-card {
+  display: flex; align-items: center; gap: 16px;
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  border: 1px solid #e8e2d8;
+  padding: 18px 18px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform .15s, box-shadow .15s;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.menu-card:active { transform: scale(.985); box-shadow: var(--shadow-lg); }
+.menu-card.locked {
+  opacity: .5; pointer-events: none; cursor: default;
+}
+
+.card-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.icon-tests      { background: linear-gradient(135deg, #1a2e4a, #2e4d72); }
+.icon-summary    { background: linear-gradient(135deg, #8a6d2e, #c9a84c); }
+.icon-audio      { background: linear-gradient(135deg, #1a4a3a, #2a8a6a); }
+.icon-infographics { background: linear-gradient(135deg, #4a1a3a, #8a3a7a); }
+
+.card-body { flex: 1; min-width: 0; }
+.card-title {
+  font-size: 17px; font-weight: 700;
+  margin-bottom: 4px; line-height: 1.2;
+}
+.card-desc {
+  font-size: 13px; color: #777;
+  line-height: 1.4;
+}
+.card-meta {
+  font-size: 11px; font-weight: 700;
+  color: var(--gold-dim);
+  margin-top: 6px;
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.card-meta.ready   { color: var(--correct); }
+.card-meta.soon    { color: #bbb; }
+
+.card-arrow {
+  font-size: 18px; color: #ccc; flex-shrink: 0;
+}
+
+/* ── FOOTER ──────────────────────────────────────────── */
+#footer {
+  text-align: center; padding: 0 0 32px;
+  font-size: 11px; color: #bbb;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div id="topbar" style="position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25)">
+  <div style="display:flex;align-items:center;justify-content:flex-end;height:48px;max-width:560px;margin:0 auto">
+    <button id="lang-btn" onclick="cycleLang()" style="font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer">AZ</button>
+  </div>
+</div>
+<div id="hero">
+  <div class="hero-badge" id="hero-badge">CIA Part 1 · Hazırlıq</div>
+  <h1>CIA <span>Exam</span><br>Study App</h1>
+  <p id="hero-desc">10 Unit · Testlər, Xülasə, Səsli Dərslər, İnfoqrafiklər</p>
+
+</div>
+
+<!-- SECTION -->
+<div class="section-label" id="section-label">Bölmələr</div>
+
+<!-- MENU CARDS -->
+<div id="menu-list">
+
+  <!-- TESTLƏR -->
+  <a class="menu-card" href="index.html">
+    <div class="card-icon icon-tests">📝</div>
+    <div class="card-body">
+      <div class="card-title" id="test-title">Testlər</div>
+      <div class="card-desc" id="test-desc">Unit 1–10 üzrə çoxseçimli suallar, izahlı cavablar, TR / EN dil dəstəyi</div>
+      <div class="card-meta ready" id="test-meta">4 Unit hazır · 363 sual</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <!-- XÜLASƏ -->
+  <a class="menu-card" href="summary_menu.html">
+    <div class="card-icon icon-summary">📖</div>
+    <div class="card-body">
+      <div class="card-title" id="sum-title">Kitabın Xülasəsi</div>
+      <div class="card-desc" id="sum-desc">Hər SubUnit üçün əsas anlayışlar, açar terminlər, imtahan məsləhətləri — AZ / EN / TR</div>
+      <div class="card-meta ready" id="summary-meta">Unit 1 hazır · 4 SubUnit</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <!-- SƏSLİ DƏRSLƏR -->
+  <div class="menu-card locked">
+    <div class="card-icon icon-audio">🎧</div>
+    <div class="card-body">
+      <div class="card-title" id="audio-title">Səsli Dərslər</div>
+      <div class="card-desc" id="audio-desc">Audio dərslər — dinləyərək öyrən</div>
+      <div class="card-meta soon" id="audio-meta">Tezliklə</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </div>
+
+  <!-- İNFOQRAFİKLƏR -->
+  <div class="menu-card locked">
+    <div class="card-icon icon-infographics">📊</div>
+    <div class="card-body">
+      <div class="card-title" id="info-title">İnfoqrafiklər</div>
+      <div class="card-desc" id="info-desc">Vizual xülasələr, sxemlər və diaqramlar — görüntülü öyrənmə</div>
+      <div class="card-meta soon" id="info-meta">Tezliklə</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </div>
+
+</div>
+
+<div id="footer"><span id="footer-text">CIA Part 1 Study App · 2025</span></div>
+
+<script>
+const LANGS = {
+  az: {
+    heroDesc:    "10 Unit · Testlər, Xülasə, Səsli Dərslər, İnfoqrafiklər",
+    badge:       "CIA Part 1 · Hazırlıq",
+    sectionLabel:"Bölmələr",
+    testTitle:   "Testlər",
+    testDesc:    "Unit 1–10 üzrə çoxseçimli suallar, izahlı cavablar, TR / EN dil dəstəyi",
+    testMeta:    "4 Unit hazır · 363 sual",
+    sumTitle:    "Kitabın Xülasəsi",
+    sumDesc:     "Hər SubUnit üçün əsas anlayışlar, açar terminlər, imtahan məsləhətləri — AZ / EN / TR",
+    sumMeta:     "Unit 1 hazır · 4 SubUnit",
+    audioTitle:  "Səsli Dərslər",
+    audioDesc:   "Audio dərslər — dinləyərək öyrən",
+    audioMeta:   "Tezliklə",
+    infoTitle:   "İnfoqrafiklər",
+    infoDesc:    "Vizual xülasələr, sxemlər və diaqramlar — görüntülü öyrənmə",
+    infoMeta:    "Tezliklə",
+    footer:      "CIA Part 1 Study App · 2025",
+  },
+  en: {
+    heroDesc:    "10 Units · Tests, Summary, Audio Lessons, Infographics",
+    badge:       "CIA Part 1 · Exam Prep",
+    sectionLabel:"Sections",
+    testTitle:   "Practice Tests",
+    testDesc:    "Multiple-choice questions for Units 1–10, explained answers, TR / EN support",
+    testMeta:    "4 Units ready · 363 questions",
+    sumTitle:    "Study Summary",
+    sumDesc:     "Core concepts, key terms, exam tips for each SubUnit — AZ / EN / TR",
+    sumMeta:     "Unit 1 ready · 4 SubUnits",
+    audioTitle:  "Audio Lessons",
+    audioDesc:   "Audio lessons — learn by listening",
+    audioMeta:   "Coming Soon",
+    infoTitle:   "Infographics",
+    infoDesc:    "Visual summaries, diagrams and charts — visual learning",
+    infoMeta:    "Coming Soon",
+    footer:      "CIA Part 1 Study App · 2025",
+  },
+  tr: {
+    heroDesc:    "10 Ünite · Testler, Özet, Sesli Dersler, İnfografikler",
+    badge:       "CIA Part 1 · Sınav Hazırlığı",
+    sectionLabel:"Bölümler",
+    testTitle:   "Testler",
+    testDesc:    "Ünite 1–10 çoktan seçmeli sorular, açıklamalı cevaplar, TR / EN dil desteği",
+    testMeta:    "4 Ünite hazır · 363 soru",
+    sumTitle:    "Kitap Özeti",
+    sumDesc:     "Her Alt Ünite için temel kavramlar, anahtar terimler, sınav ipuçları — AZ / EN / TR",
+    sumMeta:     "Ünite 1 hazır · 4 Alt Ünite",
+    audioTitle:  "Sesli Dersler",
+    audioDesc:   "Sesli dersler — dinleyerek öğren",
+    audioMeta:   "Yakında",
+    infoTitle:   "İnfografikler",
+    infoDesc:    "Görsel özetler, şemalar ve diyagramlar — görsel öğrenme",
+    infoMeta:    "Yakında",
+    footer:      "CIA Part 1 Study App · 2025",
+  }
+};
+
+let curLang = 'az';
+const nextLang = { az: 'en', en: 'tr', tr: 'az' };
+const btnLabel = { az: 'EN', en: 'TR', tr: 'AZ' };
+
+function applyLang(l) {
+  const t = LANGS[l];
+  document.getElementById('hero-desc').textContent   = t.heroDesc;
+  document.getElementById('hero-badge').textContent  = t.badge;
+  document.getElementById('section-label').textContent = t.sectionLabel;
+  document.getElementById('test-title').textContent  = t.testTitle;
+  document.getElementById('test-desc').textContent   = t.testDesc;
+  document.getElementById('test-meta').textContent   = t.testMeta;
+  document.getElementById('sum-title').textContent   = t.sumTitle;
+  document.getElementById('sum-desc').textContent    = t.sumDesc;
+  document.getElementById('sum-meta').textContent    = t.sumMeta;
+  document.getElementById('audio-title').textContent = t.audioTitle;
+  document.getElementById('audio-desc').textContent  = t.audioDesc;
+  document.getElementById('audio-meta').textContent  = t.audioMeta;
+  document.getElementById('info-title').textContent  = t.infoTitle;
+  document.getElementById('info-desc').textContent   = t.infoDesc;
+  document.getElementById('info-meta').textContent   = t.infoMeta;
+  document.getElementById('footer-text').textContent = t.footer;
+  document.getElementById('lang-btn').textContent    = btnLabel[l];
+}
+
+function cycleLang() {
+  curLang = nextLang[curLang];
+  applyLang(curLang);
+}
+
+// Read test progress from localStorage
+(function() {
+  const UNIT_KEYS = [
+    { key: 'cia_quiz_unit1', q: 107 },
+    { key: 'cia_quiz_unit2', q: 105 },
+    { key: 'cia_quiz_unit3', q: 83  },
+    { key: 'cia_quiz_unit4', q: 68  },
+  ];
+  let totalDone = 0;
+  UNIT_KEYS.forEach(u => {
+    try {
+      const raw = localStorage.getItem(u.key);
+      if(raw) {
+        const d = JSON.parse(raw);
+        if((d.answered||[]).some(Boolean)) totalDone++;
+      }
+    } catch(e) {}
+  });
+  if(totalDone > 0) {
+    document.getElementById('stat-done').textContent = totalDone;
+  }
+})();
+</script>
+
+</body>
+</html>

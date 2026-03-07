@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 2 Summary</title>
+<style>
+:root {
+  --navy:       #1a2e4a;
+  --navy-mid:   #2e4d72;
+  --gold:       #c9a84c;
+  --gold-dim:   #8a6d2e;
+  --paper:      #f8f5ef;
+  --cream:      #ede8df;
+  --ink:        #0f1923;
+  --correct:    #1a6b3c;
+  --wrong:      #8b1a1a;
+  --font:       -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:          10px;
+  --shadow:     0 2px 12px rgba(15,25,35,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 680px; margin: 0 auto; gap: 10px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; transition: background .2s; flex-shrink: 0;
+}
+#app-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#lang-btn {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── SUBUNIT NAV STRIP ───────────────────────────────── */
+#su-nav {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0 12px 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#su-nav::-webkit-scrollbar { display: none; }
+#su-nav-inner {
+  display: flex; gap: 8px;
+  max-width: 680px; margin: 0 auto;
+  padding-top: 10px;
+}
+.su-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 7px 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .18s; min-width: 70px;
+  -webkit-tap-highlight-color: transparent;
+}
+.su-nav-btn:hover { background: rgba(255,255,255,.14); }
+.su-nav-btn.active {
+  background: rgba(201,168,76,.18);
+  border-color: var(--gold);
+}
+.su-nav-num {
+  font-size: 13px; font-weight: 800;
+  color: var(--gold); line-height: 1; margin-bottom: 3px;
+}
+.su-nav-title {
+  font-size: 10px; color: rgba(255,255,255,.6);
+  font-weight: 500; text-align: center;
+  max-width: 72px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.su-nav-btn.active .su-nav-title { color: rgba(255,255,255,.9); }
+
+/* ── MAIN CONTENT ────────────────────────────────────── */
+#main {
+  max-width: 680px; margin: 0 auto;
+  padding: 16px 14px 40px;
+}
+
+/* ── SUBUNIT HEADER ──────────────────────────────────── */
+.su-header {
+  display: flex; gap: 14px; align-items: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r); padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.su-header-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--gold); color: var(--navy);
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 800;
+}
+.su-header-title {
+  font-size: 16px; font-weight: 700; color: #fff;
+  line-height: 1.35; margin-bottom: 4px;
+}
+.su-header-sub {
+  font-size: 11px; color: rgba(255,255,255,.45);
+  font-weight: 500; letter-spacing: .4px;
+}
+
+/* ── LANG TABS ───────────────────────────────────────── */
+.lang-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+}
+.lang-tab {
+  flex: 1; padding: 9px 0;
+  border: 1.5px solid #ddd6ca;
+  border-radius: 8px;
+  background: #fff;
+  color: #888; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .18s;
+}
+.lang-tab.active {
+  background: var(--navy); color: var(--gold);
+  border-color: var(--navy);
+}
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+
+/* ── SECTION HEADINGS ────────────────────────────────── */
+.section-heading {
+  background: linear-gradient(135deg, #e8f0f8, #f0f4f9);
+  color: var(--navy);
+  font-size: 15px; font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 20px 0 10px 0;
+  border-left: 3px solid var(--navy-mid);
+}
+.section-heading:first-child { margin-top: 0; }
+
+/* ── CONCEPT BLOCKS ──────────────────────────────────── */
+.concept-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--navy-mid);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.concept-block .concept-title {
+  font-weight: 700; color: var(--navy-mid);
+  margin-bottom: 5px; font-size: 14px;
+}
+.concept-block p { font-size: 14px; color: #333; }
+
+/* ── KEY TERMS ───────────────────────────────────────── */
+.key-term { font-weight: 700; color: var(--gold-dim); }
+.term-block {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.term-block p { font-size: 14px; color: #333; }
+
+/* ── EXAM TRAPS ──────────────────────────────────────── */
+.trap-block {
+  background: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--wrong);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.trap-label {
+  display: inline-block;
+  background: var(--wrong); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.trap-block p { font-size: 14px; color: #4a1a1a; }
+
+/* ── EXAM TIPS ───────────────────────────────────────── */
+.tip-block {
+  background: #f0faf4;
+  border: 1px solid #b8e0c8;
+  border-left: 3px solid var(--correct);
+  border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+  font-size: 14px; color: #1a3a28;
+}
+
+/* ── BOTTOM NAV ──────────────────────────────────────── */
+.su-bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 16px;
+  border-top: 1px solid #e8e2d8;
+}
+.su-prev-btn, .su-next-btn {
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .18s;
+}
+.su-prev-btn:hover, .su-next-btn:hover { opacity: .85; }
+.su-counter {
+  font-size: 13px; color: #888; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Geri</button>
+    <div id="app-title">Unit 2 · Summary</div>
+    <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+  </div>
+</div>
+
+<div id="su-nav">
+  <div id="su-nav-inner">
+    <button class="su-nav-btn" id="nav-su-2-1" onclick="showSubunit('su-2-1')" >
+      <span class="su-nav-num">2.1</span>
+      <span class="su-nav-title" data-en="Assurance Services" data-az="Güvence Xidmətləri" data-tr="Güvence Hizmetleri">Assurance Services</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-2-2" onclick="showSubunit('su-2-2')" >
+      <span class="su-nav-num">2.2</span>
+      <span class="su-nav-title" data-en="Risk & Control Self-Assessment" data-az="Risk və Nəzarət Özqiymətləndirməsi" data-tr="Risk ve Kontrol Öz Değerlendirmesi">Risk & Control Self-Assessment</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-2-3" onclick="showSubunit('su-2-3')" >
+      <span class="su-nav-num">2.3</span>
+      <span class="su-nav-title" data-en="Audits of Third Parties" data-az="Üçüncü Tərəf Auditləri" data-tr="Üçüncü Taraf Denetimleri">Audits of Third Parties</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-2-4" onclick="showSubunit('su-2-4')" >
+      <span class="su-nav-num">2.4</span>
+      <span class="su-nav-title" data-en="Quality Auditing" data-az="Keyfiyyət Auditi" data-tr="Kalite Denetimi">Quality Auditing</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-2-5" onclick="showSubunit('su-2-5')" >
+      <span class="su-nav-num">2.5</span>
+      <span class="su-nav-title" data-en="Security & Privacy Audits" data-az="Təhlükəsizlik və Məxfilik Auditləri" data-tr="Güvenlik ve Gizlilik Denetimleri">Security & Privacy Audits</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-2-6" onclick="showSubunit('su-2-6')" >
+      <span class="su-nav-num">2.6</span>
+      <span class="su-nav-title" data-en="Performance Audits" data-az="Performans Auditləri" data-tr="Performans Denetimleri">Performance Audits</span>
+    </button>
+  </div>
+</div>
+
+<div id="main">
+  <div class="subunit-summary" id="su-2-1" style="display:block">
+    <div class="su-header">
+      <div class="su-header-num">2.1</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Assurance Services" data-az="Güvence Xidmətləri" data-tr="Güvence Hizmetleri">Assurance Services</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-1','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-1','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-1','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">The Goal of Assurance</div>
+<p><strong class="key-term">Assurance services</strong> involve objective assessments by internal auditors to build trust and confidence in an organization's governance, risk management, and control processes. By evaluating conditions against established criteria, auditors help strengthen the organization's ability to maintain value, run efficiently, and comply with laws.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Determining the Scope</div>
+<p>To maintain independence and objectivity, the nature and scope of a specific assurance engagement are strictly determined by the <strong class="key-term">internal auditor</strong>, not by management.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Relationship with External Auditors</div>
+<p>Internal auditors do not replicate the financial statement audits performed by <strong class="key-term">external auditors</strong>. Instead, they focus on evaluating the effectiveness of <strong class="key-term">internal controls over reporting</strong>, which external auditors may then partially rely upon to complete their own work.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Assurance Services</strong> — An objective examination of evidence by internal auditors to provide an independent assessment of governance, risk management, and control processes.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">The Three Participants</strong> — Assurance engagements always involve three distinct parties: the <strong class="key-term">process owner</strong> (responsible for the activity), the <strong class="key-term">internal auditor</strong> (conducting the assessment), and the <strong class="key-term">user</strong> (who relies on the final report for decision-making).</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Reasonable Assurance</strong> — The level of confidence provided by internal controls, acknowledging that absolute assurance is impossible to achieve.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The three primary types of assurance engagements: <strong>Operational</strong> (efficiency/effectiveness), <strong>Compliance</strong> (adherence to rules), and <strong>IT</strong> (information integrity).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Questions often test <em>who is responsible for setting the scope</em> of an engagement. If it is an assurance engagement, the correct answer is always the <strong>internal auditor</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates often mistakenly assume internal auditors perform primary <em>financial statement audits</em>. The exam expects you to know that internal auditors focus on the <strong>controls around reporting</strong>, leaving the direct financial statement audit to external auditors.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the <strong>"Three Parties"</strong> of assurance: <strong>Process Owner</strong>, <strong>Internal Auditor</strong>, and <strong>User</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Distinguish the timeframes: <strong>Operational audits</strong> focus on the present and future, while <strong>Compliance audits</strong> examine the past and present.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Link the <strong>COSO framework</strong> objectives directly to the main assurance engagement types: <strong>Operations, Reporting, and Compliance</strong>.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Əminlik Xidmətlərinin Məqsədi</div>
+<p><strong class="key-term">Əminlik xidmətləri (Assurance Services)</strong> daxili auditorlar tərəfindən təşkilatın idarəetmə (Governance), risk idarəetməsi (Risk Management) və nəzarət (Control) proseslərinə inam və etibar yaratmaq üçün aparılan obyektiv qiymətləndirmələrdir. Şərtləri müəyyən edilmiş meyarlara qarşı qiymətləndirərək auditorlar təşkilatın dəyər qoruma, effektiv fəaliyyət göstərmə və qanunlara uyğunluq qabiliyyətini gücləndirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Əhatə Dairəsinin Müəyyən Edilməsi</div>
+<p>Müstəqillik və obyektivliyi qorumaq üçün konkret əminlik tapşırığının (Assurance Engagement) xarakteri və əhatə dairəsi ciddi şəkildə <strong class="key-term">daxili auditor (Internal Auditor)</strong> tərəfindən müəyyən edilir — rəhbərlik tərəfindən deyil.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Xarici Auditorlarla Əlaqə</div>
+<p>Daxili auditorlar <strong class="key-term">xarici auditorların (External Auditors)</strong> apardığı maliyyə hesabatı auditlərini təkrarlamırlar. Əvəzinə, <strong class="key-term">hesabatlılıq üzrə daxili nəzarətlərin (Internal Controls over Reporting)</strong> effektivliyini qiymətləndirməyə fokuslanırlar — xarici auditorlar sonradan öz işlərini tamamlamaq üçün bu nəticələrə qismən etibar edə bilərlər.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Əminlik Xidmətləri (Assurance Services)</strong> — Daxili auditorlar tərəfindən idarəetmə (Governance), risk idarəetməsi (Risk Management) və nəzarət (Control) proseslərinin müstəqil qiymətləndirilməsini təmin etmək üçün sübutların obyektiv araşdırılması.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Üç İştirakçı (Three Participants)</strong> — Əminlik tapşırıqları həmişə üç fərqli tərəfi əhatə edir: <strong class="key-term">proses sahibi (Process Owner)</strong> (fəaliyyətə cavabdeh olan), <strong class="key-term">daxili auditor (Internal Auditor)</strong> (qiymətləndirməni aparan) və <strong class="key-term">istifadəçi (User)</strong> (qərar qəbulu üçün yekun hesabata etibar edən).</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Ağlabatan Əminlik (Reasonable Assurance)</strong> — Daxili nəzarətlər tərəfindən təmin edilən inam səviyyəsi; mütləq əminliyə nail olmağın qeyri-mümkün olduğunu qəbul edir.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Əminlik tapşırıqlarının üç əsas növü: <strong>Əməliyyat auditi (Operational)</strong> — effektivlik/səmərəlilik, <strong>Uyğunluq auditi (Compliance)</strong> — qaydalara riayət, və <strong>İT auditi (IT)</strong> — informasiya bütövlüyü.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>Suallar tez-tez tapşırığın <em>əhatə dairəsini kimin müəyyən etdiyini</em> test edir. Əminlik tapşırığı (Assurance Engagement) olduqda, düzgün cavab həmişə <strong>daxili auditordur (Internal Auditor)</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər tez-tez səhvən daxili auditorların birbaşa <em>maliyyə hesabatı auditləri</em> apardığını düşünür. İmtahan sizdən bilməyinizi gözləyir ki, daxili auditorlar <strong>hesabatlılıq ətrafındakı nəzarətlərə (Controls around Reporting)</strong> fokuslanır, birbaşa maliyyə hesabatı auditini xarici auditorlara buraxır.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Əminliyin <strong>"Üç Tərəfini" (Three Parties)</strong> əzbərləyin: <strong>Proses Sahibi (Process Owner)</strong>, <strong>Daxili Auditor (Internal Auditor)</strong> və <strong>İstifadəçi (User)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Zaman çərçivələrini fərqləndirin: <strong>Əməliyyat auditləri (Operational Audits)</strong> indiki və gələcəyə fokuslanır, <strong>Uyğunluq auditləri (Compliance Audits)</strong> isə keçmiş və indikini araşdırır.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>COSO çərçivəsinin (COSO Framework)</strong> məqsədlərini birbaşa əsas əminlik tapşırığı növləri ilə əlaqələndirin: <strong>Əməliyyatlar (Operations), Hesabatlılıq (Reporting) və Uyğunluq (Compliance)</strong>.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Güvence Hizmetlerinin Amacı</div>
+<p><strong class="key-term">Güvence hizmetleri (Assurance Services)</strong>, iç denetçiler tarafından kuruluşun yönetişim (Governance), risk yönetimi (Risk Management) ve kontrol (Control) süreçlerine güven ve itimat oluşturmak için yapılan objektif değerlendirmelerdir. Koşulları belirlenmiş kriterlere göre değerlendirerek denetçiler, kuruluşun değer koruma, verimli çalışma ve yasalara uyum kapasitesini güçlendirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Kapsamın Belirlenmesi</div>
+<p>Bağımsızlık ve objektifliği korumak için belirli bir güvence görevinin (Assurance Engagement) niteliği ve kapsamı kesinlikle <strong class="key-term">iç denetçi (Internal Auditor)</strong> tarafından belirlenir — yönetim tarafından değil.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Dış Denetçilerle İlişki</div>
+<p>İç denetçiler, <strong class="key-term">dış denetçilerin (External Auditors)</strong> gerçekleştirdiği finansal tablo denetimlerini tekrarlamaz. Bunun yerine, <strong class="key-term">raporlama üzerindeki iç kontrollerin (Internal Controls over Reporting)</strong> etkinliğini değerlendirmeye odaklanırlar — dış denetçiler daha sonra kendi çalışmalarını tamamlamak için bu sonuçlara kısmen güvenebilir.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Güvence Hizmetleri (Assurance Services)</strong> — İç denetçiler tarafından yönetişim (Governance), risk yönetimi (Risk Management) ve kontrol (Control) süreçlerinin bağımsız değerlendirmesini sağlamak için kanıtların objektif incelenmesi.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Üç Katılımcı (Three Participants)</strong> — Güvence görevleri her zaman üç ayrı tarafı içerir: <strong class="key-term">süreç sahibi (Process Owner)</strong> (faaliyetten sorumlu olan), <strong class="key-term">iç denetçi (Internal Auditor)</strong> (değerlendirmeyi yürüten) ve <strong class="key-term">kullanıcı (User)</strong> (karar alma için nihai rapora güvenen).</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Makul Güvence (Reasonable Assurance)</strong> — İç kontroller tarafından sağlanan güven düzeyi; mutlak güvenceye ulaşmanın imkânsız olduğunu kabul eder.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Güvence görevlerinin üç temel türü: <strong>Faaliyet denetimi (Operational)</strong> — verimlilik/etkinlik, <strong>Uyum denetimi (Compliance)</strong> — kurallara uyum, ve <strong>BT denetimi (IT)</strong> — bilgi bütünlüğü.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sorular sıklıkla görevin <em>kapsamını kimin belirlediğini</em> test eder. Güvence görevi (Assurance Engagement) söz konusu olduğunda, doğru cevap her zaman <strong>iç denetçidir (Internal Auditor)</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar sıklıkla yanlışlıkla iç denetçilerin doğrudan <em>finansal tablo denetimleri</em> yaptığını varsayar. Sınav, iç denetçilerin <strong>raporlama etrafındaki kontrollere (Controls around Reporting)</strong> odaklandığını, doğrudan finansal tablo denetimini dış denetçilere bıraktığını bilmenizi bekler.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Güvencenin <strong>"Üç Tarafını" (Three Parties)</strong> ezberleyin: <strong>Süreç Sahibi (Process Owner)</strong>, <strong>İç Denetçi (Internal Auditor)</strong> ve <strong>Kullanıcı (User)</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Zaman çerçevelerini ayırt edin: <strong>Faaliyet denetimleri (Operational Audits)</strong> şimdiki ve geleceğe odaklanır, <strong>Uyum denetimleri (Compliance Audits)</strong> ise geçmiş ve şimdikiyi inceler.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>COSO çerçevesinin (COSO Framework)</strong> hedeflerini doğrudan ana güvence görevi türleriyle ilişkilendirin: <strong>Faaliyetler (Operations), Raporlama (Reporting) ve Uyum (Compliance)</strong>.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <div></div>
+      <span class="su-counter">1 / 6</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <div class="subunit-summary" id="su-2-2" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">2.2</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Risk & Control Self-Assessment" data-az="Risk və Nəzarət Özqiymətləndirməsi" data-tr="Risk ve Kontrol Öz Değerlendirmesi">Risk & Control Self-Assessment</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-2','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-2','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-2','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">The Core Philosophy</div>
+<p>The basic philosophy of <strong class="key-term">CSA</strong> is that control is the responsibility of <strong class="key-term">everyone in the organization</strong>, not just senior management or internal auditors. It empowers employees at all levels to actively engage in evaluating and improving the risk management and control systems they use daily.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">The Role of Internal Audit</div>
+<p>Internal auditors <strong class="key-term">collaborate</strong> with business units rather than performing traditional audit tests. Their involvement can range from minimal (acting only as an interested consultant and ultimate verifier) to significant (sponsoring the program, providing training, and facilitating workshops).</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Managing Objectivity</div>
+<p>As internal audit's involvement in workshop deliberations increases, the <strong class="key-term">CAE</strong> must actively monitor and manage the internal audit staff to ensure their <strong class="key-term">objectivity</strong> is not impaired.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Benefits and Risks</div>
+<p>CSAs provide greater coverage, identify informal <strong class="key-term">"soft" controls</strong>, and motivate personnel to take ownership of their processes. However, a major risk is a <strong class="key-term">lack of honesty or transparency</strong> — participants may describe how a process is <em>supposed</em> to work rather than how it <em>actually</em> functions.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Control Self-Assessment (CSA)</strong> — A process where internal audit and business units collaborate to produce better information about the working status of control processes and the significance of any residual risks.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Workshop-Facilitation Approach</strong> — The most common form of CSA, involving structured, documented, and repetitive in-person meetings led by a facilitator to examine risks and controls.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Survey Approach</strong> — A CSA method using simple questionnaires, preferred when respondents are widely dispersed or when the organizational culture limits open and candid discussion.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Management-Produced Analysis (Self-Certification)</strong> — An approach where management independently prepares an analysis of risks and controls in their area without the direct involvement of internal auditors or facilitators.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The four specific formats of facilitated workshops: <strong>Objective-based</strong> (best way to achieve a goal), <strong>Risk-based</strong> (listing possible barriers/threats), <strong>Control-based</strong> (gap analysis of how current controls are working), and <strong>Process-based</strong> (evaluating a chain of related activities).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Questions testing the auditor's role in a CSA often include distractors like <em>"auditors perform traditional tests to identify weaknesses."</em> This is incorrect — in a CSA, <strong>participants discuss the weaknesses</strong>, and auditors facilitate or verify.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates sometimes assume that because business managers design risk mitigation strategies, they are the <em>most objective evaluators</em>. While managers are in the best position to monitor risks, they are <strong>not always objective</strong>.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always match the <strong>Survey approach</strong> to scenarios mentioning <strong>"widely dispersed employees"</strong> or <strong>"low-trust / authoritative organizational cultures"</strong> where people might be afraid to speak up.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> CSA helps internal audit <strong>allocate scarce resources better</strong> by allowing them to focus on high-risk areas identified by the self-assessments.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> A key word for CSA benefits is <strong>"ownership"</strong> — the process motivates personnel to take ownership of control processes, leading to more timely and effective corrective actions.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Əsas Fəlsəfə</div>
+<p><strong class="key-term">Nəzarətin Özünüqiymətləndirilməsinin (CSA)</strong> əsas fəlsəfəsi ondan ibarətdir ki, nəzarət yalnız yüksək rəhbərliyin və ya daxili auditorların deyil, <strong class="key-term">təşkilatdakı hər kəsin məsuliyyətidir</strong>. Bu, bütün səviyyələrdə işçiləri gündəlik istifadə etdikləri risk idarəetməsi və nəzarət sistemlərinin qiymətləndirilməsində və təkmilləşdirilməsində fəal iştirak etməyə təşviq edir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Daxili Auditin Rolu</div>
+<p>Daxili auditorlar ənənəvi audit testləri aparmaq əvəzinə biznes bölmələri ilə <strong class="key-term">əməkdaşlıq (Collaborate)</strong> edirlər. Onların iştirakı minimal (yalnız maraqlı məsləhətçi və yekun təsdiqləyici) səviyyəsindən əhəmiyyətli (proqramı maliyyələşdirmək, təlim vermək və seminarları idarə etmək) səviyyəsinə qədər dəyişə bilər.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Obyektivliyin İdarə Edilməsi</div>
+<p>Daxili auditin seminar müzakirələrində iştirakı artdıqca, <strong class="key-term">Baş Audit İcraçısı (CAE)</strong> daxili audit işçilərinin <strong class="key-term">obyektivliyinin (Objectivity)</strong> pozulmamasını təmin etmək üçün onları fəal şəkildə izləməli və idarə etməlidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Faydalar və Risklər</div>
+<p>Nəzarətin Özünüqiymətləndirilməsi (CSA) daha geniş əhatə təmin edir, qeyri-rəsmi <strong class="key-term">"yumşaq" nəzarətləri (Soft Controls)</strong> müəyyən edir və işçiləri proseslərinə sahib çıxmağa motivasiya edir. Lakin əsas risk <strong class="key-term">dürüstlük və ya şəffaflıq çatışmazlığıdır</strong> — iştirakçılar prosesin <em>faktiki olaraq</em> necə işlədiyini deyil, <em>necə işləməli olduğunu</em> təsvir edə bilərlər.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Nəzarətin Özünüqiymətləndirilməsi (Control Self-Assessment / CSA)</strong> — Daxili audit və biznes bölmələrinin nəzarət proseslərinin iş vəziyyəti və qalıq risklərin (Residual Risks) əhəmiyyəti barədə daha yaxşı məlumat əldə etmək üçün əməkdaşlıq etdiyi proses.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Seminar-Fasilitasiya Yanaşması (Workshop-Facilitation Approach)</strong> — CSA-nın ən geniş yayılmış forması; riskləri və nəzarətləri araşdırmaq üçün fasilitator tərəfindən idarə olunan strukturlaşdırılmış, sənədləşdirilmiş və təkrarlanan üz-üzə görüşləri əhatə edir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Sorğu Yanaşması (Survey Approach)</strong> — Sadə anketlərdən istifadə edən CSA metodu; respondentlər geniş ərazidə səpələnmiş olduqda və ya təşkilat mədəniyyəti açıq müzakirəni məhdudlaşdırdıqda üstünlük verilir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Rəhbərlik tərəfindən Hazırlanan Təhlil / Öz-özünə Sertifikasiya (Management-Produced Analysis / Self-Certification)</strong> — Rəhbərliyin daxili auditorların və ya fasilitatorların birbaşa iştirakı olmadan öz sahəsindəki risklər və nəzarətlər barədə müstəqil şəkildə təhlil hazırladığı yanaşma.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Fasilitasiya olunmuş seminarların dörd xüsusi formatı: <strong>Məqsəd əsaslı (Objective-based)</strong> — məqsədə çatmağın ən yaxşı yolu, <strong>Risk əsaslı (Risk-based)</strong> — mümkün maneələrin/təhdidlərin siyahısı, <strong>Nəzarət əsaslı (Control-based)</strong> — cari nəzarətlərin necə işlədiyinin boşluq təhlili, və <strong>Proses əsaslı (Process-based)</strong> — əlaqəli fəaliyyətlər zəncirinin qiymətləndirilməsi.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>CSA-da auditorun rolunu test edən suallar tez-tez <em>"auditorlar zəif cəhətləri müəyyən etmək üçün ənənəvi testlər aparır"</em> kimi yanlış yönləndirici cavablar ehtiva edir. Bu yanlışdır — CSA-da <strong>iştirakçılar zəif cəhətləri müzakirə edir</strong>, auditorlar isə fasilitasiya edir və ya təsdiqləyir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər bəzən düşünür ki, biznes menecerləri risk azaltma strategiyalarını hazırladığı üçün <em>ən obyektiv qiymətləndiricilərdir</em>. Menecerlər riskləri izləmək üçün ən yaxşı mövqedə olsalar da, <strong>həmişə obyektiv deyillər</strong>.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Sorğu yanaşmasını (Survey Approach)</strong> həmişə <strong>"geniş əraziyə səpələnmiş işçilər"</strong> və ya <strong>"aşağı etibar/avtoritar təşkilat mədəniyyəti"</strong> — insanların seminarda danışmaqdan çəkindiyi ssenarilərlə uyğunlaşdırın.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> CSA daxili auditə özünüqiymətləndirilmələr tərəfindən müəyyən edilmiş yüksək riskli sahələrə fokuslanmağa imkan verərək <strong>məhdud resursları daha yaxşı bölüşdürməyə (Allocate Scarce Resources)</strong> kömək edir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> CSA faydalarının açar sözü <strong>"sahiblik" (Ownership)</strong> — proses işçiləri nəzarət proseslərinə sahib çıxmağa motivasiya edir, bu da daha vaxtında və effektiv düzəldici tədbirlərə gətirib çıxarır.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Temel Felsefe</div>
+<p><strong class="key-term">Kontrol Öz Değerlendirmesinin (CSA)</strong> temel felsefesi, kontrolün yalnızca üst yönetimin veya iç denetçilerin değil, <strong class="key-term">kuruluştaki herkesin sorumluluğu</strong> olduğudur. Bu, tüm seviyelerdeki çalışanları günlük kullandıkları risk yönetimi ve kontrol sistemlerinin değerlendirilmesine ve iyileştirilmesine aktif olarak katılmaya teşvik eder.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">İç Denetimin Rolü</div>
+<p>İç denetçiler geleneksel denetim testleri yapmak yerine iş birimleriyle <strong class="key-term">iş birliği (Collaborate)</strong> yapar. Katılımları minimal (yalnızca ilgili danışman ve nihai doğrulayıcı) düzeyden önemli (programı destekleme, eğitim sağlama ve çalıştayları yönetme) düzeye kadar değişebilir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Objektifliğin Yönetimi</div>
+<p>İç denetimin çalıştay müzakerelerindeki katılımı arttıkça, <strong class="key-term">Denetim Yöneticisi (CAE)</strong> iç denetim personelinin <strong class="key-term">objektifliğinin (Objectivity)</strong> bozulmamasını sağlamak için onları aktif olarak izlemeli ve yönetmelidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Faydalar ve Riskler</div>
+<p>Kontrol Öz Değerlendirmesi (CSA) daha geniş kapsam sağlar, gayri resmi <strong class="key-term">"yumuşak" kontrolleri (Soft Controls)</strong> belirler ve personeli süreçlerine sahip çıkmaya motive eder. Ancak temel risk <strong class="key-term">dürüstlük veya şeffaflık eksikliğidir</strong> — katılımcılar sürecin <em>gerçekte</em> nasıl çalıştığını değil, <em>nasıl çalışması gerektiğini</em> tanımlayabilir.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Kontrol Öz Değerlendirmesi (Control Self-Assessment / CSA)</strong> — İç denetim ve iş birimlerinin kontrol süreçlerinin çalışma durumu ve artık risklerin (Residual Risks) önemi hakkında daha iyi bilgi üretmek için iş birliği yaptığı süreç.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Çalıştay-Kolaylaştırma Yaklaşımı (Workshop-Facilitation Approach)</strong> — CSA'nın en yaygın biçimi; riskleri ve kontrolleri incelemek üzere bir kolaylaştırıcı tarafından yönetilen yapılandırılmış, belgelenmiş ve tekrarlanan yüz yüze toplantıları kapsar.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Anket Yaklaşımı (Survey Approach)</strong> — Basit anketler kullanan CSA yöntemi; katılımcılar geniş alana dağılmış olduğunda veya kurum kültürü açık tartışmayı sınırladığında tercih edilir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Yönetim Tarafından Hazırlanan Analiz / Kendi Kendine Sertifikasyon (Management-Produced Analysis / Self-Certification)</strong> — Yönetimin, iç denetçilerin veya kolaylaştırıcıların doğrudan katılımı olmadan kendi alanındaki riskler ve kontroller hakkında bağımsız olarak analiz hazırladığı yaklaşım.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Kolaylaştırılmış çalıştayların dört belirli formatı: <strong>Hedef temelli (Objective-based)</strong> — amaca ulaşmanın en iyi yolu, <strong>Risk temelli (Risk-based)</strong> — olası engellerin/tehditlerin listelenmesi, <strong>Kontrol temelli (Control-based)</strong> — mevcut kontrollerin nasıl çalıştığının boşluk analizi, ve <strong>Süreç temelli (Process-based)</strong> — ilişkili faaliyetler zincirinin değerlendirilmesi.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>CSA'da denetçinin rolünü test eden sorular sıklıkla <em>"denetçiler zayıflıkları belirlemek için geleneksel testler yapar"</em> gibi yanıltıcı seçenekler içerir. Bu yanlıştır — CSA'da <strong>katılımcılar zayıflıkları tartışır</strong>, denetçiler ise kolaylaştırır veya doğrular.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar bazen iş yöneticilerinin risk azaltma stratejilerini tasarladığı için <em>en objektif değerlendiriciler</em> olduğunu varsayar. Yöneticiler riskleri izlemek için en iyi konumda olsalar da, <strong>her zaman objektif değildirler</strong>.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Anket yaklaşımını (Survey Approach)</strong> her zaman <strong>"geniş alana dağılmış çalışanlar"</strong> veya <strong>"düşük güven/otoriter kurum kültürü"</strong> — insanların çalıştayda konuşmaktan çekindiği senaryolarla eşleştirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> CSA, iç denetime öz değerlendirmeler tarafından belirlenen yüksek riskli alanlara odaklanma imkânı vererek <strong>kıt kaynakları daha iyi tahsis etmeye (Allocate Scarce Resources)</strong> yardımcı olur.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> CSA faydalarının anahtar kelimesi <strong>"sahiplenme" (Ownership)</strong> — süreç, personeli kontrol süreçlerine sahip çıkmaya motive eder, bu da daha zamanında ve etkili düzeltici eylemlere yol açar.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">2 / 6</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <div class="subunit-summary" id="su-2-3" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">2.3</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Audits of Third Parties" data-az="Üçüncü Tərəf Auditləri" data-tr="Üçüncü Taraf Denetimleri">Audits of Third Parties</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-3','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-3','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-3','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">Managing External Business Relationships (EBRs)</div>
+<p>Organizations use external partners like service providers, vendors, and joint ventures to lower costs and gain expertise, but management must ensure the benefits outweigh the risks. Internal auditors add value by evaluating these relationships to uncover missed revenue, identify overcharges, and mitigate risks like <strong class="key-term">fraud</strong> or <strong class="key-term">reputational damage</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Mitigating Third-Party Control Risk</div>
+<p>When vital processes are outsourced (like IT), the external entity's controls become an extension of the organization's controls, significantly increasing <strong class="key-term">control risk</strong>. Internal auditors mitigate this by reviewing <strong class="key-term">SOC reports</strong> from the provider's external auditors, though they must first evaluate the external auditor's reliability to justify relying on their work.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">The Contract Audit Lifecycle</div>
+<p>Internal auditors evaluate significant construction and operating contracts to ensure both parties meet their obligations. To best protect the organization, auditors should not wait until the performance phase — they must be involved <strong class="key-term">throughout the entire contracting process</strong>, including reviewing bidding procedures and cost estimations.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Audit Clause</strong> — A specific provision within a contract that grants the internal auditor the right to perform an audit of an external business relationship.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SOC Reports</strong> — Reports issued by a service provider's external auditor (SOC 1, 2, or 3) that detail the suitability and effectiveness of the provider's internal controls.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Cost-Plus Contract</strong> — A contract where the buyer pays the cost of performance plus a fixed amount or percentage; requires careful audit review because the contractor has little incentive for economy or efficiency.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Unit-Price Contract</strong> — A contract where a cost per unit is set, making the accurate measurement of actual work performed (e.g., hours logged or acres cleared) the key audit issue.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Source Code Escrow Clause</strong> — A contractual provision requiring application source code to be held securely by a trusted third party, protecting the buyer if the software vendor fails to maintain the system.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The distinct risks associated with the three main contract types: <strong>Lump-Sum / Fixed-Price</strong>, <strong>Cost-Plus</strong>, and <strong>Unit-Price</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Exam scenarios often ask <em>when</em> an internal auditor should get involved in a major contract. Distractors suggest "during the execution phase" or "after completion." The correct answer is always: involved <strong>throughout the contracting process</strong>, starting with bidding and estimation.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates sometimes assume internal auditors have an <em>automatic right</em> to audit any outsourced vendor. The exam emphasizes that the auditor must first confirm the contract explicitly contains an <strong>"audit clause"</strong> granting this right.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Match the contract type to its primary risk: <strong>"Cost-Plus"</strong> → lack of efficiency incentive. <strong>"Unit-Price"</strong> → risk of inaccurate work measurement.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> If an exam question mentions purchasing a new business application system, look for the answer choice recommending a <strong>"Source Code Escrow Clause"</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> While internal auditors can rely on <strong>SOC reports</strong> for third-party controls, they must always review them for accuracy and verify the <strong>credibility of the external auditor</strong> who issued them.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Xarici Biznes Münasibətlərinin İdarə Edilməsi (EBRs)</div>
+<p>Təşkilatlar xərcləri azaltmaq və ekspertiza qazanmaq üçün xidmət təminatçıları, satıcılar və birgə müəssisələr kimi xarici tərəfdaşlardan istifadə edir, lakin rəhbərlik faydaların risklərdən üstün olmasını təmin etməlidir. Daxili auditorlar bu münasibətləri qiymətləndirərək əldən verilmiş gəlirləri aşkar etmək, artıq ödəmələri müəyyən etmək və <strong class="key-term">fırıldaqçılıq (Fraud)</strong> və ya <strong class="key-term">reputasiya zərəri (Reputational Damage)</strong> kimi riskləri azaltmaqla dəyər yaradır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üçüncü Tərəf Nəzarət Riskinin Azaldılması</div>
+<p>Əsas proseslər (İT kimi) autsorsinq edildikdə, xarici qurumun nəzarətləri təşkilatın nəzarətlərinin davamı olur və <strong class="key-term">nəzarət riskini (Control Risk)</strong> əhəmiyyətli dərəcədə artırır. Daxili auditorlar bunu təminatçının xarici auditorlarından alınan <strong class="key-term">SOC hesabatlarını (SOC Reports)</strong> nəzərdən keçirərək azaldır, lakin əvvəlcə xarici auditorun etibarlılığını qiymətləndirərək onların işinə etibar etməyi əsaslandırmalıdırlar.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Müqavilə Auditinin Həyat Dövrü</div>
+<p>Daxili auditorlar əhəmiyyətli tikinti və əməliyyat müqavilələrini hər iki tərəfin öhdəliklərini yerinə yetirməsini təmin etmək üçün qiymətləndirirlər. Təşkilatı ən yaxşı şəkildə qorumaq üçün auditorlar icra mərhələsinə qədər gözləməməlidir — tender prosedurları və xərc hesablamaları da daxil olmaqla <strong class="key-term">bütün müqavilə prosesi boyunca (Throughout the Entire Contracting Process)</strong> iştirak etməlidirlər.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Audit Maddəsi (Audit Clause)</strong> — Müqavilə daxilində daxili auditora xarici biznes münasibətinin auditini aparmaq hüququ verən xüsusi şərt.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SOC Hesabatları (SOC Reports)</strong> — Xidmət təminatçısının xarici auditoru tərəfindən verilən (SOC 1, 2 və ya 3) və təminatçının daxili nəzarətlərinin uyğunluğunu və effektivliyini ətraflı təsvir edən hesabatlar.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Xərc-Üstəgəl Müqavilə (Cost-Plus Contract)</strong> — Alıcının icra xərclərini üstəgəl sabit məbləğ və ya faiz ödədiyi müqavilə; podratçının qənaət və ya səmərəlilik üçün az stimulu olduğundan diqqətli audit nəzərdən keçirilməsi tələb olunur.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Vahid Qiymət Müqaviləsi (Unit-Price Contract)</strong> — Vahid başına qiymətin müəyyən edildiyi müqavilə; faktiki görülmüş işin dəqiq ölçülməsi (məs., qeydə alınmış saatlar və ya təmizlənmiş sahə) əsas audit məsələsidir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Mənbə Kodu Depozit Maddəsi (Source Code Escrow Clause)</strong> — Tətbiqin mənbə kodunun etibarlı üçüncü tərəf yanında təhlükəsiz saxlanmasını tələb edən müqavilə şərti; proqram təminatı satıcısı sistemi dəstəkləməyi dayandırdıqda alıcını qoruyur.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Üç əsas müqavilə növü ilə bağlı fərqli risklər: <strong>Birdəfəlik / Sabit Qiymət (Lump-Sum / Fixed-Price)</strong>, <strong>Xərc-Üstəgəl (Cost-Plus)</strong> və <strong>Vahid Qiymət (Unit-Price)</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>İmtahan ssenariləri tez-tez daxili auditorun böyük müqaviləyə <em>nə vaxt</em> qoşulmalı olduğunu soruşur. Yanlış yönləndirici cavablar "icra mərhələsində" və ya "tamamlandıqdan sonra" təklif edir. Düzgün cavab həmişə: tender və hesablamalardan başlayaraq <strong>bütün müqavilə prosesi boyunca</strong> iştirak etmək.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər bəzən daxili auditorların istənilən autsorsinq satıcısını audit etmək üçün <em>avtomatik hüquqa</em> sahib olduğunu düşünür. İmtahan vurğulayır ki, auditor əvvəlcə müqavilənin bu hüququ verən <strong>"audit maddəsi" (Audit Clause)</strong> ehtiva etdiyini təsdiqləməlidir.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Müqavilə növünü onun əsas riski ilə uyğunlaşdırın: <strong>"Xərc-Üstəgəl" (Cost-Plus)</strong> → səmərəlilik stimulunun olmaması. <strong>"Vahid Qiymət" (Unit-Price)</strong> → işin qeyri-dəqiq ölçülməsi riski.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İmtahan sualında yeni biznes tətbiq sisteminin alınması qeyd olunursa, <strong>"Mənbə Kodu Depozit Maddəsi" (Source Code Escrow Clause)</strong> tövsiyə edən cavab seçimini axtarın.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Daxili auditorlar üçüncü tərəf nəzarətləri üçün <strong>SOC hesabatlarına (SOC Reports)</strong> etibar edə bilsələr də, həmişə onları dəqiqlik baxımından nəzərdən keçirməli və hesabatı verən <strong>xarici auditorun etibarlılığını (Credibility)</strong> yoxlamalıdırlar.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Dış İş İlişkilerinin Yönetimi (EBRs)</div>
+<p>Kuruluşlar maliyetleri düşürmek ve uzmanlık kazanmak için hizmet sağlayıcıları, satıcılar ve ortak girişimler gibi dış ortaklar kullanır, ancak yönetim faydaların risklerden ağır basmasını sağlamalıdır. İç denetçiler bu ilişkileri değerlendirerek kaçırılan gelirleri ortaya çıkarmak, fazla faturalandırmaları belirlemek ve <strong class="key-term">hile (Fraud)</strong> veya <strong class="key-term">itibar zararı (Reputational Damage)</strong> gibi riskleri azaltmakla değer katarlar.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Üçüncü Taraf Kontrol Riskinin Azaltılması</div>
+<p>Hayati süreçler (BT gibi) dış kaynak kullanımıyla sağlandığında, dış kuruluşun kontrolleri kuruluşun kontrollerinin uzantısı haline gelir ve <strong class="key-term">kontrol riskini (Control Risk)</strong> önemli ölçüde artırır. İç denetçiler bunu sağlayıcının dış denetçilerinden alınan <strong class="key-term">SOC raporlarını (SOC Reports)</strong> inceleyerek azaltır, ancak önce dış denetçinin güvenilirliğini değerlendirerek çalışmalarına güvenmeyi gerekçelendirmelidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Sözleşme Denetiminin Yaşam Döngüsü</div>
+<p>İç denetçiler her iki tarafın yükümlülüklerini yerine getirmesini sağlamak için önemli inşaat ve işletme sözleşmelerini değerlendirir. Kuruluşu en iyi şekilde korumak için denetçiler performans aşamasına kadar beklememeli — ihale prosedürleri ve maliyet tahminleri dahil olmak üzere <strong class="key-term">tüm sözleşme süreci boyunca (Throughout the Entire Contracting Process)</strong> yer almalıdırlar.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Denetim Maddesi (Audit Clause)</strong> — Sözleşme içinde iç denetçiye dış iş ilişkisinin denetimini gerçekleştirme hakkı veren özel hüküm.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SOC Raporları (SOC Reports)</strong> — Hizmet sağlayıcısının dış denetçisi tarafından düzenlenen (SOC 1, 2 veya 3) ve sağlayıcının iç kontrollerinin uygunluğunu ve etkinliğini ayrıntılı olarak açıklayan raporlar.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Maliyet Artı Sözleşme (Cost-Plus Contract)</strong> — Alıcının performans maliyetini artı sabit bir tutar veya yüzde ödediği sözleşme; yüklenicinin tasarruf veya verimlilik için az teşviki olduğundan dikkatli denetim incelemesi gerektirir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Birim Fiyat Sözleşmesi (Unit-Price Contract)</strong> — Birim başına maliyetin belirlendiği sözleşme; gerçekleştirilen işin doğru ölçülmesi (örn., kaydedilen saatler veya temizlenen alan) temel denetim meselesidir.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Kaynak Kodu Emanet Maddesi (Source Code Escrow Clause)</strong> — Uygulamanın kaynak kodunun güvenilir bir üçüncü taraf tarafından güvenli şekilde tutulmasını gerektiren sözleşme hükmü; yazılım satıcısı sistemi sürdüremezse alıcıyı korur.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Üç ana sözleşme türüyle ilgili farklı riskler: <strong>Götürü / Sabit Fiyat (Lump-Sum / Fixed-Price)</strong>, <strong>Maliyet Artı (Cost-Plus)</strong> ve <strong>Birim Fiyat (Unit-Price)</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sınav senaryoları sıklıkla iç denetçinin büyük bir sözleşmeye <em>ne zaman</em> dahil olması gerektiğini sorar. Yanıltıcı seçenekler "yürütme aşamasında" veya "tamamlandıktan sonra" önerir. Doğru cevap her zaman: ihale ve tahminlerden başlayarak <strong>tüm sözleşme süreci boyunca</strong> yer almak.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar bazen iç denetçilerin herhangi bir dış kaynak satıcısını denetlemek için <em>otomatik hakka</em> sahip olduğunu varsayar. Sınav, denetçinin önce sözleşmenin bu hakkı veren bir <strong>"denetim maddesi" (Audit Clause)</strong> içerdiğini doğrulaması gerektiğini vurgular.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Sözleşme türünü temel riskiyle eşleştirin: <strong>"Maliyet Artı" (Cost-Plus)</strong> → verimlilik teşvikinin eksikliği. <strong>"Birim Fiyat" (Unit-Price)</strong> → işin yanlış ölçülme riski.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Sınav sorusunda yeni bir iş uygulama sistemi satın alınmasından söz edilirse, <strong>"Kaynak Kodu Emanet Maddesi" (Source Code Escrow Clause)</strong> öneren cevap seçeneğini arayın.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İç denetçiler üçüncü taraf kontrolleri için <strong>SOC raporlarına (SOC Reports)</strong> güvenebilse de, her zaman bunları doğruluk açısından incelemeli ve raporu düzenleyen <strong>dış denetçinin güvenilirliğini (Credibility)</strong> doğrulamalıdır.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">3 / 6</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <div class="subunit-summary" id="su-2-4" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">2.4</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Quality Auditing" data-az="Keyfiyyət Auditi" data-tr="Kalite Denetimi">Quality Auditing</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-4','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-4','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-4','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">The Shift to TQM</div>
+<p>The traditional view of quality focused on <strong class="key-term">detecting and reworking</strong> defective products, which is costly because resources have already been spent. The modern approach, <strong class="key-term">Total Quality Management (TQM)</strong>, is a holistic strategy that focuses on <strong class="key-term">preventing defects</strong> from the very beginning of the product design phase.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">The TQM Philosophy</div>
+<p>TQM is the continuous pursuit of quality in every organizational aspect, driven by the philosophy of <strong class="key-term">"doing it right the first time"</strong>. It relies heavily on employee empowerment, teamwork, and a strong focus on satisfying both <strong class="key-term">internal and external customers</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Shared Responsibility</div>
+<p>A fundamental principle of modern quality management is that responsibility for quality resides with <strong class="key-term">all staff across the entire organization</strong>, not just a dedicated quality control department.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Total Quality Management (TQM)</strong> — A comprehensive, continuous approach to quality that spans all organizational processes to increase revenues, decrease costs, and satisfy customers.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Internal Customers</strong> — The concept that everyone in a process is at some point a customer or supplier to someone else within the organization, not just the final external buyer.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The core differences between the <strong>traditional view</strong> of quality (detection/reworking) and the <strong>TQM view</strong> (prevention/holistic).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Questions might ask who is <em>ultimately responsible</em> for ensuring quality standards are met. Distractors will point to the "Quality Manager" or "Internal Audit." The correct answer is always that responsibility resides with <strong>all staff</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates sometimes assume internal auditors are responsible for <em>implementing quality processes</em>. Instead, the internal audit function merely performs procedures to <strong>provide assurance</strong> that basic quality objectives (customer satisfaction, continuous improvement) are being reached.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always associate <strong>TQM</strong> with <strong>"prevention"</strong> and <strong>"doing it right the first time"</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember that TQM concepts also apply directly to the <strong>internal audit function itself</strong> (e.g., conducting periodic internal quality assessments).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> If a scenario mentions a <strong>"comprehensive"</strong> or <strong>"holistic"</strong> approach to quality, the answer is likely <strong>TQM</strong>.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">TKİ-yə Keçid</div>
+<p>Keyfiyyətə ənənəvi baxış qüsurlu məhsulların <strong class="key-term">aşkarlanması və yenidən işlənməsinə (Detection and Reworking)</strong> fokuslanırdı — bu, resurslar artıq xərcləndiyi üçün baha başa gəlir. Müasir yanaşma olan <strong class="key-term">Tam Keyfiyyət İdarəetməsi (Total Quality Management / TQM)</strong> məhsulun dizayn mərhələsinin lap əvvəlindən <strong class="key-term">qüsurların qarşısının alınmasına (Prevention)</strong> fokuslanmış bütöv bir strategiyadır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">TKİ Fəlsəfəsi</div>
+<p>Tam Keyfiyyət İdarəetməsi (TQM) təşkilatın hər sahəsində keyfiyyətin davamlı axtarışıdır və <strong class="key-term">"ilk dəfədən düzgün etmək" (Doing It Right the First Time)</strong> fəlsəfəsi ilə idarə olunur. İşçilərin səlahiyyətləndirilməsinə, komanda işinə və həm <strong class="key-term">daxili, həm də xarici müştərilərin (Internal and External Customers)</strong> məmnuniyyətinə güclü fokusa əsaslanır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Paylaşılan Məsuliyyət</div>
+<p>Müasir keyfiyyət idarəetməsinin əsas prinsipi ondan ibarətdir ki, keyfiyyətə görə məsuliyyət yalnız xüsusi keyfiyyət nəzarəti şöbəsinə deyil, <strong class="key-term">bütün təşkilat boyunca bütün işçilərə (All Staff)</strong> aiddir.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Tam Keyfiyyət İdarəetməsi (Total Quality Management / TQM)</strong> — Gəlirləri artırmaq, xərcləri azaltmaq və müştəriləri məmnun etmək üçün bütün təşkilati prosesləri əhatə edən hərtərəfli, davamlı keyfiyyət yanaşması.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Daxili Müştərilər (Internal Customers)</strong> — Prosesdə hər kəsin müəyyən anda təşkilat daxilində başqa birinin müştərisi və ya tədarükçüsü olduğu anlayışı; yalnız son xarici alıcı nəzərdə tutulmur.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Keyfiyyətə <strong>ənənəvi baxış</strong> (aşkarlama/yenidən işləmə) ilə <strong>TKİ baxışı (TQM)</strong> (qarşısının alınması/bütöv yanaşma) arasındakı əsas fərqlər.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>Suallar keyfiyyət standartlarının təmin edilməsinə <em>son nəticədə kimin cavabdeh olduğunu</em> soruşa bilər. Yanlış yönləndirici cavablar "Keyfiyyət Meneceri" və ya "Daxili Audit" göstərəcək. Düzgün cavab həmişə: məsuliyyət <strong>bütün işçilərə (All Staff)</strong> aiddir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər bəzən daxili auditorların <em>keyfiyyət proseslərini tətbiq etməyə</em> cavabdeh olduğunu düşünür. Əslində, daxili audit funksiyası yalnız əsas keyfiyyət məqsədlərinin (müştəri məmnuniyyəti, davamlı təkmilləşdirmə) əldə edilməsinə dair <strong>əminlik (Assurance) təqdim etmək</strong> üçün prosedurlar həyata keçirir.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Tam Keyfiyyət İdarəetməsini (TQM)</strong> həmişə <strong>"qarşısının alınması" (Prevention)</strong> və <strong>"ilk dəfədən düzgün etmək" (Doing It Right the First Time)</strong> ilə əlaqələndirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, TKİ (TQM) konsepsiyaları <strong>daxili audit funksiyasının özünə (Internal Audit Function Itself)</strong> də birbaşa tətbiq olunur (məs., vaxtaşırı daxili keyfiyyət qiymətləndirmələrinin aparılması).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Ssenari keyfiyyətə <strong>"hərtərəfli" (Comprehensive)</strong> və ya <strong>"bütöv" (Holistic)</strong> yanaşmadan bəhs edirsə, cavab çox güman ki, <strong>Tam Keyfiyyət İdarəetməsidir (TQM)</strong>.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">TKY'ye Geçiş</div>
+<p>Kaliteye geleneksel bakış, hatalı ürünlerin <strong class="key-term">tespit edilmesi ve yeniden işlenmesine (Detection and Reworking)</strong> odaklanıyordu — kaynaklar zaten harcanmış olduğu için bu maliyetlidir. Modern yaklaşım olan <strong class="key-term">Toplam Kalite Yönetimi (Total Quality Management / TQM)</strong>, ürün tasarım aşamasının en başından itibaren <strong class="key-term">hataların önlenmesine (Prevention)</strong> odaklanan bütüncül bir stratejidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">TKY Felsefesi</div>
+<p>Toplam Kalite Yönetimi (TQM), kuruluşun her alanında kalitenin sürekli arayışıdır ve <strong class="key-term">"ilk seferde doğru yapmak" (Doing It Right the First Time)</strong> felsefesiyle yönlendirilir. Çalışan yetkilendirmesine, takım çalışmasına ve hem <strong class="key-term">iç hem de dış müşterilerin (Internal and External Customers)</strong> memnuniyetine güçlü bir odaklanmaya dayanır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Paylaşılan Sorumluluk</div>
+<p>Modern kalite yönetiminin temel ilkesi, kalite sorumluluğunun yalnızca özel bir kalite kontrol departmanına değil, <strong class="key-term">tüm kuruluş genelinde tüm personele (All Staff)</strong> ait olduğudur.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Toplam Kalite Yönetimi (Total Quality Management / TQM)</strong> — Gelirleri artırmak, maliyetleri düşürmek ve müşterileri memnun etmek için tüm organizasyonel süreçleri kapsayan kapsamlı, sürekli kalite yaklaşımı.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">İç Müşteriler (Internal Customers)</strong> — Bir süreçteki herkesin bir noktada kuruluş içinde başka birinin müşterisi veya tedarikçisi olduğu kavramı; yalnızca son dış alıcı kastedilmez.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Kaliteye <strong>geleneksel bakış</strong> (tespit/yeniden işleme) ile <strong>TKY bakışı (TQM)</strong> (önleme/bütüncül) arasındaki temel farklar.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sorular, kalite standartlarının sağlanmasından <em>nihayetinde kimin sorumlu olduğunu</em> sorabilir. Yanıltıcı seçenekler "Kalite Müdürü" veya "İç Denetim"i işaret edecektir. Doğru cevap her zaman: sorumluluk <strong>tüm personele (All Staff)</strong> aittir.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar bazen iç denetçilerin <em>kalite süreçlerini uygulamaktan</em> sorumlu olduğunu varsayar. Oysa iç denetim fonksiyonu yalnızca temel kalite hedeflerinin (müşteri memnuniyeti, sürekli iyileştirme) gerçekleştirildiğine dair <strong>güvence (Assurance) sağlamak</strong> için prosedürler uygular.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Toplam Kalite Yönetimini (TQM)</strong> her zaman <strong>"önleme" (Prevention)</strong> ve <strong>"ilk seferde doğru yapmak" (Doing It Right the First Time)</strong> ile ilişkilendirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, TKY (TQM) kavramları <strong>iç denetim fonksiyonunun kendisine (Internal Audit Function Itself)</strong> de doğrudan uygulanır (örn., periyodik iç kalite değerlendirmelerinin yapılması).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Senaryo kaliteye <strong>"kapsamlı" (Comprehensive)</strong> veya <strong>"bütüncül" (Holistic)</strong> bir yaklaşımdan bahsediyorsa, cevap büyük olasılıkla <strong>Toplam Kalite Yönetimidir (TQM)</strong>.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">4 / 6</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <div class="subunit-summary" id="su-2-5" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">2.5</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Security & Privacy Audits" data-az="Təhlükəsizlik və Məxfilik Auditləri" data-tr="Güvenlik ve Gizlilik Denetimleri">Security & Privacy Audits</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-5','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-5','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-5','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">Comprehensive Scope of Security</div>
+<p>Security auditing extends far beyond just <strong class="key-term">Information Technology (IT)</strong> and cyber threats. A comprehensive view also includes <strong class="key-term">physical protection</strong>, such as safeguarding employees and visitors from workplace violence. Management is responsible for establishing controls, while internal audit evaluates their adequacy.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Privacy Risk Accountability</div>
+<p>The <strong class="key-term">board</strong> holds ultimate accountability for identifying principal risks, implementing controls, and managing privacy risk (such as establishing a privacy framework). Internal audit evaluates the maturity of these privacy practices, assessing how personal data is handled from <strong class="key-term">initial collection all the way to disposal or destruction</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Auditor Use of Personal Information</div>
+<p>During engagements, internal auditors often access <strong class="key-term">personally identifiable information (PII)</strong>. They are bound by the <strong class="key-term">IIA Code of Ethics (Confidentiality)</strong> and local laws to protect this data. If there is ever a question about the legality or appropriateness of accessing personal information, the auditor should seek advice from <strong class="key-term">legal counsel</strong> before beginning work.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Information Reliability and Integrity</strong> — The overarching concept that ensures organizational information maintains accuracy, completeness, and security.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Privacy</strong> — The protection of personal information across all phases of handling — including collection, storage, processing, dissemination, and destruction — preventing unauthorized intrusion or misuse.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Personally Identifiable Information (PII)</strong> — Any information that can be associated with a specific individual, such as medical status, credit records, or employee evaluations.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The strict <strong>separation of duties</strong> regarding security and privacy: <strong>management</strong> is responsible for the reliability and integrity of information, the <strong>board</strong> is accountable for oversight; internal audit only <strong>provides assurance</strong> that these duties are being discharged.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Exam scenarios may propose an expensive, high-tech security solution (like advanced encryption) to solve a data issue. The correct thinking: the <strong>benefits of security arrangements must exceed the costs</strong>; sometimes simpler methods, like basic access controls, are more appropriate for the assessed risk.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates often wrongly assume that security auditing only applies to organizations with <em>complex IT networks</em>. The exam expects you to know that security is a <strong>critical governance issue even in the absence of IT</strong>.</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always associate the <strong>"ultimate accountability"</strong> for privacy risk with the <strong>Board</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember the <strong>full lifecycle of privacy data</strong>: audits must cover everything from the <strong>initial collection</strong> to the <strong>final destruction</strong>.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> If an exam question presents a scenario where an auditor is unsure about accessing sensitive employee or customer records, the correct answer is usually to <strong>consult legal counsel</strong>.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Təhlükəsizliyin Hərtərəfli Əhatə Dairəsi</div>
+<p>Təhlükəsizlik auditi yalnız <strong class="key-term">İnformasiya Texnologiyaları (İT / IT)</strong> və kiber təhdidlərdən xeyli kənara çıxır. Hərtərəfli baxış həmçinin işçiləri və ziyarətçiləri iş yerində zorakılıqdan qorumaq kimi <strong class="key-term">fiziki mühafizəni (Physical Protection)</strong> əhatə edir. Rəhbərlik nəzarətlərin yaradılmasına cavabdehdir, daxili audit isə onların adekvatlığını qiymətləndirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Məxfilik Riski üzrə Hesabatlılıq</div>
+<p><strong class="key-term">İdarə Heyəti (Board)</strong> əsas risklərin müəyyən edilməsi, nəzarətlərin tətbiqi və məxfilik riskinin idarə edilməsinə (məsələn, məxfilik çərçivəsinin yaradılması) görə ali hesabatlılıq daşıyır. Daxili audit bu məxfilik təcrübələrinin yetkinliyini qiymətləndirir — şəxsi məlumatların <strong class="key-term">ilkin toplanmadan son məhv edilməsinə qədər (Initial Collection to Disposal)</strong> necə idarə edildiyini araşdırır.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Auditorun Şəxsi Məlumatlardan İstifadəsi</div>
+<p>Tapşırıqlar zamanı daxili auditorlar tez-tez <strong class="key-term">şəxsi müəyyənedici məlumatlarla (Personally Identifiable Information / PII)</strong> işləyirlər. Onlar bu məlumatları qorumaq üçün <strong class="key-term">DDA Etik Kodeksi (Məxfilik / IIA Code of Ethics — Confidentiality)</strong> və yerli qanunlarla bağlıdırlar. Şəxsi məlumatların əldə edilməsinin qanuniliyi və ya uyğunluğu ilə bağlı hər hansı sual yarandıqda, auditor işə başlamazdan əvvəl <strong class="key-term">hüquqi məsləhətçiyə (Legal Counsel)</strong> müraciət etməlidir.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Məlumatın Etibarlılığı və Bütövlüyü (Information Reliability and Integrity)</strong> — Təşkilati məlumatın dəqiqliyini, tamlığını və təhlükəsizliyini təmin edən əhatəedici konsepsiya.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Məxfilik (Privacy)</strong> — Şəxsi məlumatın bütün idarəetmə mərhələlərində — toplama, saxlama, emal, yayma və məhv etmə daxil olmaqla — icazəsiz müdaxilənin və ya sui-istifadənin qarşısını alaraq qorunması.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Şəxsi Müəyyənedici Məlumat (Personally Identifiable Information / PII)</strong> — Tibbi vəziyyət, kredit qeydləri və ya işçi qiymətləndirmələri kimi müəyyən bir şəxslə əlaqələndirilə bilən istənilən məlumat.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p>Təhlükəsizlik və məxfilik ilə bağlı ciddi <strong>vəzifə bölgüsü (Separation of Duties)</strong>: <strong>rəhbərlik</strong> məlumatın etibarlılığı və bütövlüyünə cavabdehdir, <strong>İdarə Heyəti (Board)</strong> nəzarətə görə hesabatlıdır; daxili audit yalnız bu vəzifələrin yerinə yetirildiyinə dair <strong>əminlik (Assurance) təqdim edir</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>İmtahan ssenariləri məlumat problemini həll etmək üçün bahalı, yüksək texnologiyalı təhlükəsizlik həlli (məsələn, qabaqcıl şifrələmə) təklif edə bilər. Düzgün düşüncə: <strong>təhlükəsizlik tədbirlərinin faydaları xərcləri üstələməlidir</strong>; bəzən sadə metodlar, məsələn əsas giriş nəzarətləri, qiymətləndirilmiş risk üçün daha uyğundur.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər tez-tez yanlış olaraq təhlükəsizlik auditinin yalnız <em>mürəkkəb İT şəbəkələri</em> olan təşkilatlara aid olduğunu düşünür. İmtahan sizdən bilməyinizi gözləyir ki, təhlükəsizlik <strong>İT olmasa belə kritik idarəetmə məsələsidir (Critical Governance Issue)</strong>.</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Məxfilik riski üzrə <strong>"ali hesabatlılığı" (Ultimate Accountability)</strong> həmişə <strong>İdarə Heyəti (Board)</strong> ilə əlaqələndirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Məxfilik məlumatının tam həyat dövrünü (Full Lifecycle)</strong> xatırlayın: auditlər <strong>ilkin toplama (Initial Collection)</strong>dan <strong>son məhv etməyə (Final Destruction)</strong> qədər hər şeyi əhatə etməlidir.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> İmtahan sualında auditorun həssas işçi və ya müştəri qeydlərinə daxil olmaqda tərəddüd etdiyi ssenari təqdim olunarsa, düzgün cavab adətən <strong>hüquqi məsləhətçiyə müraciət etməkdir (Consult Legal Counsel)</strong>.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Güvenliğin Kapsamlı Çerçevesi</div>
+<p>Güvenlik denetimi yalnızca <strong class="key-term">Bilgi Teknolojileri (BT / IT)</strong> ve siber tehditlerden çok öteye uzanır. Kapsamlı bir bakış aynı zamanda çalışanları ve ziyaretçileri işyeri şiddetinden koruma gibi <strong class="key-term">fiziksel korumayı (Physical Protection)</strong> da içerir. Yönetim kontrollerin oluşturulmasından sorumludur, iç denetim ise yeterliliğini değerlendirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Gizlilik Riski Hesap Verebilirliği</div>
+<p><strong class="key-term">Yönetim Kurulu (Board)</strong>, temel risklerin belirlenmesi, kontrollerin uygulanması ve gizlilik riskinin yönetilmesinde (örneğin, gizlilik çerçevesinin oluşturulması) nihai hesap verebilirliğe sahiptir. İç denetim bu gizlilik uygulamalarının olgunluğunu değerlendirir — kişisel verilerin <strong class="key-term">ilk toplamadan son imhaya kadar (Initial Collection to Disposal)</strong> nasıl yönetildiğini inceler.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Denetçinin Kişisel Bilgi Kullanımı</div>
+<p>Görevler sırasında iç denetçiler sıklıkla <strong class="key-term">kişisel tanımlanabilir bilgilerle (Personally Identifiable Information / PII)</strong> çalışır. Bu verileri korumak için <strong class="key-term">UDD Etik Kuralları (Gizlilik / IIA Code of Ethics — Confidentiality)</strong> ve yerel yasalarla bağlıdırlar. Kişisel bilgilere erişimin yasallığı veya uygunluğu hakkında herhangi bir soru olduğunda, denetçi işe başlamadan önce <strong class="key-term">hukuk danışmanına (Legal Counsel)</strong> başvurmalıdır.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Bilginin Güvenilirliği ve Bütünlüğü (Information Reliability and Integrity)</strong> — Kurumsal bilginin doğruluğunu, tamlığını ve güvenliğini sağlayan kapsayıcı kavram.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Gizlilik (Privacy)</strong> — Kişisel bilginin tüm yönetim aşamalarında — toplama, depolama, işleme, yayma ve imha dahil — yetkisiz müdahaleyi veya kötüye kullanımı önleyerek korunması.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Kişisel Tanımlanabilir Bilgi (Personally Identifiable Information / PII)</strong> — Tıbbi durum, kredi kayıtları veya çalışan değerlendirmeleri gibi belirli bir bireyle ilişkilendirilebilen herhangi bir bilgi.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p>Güvenlik ve gizlilik konusunda sıkı <strong>görev ayrılığı (Separation of Duties)</strong>: <strong>yönetim</strong> bilginin güvenilirliği ve bütünlüğünden sorumludur, <strong>Yönetim Kurulu (Board)</strong> gözetimden hesap verebilirdir; iç denetim yalnızca bu görevlerin yerine getirildiğine dair <strong>güvence (Assurance) sağlar</strong>.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sınav senaryoları bir veri sorununu çözmek için pahalı, yüksek teknolojili bir güvenlik çözümü (gelişmiş şifreleme gibi) önerebilir. Doğru düşünce: <strong>güvenlik düzenlemelerinin faydaları maliyetleri aşmalıdır</strong>; bazen temel erişim kontrolleri gibi daha basit yöntemler, değerlendirilen risk için daha uygundur.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar sıklıkla güvenlik denetiminin yalnızca <em>karmaşık BT ağlarına</em> sahip kuruluşlara uygulandığını yanlış varsayar. Sınav, güvenliğin <strong>BT olmasa bile kritik bir yönetişim meselesi (Critical Governance Issue)</strong> olduğunu bilmenizi bekler.</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Gizlilik riski için <strong>"nihai hesap verebilirliği" (Ultimate Accountability)</strong> her zaman <strong>Yönetim Kurulu (Board)</strong> ile ilişkilendirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Gizlilik verisinin tam yaşam döngüsünü (Full Lifecycle)</strong> hatırlayın: denetimler <strong>ilk toplama (Initial Collection)</strong>dan <strong>son imhaya (Final Destruction)</strong> kadar her şeyi kapsamalıdır.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Sınav sorusunda denetçinin hassas çalışan veya müşteri kayıtlarına erişim konusunda tereddüt ettiği bir senaryo sunulursa, doğru cevap genellikle <strong>hukuk danışmanına başvurmaktır (Consult Legal Counsel)</strong>.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">5 / 6</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+  <div class="subunit-summary" id="su-2-6" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">2.6</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Performance Audits" data-az="Performans Auditləri" data-tr="Performans Denetimleri">Performance Audits</div>
+        <div class="su-header-sub">Unit 2 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-2-6','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-2-6','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-2-6','tr')">TR</button>
+    </div>
+    <div class="lang-content en active">
+<div class="section-heading">🎯 Core Concepts</div>
+<div class="concept-block">
+<div class="concept-title">Evaluating Organizational Success</div>
+<p><strong class="key-term">Performance audits</strong> assess how effectively an organization measures its own performance, recognizes deficiencies, takes corrective actions, and ultimately accomplishes its strategic and operational objectives.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Synchronizing Goals</div>
+<p>Effective management control requires clear performance expectations and feedback. It is critical that the <strong class="key-term">performance evaluation model</strong> aligns with the organization's <strong class="key-term">decision-making model</strong>; for example, if the goal is long-term success, managers should be evaluated on long-term metrics rather than short-term profits.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">The Balanced Scorecard Approach</div>
+<p>To avoid focusing solely on short-term financial gains, organizations use a <strong class="key-term">balanced scorecard</strong>. This tool links directly to strategy and evaluates performance across four balanced perspectives: <strong class="key-term">Financial, Customer, Internal Processes, and Learning/Growth</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Strategic Analysis via SWOT</div>
+<p>Organizations evaluate <strong class="key-term">internal factors</strong> (strengths and weaknesses, like core competencies or lack of resources) against <strong class="key-term">external factors</strong> (opportunities and threats, like demographic changes or new regulations) to identify critical success factors and develop strategy.</p>
+</div>
+<div class="section-heading">📌 Key Terms &amp; Definitions</div>
+<div class="term-block">
+<p><strong class="key-term">Performance Audit</strong> — An engagement that provides assurance on whether management has appropriate monitoring and controlling activities in place to assess progress toward organizational goals.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Balanced Scorecard</strong> — A performance measurement tool that relates critical success factors by balancing short-term and long-term considerations, as well as financial and nonfinancial measures.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SWOT Analysis</strong> — A strategic evaluation tool that categorizes elements into Strengths, Weaknesses, Opportunities, and Threats.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SMART Principle</strong> — A framework ensuring Key Performance Indicators (KPIs) are Specific, Measurable, Achievable, Relevant, and Time-based.</p>
+</div>
+<div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+<div class="trap-block">
+<span class="trap-label">Frequently Tested</span>
+<p>The four specific perspectives of the <strong>balanced scorecard</strong> — Financial, Customer, Internal Processes, Learning/Growth — and examples of each (e.g., market share = "Customer" measure; employee morale = "Learning/Growth" measure).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Tricky Questions</span>
+<p>Questions often ask you to classify a scenario in a <strong>SWOT analysis</strong>. The trick: strictly separate <strong>internal factors</strong> (things the organization controls, like R&amp;D or capable management) from <strong>external factors</strong> (things outside their control, like competitor actions or government regulations).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Common Wrong Assumption</span>
+<p>Candidates sometimes choose vague goals as "good criteria" for an audit. The exam emphasizes the <strong>SMART principle</strong>: criteria must be specific and measurable (e.g., "Answer all inquiries within 7 days" is correct, while "The customer is always right" is too vague to audit).</p>
+</div>
+<div class="section-heading">💡 Exam Tips</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Memorize the <strong>SMART</strong> acronym for KPI setting: <strong>S</strong>pecific, <strong>M</strong>easurable, <strong>A</strong>chievable, <strong>R</strong>elevant, <strong>T</strong>ime-based.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Always associate the <strong>Balanced Scorecard</strong> with balancing <strong>"Financial vs. Nonfinancial"</strong> and <strong>"Short-term vs. Long-term"</strong> metrics.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Remember that a balanced scorecard must be developed with the <strong>direct involvement of senior management</strong> and linked directly to strategy.
+    </div>
+</div>
+    <div class="lang-content az">
+<div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+<div class="concept-block">
+<div class="concept-title">Təşkilati Uğurun Qiymətləndirilməsi</div>
+<p><strong class="key-term">Fəaliyyət auditləri (Performance Audits)</strong> təşkilatın öz fəaliyyətini nə dərəcədə effektiv ölçdüyünü, çatışmazlıqları tanıdığını, düzəldici tədbirlər gördüyünü və nəticədə strateji və əməliyyat məqsədlərinə nail olduğunu qiymətləndirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Məqsədlərin Sinxronlaşdırılması</div>
+<p>Effektiv idarəetmə nəzarəti aydın fəaliyyət gözləntiləri və əks əlaqə tələb edir. <strong class="key-term">Fəaliyyət qiymətləndirmə modelinin (Performance Evaluation Model)</strong> təşkilatın <strong class="key-term">qərar qəbulma modeli (Decision-Making Model)</strong> ilə uyğunlaşması vacibdir; məsələn, məqsəd uzunmüddətli uğurdursa, menecerlər qısamüddətli mənfəət deyil, uzunmüddətli göstəricilər əsasında qiymətləndirilməlidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Balanslaşdırılmış Hesab Kartı Yanaşması</div>
+<p>Yalnız qısamüddətli maliyyə qazanclarına fokuslanma tələsindən qaçmaq üçün təşkilatlar <strong class="key-term">Balanslaşdırılmış Hesab Kartından (Balanced Scorecard)</strong> istifadə edir. Bu alət birbaşa strategiya ilə əlaqəlidir və fəaliyyəti dörd balanslı perspektivdə qiymətləndirir: <strong class="key-term">Maliyyə (Financial), Müştəri (Customer), Daxili Proseslər (Internal Processes) və Öyrənmə/İnkişaf (Learning/Growth)</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">SWOT vasitəsilə Strateji Təhlil</div>
+<p>Təşkilatlar kritik uğur amillərini müəyyən etmək və strategiya hazırlamaq üçün <strong class="key-term">daxili amilləri (Internal Factors)</strong> (güclü və zəif tərəflər — məs., əsas bacarıqlar və ya resurs çatışmazlığı) <strong class="key-term">xarici amillərə (External Factors)</strong> (imkanlar və təhdidlər — məs., demoqrafik dəyişikliklər və ya yeni qaydalar) qarşı qiymətləndirirlər.</p>
+</div>
+<div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+<div class="term-block">
+<p><strong class="key-term">Fəaliyyət Auditi (Performance Audit)</strong> — Rəhbərliyin təşkilati məqsədlərə doğru irəliləyişi qiymətləndirmək üçün müvafiq monitorinq və nəzarət fəaliyyətlərinin olub-olmadığına dair əminlik (Assurance) təqdim edən tapşırıq.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Balanslaşdırılmış Hesab Kartı (Balanced Scorecard)</strong> — Qısamüddətli və uzunmüddətli mülahizələri, eləcə də maliyyə və qeyri-maliyyə göstəricilərini balanslaşdıraraq kritik uğur amillərini əlaqələndirən fəaliyyət ölçmə aləti.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SWOT Təhlili (SWOT Analysis)</strong> — Elementləri Güclü tərəflər (Strengths), Zəif tərəflər (Weaknesses), İmkanlar (Opportunities) və Təhdidlər (Threats) kateqoriyalarına ayıran strateji qiymətləndirmə aləti.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SMART Prinsipi (SMART Principle)</strong> — Əsas Fəaliyyət Göstəricilərinin (KPIs) Spesifik (Specific), Ölçülə bilən (Measurable), Əldə edilə bilən (Achievable), Uyğun (Relevant) və Zaman əsaslı (Time-based) olmasını təmin edən çərçivə.</p>
+</div>
+<div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+<div class="trap-block">
+<span class="trap-label">Tez-tez Test Edilir</span>
+<p><strong>Balanslaşdırılmış Hesab Kartının (Balanced Scorecard)</strong> dörd xüsusi perspektivi — Maliyyə (Financial), Müştəri (Customer), Daxili Proseslər (Internal Processes), Öyrənmə/İnkişaf (Learning/Growth) — və hər birinin nümunələri (məs., bazar payı = "Müştəri" göstəricisi; işçi əhval-ruhiyyəsi = "Öyrənmə/İnkişaf" göstəricisi).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Çətin Suallar</span>
+<p>Suallar tez-tez bir ssenarini <strong>SWOT təhlilində</strong> təsnif etməyinizi istəyir. Fənd: <strong>daxili amilləri</strong> (təşkilatın nəzarət etdiyi şeylər — Ar-Ge, bacarıqlı rəhbərlik kimi) <strong>xarici amillərdən</strong> (nəzarət xaricindəki şeylər — rəqib hərəkətləri, dövlət qaydaları kimi) ciddi şəkildə ayırın.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yanlış Fərziyyə</span>
+<p>Namizədlər bəzən qeyri-müəyyən məqsədləri audit üçün "yaxşı meyar" seçir. İmtahan <strong>SMART prinsipini</strong> vurğulayır: meyarlar spesifik və ölçülə bilən olmalıdır (məs., "Bütün sorğulara 7 gün ərzində cavab verin" — düzgündür; "Müştəri həmişə haqlıdır" — audit üçün çox qeyri-müəyyəndir).</p>
+</div>
+<div class="section-heading">💡 İmtahan Məsləhətləri</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Əsas Fəaliyyət Göstəricilərinin (KPIs) müəyyən edilməsi üçün <strong>SMART</strong> akronimini əzbərləyin: <strong>S</strong>pesifik (Specific), <strong>Ö</strong>lçülə bilən (Measurable), <strong>Ə</strong>ldə edilə bilən (Achievable), <strong>U</strong>yğun (Relevant), <strong>Z</strong>aman əsaslı (Time-based).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Balanslaşdırılmış Hesab Kartını (Balanced Scorecard)</strong> həmişə <strong>"Maliyyə və Qeyri-maliyyə" (Financial vs. Nonfinancial)</strong> və <strong>"Qısamüddətli və Uzunmüddətli" (Short-term vs. Long-term)</strong> göstəricilərin balanslaşdırılması ilə əlaqələndirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, Balanslaşdırılmış Hesab Kartı (Balanced Scorecard) <strong>yüksək rəhbərliyin (Senior Management) birbaşa iştirakı</strong> ilə hazırlanmalı və birbaşa strategiya ilə əlaqələndirilməlidir.
+    </div>
+</div>
+    <div class="lang-content tr">
+<div class="section-heading">🎯 Temel Kavramlar</div>
+<div class="concept-block">
+<div class="concept-title">Kurumsal Başarının Değerlendirilmesi</div>
+<p><strong class="key-term">Performans denetimleri (Performance Audits)</strong>, kuruluşun kendi performansını ne kadar etkili ölçtüğünü, eksiklikleri tanıdığını, düzeltici önlemler aldığını ve nihayetinde stratejik ve operasyonel hedeflerine ulaştığını değerlendirir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Hedeflerin Senkronizasyonu</div>
+<p>Etkin yönetim kontrolü, açık performans beklentileri ve geri bildirim gerektirir. <strong class="key-term">Performans değerlendirme modelinin (Performance Evaluation Model)</strong> kuruluşun <strong class="key-term">karar alma modeli (Decision-Making Model)</strong> ile uyumlu olması kritiktir; örneğin, hedef uzun vadeli başarıysa, yöneticiler kısa vadeli kârlar yerine uzun vadeli ölçütlerle değerlendirilmelidir.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">Dengeli Puan Kartı Yaklaşımı</div>
+<p>Yalnızca kısa vadeli finansal kazançlara odaklanma tuzağından kaçınmak için kuruluşlar <strong class="key-term">Dengeli Puan Kartı (Balanced Scorecard)</strong> kullanır. Bu araç doğrudan stratejiyle bağlantılıdır ve performansı dört dengeli perspektiften değerlendirir: <strong class="key-term">Finansal (Financial), Müşteri (Customer), İç Süreçler (Internal Processes) ve Öğrenme/Gelişme (Learning/Growth)</strong>.</p>
+</div>
+<div class="concept-block">
+<div class="concept-title">SWOT ile Stratejik Analiz</div>
+<p>Kuruluşlar kritik başarı faktörlerini belirlemek ve strateji geliştirmek için <strong class="key-term">iç faktörleri (Internal Factors)</strong> (güçlü ve zayıf yönler — örn., temel yetkinlikler veya kaynak eksikliği) <strong class="key-term">dış faktörlere (External Factors)</strong> (fırsatlar ve tehditler — örn., demografik değişimler veya yeni düzenlemeler) karşı değerlendirir.</p>
+</div>
+<div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+<div class="term-block">
+<p><strong class="key-term">Performans Denetimi (Performance Audit)</strong> — Yönetimin kurumsal hedeflere doğru ilerlemeyi değerlendirmek için uygun izleme ve kontrol faaliyetlerine sahip olup olmadığına dair güvence (Assurance) sağlayan görev.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">Dengeli Puan Kartı (Balanced Scorecard)</strong> — Kısa vadeli ve uzun vadeli değerlendirmeleri, ayrıca finansal ve finansal olmayan ölçütleri dengeleyerek kritik başarı faktörlerini ilişkilendiren performans ölçüm aracı.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SWOT Analizi (SWOT Analysis)</strong> — Unsurları Güçlü Yönler (Strengths), Zayıf Yönler (Weaknesses), Fırsatlar (Opportunities) ve Tehditler (Threats) kategorilerine ayıran stratejik değerlendirme aracı.</p>
+</div>
+<div class="term-block">
+<p><strong class="key-term">SMART İlkesi (SMART Principle)</strong> — Temel Performans Göstergelerinin (KPIs) Spesifik (Specific), Ölçülebilir (Measurable), Ulaşılabilir (Achievable), İlgili (Relevant) ve Zaman temelli (Time-based) olmasını sağlayan çerçeve.</p>
+</div>
+<div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+<div class="trap-block">
+<span class="trap-label">Sık Test Edilir</span>
+<p><strong>Dengeli Puan Kartının (Balanced Scorecard)</strong> dört belirli perspektifi — Finansal (Financial), Müşteri (Customer), İç Süreçler (Internal Processes), Öğrenme/Gelişme (Learning/Growth) — ve her birinin örnekleri (örn., pazar payı = "Müşteri" ölçütü; çalışan morali = "Öğrenme/Gelişme" ölçütü).</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Zor Sorular</span>
+<p>Sorular sıklıkla bir senaryoyu <strong>SWOT analizinde</strong> sınıflandırmanızı ister. Hile: <strong>iç faktörleri</strong> (kuruluşun kontrol ettiği şeyler — Ar-Ge, yetenekli yönetim gibi) <strong>dış faktörlerden</strong> (kontrol dışındaki şeyler — rakip eylemleri, devlet düzenlemeleri gibi) kesinlikle ayırın.</p>
+</div>
+<div class="trap-block">
+<span class="trap-label">Yaygın Yanlış Varsayım</span>
+<p>Adaylar bazen belirsiz hedefleri denetim için "iyi kriter" olarak seçer. Sınav <strong>SMART ilkesini</strong> vurgular: kriterler spesifik ve ölçülebilir olmalıdır (örn., "Tüm sorulara 7 gün içinde cevap verin" — doğrudur; "Müşteri her zaman haklıdır" — denetim için çok belirsizdir).</p>
+</div>
+<div class="section-heading">💡 Sınav İpuçları</div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Temel Performans Göstergelerinin (KPIs) belirlenmesi için <strong>SMART</strong> kısaltmasını ezberleyin: <strong>S</strong>pesifik (Specific), <strong>Ö</strong>lçülebilir (Measurable), <strong>U</strong>laşılabilir (Achievable), <strong>İ</strong>lgili (Relevant), <strong>Z</strong>aman temelli (Time-based).
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> <strong>Dengeli Puan Kartını (Balanced Scorecard)</strong> her zaman <strong>"Finansal ve Finansal Olmayan" (Financial vs. Nonfinancial)</strong> ile <strong>"Kısa Vadeli ve Uzun Vadeli" (Short-term vs. Long-term)</strong> ölçütlerin dengelenmesiyle ilişkilendirin.
+    </div>
+<div class="tip-block">
+<span class="tip-icon">✅</span> Unutmayın ki, Dengeli Puan Kartı (Balanced Scorecard) <strong>üst yönetimin (Senior Management) doğrudan katılımıyla</strong> geliştirilmeli ve doğrudan stratejiyle bağlantılı olmalıdır.
+    </div>
+</div>
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">6 / 6</span>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const SUBUNIT_IDS = ["su-2-1", "su-2-2", "su-2-3", "su-2-4", "su-2-5", "su-2-6"];
+let currentSU = SUBUNIT_IDS[0];
+let globalLang = 'en';
+
+function showSubunit(id) {
+  SUBUNIT_IDS.forEach(sid => {
+    document.getElementById(sid).style.display = 'none';
+    document.getElementById('nav-' + sid).classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('nav-' + id).classList.add('active');
+  currentSU = id;
+  // Scroll nav button into view
+  document.getElementById('nav-' + id).scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Apply current global lang
+  applyLangToSubunit(id, globalLang);
+}
+
+function showLang(unitId, lang) {
+  globalLang = lang;
+  const unit = document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+  unit.querySelector('.lang-content.' + lang).classList.add('active');
+  const tabs = unit.querySelectorAll('.lang-tab');
+  const langMap = {'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  // Sync top lang button label
+  const labels = {'en':'AZ','az':'TR','tr':'EN'};
+  document.getElementById('lang-btn').textContent = labels[lang];
+}
+
+function applyLangToSubunit(id, lang) {
+  showLang(id, lang);
+  // Update header title
+  const su = document.getElementById(id);
+  const titleEl = su.querySelector('.su-header-title');
+  if(titleEl) titleEl.textContent = titleEl.dataset[lang] || titleEl.dataset.en;
+  // Update nav title
+  const navBtn = document.getElementById('nav-' + id);
+  const navTitle = navBtn.querySelector('.su-nav-title');
+  if(navTitle) navTitle.textContent = navTitle.dataset[lang] || navTitle.dataset.en;
+}
+
+function toggleGlobalLang() {
+  const langs = ['en', 'az', 'tr'];
+  const labels = ['AZ', 'TR', 'EN'];
+  const idx = langs.indexOf(globalLang);
+  globalLang = langs[(idx + 1) % 3];
+  document.getElementById('lang-btn').textContent = labels[(idx + 1) % 3];
+  // Apply to current visible subunit
+  applyLangToSubunit(currentSU, globalLang);
+  // Update all nav titles
+  SUBUNIT_IDS.forEach(sid => {
+    const btn = document.getElementById('nav-' + sid);
+    const t = btn.querySelector('.su-nav-title');
+    if(t) t.textContent = t.dataset[globalLang] || t.dataset.en;
+  });
+  // Update page title
+  document.getElementById('app-title').textContent =
+    globalLang === 'az' ? 'Unit 2 · Xülasə' :
+    globalLang === 'tr' ? 'Unit 2 · Özet' : 'Unit 2 · Summary';
+}
+
+function nextSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx < SUBUNIT_IDS.length - 1) showSubunit(SUBUNIT_IDS[idx + 1]);
+}
+
+function prevSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx > 0) showSubunit(SUBUNIT_IDS[idx - 1]);
+}
+
+// Init: mark first nav as active
+document.getElementById('nav-' + SUBUNIT_IDS[0]).classList.add('active');
+
+</script>
+</body>
+</html>
