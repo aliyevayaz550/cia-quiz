@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CIA Quiz">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 3</title>
+<style>
+:root {
+  --ink:       #0f1923;
+  --paper:     #f8f5ef;
+  --cream:     #ede8df;
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6d2e;
+  --navy:      #1a2e4a;
+  --navy-mid:  #2e4d72;
+  --correct:   #1a6b3c;
+  --correct-bg:#d4edda;
+  --wrong:     #8b1a1a;
+  --wrong-bg:  #f8d7da;
+  --explain-bg:#fffbf0;
+  --r: 12px;
+  --shadow: 0 2px 16px rgba(15,25,35,.10);
+  --shadow-lg: 0 8px 32px rgba(15,25,35,.16);
+  --font-head: -apple-system, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-body: -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-ui:   -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+
+/* ── BACK TO MENU BUTTON ─────────────────────────────── */
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  margin-right: 8px; white-space: nowrap;
+  transition: background .2s;
+}
+#back-btn:hover { background: rgba(255,255,255,.22); }
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 720px; margin: 0 auto;
+}
+#app-title {
+  font-family: var(--font-head);
+  font-size: 16px; font-weight: normal; letter-spacing: .4px;
+  color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#score-badge {
+  font-family: var(--font-ui);
+  font-size: 13px; font-weight: 700; letter-spacing: .5px;
+  background: var(--gold); color: var(--navy);
+  border-radius: 20px; padding: 4px 12px;
+  white-space: nowrap; margin-left: 12px;
+}
+#lang-btn {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  margin-left: 10px; transition: background .2s;
+}
+#lang-btn:hover { background: rgba(255,255,255,.22); }
+
+/* ── PROGRESS ─────────────────────────────────────────── */
+#progress-wrap {
+  background: var(--navy); padding: 0 16px 10px;
+}
+#progress-inner {
+  max-width: 720px; margin: 0 auto;
+}
+#progress-bar-bg {
+  height: 4px; background: rgba(255,255,255,.18); border-radius: 4px; overflow: hidden;
+}
+#progress-bar-fill {
+  height: 100%; background: var(--gold);
+  border-radius: 4px; transition: width .4s ease;
+  width: 0%;
+}
+#progress-label {
+  font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,.55);
+  margin-top: 5px; display: flex; justify-content: space-between;
+}
+
+/* ── MAIN CONTAINER ───────────────────────────────────── */
+#main {
+  max-width: 720px; margin: 0 auto;
+  padding: 0 0 80px;
+}
+
+/* ── CHAPTER TABS ─────────────────────────────────────── */
+#chapters-scroll {
+  padding: 14px 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+#chapters-scroll::-webkit-scrollbar { display: none; }
+#chapters-inner {
+  display: flex; gap: 8px;
+  width: max-content;
+}
+.ch-btn {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  letter-spacing: .3px;
+  background: var(--cream); color: var(--navy-mid);
+  border: 1.5px solid #d4cfc5;
+  border-radius: 20px; padding: 6px 14px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .2s;
+  position: relative;
+}
+.ch-btn:hover { background: #e2dcd0; }
+.ch-btn.active {
+  background: var(--navy); color: #fff;
+  border-color: var(--navy);
+}
+.ch-btn .ch-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 5px; vertical-align: middle;
+  background: rgba(255,255,255,.4);
+}
+.ch-btn.active .ch-dot { background: var(--gold); }
+.ch-btn:not(.active) .ch-dot { background: #b0a890; }
+.ch-done .ch-dot { background: var(--correct) !important; }
+
+/* ── QUESTION CARD ────────────────────────────────────── */
+.q-wrap {
+  padding: 14px 16px 0;
+}
+.q-card {
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid #e8e2d8;
+}
+
+/* Card header: question number + text */
+.q-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 18px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.q-number {
+  font-family: var(--font-ui); font-size: 17px; font-weight: 800;
+  color: var(--navy);
+  background: var(--gold);
+  border-radius: 10px;
+  min-width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 0;
+  letter-spacing: -.3px;
+}
+.q-text {
+  font-family: var(--font-body); font-size: 18px; line-height: 1.5;
+  color: #fff; font-weight: 600; flex: 1;
+}
+
+/* Options */
+.q-options { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; }
+
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--cream); border: 1.5px solid #e0dbd2;
+  border-radius: 10px; padding: 12px 14px;
+  cursor: pointer; text-align: left;
+  transition: all .18s; position: relative;
+  outline: none; -webkit-tap-highlight-color: transparent;
+}
+.opt-btn:hover:not(:disabled) {
+  background: #e8e3d7; border-color: #c0b898;
+  transform: translateX(2px);
+}
+.opt-label {
+  font-family: var(--font-ui); font-size: 13px; font-weight: 800;
+  letter-spacing: .8px; color: var(--navy-mid);
+  background: rgba(46,77,114,.1);
+  border-radius: 5px; padding: 3px 8px;
+  min-width: 28px; text-align: center; margin-top: 2px;
+  flex-shrink: 0;
+}
+.opt-text {
+  font-family: var(--font-body); font-size: 16px; line-height: 1.45;
+  color: var(--ink); flex: 1;
+}
+.opt-icon {
+  font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 2px;
+  opacity: 0; transition: opacity .2s;
+}
+
+/* States */
+.opt-btn.correct {
+  background: var(--correct-bg) !important;
+  border-color: var(--correct) !important;
+}
+.opt-btn.correct .opt-label { background: var(--correct); color: #fff; }
+.opt-btn.correct .opt-icon { opacity: 1; }
+.opt-btn.correct .opt-text { color: var(--correct); font-weight: 600; }
+
+.opt-btn.wrong {
+  background: var(--wrong-bg) !important;
+  border-color: var(--wrong) !important;
+}
+.opt-btn.wrong .opt-label { background: var(--wrong); color: #fff; }
+.opt-btn.wrong .opt-icon { opacity: 1; }
+.opt-btn.wrong .opt-text { color: var(--wrong); }
+
+.opt-btn:disabled { cursor: default; }
+.opt-btn:disabled:not(.correct):not(.wrong) { opacity: .55; }
+
+
+/* Explanation accordion */
+.explanation {
+  background: var(--explain-bg);
+  border-top: 1px solid #e8e0cc;
+  padding: 0 14px;
+  max-height: 0; overflow: hidden;
+  transition: max-height .35s ease, padding .35s ease;
+}
+.explanation.open {
+  max-height: 300px;
+  padding: 12px 14px;
+}
+.expl-lang {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--gold-dim); margin-bottom: 5px;
+}
+.expl-text {
+  font-family: var(--font-body); font-size: 14.5px; line-height: 1.55;
+  color: #444;
+}
+.expl-divider {
+  height: 1px; background: #e0d8c8; margin: 9px 0;
+}
+
+/* Explanation toggle arrow */
+.expl-toggle {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  padding: 0;
+  max-height: 0; overflow: hidden;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  color: var(--gold-dim); letter-spacing: .3px;
+  border-top: none;
+  width: 100%;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, max-height .2s, padding .2s;
+}
+.expl-toggle.visible {
+  opacity: 1; pointer-events: auto;
+  max-height: 40px;
+  padding: 10px 14px 8px;
+  border-top: 1px solid #ece6da;
+}
+.expl-toggle svg {
+  transition: transform .3s; flex-shrink: 0;
+}
+.expl-toggle.open svg { transform: rotate(180deg); }
+
+/* ── CHAPTER SUMMARY CARD ─────────────────────────────── */
+#summary-card {
+  display: none;
+  margin: 20px 16px 0;
+  background: #fff; border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; border: 1px solid #e8e2d8;
+}
+#summary-card.visible { display: block; }
+.summary-header {
+  background: linear-gradient(135deg, #1a4a2e 0%, #2e7a50 100%);
+  padding: 20px 20px;
+  text-align: center;
+}
+.summary-header h2 {
+  font-family: var(--font-head); font-size: 20px; color: #fff;
+  font-weight: normal; margin-bottom: 4px;
+}
+.summary-header p {
+  font-family: var(--font-ui); font-size: 13px;
+  color: rgba(255,255,255,.7);
+}
+.summary-score-ring {
+  display: flex; align-items: center; justify-content: center;
+  margin: 20px 0 10px;
+}
+.ring-wrap {
+  position: relative; width: 110px; height: 110px;
+}
+.ring-wrap svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+.ring-track { fill: none; stroke: #e0d8c8; stroke-width: 8; }
+.ring-fill {
+  fill: none; stroke: var(--gold); stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease;
+}
+.ring-label {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center;
+}
+.ring-pct {
+  font-family: var(--font-head); font-size: 26px; font-weight: bold;
+  color: var(--navy); display: block; line-height: 1;
+}
+.ring-sub {
+  font-family: var(--font-ui); font-size: 11px; color: #888; margin-top: 2px;
+}
+.summary-stats {
+  display: flex; justify-content: space-around; padding: 0 20px 16px;
+  border-bottom: 1px solid #ece6da;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: var(--font-head); font-size: 24px;
+  color: var(--navy); display: block;
+}
+.stat-label {
+  font-family: var(--font-ui); font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.summary-actions {
+  padding: 16px 20px;
+  display: flex; gap: 10px;
+}
+.btn-retry, .btn-next {
+  flex: 1; font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  letter-spacing: .3px; border-radius: 9px; padding: 13px 10px;
+  border: none; cursor: pointer; transition: all .2s;
+}
+.btn-retry {
+  background: var(--cream); color: var(--navy);
+  border: 1.5px solid #c8c0b0;
+}
+.btn-retry:hover { background: #e0d8c8; }
+.btn-next {
+  background: var(--navy); color: #fff;
+}
+.btn-next:hover { background: var(--navy-mid); }
+
+/* ── WELCOME SCREEN ───────────────────────────────────── */
+#welcome {
+  padding: 40px 24px 20px;
+  text-align: center;
+}
+#welcome h1 {
+  font-family: var(--font-head); font-size: 26px; font-weight: normal;
+  color: var(--navy); line-height: 1.25; margin-bottom: 10px;
+}
+#welcome p {
+  font-family: var(--font-ui); font-size: 14px; color: #666;
+  line-height: 1.55; max-width: 400px; margin: 0 auto 24px;
+}
+.welcome-stats {
+  display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.ws-item {
+  background: #fff; border: 1px solid #e0d8cc;
+  border-radius: 10px; padding: 12px 18px; min-width: 90px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.ws-num {
+  font-family: var(--font-head); font-size: 28px; color: var(--navy);
+  display: block;
+}
+.ws-label {
+  font-family: var(--font-ui); font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.btn-start {
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 15px; font-weight: 700;
+  letter-spacing: .5px; border: none; border-radius: 10px;
+  padding: 15px 40px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(26,46,74,.3);
+  transition: all .2s;
+}
+.btn-start:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+/* ── OVERALL RESULTS ──────────────────────────────────── */
+#overall-result {
+  display: none;
+  margin: 20px 16px 0;
+  background: #fff; border-radius: var(--r);
+  box-shadow: var(--shadow-lg); border: 1px solid #e8e2d8;
+  overflow: hidden;
+}
+#overall-result.visible { display: block; }
+.overall-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #c9a84c 200%);
+  padding: 24px 20px; text-align: center;
+}
+.overall-header h2 {
+  font-family: var(--font-head); font-size: 22px; color: #fff;
+  font-weight: normal;
+}
+.overall-header p {
+  font-family: var(--font-ui); font-size: 13px; color: rgba(255,255,255,.7);
+  margin-top: 4px;
+}
+.chapter-results { padding: 16px 20px; }
+.cr-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid #ece6da;
+}
+.cr-row:last-child { border-bottom: none; }
+.cr-name {
+  font-family: var(--font-ui); font-size: 13px; color: var(--navy);
+  font-weight: 600; flex: 1;
+}
+.cr-score {
+  font-family: var(--font-ui); font-size: 12px; color: #666;
+  min-width: 60px; text-align: right;
+}
+.cr-bar-bg {
+  flex: 2; height: 7px; background: var(--cream);
+  border-radius: 4px; overflow: hidden;
+}
+.cr-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--correct), #2ea862);
+  transition: width 1s ease;
+}
+.btn-restart {
+  display: block; margin: 16px 20px 20px;
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  border: none; border-radius: 9px; padding: 13px; cursor: pointer;
+  width: calc(100% - 40px); text-align: center;
+  transition: background .2s;
+}
+.btn-restart:hover { background: var(--navy-mid); }
+
+
+/* ── QUESTION GRID (number nav) ──────────────────────────────────────── */
+.q-grid-wrap {
+  padding: 14px 14px 6px;
+  border-top: 1px solid #ece6da;
+}
+.q-grid-label {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase;
+  color: #999; margin-bottom: 8px;
+}
+.q-grid {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.q-num-btn {
+  width: 30px; height: 30px; border-radius: 6px; border: none;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: transform .1s, opacity .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.q-num-btn:active { transform: scale(.92); }
+.q-num-btn.qst-unseen  { background: #d0d0d0; color: #555; }
+.q-num-btn.qst-current { background: var(--gold); color: #333; box-shadow: 0 0 0 2px var(--navy); }
+.q-num-btn.qst-visited { background: #ffe082; color: #7a5c00; }
+.q-num-btn.qst-correct { background: #4caf50; color: #fff; }
+.q-num-btn.qst-wrong   { background: #e53935; color: #fff; }
+
+/* ── RESET BUTTON ─────────────────────────────────────────────────────── */
+.reset-unit-btn {
+  display: block; width: calc(100% - 28px);
+  margin: 8px 14px 14px;
+  background: transparent; border: 1.5px solid #c0b090; border-radius: 9px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  color: #8a6a30; padding: 10px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.reset-unit-btn:hover { background: #fff3cd; color: #5a3e10; }
+
+/* ── NEXT QUESTION BUTTON ─────────────────────────────── */
+.next-btn-wrap {
+  padding: 12px 14px 14px;
+  border-top: 1px solid #ece6da;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.next-btn-wrap.visible {
+  opacity: 1; transform: translateY(0);
+}
+.btn-next-q {
+  width: 100%;
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  letter-spacing: .4px; border: none; border-radius: 9px;
+  padding: 13px; cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.btn-next-q:hover { background: var(--navy-mid); transform: translateY(-1px); }
+.btn-next-q:active { transform: translateY(0); }
+
+/* ── ANIMATIONS ───────────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.q-card { animation: slideIn .3s ease; }
+.opt-btn.correct { animation: pop .4s ease; }
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 400px) {
+  .q-text { font-size: 16px; }
+  .opt-text { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="goToMenu()">← Menyu</button>
+    <div id="app-title">Unit 3</div>
+    <div id="score-badge">0 / 0</div>
+    <button id="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</div>
+<!-- PROGRESS -->
+<div id="progress-wrap">
+  <div id="progress-inner">
+    <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
+    <div id="progress-label">
+      <span id="prog-left">Başlangıç</span>
+      <span id="prog-right">83 sual</span>
+    </div>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- WELCOME -->
+  <div id="welcome">
+    <h1>CIA Sınav Quiz<br><span style="color:var(--gold);font-size:.75em">Unit 3 · Denetim Türleri</span></h1>
+    <p id="welcome-desc">5 mövzu, 83 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar</p>
+    <div class="welcome-stats">
+      <div class="ws-item"><span class="ws-num">5</span><span class="ws-label">Mövzu</span></div>
+      <div class="ws-item"><span class="ws-num">83</span><span class="ws-label">Sual</span></div>
+      <div class="ws-item"><span class="ws-num">332</span><span class="ws-label">İzah</span></div>
+    </div>
+    <button class="btn-start" onclick="startOrResume()" id="btn-main-start">Başla / Start</button>
+    <button class="btn-start" id="btn-fresh-start"
+      style="display:none;margin-top:8px;background:transparent;border:1.5px solid var(--gold);color:var(--gold);font-size:13px;padding:10px"
+      onclick="startQuiz()">↺ Yenidən başla / Restart</button>
+  </div>
+
+  <!-- CHAPTER TABS (hidden until started) -->
+  <div id="chapters-scroll" style="display:none">
+    <div id="chapters-inner"></div>
+  </div>
+
+  <!-- QUESTION AREA -->
+  <div id="question-area"></div>
+
+  <!-- QUESTION NUMBER GRID -->
+  <div id="q-grid-area"></div>
+
+  <!-- CHAPTER SUMMARY -->
+  <div id="summary-card"></div>
+
+  <!-- OVERALL RESULTS -->
+  <div id="overall-result"></div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const QUIZ = {"SU1 - Operational Auditing": [{"q_tr": "CEO, satın alma fonksiyonunun görevini yerine getirip getirmediğini öğrenmek istiyor. Bu talebi karşılayan denetim türü hangisidir?", "q_en": "The CEO wants to know whether the purchasing function is properly meeting its charge. Which type of engagement addresses this request?", "answer": 1, "options": [{"tr": "Satın alma departmanıyla ilgili finansal denetim.", "en": "A financial engagement relating to the purchasing department.", "cmt_tr": "Finansal denetim, ekonomik faaliyeti muhasebe yöntemleriyle ölçer ve raporlar; satın alma fonksiyonunun etkinliğini değerlendirmez. A financial engagement analyzes economic activity as measured by accounting methods; it does not assess the effectiveness of the purchasing function.", "cmt_en": ""}, {"tr": "Satın alma fonksiyonuyla ilgili operasyonel denetim.", "en": "An operational engagement relating to the purchasing function.", "cmt_tr": "Operasyonel denetim, bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir; satın alma fonksiyonunun görevini yerine getirip getirmediğini belirler. An operational engagement assesses the efficiency and effectiveness of an organization's operations, determining whether the purchasing function meets its charge.", "cmt_en": ""}, {"tr": "Satın alma fonksiyonuyla ilgili uyum denetimi.", "en": "A compliance engagement relating to the purchasing function.", "cmt_tr": "Uyum denetimi, yönetimin politikalarına, prosedürlerine ve planlarına uyumu değerlendirir; fonksiyonun etkinliğini ölçmez. A compliance engagement assesses conformance with established standards, not the effectiveness of the function in meeting its charge.", "cmt_en": ""}, {"tr": "Üretim operasyonuyla ilgili tam kapsamlı denetim.", "en": "A full-scope engagement relating to the manufacturing operation.", "cmt_tr": "Tam kapsamlı denetim finansal, uyum ve operasyonel boyutları içerir ve CEO'nun talebinin kapsamını aşar. A full-scale engagement has financial, compliance, and operational aspects and exceeds the CEO's specific request.", "cmt_en": ""}]}, {"q_tr": "Maliyet tasarrufunun belirlenmesi en çok hangi denetimin amacıdır?", "q_en": "A determination of cost savings is most likely to be an objective of a(n)?", "answer": 3, "options": [{"tr": "Program sonuçları denetimi.", "en": "Program-results engagement.", "cmt_tr": "Program sonuçları denetimi, programın amaçlarının gerçekleştirilmesini ele alır; maliyetlerin en aza indirilip indirilmediğini değerlendirmez. A program-results engagement addresses accomplishment of program objectives, not necessarily whether costs were minimized.", "cmt_en": ""}, {"tr": "Finansal denetim.", "en": "Financial engagement.", "cmt_tr": "Finansal denetim, varlıkların korunması ve bilgilerin güvenilirliği ile bütünlüğüyle ilgilidir; maliyet tasarrufu odaklı değildir. A financial engagement relates to the safeguarding of assets and the reliability and integrity of information.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance engagement.", "cmt_tr": "Uyum denetimi, yasal, düzenleyici ve prosedürel gerekliliklere uyumla ilgilidir; maliyet tasarrufu hedeflemez. A compliance engagement relates to compliance with legal, regulatory, procedural, and other requirements.", "cmt_en": ""}, {"tr": "Operasyonel denetim.", "en": "Operational engagement.", "cmt_tr": "Operasyonel denetim, kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir. Satın alma gibi süreç denetimlerinde maliyet tasarrufu tipik bir amaçtır. An operational engagement assesses efficiency and effectiveness. For process engagements like purchasing, cost savings is a typical objective.", "cmt_en": ""}]}, {"q_tr": "Hangi denetim türü operasyonlara ve etkilenen örgütsel birimlerin ne kadar etkili iş birliği yapacağına odaklanır?", "q_en": "Which type of engagement focuses on operations and how effectively and efficiently the organizational units affected will cooperate?", "answer": 1, "options": [{"tr": "Program sonuçları denetimi.", "en": "Program-results engagement.", "cmt_tr": "Program sonuçları denetimi, bir programın maliyetleri, çıktıları, faydaları ve etkileri hakkında bilgi edinir. A program-results engagement obtains information about the costs, outputs, benefits, and effects of a program.", "cmt_en": ""}, {"tr": "Süreç denetimi.", "en": "Process engagement.", "cmt_tr": "Süreç denetimleri, kapsamları ve çatışan hedefleri olabilecek alt birimlerle başa çıkma ihtiyacı nedeniyle zorlayıcı olabilir. Process engagements tend to be challenging because of their scope and the need to deal with subunits that may have conflicting objectives.", "cmt_en": ""}, {"tr": "Gizlilik denetimi.", "en": "Privacy engagement.", "cmt_tr": "Gizlilik denetimleri, kişisel bilgilerin güvenliğini ele alır; organizasyonel iş birliğini değil. Privacy engagements address the security of personal information, not organizational cooperation.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance engagement.", "cmt_tr": "Uyum denetimleri, tüm yasa ve yönetmeliklere uyumu ele alır; operasyonel iş birliğini değil. Compliance engagements address compliance with all laws and regulations.", "cmt_en": ""}]}, {"q_tr": "Bir nakliye departmanı değerlendirmesinde 'acele sevkiyat' taleplerinin analizi yapılmaktadır. Bu durumda denetim amacı nedir?", "q_en": "An engagement to evaluate a transportation department includes an analysis of 'rush shipment' requests. What is the engagement objective?", "answer": 2, "options": [{"tr": "Acele sevkiyatın finansal tasfiyesi.", "en": "Financial settlement of the rush shipment.", "cmt_tr": "Bir hizmet talebinin analizinde vurgu, hizmetin nasıl ödeneceği değil, ihtiyaç üzerinedir. The emphasis in analyzing service requests is on need, not how the service will be paid for.", "cmt_en": ""}, {"tr": "Acele sevkiyat için kullanılacak nakliye düzenlemeleri.", "en": "Transportation arrangements to be used for rush shipments.", "cmt_tr": "Denetim amacı, taleplerin nasıl karşılandığını değil, taleplerin nasıl oluştuğunu incelemektir. The engagement objective is to examine the generation of requests, not the methods by which they are granted.", "cmt_en": ""}, {"tr": "Acele sevkiyat hizmetlerine olan ihtiyacın belirlenmesi.", "en": "Determination of the need for rush shipment services.", "cmt_tr": "Acele sevkiyat yöntemleri alternatiflerden daha pahalı olduğundan, iç denetçi yetkilendirme prosedürlerini ve bu ihtiyacı azaltma olasılıklarını incelemelidir. Since rush shipment methods tend to be more expensive, the internal auditor should examine authorization procedures and possibilities for reducing the need.", "cmt_en": ""}, {"tr": "Teslim edilmeyen acele sevkiyat malları için taleplerin işlenmesi.", "en": "Handling of claims for undelivered rush shipment goods.", "cmt_tr": "Sevkiyat ajanslarına karşı taleplerin analizi, acele sevkiyat taleplerinin nedenlerini ortaya çıkarmaz. Analysis of claims against shipment agencies does not shed light on the reasons for rush shipment requests.", "cmt_en": ""}]}, {"q_tr": "Operasyonel ve finansal denetimler arasındaki temel fark nedir? Operasyonel denetimlerde iç denetçiler...", "q_en": "The primary difference between operational and financial engagements is that, in the former, internal auditors...", "answer": 1, "options": [{"tr": "Müşteri kuruluşun finansal muhasebe standartlarına uygun bilgi üretip üretmediğiyle ilgilenmezler.", "en": "Are not concerned with whether the client entity is generating information in compliance with financial accounting standards.", "cmt_tr": "Finansal bilginin güvenilirliği ve bütünlüğü operasyonel denetimlerde de önemlidir. Bilgi sistemleri karar verme, kontrol ve dış gerekliliklerle uyum için veri sağlar. The reliability and integrity of financial information are important in operational engagements. Information systems provide data for decision making and compliance.", "cmt_en": ""}, {"tr": "Yönetimin kaynakları mümkün olan en etkili şekilde kullanmasına yardımcı olmaya çalışırlar.", "en": "Are seeking to help management use resources in the most effective manner possible.", "cmt_tr": "Operasyonel denetimin temel amacı, belirlenen hedeflerin ve amaçların gerçekleştirilmesini ve kaynakların ekonomik ve verimli kullanımını değerlendirmektir. The primary objective of operational engagements is to evaluate accomplishment of established objectives and economical and efficient use of resources.", "cmt_en": ""}, {"tr": "Finansal tablolardan başlayarak temel süreçlere doğru geriye doğru çalışırlar.", "en": "Start with the financial statements of the client entity and work backward to the basic processes.", "cmt_tr": "Finansal denetimler, finansal tablolardan başlar. Operasyonel denetimler ise bir süreci organizasyonel sınırlar boyunca takip eder. Financial, not operational, engagements start with financial statements. Operational engagements follow a process across organizational lines.", "cmt_en": ""}, {"tr": "Finansal denetimlerde gerekli olmayan analitik beceri ve araçları kullanabilirler.", "en": "Can use analytical skills and tools that are not necessary in financial engagements.", "cmt_tr": "Analitik beceriler her tür denetimde gereklidir; bu nedenle bu ifade doğru değildir. Analytical skills are necessary in all types of engagements.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetim sırasında iç denetçiler bir departmanın mevcut kadrosunu endüstri standartlarıyla karşılaştırır. Bu işlemin amacı nedir?", "q_en": "During an operational engagement, internal auditors compare current staffing with industry standards. What is the purpose?", "answer": 1, "options": [{"tr": "Departmanın bordrosundaki sahte çalışanları tespit etmek.", "en": "Identify bogus employees on the department's payroll.", "cmt_tr": "Bu tür testlerde iç denetçiler bordro işlemleriyle ilgilenmez. Internal auditors would not be concerned with payroll processing during this type of testing and evaluation.", "cmt_en": ""}, {"tr": "Departmanın mevcut performansını değerlendirmek ve uygun iyileştirme önerileri sunmak.", "en": "Assess the current performance of the department and make appropriate recommendations for improvement.", "cmt_tr": "Operasyonel denetim, bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir. Kadro karşılaştırması bu amaca hizmet eder. An operational engagement assesses the efficiency and effectiveness of an organization's operations.", "cmt_en": ""}, {"tr": "Departman için oluşturulan iç kontrollerin yeterliliğini değerlendirmek.", "en": "Evaluate the adequacy of established internal controls for the department.", "cmt_tr": "Kadro seviyelerinin endüstri standartlarıyla karşılaştırılması iç kontrolleri test etmez. Comparison of staffing levels with industry standards will not test the adequacy of internal controls.", "cmt_en": ""}, {"tr": "Departmanın personeline ilişkin tüm yasa ve yönetmeliklere uyup uymadığını belirlemek.", "en": "Determine whether the department has complied with all laws and regulations governing its personnel.", "cmt_tr": "İç denetçiler yasal gerekliliklerle bir uyum denetimi sırasında daha çok ilgilenir. Internal auditors would be more concerned with legal requirements during a compliance engagement.", "cmt_en": ""}]}, {"q_tr": "Üretim fonksiyonuna ilişkin operasyonel denetimde fiili maliyetleri standart maliyetlerle karşılaştırma prosedürünün amacı nedir?", "q_en": "An operational engagement relating to production includes a procedure to compare actual costs with standard costs. What is the purpose?", "answer": 3, "options": [{"tr": "Fiili maliyetlerin kaydedildiği sistemin doğruluğunu belirlemek.", "en": "Determine the accuracy of the system used to record actual costs.", "cmt_tr": "Bu karşılaştırma fiili maliyetlerin doğruluğunu belirlemez. The comparison will not determine the accuracy of actual costs.", "cmt_en": ""}, {"tr": "Standart maliyet sisteminin etkinliğini ölçmek.", "en": "Measure the effectiveness of the standard cost system.", "cmt_tr": "Bu karşılaştırma standart maliyet sisteminin etkinliğini belirlemez. The comparison will not determine the effectiveness of the standard cost system.", "cmt_en": ""}, {"tr": "Standart maliyetlerin makullüğünü değerlendirmek.", "en": "Assess the reasonableness of standard costs.", "cmt_tr": "Bu karşılaştırma standart maliyetlerin makullüğünü belirlemez. The comparison will not determine the reasonableness of standard costs.", "cmt_en": ""}, {"tr": "Yönetimin etkinlik ve verimlilik değerlendirmesine yardımcı olmak.", "en": "Assist management in its evaluation of effectiveness and efficiency.", "cmt_tr": "Operasyonel denetim, operasyonların verimliliğini ve etkinliğini değerlendirir. Fiili ve standart maliyetlerin karşılaştırılması bu konuları ele alır. An operational engagement assesses efficiency and effectiveness. Comparing actual and standard costs directly addresses these issues.", "cmt_en": ""}]}, {"q_tr": "Büyük bir üreticinin trafik departmanı operasyonlarının etkinlik ve verimliliğini inceleyen denetimde en değerli prosedür hangisidir?", "q_en": "Which procedure is most valuable in an engagement involving efficiency and effectiveness of traffic department operations?", "answer": 1, "options": [{"tr": "Kullanılan tüm taşıyıcıların uygun şekilde lisanslandığını ve güvence altına alındığını düzenleyici kurumlardan yazılı olarak teyit etmek.", "en": "Obtain written confirmation from regulatory agencies that all carriers used are properly licensed and bonded.", "cmt_tr": "Bu bilgi başka kaynaklardan da edinilebilir ve teyit yöntemi gereksizdir. This information is available from other sources, and the confirmation approach is unnecessary.", "cmt_en": ""}, {"tr": "Güzergah ve taşıyıcı seçimi prosedürlerini incelemek.", "en": "Review procedures for selection of routes and carriers.", "cmt_tr": "Güzergah ve taşıyıcı seçimi departmanın temel fonksiyonudur; kötü uygulama önemli aşırı nakliye maliyetlerine veya ciddi gecikmelere yol açabilir. Route and carrier selection is the chief function of the department. Poor practice may lead to materially excessive shipping costs or serious delays.", "cmt_en": ""}, {"tr": "Haftalık demürraj raporundaki seçili kalemleri destekleyici belgelere kadar izlemek.", "en": "Trace selected items from the weekly demurrage report to supporting documentation.", "cmt_tr": "Demürraj ayrıntıları, güzergah ve taşıyıcı seçimi kadar departman operasyonları açısından önemli değildir. The details of demurrage are not as significant to the operations of the department as route and carrier selection.", "cmt_en": ""}, {"tr": "Tüm konşimento belgelerinin önceden numaralandırıldığını doğrulamak.", "en": "Verify that all bills of lading are prenumbered.", "cmt_tr": "Belgelerin önceden numaralandırılması önemli bir iç kontrol meselesidir, ancak departman amaçlarının merkezinde değildir. Prenumbering of bills of lading is an internal control matter but not central to department objectives.", "cmt_en": ""}]}, {"q_tr": "Operasyonel güvence denetimi aşağıdakilerden hangisinin değerlendirmesini içerebilir?", "q_en": "An operational assurance engagement may include an assessment of which of the following?", "answer": 1, "options": [{"tr": "Finansal raporlamanın doğruluğu.", "en": "Accuracy of financial reporting.", "cmt_tr": "Finansal raporlamanın doğruluğunun değerlendirilmesi finansal güvence denetimi sırasında yapılır. An evaluation of the accuracy of financial reporting is performed during a financial assurance engagement.", "cmt_en": ""}, {"tr": "Bütçeleme sürecinin geliştirilmesi ve etkinliği.", "en": "Development and effectiveness of the budgeting process.", "cmt_tr": "Bütçeleme süreci, organizasyonel sınırları aşan bir süreç denetimidir ve operasyonel denetim kapsamındadır. An assessment of the budgeting process is a process engagement that crosses organizational lines, which is an operational audit engagement.", "cmt_en": ""}, {"tr": "Düzenleyici ihlallerin tespiti.", "en": "Detection of regulatory violations.", "cmt_tr": "Düzenleyici ihlallerin tespiti uyum güvence denetimi sırasında yapılır. Detection of regulatory violations is performed during a compliance assurance engagement.", "cmt_en": ""}, {"tr": "Yönetim raporlarının doğruluğu ve etkinliği.", "en": "Accuracy and effectiveness of management reports.", "cmt_tr": "Yönetim raporlarının doğruluğunu ve etkinliğini değerlendirmek, yönetim raporlama güvence denetimi sırasında yapılır. Evaluating the accuracy and effectiveness of management reports is performed during a management reporting assurance engagement.", "cmt_en": ""}]}, {"q_tr": "Üreticideki hurda bertaraf fonksiyonuna ilişkin operasyonel denetim raporu neyi ele almalıdır?", "q_en": "An operational engagement communication concerning the scrap disposal function in a manufacturer should address what?", "answer": 0, "options": [{"tr": "Hurda bertaraf fonksiyonunun verimliliği ve etkinliği ile düzeltici eylem gerektiren gözlemler.", "en": "The efficiency and effectiveness of the scrap disposal function and observations requiring corrective action.", "cmt_tr": "Operasyonel denetim raporu, verilen operasyonların verimliliği ve etkinliği hakkında yönetimi bilgilendirmeli ve düzeltici eylem gerektiren gözlemleri tartışmalıdır. An operational engagement communication should inform management about efficiency and effectiveness and discuss observations requiring corrective action.", "cmt_en": ""}, {"tr": "Hurda malzeme stokunun dönen varlık olarak raporlanıp raporlanmadığı.", "en": "Whether the scrap material inventory is reported as a current asset.", "cmt_tr": "Denetim raporu, finansal tablolardaki raporlamayı değil, fonksiyonun verimliliğini ve etkinliğini ele almalıdır. An engagement communication should address efficiency and effectiveness, not reporting in the financial statements.", "cmt_en": ""}, {"tr": "Hurda malzeme stokuyla ilgili fiziksel sayımın kayıtlı miktarla eşleşip eşleşmediği.", "en": "Whether the physical inventory count of the scrap material equals the recorded amount.", "cmt_tr": "Kayıtlar ile değerlendirilen kalemler arasındaki uyum finansal denetimde birincil bir endişedir. Agreement between the records and the items being evaluated is a primary concern in a financial audit.", "cmt_en": ""}, {"tr": "Hurda malzeme stokunun maliyet veya piyasa değerinin düşüğü ile değerlenip değerlenmediği.", "en": "Whether the scrap material inventory is valued at the lower of cost or market.", "cmt_tr": "Değerleme finansal denetimde bir konudur; operasyonel denetim raporunda değil. Valuation is an issue in a financial audit, not in an operational engagement communication.", "cmt_en": ""}]}, {"q_tr": "Girişimin başarımını ve göreli başarısını ölçmeye çalışan denetim türü hangisidir?", "q_en": "Which type of engagement attempts to measure the accomplishment and relative success of the undertaking?", "answer": 0, "options": [{"tr": "Program sonuçları denetimi.", "en": "Program-results engagement.", "cmt_tr": "Program sonuçları denetimi, bir programın maliyetleri, çıktıları, faydaları ve etkileri hakkında bilgi edinmeye çalışır ve girişimin başarısını ölçer. A program-results engagement obtains information about costs, outputs, benefits, and effects of a program and attempts to measure accomplishment and relative success.", "cmt_en": ""}, {"tr": "Gizlilik denetimi.", "en": "Privacy engagement.", "cmt_tr": "Gizlilik denetimleri, kişisel bilgilerin güvenliğini ele alır. Privacy engagements address the security of personal information.", "cmt_en": ""}, {"tr": "Süreç denetimi.", "en": "Process engagement.", "cmt_tr": "Süreç denetimi, operasyonel birimlerin ne kadar etkili ve verimli iş birliği yaptığını ele alır. A process engagement addresses how effectively and efficiently operating units cooperate.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance engagement.", "cmt_tr": "Uyum denetimi, ilgili yasa ve yönetmeliklere uyumu ele alır. A compliance engagement addresses compliance with related laws and regulations.", "cmt_en": ""}]}, {"q_tr": "Program sonuçları denetimi hakkında doğru olan ifade hangisidir?", "q_en": "Which statement is correct about a program-results engagement?", "answer": 3, "options": [{"tr": "Programın maliyetleri hakkında bilgi edinir.", "en": "Obtains information about the costs of the program.", "cmt_tr": "Bu doğru olsa da, program sonuçları denetimi aynı zamanda programın başarısını ölçmeye çalışır ve etkinliği ölçme yeteneği konusundaki endişeleri de içerir. This is correct, but a program-results engagement also attempts to measure accomplishment and concerns the ability to measure effectiveness.", "cmt_en": ""}, {"tr": "Programın başarımını ve başarısını ölçmeye çalışır.", "en": "Attempts to measure the accomplishment and success of the program.", "cmt_tr": "Bu doğru olsa da, program sonuçları denetimi aynı zamanda programın maliyetleri hakkında bilgi edinir ve etkinliği ölçme yeteneğiyle de ilgilenir. This is correct, but a program-results engagement also obtains cost information and concerns the ability to measure effectiveness.", "cmt_en": ""}, {"tr": "Programın etkinliğini ölçme yeteneği konusundaki endişeleri içerir.", "en": "Concerns the ability to measure the effectiveness of the program.", "cmt_tr": "Bu doğru olsa da, program sonuçları denetimi aynı zamanda maliyetler hakkında bilgi edinir ve başarımı ölçmeye çalışır. This is correct, but a program-results engagement also obtains cost information and attempts to measure accomplishment and success.", "cmt_en": ""}, {"tr": "Tüm cevaplar doğrudur.", "en": "All of the answers are correct.", "cmt_tr": "Program sonuçları denetimi, maliyetler, çıktılar, faydalar ve etkiler hakkında bilgi edinmeyi, girişimin başarımını ve göreli başarısını ölçmeyi ve etkinliği ölçme yeteneğini içerir. A program-results engagement obtains information about costs, outputs, benefits, and effects; measures accomplishment and relative success; and concerns the ability to measure effectiveness.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetim sırasında denetçi yerüstü depolama kapları ve yüksek emisyonlar gözlemliyor. Kuruluşun bir çevre güvenliği departmanı var. En iyi eylem planı nedir?", "q_en": "During an operational engagement, an auditor observes above-ground storage containers and black emissions from a smokestack. The organization has an environmental safety department. What is the best course of action?", "answer": 2, "options": [{"tr": "Çevre risk endişelerini gelecek yılın denetim planında değerlendirmek üzere not almak, ancak mevcut denetimin kapsamını genişletmemek.", "en": "Make a note to consider environmental risk concerns next year, but do not expand the scope of the existing engagement.", "cmt_tr": "İç denetçi, potansiyel olarak büyük risk taşıyan bilgileri görmezden gelemez. The internal auditor cannot ignore information about a potentially large risk.", "cmt_en": ""}, {"tr": "Gözlemleri denetim komitesine bildirmek ve denetimin genişletilip genişletilmeyeceği konusunda tavsiye almak.", "en": "Report the observations to the audit committee and seek their advice on whether the engagement should be expanded.", "cmt_tr": "Denetim komitesine bildirmeden önce daha fazla bilgiye ihtiyaç vardır. İç denetçi önce çevre güvenliği departmanıyla iletişime geçmelidir. More information is needed before reporting to the audit committee. The internal auditor should first contact the environmental safety department.", "cmt_en": ""}, {"tr": "Gözlemleri belgelemek ve çevre güvenliği departmanına bildirmek, yanıtlarının zamanında olup olmayacağını belirlemek ve takip etmek.", "en": "Document the observations and report them to the environmental safety department. Determine if their response will be timely, and follow up.", "cmt_tr": "Çevre sorunları pek çok kuruluş için potansiyel olarak büyük riskler barındırdığından, iç denetçi çevre güvenliği departmanının durumdan haberdar olduğundan ve durumu aktif olarak izlediğinden emin olmalıdır. Because environmental issues have potentially large risks, the auditor should ensure the environmental safety department is aware and actively monitoring the situation, with follow-up.", "cmt_en": ""}, {"tr": "Depolama tanklarının kullanımı hakkında yerel yönetimle görüşmek, ancak çevre konularında eylem almamak çünkü iç denetçi bu alanda eğitim almamıştır.", "en": "Inquire of local management as to the use of the storage tanks. Do not take action on environmental issues because the auditor is untrained in the area.", "cmt_tr": "İç denetçi çevre güvenliği departmanıyla iletişime geçmeli ve eylemlerini takip etmelidir. Toplanan bilgileri görmezden gelemez. The internal auditor should contact the environmental safety department and follow up. Gathered information cannot be ignored.", "cmt_en": ""}]}, {"q_tr": "Bir satış departmanı yeni ürün satışlarını teşvik etmek için pahalı ürünler dağıtıyor. Yönetim maliyetin çok yüksek olabileceğini düşünüyor. Promosyonun etkinliğini belirlemek için en yararlı prosedür hangisidir?", "q_en": "A sales department is giving away expensive items to stimulate demand. Management believes the cost may be too high. Which procedure is most useful to determine the effectiveness of the promotion?", "answer": 2, "options": [{"tr": "Promosyon dönemi ürün satışlarını benzer promosyon olmayan dönemle karşılaştırmak.", "en": "Comparing product sales during the promotion period with sales during a similar non-promotion period.", "cmt_tr": "Bu yaklaşım, promosyonun gelir artırma etkinliğini ele alır; ancak pahalı hediyelerin maliyetini hesaba katmadığından promosyonun kârlılığını değerlendirmez. This addresses effectiveness in increasing revenues but does not address profitability because the cost of giveaways is not taken into account.", "cmt_en": ""}, {"tr": "Promosyon öncesi ve sırasında satılan ürünlerin birim maliyetini karşılaştırmak.", "en": "Comparing the unit cost of the products sold before and during the promotion period.", "cmt_tr": "Satılan ürünlerin maliyetinin değiştiğine dair bir gösterge yoktur. Bu prosedür promosyonun gelir etkilerini de değerlendirmez. There is no indication that product costs changed. This procedure does not consider the revenue effects of the promotion either.", "cmt_en": ""}, {"tr": "Promosyon dönemi için marjinal gelir ve marjinal maliyet analizi yapmak.", "en": "Performing an analysis of marginal revenue and marginal cost for the promotion period, compared with the period before the promotion.", "cmt_tr": "Temel analiz, kuruluşun katkı payı üzerindeki etkiyi (Gelirler – Değişken maliyetler) belirlemektir. Bu, hem gelir hem de maliyet etkilerini kapsar. The key analysis is to determine the effect on the organization's contribution margin (Revenues – Variable costs), capturing both revenue and cost effects.", "cmt_en": ""}, {"tr": "Satış yöneticilerinin prim ödemelerini promosyon döneminde ve olmayan dönemde karşılaştırmak.", "en": "Comparing sales managers' bonus payments during the promotion period with a similar non-promotion period.", "cmt_tr": "Satış yöneticilerinin primlerini karşılaştırmak satış faaliyetini gösterebilir, ancak promosyonun kârlılığını ölçmez. Comparing bonus payments may indicate sales activity but would not measure the profitability of the promotion.", "cmt_en": ""}]}, {"q_tr": "Bir şehir, iş yeniden eğitim programına katılanların ne kadarının iş bulduğunu belirlemek için katılımcıları rastgele seçiyor. Bu denetim türü nedir?", "q_en": "A city randomly selects participants in a job retraining program to determine how many have retained a job. This type of engagement relates to?", "answer": 3, "options": [{"tr": "Uyum.", "en": "Compliance.", "cmt_tr": "Uyum denetimi, yasa, yönetmelik ve sözleşmelere uyumu ele alır; program çıktılarını ölçmez. A compliance audit addresses compliance with laws, regulations, and contracts.", "cmt_en": ""}, {"tr": "Operasyonel etkinlik.", "en": "Operational effectiveness.", "cmt_tr": "Operasyonel etkinlik denetimi, iş yeniden eğitim programının genel kapsamlı bir değerlendirmesinden oluşur. An operational effectiveness engagement consists of a comprehensive review of the overall job retraining program.", "cmt_en": ""}, {"tr": "Ekonomi ve verimlilik.", "en": "Economy and efficiency.", "cmt_tr": "Ekonomi ve verimlilik denetimi, programın maliyetini elde edilen hedeflerle karşılaştırır; başarı ölçümünü değil. An economy and efficiency engagement considers the cost of the program compared with objectives achieved.", "cmt_en": ""}, {"tr": "Program sonuçları.", "en": "Program results.", "cmt_tr": "Program sonuçları denetimi, programın başarımlarını ve göreli başarısını ölçmeye çalışır. İş bulma oranının belirlenmesi bu denetim türüne örnektir. A program-results engagement attempts to measure accomplishments and relative success of the program. Determining job retention rates is an example.", "cmt_en": ""}]}, {"q_tr": "Toplam personel içindeki doğrudan personel yüzdesi hangi verimlilik ölçüm türüne örnek teşkil eder?", "q_en": "Direct staff as a percentage of total staff is an example of which type of efficiency measure?", "answer": 2, "options": [{"tr": "Verimlilik oranı.", "en": "Productivity ratio.", "cmt_tr": "Verimlilik oranı, çıktıyı girdi ile oranlar; personel yüzdesi bu ölçüme karşılık gelmez. The productivity ratio measures output relative to input.", "cmt_en": ""}, {"tr": "Verimlilik endeksi.", "en": "Productivity index.", "cmt_tr": "Verimlilik endeksi, üretim potansiyelini ölçer. The productivity index measures production potential.", "cmt_en": ""}, {"tr": "İşletme oranı.", "en": "Operating ratio.", "cmt_tr": "İşletme oranı, bir kuruluşun operasyonel verimliliğini ölçer. Personel, operasyonların bir bileşenidir ve toplam personel içindeki doğrudan personel yüzdesi bir işletme oranı örneğidir. The operating ratio measures operational efficiency. Staffing is a component of operations, and direct staff as a percentage of total staff is an example of an operating ratio.", "cmt_en": ""}, {"tr": "Kaynak kullanım oranı.", "en": "Resource utilization rate.", "cmt_tr": "Kaynak kullanım oranı, kaynak kullanımını mevcut kaynaklara göre ölçer. The resource usage rate measures resource use relative to available resources.", "cmt_en": ""}]}, {"q_tr": "Çevre koruma ve alarm cihazlarına ilişkin denetimde en önemli amaç nedir?", "q_en": "An internal auditor is conducting an audit of environmental protection and alarm devices. What is the most significant objective?", "answer": 0, "options": [{"tr": "Cihazların kurulu ve doğru çalışır durumda olup olmadığını belirlemek.", "en": "The devices are installed and operating properly.", "cmt_tr": "Amaç, cihazların etkin biçimde çalışıp çalışmadığını belirlemektir. Bunun için iç denetçinin gerçek bir işlem testini gözlemlemesi gerekir. The objective should be to determine whether the devices are operating effectively. The internal auditor must observe an actual test of the operation.", "cmt_en": ""}, {"tr": "Cihazların maliyetlerinin doğru kayıt altına alınıp alınmadığını belirlemek.", "en": "The costs of the devices were properly recorded.", "cmt_tr": "Bu tür cihazlarda kayıt tutma, etkinlik kadar önemli değildir. Recordkeeping is not as important as the effectiveness of such devices.", "cmt_en": ""}, {"tr": "Cihaz şartname belgelerinin eksiksiz olup olmadığını belirlemek.", "en": "The device specification documents are complete.", "cmt_tr": "Şartname belgeleri yalnızca onarım gerektiğinde önem kazanır. Specification documents become important only when repairs are needed.", "cmt_en": ""}, {"tr": "Satın alma ve elden çıkarma işlemlerinin uygun şekilde yetkilendirilip yetkilendirilmediğini belirlemek.", "en": "Acquisitions and disposals are properly authorized.", "cmt_tr": "Yetkilendirme, etkinlikten daha az önemlidir. Authorization is less important than effectiveness.", "cmt_en": ""}]}, {"q_tr": "Program sonuçları denetiminin en çok uygulanması gereken alan hangisidir?", "q_en": "A program-results engagement is most likely to be performed on?", "answer": 0, "options": [{"tr": "Normal operasyonların bir parçası olmayan bir faaliyet.", "en": "An activity not part of normal operations.", "cmt_tr": "Program, bir genişleme veya yeni bir bilgi sistemi gibi, kuruluşun normal süregelen operasyonlarının bir parçası olmayan finanse edilmiş bir faaliyettir. A program is a funded activity not part of the normal, continuing operations of the organization, such as an expansion or a new information system.", "cmt_en": ""}, {"tr": "Satın alma ve teslim alma departmanları.", "en": "The purchasing and receiving departments.", "cmt_tr": "Satın alma ve teslim alma departmanları, süreç (fonksiyonel) denetiminin tipik konularıdır. The purchasing and receiving departments are typical processes (functions) that are typical subjects of a process (functional) engagement.", "cmt_en": ""}, {"tr": "Güvenlik uygulamaları ve hurda işleme.", "en": "Safety practices and scrap handling.", "cmt_tr": "Güvenlik uygulamaları ve hurda işleme tipik süreçlerdir, programlar değil. Safety practices and scrap handling are typical processes (functions), not programs.", "cmt_en": ""}, {"tr": "Hizmet ve malzemelerin dağıtımı.", "en": "Distribution of services and materials.", "cmt_tr": "Kuruluşta hizmet, malzeme ve sarf malzemelerinin kullanıcılara dağıtımı tipik süreçlerdir. Distribution of services, materials, and supplies to users in the organization are typical processes (functions).", "cmt_en": ""}]}, {"q_tr": "Hangi iç denetim türü, organizasyonel birimlerin çatışan hedefleri nedeniyle zor olabilir?", "q_en": "Which type of internal audit engagement most likely may be difficult because of the conflicting objectives of organizational units?", "answer": 3, "options": [{"tr": "Performans denetimi.", "en": "Performance audit.", "cmt_tr": "Performans denetimi, kuruluşun hedeflerinin gerçekleştirilmesi hakkında güvence sağlayabilir. Buna karşın, süreç denetimi bir sürecin verimliliğini ve etkinliğini değerlendirir. A performance audit may provide assurance about achievement of objectives. In contrast, a process engagement assesses the efficiency and effectiveness of a process.", "cmt_en": ""}, {"tr": "Program sonuçları denetimi.", "en": "Program-results engagement.", "cmt_tr": "Program sonuçları denetimleri, bir programın maliyetleri, çıktıları ve etkileri hakkında bilgi edinmeye çalışır ve organizasyonel sınırları aşan bir sürece uygulanmaz. Program-results engagements obtain information about program costs, outputs, benefits, and effects. They do not apply to a process that crosses organizational lines.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance audit.", "cmt_tr": "Uyum denetimi, yasa ve yönetmeliklere uyumu ele alır. A compliance audit addresses compliance with laws and regulations.", "cmt_en": ""}, {"tr": "Süreç denetimi.", "en": "Process engagement.", "cmt_tr": "Bu denetimler, kapsamları ve çatışan hedefleri olabilecek organizasyonel birimlerle başa çıkma ihtiyacı nedeniyle zorlayıcı olabilir. These engagements tend to be challenging because of their scope and the need to deal with organizational units that may have conflicting objectives.", "cmt_en": ""}]}, {"q_tr": "Etkinliği ölçme yeteneği hangi denetimde özel bir endişedir?", "q_en": "The ability to measure effectiveness is a special concern in a?", "answer": 1, "options": [{"tr": "Süreç denetimi.", "en": "Process engagement.", "cmt_tr": "Süreç denetimindeki özel endişe, bir sürecin organizasyonel sınırları, hizmet birimlerini ve coğrafi konumları aşmasıdır. The special concern in a process engagement is that a process crosses organizational lines, service units, and geographic locations.", "cmt_en": ""}, {"tr": "Program sonuçları denetimi.", "en": "Program-results engagement.", "cmt_tr": "Faydalar çoğu zaman finansal terimlerle ifade edilemediğinden, etkinliği ölçme yeteneği özel bir endişedir. Bu nedenle hedeflerin ve standartların açık tanımları başlangıçta sağlanmalıdır. Because benefits often cannot be quantified in financial terms, the ability to measure effectiveness is a special concern. Clear definitions of objectives and standards should be provided at the outset.", "cmt_en": ""}, {"tr": "Fonksiyonel denetim.", "en": "Functional engagement.", "cmt_tr": "Fonksiyonel denetim, süreç denetiminin eş anlamlısıdır. A functional engagement is a synonym for a process engagement.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance audit.", "cmt_tr": "Uyum denetimi, yasa ve yönetmeliklere uyumu ele alır. A compliance audit addresses compliance with laws and regulations.", "cmt_en": ""}]}, {"q_tr": "Program sonuçları operasyonel denetimi ile süreç operasyonel denetimi arasındaki fark nedir?", "q_en": "A program-results audit is different from a process audit because?", "answer": 3, "options": [{"tr": "Program sonuçları denetiminde faydalar ölçülemez; bu nedenle odak, fiili maliyetleri bütçelenen maliyetlerle karşılaştırmaktır.", "en": "Benefits cannot be quantified in a program-results audit; therefore, the focus is comparing actual costs to budgeted costs.", "cmt_tr": "Program faydalarını ölçmek zor olabilir, ancak genellikle ölçülebilirler. The benefits of programs can be difficult to measure, but they generally can be measured.", "cmt_en": ""}, {"tr": "Süreç denetimi belirli organizasyonel departmanları değerlendirirken, program sonuçları denetimi çapraz fonksiyonlu süreçleri değerlendirir.", "en": "A process audit evaluates specific organizational departments, while a program-results audit evaluates cross-functional processes.", "cmt_tr": "Süreç denetimi çapraz fonksiyonludur; program sonuçları denetimi ise süreçlere değil program sonuçlarına odaklanır. A process audit is cross-functional, and a program-results audit is focused on the results of a program, not specifically on processes.", "cmt_en": ""}, {"tr": "Süreç denetiminin odağı verimlilik, program sonuçları denetiminin odağı ise etkinliktir.", "en": "The focus of a process audit is efficiency, while the focus of a program-results audit is effectiveness.", "cmt_tr": "Hem süreç denetimleri hem de program sonuçları denetimleri etkinlik ve verimliliğe odaklanır. Both process audits and program-results audits are focused on effectiveness and efficiency.", "cmt_en": ""}, {"tr": "Program sonuçları denetimi, kuruluşun süregelen operasyonlarının bir parçası olmayan finanse edilmiş bir faaliyetin denetimidir.", "en": "A program-results audit is an audit of a funded activity that is not part of an organization's continuing operations.", "cmt_tr": "Program sonuçları denetimi, bir genişleme veya maliyet kesintisi girişimi gibi kuruluşun süregelen operasyonlarının bir parçası olmayan finanse edilmiş bir faaliyetin denetimidir. A program-results audit is an audit of a funded activity not part of an organization's continuing operations, such as an expansion or a cost-cutting initiative.", "cmt_en": ""}]}, {"q_tr": "Aşağıdakilerden hangisi bir programa örnek teşkil eder?", "q_en": "Which one of the following is an example of a program?", "answer": 2, "options": [{"tr": "Bütçe hazırlama adımları.", "en": "The steps in preparing budgets.", "cmt_tr": "Bütçe hazırlama adımları bir süreçtir ve süregelen operasyonların parçasıdır. The steps in preparing a budget are a process and part of continuing operations.", "cmt_en": ""}, {"tr": "Fabrika güvenlik uygulaması.", "en": "A factory safety practice.", "cmt_tr": "Güvenlik uygulamaları bir süreçtir ve süregelen operasyonların parçasıdır. Safety practices are a process and part of continuing operations.", "cmt_en": ""}, {"tr": "Maliyet kesintisi girişimi.", "en": "A cost-cutting initiative.", "cmt_tr": "Program, bir genişleme, yeni bir bilgi sistemi veya maliyet kesintisi girişimi gibi kuruluşun süregelen operasyonlarının bir parçası olmayan finanse edilmiş bir faaliyettir. A program is a funded activity not part of the continuing operations of the organization, such as an expansion, a new information system, or a cost-cutting initiative.", "cmt_en": ""}, {"tr": "Ürün değiştirme prosedürleri.", "en": "Product modification procedures.", "cmt_tr": "Ürün değiştirme prosedürleri süregelen operasyonların bir parçasıdır ve belgelenmiş bir süreçtir. Product modification procedures are part of continuing operations and a documented process.", "cmt_en": ""}]}, {"q_tr": "Bir iç denetçi, şirketin üretim tesislerinin verimliliğini belirlemek için işletme oranını hesaplamak istiyor. İşletme oranını doğru tanımlayan hangisidir?", "q_en": "An internal auditor wants to calculate the company's operating ratio. Which statement correctly describes the operating ratio?", "answer": 1, "options": [{"tr": "Toplam üretim çıktısını toplam girdinin yüzdesi olarak hesaplar.", "en": "It calculates total production output as a percentage of the total input.", "cmt_tr": "Girdi yüzdesi olarak çıktı, verimlilik oranıdır; işletme oranı değil. Output as a percentage of input is the productivity ratio, not the operating ratio.", "cmt_en": ""}, {"tr": "Toplam işletme giderlerini net satışlarla karşılaştırır.", "en": "It compares total operating expenses to net sales.", "cmt_tr": "İşletme oranı, bir şirketin operasyonel verimliliğinin ölçüsüdür. Toplam işletme giderlerinin net satışlara bölünmesiyle hesaplanır. The operating ratio is a measure of a company's operating efficiency. It equals total operating expenses divided by net sales.", "cmt_en": ""}, {"tr": "Kaynak kullanımını mevcut toplam kaynaklarla karşılaştırır.", "en": "It compares resource usage to the total resources available.", "cmt_tr": "Mevcut kaynaklara kıyasla kaynak kullanımı, kaynak kullanım oranıdır. Resource usage compared to total available resources is the resource usage rate.", "cmt_en": ""}, {"tr": "Toplam üretim çıktısını toplam üretim potansiyelinin yüzdesi olarak hesaplar.", "en": "It calculates total production output as a percentage of total production potential.", "cmt_tr": "Üretim potansiyelinin yüzdesi olarak üretim çıktısı, verimlilik endeksidir. Production output as a percentage of production potential is the productivity index.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetimin birincil amacı nedir?", "q_en": "The primary goal of an operational audit is to?", "answer": 1, "options": [{"tr": "İşlemlerin finansal doğruluğunu değerlendirmek.", "en": "Assess the financial correctness of transactions.", "cmt_tr": "Finansal denetimler işlemlerin doğruluğuna odaklanır; operasyonel denetimler değil. Financial audits focus on transaction correctness.", "cmt_en": ""}, {"tr": "Operasyonların verimliliğini ve etkinliğini değerlendirmek.", "en": "Evaluate the efficiency and effectiveness of operations.", "cmt_tr": "Operasyonel denetimler, bir kuruluşun ne kadar etkin ve verimli çalıştığını değerlendirir; süreçleri, hizmet birimlerini ve birimler arası iş birliğini inceler. Operational audits assess how effectively and efficiently an organization operates, evaluating processes, service units, and the cooperation among units.", "cmt_en": ""}, {"tr": "Finansal tablolardaki hileli işlemleri tespit etmek.", "en": "Detect fraud within financial statements.", "cmt_tr": "Operasyonel denetimler dolaylı olarak hileyi tespit edebilir, ancak birincil amaçları operasyonları değerlendirmektir. Operational audits may indirectly detect fraud, but their primary objective is to evaluate operations.", "cmt_en": ""}, {"tr": "Yasa ve yönetmeliklere uyumu sağlamak.", "en": "Ensure compliance with laws and regulations.", "cmt_tr": "Uyum denetimi, yasal ve düzenleyici gerekliliklere bağlılığı değerlendirir. Compliance auditing evaluates adherence to legal and regulatory requirements.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetimlerin temel amacı nedir?", "q_en": "A key objective of operational audits is to?", "answer": 1, "options": [{"tr": "Finansal tabloların GAAP standartlarına uygunluğunu sağlamak.", "en": "Ensure financial statements comply with GAAP standards.", "cmt_tr": "Finansal tabloların GAAP'e uygunluğunun sağlanması, finansal tabloların doğruluğunu belirleyen finansal denetimlerle ilgilidir. Ensuring financial statements comply with GAAP relates to financial audits, which determine the accuracy of financial statements.", "cmt_en": ""}, {"tr": "Bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirmek.", "en": "Assess the efficiency and effectiveness of an organization's operations.", "cmt_tr": "Operasyonel denetimler, bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir; süreçleri ve organizasyonel birimlerin ne kadar etkili iş birliği yaptığını değerlendirir. Operational audits assess the efficiency and effectiveness of an organization's operations, evaluating processes and organizational unit collaboration.", "cmt_en": ""}, {"tr": "Düzenleyici uyum gerekliliklerine bağlılığı doğrulamak.", "en": "Verify adherence to regulatory compliance requirements.", "cmt_tr": "Uyum denetimleri, kural ve yönetmeliklere bağlılığı belirler. Compliance audits determine adherence to rules and regulations.", "cmt_en": ""}, {"tr": "Organizasyonel kültürün performans üzerindeki etkilerini değerlendirmek.", "en": "Evaluate the effects of organizational culture on performance.", "cmt_tr": "Organizasyonel kültürün etkilerinin değerlendirilmesi, organizasyonel kültür denetiminin bir parçasıdır. Evaluating the effects of organizational culture is part of an organizational culture audit.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetimde program sonuçları denetimine örnek olan hangisidir?", "q_en": "Which of the following is an example of a program-results engagement in operational auditing?", "answer": 2, "options": [{"tr": "Çevre mevzuatına uyumun değerlendirilmesi.", "en": "Evaluating compliance with environmental regulations.", "cmt_tr": "Uyum denetimi, çevre mevzuatına uyumun değerlendirilmesini içerebilir. A compliance audit may include evaluating compliance with environmental regulations.", "cmt_en": ""}, {"tr": "Devam eden üretim hattı için yeni ekipman alımının değerlendirilmesi.", "en": "Assessing the acquisition of new equipment for an ongoing production line.", "cmt_tr": "Devam eden bir operasyonel faaliyet, belirli bir program değil. An ongoing operational activity, not a specific program.", "cmt_en": ""}, {"tr": "Yeni uygulanan müşteri elde tutma programının sonuçlarının ölçülmesi.", "en": "Measuring the outcomes of a newly implemented customer retention program.", "cmt_tr": "Program sonuçları denetimleri, yeni bir müşteri elde tutma programı gibi kuruluşun normal operasyonlarının parçası olmayan programların başarısını ölçer. Program-results engagements measure the success of programs not part of regular operations, such as a new customer retention program.", "cmt_en": ""}, {"tr": "Önemli yanlış beyanlar için finansal raporların incelenmesi.", "en": "Reviewing the financial reports for material misstatements.", "cmt_tr": "Finansal denetimler, finansal tabloları değerlendirir. Financial audits evaluate financial statements.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetimin etkinliğini değerlendirmek için kullanılmayan ölçüt hangisidir?", "q_en": "Which of the following is NOT a measure used to assess the effectiveness of an operational audit?", "answer": 2, "options": [{"tr": "Verimlilik oranı.", "en": "Productivity ratio.", "cmt_tr": "Verimlilik oranı, operasyonel denetimlerde etkinliği değerlendirmek için kullanılır. The productivity ratio is used in operational audits to assess effectiveness.", "cmt_en": ""}, {"tr": "Kaynak kullanım oranı.", "en": "Resource usage rate.", "cmt_tr": "Kaynak kullanım oranı, operasyonel verimliliği değerlendirmeye yardımcı olur. The resource usage rate helps assess operational efficiency.", "cmt_en": ""}, {"tr": "Özkaynak karlılığı.", "en": "Return on equity.", "cmt_tr": "Özkaynak karlılığı (ROE), operasyonel verimlilik veya etkinliğe özgü değil, hissedar getirileriyle ilgili genel bir finansal performans ölçüsüdür. Return on equity (ROE) is a general financial performance measure relating to shareholder returns, not specifically applicable to operational efficiency or effectiveness.", "cmt_en": ""}, {"tr": "İşletme oranı.", "en": "Operating ratio.", "cmt_tr": "İşletme oranı, kaynaklara göre operasyonel verimliliği yansıtır. The operating ratio reflects operational efficiency in respect to resources.", "cmt_en": ""}]}, {"q_tr": "Operasyonel denetimin birincil amacı nedir?", "q_en": "The primary objective of an operational audit is to?", "answer": 2, "options": [{"tr": "Finansal tablo doğruluğunu doğrulamak.", "en": "Verify financial statement accuracy.", "cmt_tr": "Finansal tablo doğruluğunu doğrulamak, finansal denetimlerin amacıdır. Verifying financial statement accuracy is the purpose of financial audits.", "cmt_en": ""}, {"tr": "Yasa ve yönetmeliklere uyumu değerlendirmek.", "en": "Assess compliance with laws and regulations.", "cmt_tr": "Uyum denetimleri, yasal ve düzenleyici gerekliliklere bağlılığı değerlendirir; operasyonel verimliliği değil. Compliance audits assess adherence to laws and regulations, not operational efficiency.", "cmt_en": ""}, {"tr": "Operasyonların verimliliğini ve etkinliğini değerlendirmek.", "en": "Evaluate the efficiency and effectiveness of operations.", "cmt_tr": "Operasyonel denetim, bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir. Vurgu, organizasyonel birimlerin nasıl iş birliği yaptığı ve hedeflere nasıl ulaştığı üzerinedir. An operational audit assesses the efficiency and effectiveness of an organization's operations, focusing on how organizational units cooperate and achieve their objectives.", "cmt_en": ""}, {"tr": "İç politikalara uyumu sağlamak.", "en": "Ensure adherence to internal policies.", "cmt_tr": "İç politikalara uyumu sağlamak, uyum denetiminin bir amacıdır. Ensuring adherence to internal policies is an objective of compliance auditing.", "cmt_en": ""}]}], "SU2 - Compliance Auditing": [{"q_tr": "Çalışanlar hangi tarafından izlenen bir ihbar hattına en çok güven duyar?", "q_en": "Employees have the most confidence in a hotline monitored by which of the following?", "answer": 2, "options": [{"tr": "İntikam almama politikasıyla desteklenen hukuk departmanından bir uzman.", "en": "An expert from the legal department, backed by a nonretaliation policy.", "cmt_tr": "Çalışanlar, hukuk departmanı tarafından yanıtlanan ihbar hatlarına çok az güven duyar. Employees have little confidence in hotlines answered by the legal department.", "cmt_en": ""}, {"tr": "İntikam alma politikasıyla desteklenen kurum içi temsilci.", "en": "An in-house representative, backed by a retaliation policy.", "cmt_tr": "İntikam alma politikası, olası misilleme endişesiyle ihbarcıların ortaya çıkmasını engelleyecektir. A retaliation policy would dissuade whistleblowers from coming forth due to concern over possible backlash.", "cmt_en": ""}, {"tr": "İntikam almama politikasıyla desteklenen kurum içi temsilci.", "en": "An in-house representative, backed by a nonretaliation policy.", "cmt_tr": "Çalışanlar, ihbar hatlarını kurum içi temsilcinin yanıtlaması ve bunun intikam almama politikasıyla desteklenmesi durumunda güvenmektedir. Employees may have confidence in hotlines answered by an in-house representative backed by a nonretaliation policy.", "cmt_en": ""}, {"tr": "Avukat-müvekkil gizliliğini daha iyi koruyabilecek harici bir avukat.", "en": "An off-site attorney who can better protect attorney-client privilege.", "cmt_tr": "Çalışanlar, hukuk departmanı veya harici bir hizmet sağlayıcı tarafından izlenen ihbar hatlarına çok az güven duyar. Employees have little confidence in hotlines monitored by the legal department or by an external service provider.", "cmt_en": ""}]}, {"q_tr": "Uyum standartları ve prosedürleri ile yazılı iş davranış kuralları hakkında doğru olan hangisidir?", "q_en": "An organization establishes compliance standards and a written business code of conduct. Which statement is true?", "answer": 0, "options": [{"tr": "Uyum standartları basit ve suç davranışı olasılığını makul ölçüde azaltabilecek nitelikte olmalıdır.", "en": "Compliance standards should be straightforward and reasonably capable of reducing the prospect of criminal conduct.", "cmt_tr": "Davranış kuralları, yasaklanan faaliyetleri açıkça belirtmeli ve uyum standartları kasıtlı ihlalleri caydıracak biçimde basit olmalıdır. The code of conduct should clearly identify prohibited activities, and compliance standards should be straightforward to discourage intentional violations.", "cmt_en": ""}, {"tr": "Uyum standartları denetim komitesinin tüzüğüne kodlanmalıdır.", "en": "The compliance standards should be codified in the charter of the audit committee.", "cmt_tr": "Denetim komitesi tüzüğünün uyum standartlarını fiilen kodlaması uygun değildir; tüzük yalnızca uyumun izlenmesi sürecini ele almalıdır. Actually codifying the compliance standards in the audit committee's charter is inappropriate; the charter should address reviewing the process for monitoring compliance.", "cmt_en": ""}, {"tr": "Uluslararası operasyonlara sahip şirketler, seçici coğrafi konumlara dayalı çeşitli uyum programları oluşturmalıdır.", "en": "Companies with international operations should institute various compliance programs based on selective geographic locations.", "cmt_tr": "Uluslararası operasyonlara sahip şirketler, seçici coğrafi konumlar için değil, küresel bazda bir uyum programı oluşturmalıdır. Companies with international operations should institute a compliance program on a global basis, not just for selective geographic locations.", "cmt_en": ""}, {"tr": "Gelecekteki hukuki yükümlülükleri önlemek için kural, hukuki terim ve tanımlardan oluşmalıdır.", "en": "In order to prevent future legal liability, the code should consist of legal terms and definitions.", "cmt_tr": "Kural, tüm çalışanların anlayabileceği bir dilde yazılmalı; hukuk dili kullanılmamalıdır. The code should be written in a language that all employees can understand, avoiding legalese.", "cmt_en": ""}]}, {"q_tr": "Bir kuruluşta etik dışı veya yasadışı faaliyeti ortaya çıkarmak için etkili bir araç hangisidir?", "q_en": "Which of the following is an effective tool for uncovering unethical or illegal activity in an organization?", "answer": 3, "options": [{"tr": "Adayların taranması.", "en": "The screening of applicants.", "cmt_tr": "Adayların işe alım için taranması, geçmişteki suç faaliyetini tespit etmenin bir yoludur; devam eden yasadışı faaliyeti ortaya çıkarmaz. Screening applicants is a way to detect past criminal activity; it does not uncover ongoing unethical or illegal activity.", "cmt_en": ""}, {"tr": "Etik görüşmesi.", "en": "The ethics interview.", "cmt_tr": "Etik görüşmesi, bir çalışanda rahatsızlığa neden olabilir; çalışan, görüşmenin etik anketi kadar gizli olduğuna inanmayabilir. An ethics interview may cause discomfort, and an employee may not believe the interview is as confidential as an ethics questionnaire.", "cmt_en": ""}, {"tr": "Geçmiş araştırması.", "en": "The background check.", "cmt_tr": "Geçmiş araştırması, geçmişteki suistimalleri tespit etmenin bir yoludur; devam eden yasadışı faaliyetleri değil. The background check is a way to detect past wrongdoing, not ongoing unethical or illegal activities.", "cmt_en": ""}, {"tr": "Etik anketi.", "en": "The ethics questionnaire.", "cmt_tr": "Etik dışı veya yasadışı faaliyeti ortaya çıkarmak için etkili bir araç, etik anketidir. Kuruluşun her çalışanı, rüşvet, ödül veya diğer suistimallerden haberdar olup olmadığını soran bir anket almalıdır. The ethics questionnaire is effective for uncovering unethical or illegal activity. Each employee should receive a questionnaire asking whether they are aware of kickbacks, bribes, or other wrongdoing.", "cmt_en": ""}]}, {"q_tr": "Kıdemli yönetim, çalışan sosyal hakları paketinin uyum denetimini talep etti. Her iki tarafın da birincil denetim amacı nedir?", "q_en": "Senior management requested a compliance audit of the organization's employee benefits package. What is the primary engagement objective for both the CAE and senior management?", "answer": 1, "options": [{"tr": "Organizasyonun katkı düzeyi programın taleplerini karşılamak için yeterlidir.", "en": "The level of organizational contributions is adequate to meet the program's demands.", "cmt_tr": "Katkılar, uyum ile yasalar, yönetmelikler ve sözleşmelerle birincil amaca tabi spesifik denetim hedefleriyle ilgilidir. Contributions relate to specific engagement objectives subordinate to the primary objective of compliance with laws, regulations, and contracts.", "cmt_en": ""}, {"tr": "Bireysel programlar, sözleşme gereklilikleri ve devlet düzenlemeleri doğrultusunda işletilmektedir.", "en": "Individual programs are operating in accordance with contractual requirements and government regulations.", "cmt_tr": "Sözleşme ve düzenlemelere uyum, programların en temel yönleriyle ilgili olduğundan diğer tüm hedeflere önceliklidir. Operation in accordance with contracts and regulations takes precedence over all other objectives because it relates to the most basic aspects of the programs.", "cmt_en": ""}, {"tr": "Katılım düzeyleri bireysel programların devamını desteklemektedir.", "en": "Participation levels support continuation of individual programs.", "cmt_tr": "Katılım düzeyleri, uyum ile yasalar, yönetmelikler ve sözleşmelerle birincil amaca tabi spesifik denetim hedefleriyle ilgilidir. Participation levels relate to specific engagement objectives subordinate to the primary objective of compliance with laws, regulations, and contracts.", "cmt_en": ""}, {"tr": "Haklar ödemeleri, uygun olduğunda, doğru ve zamanındadır.", "en": "Benefit payments, when appropriate, are accurate and timely.", "cmt_tr": "Haklar ödemeleri, uyum ile yasalar, yönetmelikler ve sözleşmelerle birincil amaca tabi spesifik denetim hedefleriyle ilgilidir. Benefit payments relate to specific engagement objectives subordinate to the primary objective of compliance with laws, regulations, and contracts.", "cmt_en": ""}]}, {"q_tr": "Uyum programları kuruluşlara en doğrudan nasıl yardımcı olur?", "q_en": "Compliance programs most directly assist organizations by doing which of the following?", "answer": 1, "options": [{"tr": "İş sürekliliği yönetimi için bir plan geliştirmek.", "en": "Developing a plan for business continuity management.", "cmt_tr": "İş sürekliliği yönetimi için bir plan geliştirmek, uyum programının değil, operasyonel bir faaliyettir. Developing a plan for business continuity management is an operational activity, not part of a compliance program.", "cmt_en": ""}, {"tr": "Yönetici ve yetkili sorumluluğunu belirlemek.", "en": "Determining director and officer liability.", "cmt_tr": "Uyum programları, yönetici ve yetkili sorumluluğunu belirlemeye yardımcı olur; ayrıca kasıtsız ihlalleri, yasadışı faaliyetleri caydırır ve sigortacılık taleplerinin kanıtlanmasına yardımcı olabilir. Compliance programs assist organizations in determining director and officer liability, preventing inadvertent violations, and proving insurance claims.", "cmt_en": ""}, {"tr": "Kalite süreçlerinin planlandığı gibi işlediğini güvence altına almak.", "en": "Assuring that quality processes are operating as planned.", "cmt_tr": "Kalite süreçlerinin güvence altına alınması, uyum denetiminin değil, kalite denetiminin amacıdır. Assuring quality processes are operating is an objective of a quality audit, not a compliance program.", "cmt_en": ""}, {"tr": "Felaket kurtarma planlaması yapmak.", "en": "Planning for disaster recovery.", "cmt_tr": "Felaket kurtarma planlaması, uyum programının değil, operasyonel bir faaliyettir. Planning for disaster recovery is an operational activity, not part of a compliance program.", "cmt_en": ""}]}, {"q_tr": "Çalışanların disiplin süreçleri hangi durumlarda sınırlandırılabilir?", "q_en": "Discipline of employees may be limited by which of the following?", "answer": 3, "options": [{"tr": "Kuruluşun davranış kuralları politikaları.", "en": "The organization's code of conduct policies.", "cmt_tr": "Davranış kuralları politikaları, etik dışı veya yasadışı davranış için çalışanları disipline etme yetkisini sınırlamamalıdır. Code of conduct policies should not limit an organization's power to discipline employees for unethical or illegal behavior.", "cmt_en": ""}, {"tr": "Belirli çalışan ihlallerini bir devlet kuruluşuna bildirme gerekliliği.", "en": "A requirement to report certain employee violations to a governmental entity.", "cmt_tr": "Belirli ihlalleri bildirme zorunluluğu, işverenin çalışanları disipline etme yetkisini sınırlayan bir durum değildir. A governmental requirement to report certain employee violations is not itself a limitation on the employer's power to discipline employees.", "cmt_en": ""}, {"tr": "Kayırmacılık.", "en": "Nepotism.", "cmt_tr": "Aile üyelerine tercihli muamele gösterilmesi (kayırmacılık), bir şirketin disiplin amacıyla çalışanları işten çıkarma yetkisini sınırlamamalıdır. Giving preferential treatment to family members (nepotism) should not limit a company's power to terminate employees for disciplinary reasons.", "cmt_en": ""}, {"tr": "İstihdamın isteğe bağlılığı ilkesine ilişkin istisnalar.", "en": "Exceptions to the employee-at-will doctrine.", "cmt_tr": "Çalışan disiplini; ihbarcı yasaları, istihdamın isteğe bağlılığı ilkesine ilişkin istisnalar, çalışan sözleşmeleri ve işverenin iyi niyet yükümlülükleri tarafından sınırlandırılabilir. Employee discipline may be limited by whistleblower laws, exceptions to the employee-at-will doctrine, employee contracts, and employer responsibilities to act in good faith.", "cmt_en": ""}]}, {"q_tr": "İç denetçiler, uygulanabilir yasa ve yönetmelikleri öğrenmek için en etkili yol hangisidir?", "q_en": "Which procedure is most effective in learning about the applicable laws and regulations for a compliance audit?", "answer": 1, "options": [{"tr": "Hibe ajansının uygun yasa ve yönetmelikleri takip edip etmediğini belirlemek.", "en": "Determine that the granting agency followed the appropriate laws and regulations.", "cmt_tr": "Hibe ajansının uygunluğunu belirlemek için, iç denetçinin önce uygulanabilir yasa ve yönetmelikleri öğrenmesi gerekir. To determine whether the granting agency followed appropriate laws and regulations, the internal auditor must first determine what those laws and regulations are.", "cmt_en": ""}, {"tr": "Önceki yılın çalışma kağıtlarını incelemek ve değişiklikler konusunda yetkililerle görüşmek.", "en": "Review prior-year working papers and inquire of officials as to changes.", "cmt_tr": "Önceki yılın çalışma kağıtlarının incelenmesi, uygulanabilir yasa ve yönetmelikleri öğrenmek için etkili bir yoldur. Reviewing prior-year working papers is an effective way to learn about the applicable laws and regulations.", "cmt_en": ""}, {"tr": "Bu spesifik hibeyle ilgili önceki yılın denetim prosedürlerini takip etmek.", "en": "Follow the procedures for the prior year's engagements related to this specific grant.", "cmt_tr": "Uygulanabilir yasa ve yönetmelikler önceki yıldan bu yana değişmiş olabilir. The applicable laws and regulations may have changed since the prior year engagements.", "cmt_en": ""}, {"tr": "Konuyu yönetim kuruluyla görüşmek ve gerekliliklerin niteliği ile kurul amaçları hakkında soru sormak.", "en": "Discuss the matter with the board and make inquiries as to the nature of the requirements and the board's objectives.", "cmt_tr": "Yönetim kuruluyla görüşmek yardımcı olmaz. Üyeler muhtemelen uygulanabilir yasa ve yönetmelikleri bilmez. Discussing the matter with the board is not helpful. Board members are not likely to know the applicable laws and regulations.", "cmt_en": ""}]}, {"q_tr": "Yasadışı faaliyetlere eğilimli kişileri tespit etmek için hangi adım atılabilir?", "q_en": "To detect individuals with a propensity to engage in illegal activities, which step can an organization take?", "answer": 2, "options": [{"tr": "Yalan makinesi testi uygulamak.", "en": "Administer a lie detector test.", "cmt_tr": "Yalan makinesi testlerinin uygulanması, ABD'de ve pek çok ülkede genellikle yasadışıdır; aynı zamanda güvensizlik ortamı yaratır. Administering lie detector tests is generally illegal in the U.S. as well as other countries and creates an environment of mistrust.", "cmt_en": ""}, {"tr": "Çalışanların veya adayların kredi raporlarını izin almaksızın kontrol etmek.", "en": "Performing background checks without permission on employees' or applicants' credit reports.", "cmt_tr": "Çalışanların veya adayların kredi raporunu izinsiz kontrol etmek, gizlilik haklarını ihlal eder ve yasa dışıdır. Performing checks on credit reports without permission infringes upon privacy rights and is considered illegal.", "cmt_en": ""}, {"tr": "Tüm seviyelerdeki iş başvurucularını geçmişteki suistimaller açısından taramak.", "en": "Screening of applicants for employment at all levels for evidence of past wrongdoing.", "cmt_tr": "Kuruluşlar, kendilerini yasadışı faaliyetlere eğilimli kişilerden korumak için tüm seviyelerdeki iş başvurucularını geçmişteki suistimaller açısından tarayabilir; ancak gizlilik haklarına dikkat edilmelidir. Organizations may screen applicants at all levels for evidence of past wrongdoing, taking care not to infringe upon privacy rights.", "cmt_en": ""}, {"tr": "Çalışanların kişisel telefonlarındaki mesajları izlemek.", "en": "Monitor employee text messages on their personal phones.", "cmt_tr": "Kişisel mesajların izlenmesi, kurumsal telefon veya çalışanın izni olmadıkça genellikle yasadışıdır. Monitoring personal text messages is generally illegal unless it is a corporate-owned phone or the employee gives permission.", "cmt_en": ""}]}, {"q_tr": "Bir ombudsman ne zaman en etkilidir?", "q_en": "An ombudsperson is most effective when the individual?", "answer": 1, "options": [{"tr": "Kuruluşun genel hukuk müşavirine rapor verir.", "en": "Reports to the organization's general counsel.", "cmt_tr": "Çalışanlar, bir şirket avukatına değil, ombudsmana güvenerek sırlarını paylaşmaktan daha rahat hisseder. Employees tend to feel more comfortable confiding in an ombudsperson rather than a company attorney.", "cmt_en": ""}, {"tr": "Doğrudan baş uyum yetkilisine veya yönetim kuruluna rapor verir.", "en": "Reports directly to the chief compliance office or the board of directors.", "cmt_tr": "Ombudsman, doğrudan baş uyum yetkilisine veya yönetim kuruluna rapor verirse, ihbarcıların isimlerini gizli tutar, rehberlik sağlar ve misilleme olmadığından emin olmak için takip değerlendirmesi yaparsa daha etkili olur. Use of an ombudsperson is more effective if the person reports directly to the chief compliance officer or the board, keeps whistleblowers' names secret, and undertakes follow-up review.", "cmt_en": ""}, {"tr": "Hiç kimseye rapor vermez, bu sayede ihbarcı gizliliğini güvence altına alır.", "en": "Reports to no one, thus ensuring a whistleblower's secrecy.", "cmt_tr": "Ombudsman, organizasyon politikalarını değiştirebilecek yüksek kademeli birine rapor vermelidir. Hiç kimseye rapor vermemek kabul edilebilir bir seçenek değildir. An ombudsperson must report to someone at a high level who can initiate change. Reporting to no one is not an option.", "cmt_en": ""}, {"tr": "Baş denetim yöneticisine (CAE) rapor verir.", "en": "Reports to the chief audit executive (CAE).", "cmt_tr": "Ombudsman, baş uyum yetkilisine veya yönetim kuruluna rapor verdiğinde en etkili olur. The ombudsman is most effective when reporting to either the chief compliance officer or the board.", "cmt_en": ""}]}, {"q_tr": "İç denetim planı, kuruluşun uyum programını ve prosedürlerini incelemeyi içermelidir. Hangisi bu incelemelerin dışındadır?", "q_en": "An internal audit plan should include a review of the organization's compliance program. Which of the following is NOT included?", "answer": 3, "options": [{"tr": "Yazılı materyallerin etkinliği.", "en": "The effectiveness of written materials.", "cmt_tr": "Bu, iç denetim planına dahil edilen bir inceleme türüdür. This is a review that is included in an internal audit plan.", "cmt_en": ""}, {"tr": "İletişimlerin çalışanlar tarafından alınması.", "en": "The receipt of communications by employees.", "cmt_tr": "Bu, iç denetim planına dahil edilen bir inceleme türüdür. This is a review that is included in an internal audit plan.", "cmt_en": ""}, {"tr": "Tespit edilen ihlallerin uygun şekilde ele alınması.", "en": "The appropriate handling of detected violations.", "cmt_tr": "Bu, iç denetim planına dahil edilen bir inceleme türüdür. This is a review that is included in an internal audit plan.", "cmt_en": ""}, {"tr": "Çalışanlar ve yeni işe alınanlar üzerinde tam geçmiş araştırması yapılması.", "en": "The performance of full background checks on employees and new hires.", "cmt_tr": "Tam geçmiş araştırması yapılmasının incelenmesi, kuruluşun uyum programına ilişkin bir denetim planının parçası değildir. A review of the performance of full background checks is not included in an audit plan as part of reviewing an organization's compliance program.", "cmt_en": ""}]}, {"q_tr": "Etkili bir düzenleyici uyum programına sahip kuruluşun karakteristiği hangisidir?", "q_en": "An organization with an effective regulatory compliance program displays which characteristic?", "answer": 3, "options": [{"tr": "Kıdeme göre etik dışı veya yasadışı faaliyeti cezalandırır.", "en": "It punishes unethical or illegal activity based on seniority.", "cmt_tr": "Program kapsamındaki disiplin adil olmalıdır. Özellikle üst yönetim veya büyük üreticilerle ilgili ihlaller görmezden gelinirse program başarısız olur. Discipline under the program must be fair. If unethical or illegal activity goes unpunished, especially by senior management, it encourages wrongful behavior in the workforce.", "cmt_en": ""}, {"tr": "Suistimalden haberdar olanları disipline eder, ancak haberdar olması gerekenlerden haberi olmayanları cezalandırmaz.", "en": "It disciplines those who knew of the misconduct and did not report it, but not those who should have known but did not know.", "cmt_tr": "Program, suistimalden haberdar olan veya haberdar olması gereken ancak bildirmeyen yöneticiler ve sorumlu kişiler için disiplin uygulamalıdır. The program should provide for the discipline of managers who knew or should have known of misconduct and did not report it.", "cmt_en": ""}, {"tr": "Bir ihlal tespit edildikten sonra, programını değiştirmeksizin daha fazla benzer ihlali önlemek için gerekli adımları atar.", "en": "After an offense is detected, it takes necessary steps, short of modifying its program, to prevent further similar offenses.", "cmt_tr": "Bir ihlal tespit edildikten sonra, kuruluş ihlalleri önlemek ve tespit etmek için programda gerekli değişiklikleri de dahil olmak üzere tüm makul adımları atmalıdır. After an offense is detected, the organization should take all reasonable steps, including modifying its program, to prevent further violations.", "cmt_en": ""}, {"tr": "Çalışan disiplinini kapsamlı biçimde belgelemektedir.", "en": "It thoroughly documents employee discipline.", "cmt_tr": "Kuruluşlar, çalışan disiplinini kapsamlı biçimde belgelemeli ve herhangi bir olaya ilişkin bilgi toplamak için elinden geleni yaptığını kanıtlayabilmelidir. Organizations should be thorough in documenting employee discipline and be able to prove they made their best efforts to collect information and took appropriate action.", "cmt_en": ""}]}, {"q_tr": "Kuruluşun uyum programı tarafından tespit edilen bir ihlale uygun yanıt hangisidir?", "q_en": "Which of the following is an appropriate response to an offense detected by an organization's compliance program?", "answer": 3, "options": [{"tr": "İhlali sorumlu çalışanın sicil dosyasına kaydetmek ancak başka herhangi bir adım atmamak.", "en": "Documenting the offense in the responsible employee's record but not taking any further action.", "cmt_tr": "Yanıtın belgelenmesi uygun olmakla birlikte, spesifik ihlale bağlı olarak daha ileri adımlar atılmalıdır. Documenting the response is appropriate, but further action should be taken depending on the specific offense.", "cmt_en": ""}, {"tr": "İhlali takip planı olmaksızın CEO'ya bildirmek.", "en": "Reporting the offense to the CEO without a plan to follow up.", "cmt_tr": "CEO'ya bildirmek uygun olabilir; ancak ne tür bir eylem alındığını görmek için takip yapmak da gereklidir. Reporting to the CEO may be appropriate, but it may also be appropriate to follow up to see what action, if any, was taken.", "cmt_en": ""}, {"tr": "Sorumluluğu eski çalışanlara yüklemek.", "en": "Attributing responsibility to former employees.", "cmt_tr": "Sorumluluğun kabul edilmesi daha uygun bir yaklaşımdır; mevcut yönetim ekibi hesap verebilir olmalıdır. Accepting responsibility is more appropriate because the current management team is accountable.", "cmt_en": ""}, {"tr": "İhlali hükümete kendiliğinden bildirmek.", "en": "Self-reporting the violation to the government.", "cmt_tr": "Bazı durumlarda uygun bir yanıt, ihlali hükümete kendiliğinden bildirmek, devlet soruşturmalarıyla iş birliği yapmak ve ihlal sorumluluğunu kabul etmek olabilir. In some circumstances, an appropriate response could require self-reporting the violation to the government, cooperation with investigations, and acceptance of responsibility.", "cmt_en": ""}]}, {"q_tr": "Bir havayolu, hükümet tarafından zorunlu kılınan güvenlik değişikliklerinin yapılıp yapılmadığını ve belgelenip belgelenmediğini denetlemek için CAE'yi görevlendirdi. Denetçiler hangi denetimi gerçekleştirmektedir?", "q_en": "An airline's CAE was asked to audit whether required safety modifications have been made on aircraft. The auditors will be performing a(n)?", "answer": 3, "options": [{"tr": "Operasyonel denetim.", "en": "Operational audit.", "cmt_tr": "Operasyonel denetimde iç denetçiler, fonksiyonların verimliliğini ve etkinliğini değerlendirmek için kapsamlı bir inceleme yapar. Bu denetim ise yalnızca bir alanı kapsar. An operational audit is a comprehensive review of various functions. This audit focuses on only one area of the organization.", "cmt_en": ""}, {"tr": "Finansal denetim.", "en": "Financial audit.", "cmt_tr": "Finansal denetim, finansal bilgilerin doğru kaydedilip kaydedilmediğini ve yeterince desteklenip desteklenmediğini belirlemek için muhasebe ve finansal işlemleri inceler. A financial audit reviews accounting and financial transactions to determine whether financial information was properly recorded.", "cmt_en": ""}, {"tr": "Durum tespiti denetimi.", "en": "Due diligence audit.", "cmt_tr": "Durum tespiti denetimi, bir işletme birleşmesi gibi büyük bir işlem için iş gerekçesini belirlemek amacıyla yapılır. Bu tür bir denetim, havayolu başka bir havayoluyla birleşmeyi düşünüyor olsaydı yapılırdı. A due diligence audit determines the business justification for a major transaction. This would be performed if the airline were considering a merger.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance audit.", "cmt_tr": "İç denetçilerden uçaklarda zorunlu değişikliklerin yapılıp yapılmadığını ve belgelenip belgelenmediğini denetleme görevi verildi; bu, yasalara ve yönetmeliklere uyumu kontrol etmektir. The internal auditors have been asked to audit whether required modifications have been made and properly documented; this is checking compliance with laws and regulations applying to aircraft modifications.", "cmt_en": ""}]}, {"q_tr": "Hükümet hibeleriyle ilgili uyum denetimlerinde denetçi hangi standartları izlemelidir?", "q_en": "In performing governmental grant compliance audits, the auditor should?", "answer": 3, "options": [{"tr": "Yalnızca devlet standartlarına göre hareket etmelidir.", "en": "Be guided only by the governmental standards.", "cmt_tr": "İç denetçi yalnızca devlet standartlarını izlememelidir. The internal auditor should not only follow the governmental standards.", "cmt_en": ""}, {"tr": "Yalnızca IIA Standartlarına göre hareket etmelidir çünkü bunlar daha kapsamlıdır.", "en": "Be guided only by The IIA Standards because they are more encompassing.", "cmt_tr": "Bir iç denetçi, devlet hibeleriyle ilgili uyum denetimlerini yaparken devlet standartlarına yasal olarak uymak zorundadır. An internal auditor is legally obligated to adhere to governmental standards when performing governmental grant compliance audits.", "cmt_en": ""}, {"tr": "Kamu muhasebe mesleği tarafından yayımlanan daha genel standartlara göre hareket etmelidir.", "en": "Be guided by the more general standards that have been issued by the public accounting profession.", "cmt_tr": "İç denetçi, bu tür denetimler için belirlenen standartları izlemelidir. The internal auditor should follow the standards established for those types of audits.", "cmt_en": ""}, {"tr": "Hem IIA Standartlarını hem de ek devlet standartlarını izlemelidir.", "en": "Follow both The IIA Standards and any additional governmental standards.", "cmt_tr": "İç denetçiler Küresel İç Denetim Standartlarına uygun hareket etmeli ve devlet standartlarına yasal olarak uymalıdır. Internal auditors must perform services in accordance with the Global Internal Audit Standards and are legally obligated to adhere to governmental standards when applicable.", "cmt_en": ""}]}, {"q_tr": "Uyum denetiminde iç denetçilerin rolü nedir?", "q_en": "The role of internal auditors in compliance auditing is to?", "answer": 2, "options": [{"tr": "Finansal tablo incelemeleri gerçekleştirmek.", "en": "Perform financial statement reviews.", "cmt_tr": "Finansal tablo incelemeleri, uyum denetimlerinin değil, finansal denetimlerin kapsamındadır. Financial audits, not compliance audits, perform financial statement reviews.", "cmt_en": ""}, {"tr": "Kuruluşun iç kontrollerinin işlev gördüğünden emin olmak.", "en": "Ensure the organization's internal controls are functioning.", "cmt_tr": "Uyum denetiminin amacı yasal standartlara uyumdur; yalnızca kontrol etkinliği değil. The goal of a compliance audit is adherence to legal standards, not only control effectiveness.", "cmt_en": ""}, {"tr": "Politikalara, yasalara ve yönetmeliklere uyumu doğrulamak.", "en": "Verify adherence to policies, laws, and regulations.", "cmt_tr": "Uyum denetimi, bir kuruluşun belirlenen yasa, politika ve sözleşmelere uyup uymadığını doğrulamayı içerir. Compliance auditing involves verifying whether an organization adheres to established laws, policies, and contracts.", "cmt_en": ""}, {"tr": "Kuruluşun uyum programlarını yönetmek.", "en": "Manage the organization's compliance programs.", "cmt_tr": "İç denetçiler uyum programlarını değerlendirir, yönetmez. Internal auditors evaluate, not manage, compliance programs.", "cmt_en": ""}]}, {"q_tr": "Uyum denetiminin temel odak noktası nedir?", "q_en": "The primary focus of a compliance audit is to?", "answer": 1, "options": [{"tr": "İş süreçlerinin verimlilik oranını artırmak.", "en": "Improve the productivity ratio of business processes.", "cmt_tr": "Operasyonel denetimler, iş süreçlerinin verimlilik oranını artırmayı amaçlar. Operational audits seek to improve the productivity ratio of business processes.", "cmt_en": ""}, {"tr": "Kuruluşun politikalara, yasalara ve sözleşmelere uyduğundan emin olmak.", "en": "Ensure the organization is adhering to policies, laws, and contracts.", "cmt_tr": "Uyum denetiminin temel odak noktası, bir kuruluşun yasal düzenlemeler, politikalar ve sözleşmeler de dahil olmak üzere belirlenen standart ve gerekliliklere uymasını sağlamaktır. The primary focus of a compliance audit is to ensure that an organization is adhering to established standards and requirements, including legal regulations, policies, and contracts.", "cmt_en": ""}, {"tr": "Kuruluşun finansal tablo beyanlarını incelemek.", "en": "Review the organization's financial statement assertions.", "cmt_tr": "Finansal denetimler, kuruluşun finansal tablo beyanlarını inceler. Financial audits review the organization's financial statement assertions.", "cmt_en": ""}, {"tr": "Yönetimin karar alma için raporlama mekanizmalarını değerlendirmek.", "en": "Assess management's reporting mechanisms for decision making.", "cmt_tr": "Yönetim raporlaması, yönetimin karar alma için raporlama mekanizmalarını değerlendirir. Management reporting assesses management's reporting mechanisms for decision making.", "cmt_en": ""}]}, {"q_tr": "Uyum programları bağlamında üst yönetimin kritik rolü nedir?", "q_en": "In the context of compliance programs, what is a critical role for senior management?", "answer": 2, "options": [{"tr": "Uyum görevlilerine teknik eğitim sağlamak.", "en": "Providing technical training to compliance officers.", "cmt_tr": "Teknik eğitim genellikle uzmanlar veya İK tarafından sağlanır. Technical training is typically provided by specialists or HR.", "cmt_en": ""}, {"tr": "Tüm çalışan faaliyetlerini doğrudan izlemek.", "en": "Directly monitoring all employee activities.", "cmt_tr": "Tüm faaliyetlerin doğrudan izlenmesi uygulanamaz ve bir yönetim rolü değildir. Direct monitoring of all activities is impractical and not a management role.", "cmt_en": ""}, {"tr": "Uyumu uygun disiplin yoluyla sağlamak.", "en": "Enforcing compliance through appropriate discipline.", "cmt_tr": "Üst yönetim, kuruluşun standartlara ve değerlere uymasını sağlamak için yeterli ve adil disiplin yoluyla uyumu zorunlu kılar. Senior management enforces compliance through adequate and fair discipline to ensure organizational adherence to standards and values.", "cmt_en": ""}, {"tr": "Uyum çabaları için ayrıntılı departman planları tasarlamak.", "en": "Designing detailed departmental plans for compliance efforts.", "cmt_tr": "Ayrıntılı planların tasarlanması, üst yönetimin uyum disiplini sorumluluğundan değil, operasyonel yönetimin bir parçasıdır. Designing detailed plans is a part of operational management, not a senior management responsibility for compliance discipline.", "cmt_en": ""}]}, {"q_tr": "Uyum programlarında etik davranışı sağlamak için çalışan katılımının hangi boyutu vurgulanmaktadır?", "q_en": "What aspect of employee participation is emphasized in compliance programs to ensure ethical behavior?", "answer": 2, "options": [{"tr": "Sık mali teşvikler.", "en": "Frequent financial incentives.", "cmt_tr": "Teşvikler kullanılsa da hizalanmış olmaları ve sık kullanılmamaları gerekir. Although incentives are used, they need to be aligned and not frequent.", "cmt_en": ""}, {"tr": "Bağlama özgü eğitim.", "en": "Context-specific training.", "cmt_tr": "Eğitim önemli olmakla birlikte, raporlamada anonimlik spesifik bir vurgudur. Training is important, but anonymity in reporting is a specific emphasis.", "cmt_en": ""}, {"tr": "Anonim raporlama sistemleri.", "en": "Anonymous reporting systems.", "cmt_tr": "Uyum programları, ihbar hatları gibi anonim raporlama sistemlerinin kullanımını vurgular; bunlar, misilleme korkusu olmadan etik dışı davranışların bildirilmesini kolaylaştırır. Compliance programs emphasize the use of anonymous reporting systems, such as hotlines, which facilitate reporting of unethical behavior without fear of retaliation.", "cmt_en": ""}, {"tr": "Düzenli performans değerlendirmeleri.", "en": "Regular performance appraisals.", "cmt_tr": "Düzenli değerlendirmeler uyum için özellikle vurgulanmaz. Regular appraisals are not specifically highlighted for compliance.", "cmt_en": ""}]}, {"q_tr": "Uyum denetiminin amacını en iyi tanımlayan hangisidir?", "q_en": "Which of the following best describes the purpose of a compliance audit?", "answer": 2, "options": [{"tr": "İç finansal kontrolleri değerlendirmek.", "en": "Evaluating internal financial controls.", "cmt_tr": "İç finansal kontrollerin değerlendirilmesi, finansal denetimin bir parçasıdır. Evaluating internal financial controls is part of a financial audit.", "cmt_en": ""}, {"tr": "Çalışan memnuniyetini izlemek.", "en": "Monitoring employee satisfaction.", "cmt_tr": "Çalışan memnuniyetini izlemek, kültür ve İK ile ilgilidir; uyum değil. Monitoring employee satisfaction is related to culture and HR, not compliance.", "cmt_en": ""}, {"tr": "Dış ve iç standartlara uyumu doğrulamak.", "en": "Verifying adherence to external and internal standards.", "cmt_tr": "Uyum denetimleri, bir kuruluşun politikalar, yasalar ve sözleşmeler gibi belirli standartlara uyup uymadığını sağlar. Compliance audits ensure that an organization adheres to certain standards such as policies, laws, and contracts.", "cmt_en": ""}, {"tr": "Pazar rekabetini değerlendirmek.", "en": "Assessing market competitiveness.", "cmt_tr": "Pazar rekabetini değerlendirmek, stratejik ve pazar analiziyle daha çok ilgilidir. Assessing market competitiveness relates more to strategic and market analysis.", "cmt_en": ""}]}, {"q_tr": "Etkili uyum programlarının temel bileşeni nedir?", "q_en": "What is a key component of effective compliance programs?", "answer": 3, "options": [{"tr": "Karmaşık bir organizasyonel hiyerarşi.", "en": "A complex organizational hierarchy.", "cmt_tr": "Karmaşık hiyerarşi uyum etkinliğini engeller. A complex hierarchy hinders compliance effectiveness.", "cmt_en": ""}, {"tr": "Küçük ihlaller için önemli cezalar.", "en": "Substantial penalties for minor infractions.", "cmt_tr": "Küçük ihlaller için aşırı cezalar, düşmanca bir çalışma ortamı yaratabilir. Excessive penalties for minor infractions may create a hostile work environment.", "cmt_en": ""}, {"tr": "Suistimalle uyumlu mali teşvikler.", "en": "Financial incentives aligning with misconduct.", "cmt_tr": "Teşvikler suistimali teşvik etmemeli; aksine caydırmalıdır. Incentives should discourage, not encourage, misconduct.", "cmt_en": ""}, {"tr": "Kullanıcı dostu bir iş davranış kuralları.", "en": "A user-friendly business code of conduct.", "cmt_tr": "Kullanıcı dostu bir iş davranış kuralları, çalışanlara etik davranış konusunda net rehberlik sağlar; etkili uyum programlarının temel bir yönüdür. A user-friendly business code of conduct provides clear guidance to employees on ethical behavior and is an essential aspect of effective compliance programs.", "cmt_en": ""}]}], "SU3 - Financial Audits": [{"q_tr": "Finansal raporlama süreci hangi adımları kapsar?", "q_en": "The financial reporting process encompasses the steps to?", "answer": 1, "options": [{"tr": "Kuruluş genelinde gerçekleşen tüm hileleri tespit etmek.", "en": "Detect all fraud that is occurring throughout the organization.", "cmt_tr": "Denetçinin yalnızca hile tespiti konusunda makul güvence sağlaması gerekir; tüm hile tespit edilmek zorunda değildir. An auditor only needs to provide reasonable assurance about detecting fraud. All fraud does not have to be detected.", "cmt_en": ""}, {"tr": "Finansal tabloların ve ilgili notların hazırlanmasına yardımcı olacak bilgileri oluşturmak.", "en": "Create information to help prepare the financial statements and related notes.", "cmt_tr": "Finansal raporlama süreci, bilgilerin oluşturulması ve finansal tabloların, ilgili notların ve diğer açıklamaların hazırlanması adımlarını kapsar. The financial reporting process encompasses the steps to create information and prepare financial statements, related notes, and other disclosures.", "cmt_en": ""}, {"tr": "Tüm personele maaş artışları ve terfilerle ilgili bilgi sağlamak.", "en": "Provide all staff with information regarding raises and promotions.", "cmt_tr": "Maaş artışları ve terfiler, finansal raporlama sürecinin bir parçası değildir. Raises and promotions are not part of the financial reporting process.", "cmt_en": ""}, {"tr": "İç kontrollerin AICPA spesifikasyonlarıyla uyumlu olduğundan emin olmak.", "en": "Make sure the internal control matches up with the specifications from the AICPA.", "cmt_tr": "Denetçinin iç kontrolleri eşleştirmesi için takip etmesi gereken kılavuzlar yoktur. AICPA'nın tüm şirketlerin uyması gereken bir iç kontrol listesi bulunmamaktadır. There are no guidelines that the auditor needs to match up internal controls with. The AICPA does not have an internal control checklist that all companies must follow.", "cmt_en": ""}]}, {"q_tr": "Alacaklar yardımcı hesaplar toplamının kontrol hesabından önemli ölçüde farklı olduğu tespit edildi. Bu durum neyi gösterebilir?", "q_en": "The total of accounts receivable subsidiary accounts differs materially from the control account. This discrepancy could indicate?", "answer": 0, "options": [{"tr": "Kredi dekontlarının hatalı kaydedilmesi.", "en": "Credit memoranda being improperly recorded.", "cmt_tr": "Satış iadeleri ve indirimleri, alacak hesaplarının alacaklandırılmasını gerektirir. Yetkisiz kredi dekontlarının kaydedilmesi, satışlar ve nakit tahsilatlar doğru kaydedilirse bu tutarsızlığı açıklayabilir. Sales returns and allowances require crediting accounts receivable. The recording of unauthorized credit memoranda explains the discrepancy if sales and cash receipts are properly recorded.", "cmt_en": ""}, {"tr": "Alacak havuzlaması.", "en": "Lapping of receivables.", "cmt_tr": "Havuzlama, nakit tahsilatların çalınması ve ardından bu hırsızlığı gizlemek için sonraki tahsilatların kullanılmasını içerir. Kontrol toplamı ile yardımcı hesaplar arasında bir fark oluşturmaz. Lapping entails the theft of cash receipts and use of subsequent receipts to conceal the theft. No difference between the control total and total of subsidiary accounts would arise.", "cmt_en": ""}, {"tr": "Alacakların uygun şekilde yaşlandırılmaması.", "en": "Receivables not being properly aged.", "cmt_tr": "Yaşlandırma, muhasebe kayıtlarını içermez; bu nedenle bir tutarsızlığa yol açmaz. Aging does not involve accounting entries and would not cause the subsidiary ledger discrepancy.", "cmt_en": ""}, {"tr": "Müşteri ekstreleri gönderilmeden önce ele geçirilmesi.", "en": "Statements being intercepted prior to mailing.", "cmt_tr": "Müşteri ekstrelerinin ele geçirilmesi, sahte alacakları gösterebilir; ancak yardımcı defterde bir tutarsızlığa yol açmaz. Interception of customer statements might indicate fraudulent receivables but would not cause the subsidiary ledger discrepancy.", "cmt_en": ""}]}, {"q_tr": "Geçici finansal tabloları incelerken iç denetçilerin odaklanması en muhtemel olan husus nedir?", "q_en": "In their work on this year's interim financial statements, internal auditors are likely to focus on which of the following?", "answer": 1, "options": [{"tr": "Borçların dönem sonunda uygun şekilde tahakkuk ettirilip ettirilmediği.", "en": "Whether payables have been accrued properly at the end of the interim period.", "cmt_tr": "Borçların eksik gösterilmesi, yalnızca giderler borçlandırılmış olsaydı kazançları etkiler. Understating payables affects earnings only if expenses would have been debited.", "cmt_en": ""}, {"tr": "Hasılat tahakkukunun zamanlaması ve stok değerlemesi.", "en": "The timing of revenue recognition and the valuation of inventories.", "cmt_tr": "Hasılatın erken muhasebeleştirilmesi net karı abartır. Bitiş stoku değerinin aşırı gösterilmesi de satışların maliyetini eksik göstererek net karı abartır. Premature revenue recognition overstates net profit. Overstating ending inventories understates cost of sales, also overstating net profit.", "cmt_en": ""}, {"tr": "Muhasebe tahminlerinin geçmiş gerçek sonuçlara göre makul olup olmadığı.", "en": "Whether accounting estimates are reasonable given past actual results.", "cmt_tr": "Geçici finansal tablolarda kullanılan tahminler genellikle yaklaşık değerlerdir ve finansal tabloları önemli ölçüde bozmazlar. Estimates used in interim financial statements are often approximate and usually would not materially distort the financial statements.", "cmt_en": ""}, {"tr": "Finansal tabloları önemli ölçüde etkileyen muhasebe ilkelerinde değişiklik olup olmadığı.", "en": "Whether there have been changes in accounting principles that materially affect the financial statements.", "cmt_tr": "Bu tür değişiklikler genellikle üst yönetimin onayını gerektirir ve genellikle sürprizlere yol açmaz. Such changes usually must be approved by executive management and normally do not lead to surprises.", "cmt_en": ""}]}, {"q_tr": "Finansal denetimde iç ve dış denetçiler arasındaki ilişki nedir?", "q_en": "In a financial audit, the relationship between internal auditors and external auditors is that internal auditors?", "answer": 2, "options": [{"tr": "Dış denetçilerin çalışmalarını kopyalar.", "en": "Replicate external auditors' work.", "cmt_tr": "İç denetçiler dış denetçilerin görevlerini çoğaltmaz. Internal auditors do not duplicate external auditors' tasks.", "cmt_en": ""}, {"tr": "Münhasıran dış denetimleri doğrular.", "en": "Exclusively verify external audits.", "cmt_tr": "İç denetimin çalışma kapsamı, dış denetim sonuçlarının doğrulanmasından çok daha geniş ve çeşitlidir. Internal audit's scope of work is far broader and diverse than verifying the results of external audits.", "cmt_en": ""}, {"tr": "Dış denetimlerden önce zayıflıkları tespit ederek yardım eder.", "en": "Assist by identifying weaknesses prior to external audits.", "cmt_tr": "İç denetçiler, dış denetçilerin tam finansal denetimi yapmadan önce iç kontrollerdeki zayıflıkları tespit ederek ve azaltarak dış denetim sürecine yardımcı olur. Internal auditors aid the external audit process by identifying and mitigating weaknesses in internal controls before external auditors conduct the full financial audit.", "cmt_en": ""}, {"tr": "Aynı sorumluluklara sahiptir.", "en": "Have the same responsibilities.", "cmt_tr": "Dış denetim görevlerini yerine getirmek, iç denetçilerin çalışma kapsamının dışındadır. Performing external audit duties is beyond the scope of work of internal auditors.", "cmt_en": ""}]}, {"q_tr": "Operasyonel ve finansal denetimler arasındaki temel fark nedir? Finansal denetimlerde iç denetçiler...", "q_en": "The primary difference between operational and financial engagements is that, in the latter, internal auditors?", "answer": 3, "options": [{"tr": "Müşteri kuruluşun finansal muhasebe standartlarına uygun bilgi üretip üretmediğiyle ilgilenmezler.", "en": "Are not concerned with whether the client entity is generating information in compliance with financial accounting standards.", "cmt_tr": "Finansal bilginin güvenilirliği ve bütünlüğü finansal denetimlerde önemlidir. Bilgi sistemleri karar verme, kontrol ve uyum için veri sağlar. The reliability and integrity of financial information are important in financial engagements. Information systems provide data for decision making, control, and compliance.", "cmt_en": ""}, {"tr": "Yönetimin kaynakları mümkün olan en etkili şekilde kullanmasına yardımcı olmaya çalışırlar.", "en": "Are seeking to help management use resources in the most effective manner possible.", "cmt_tr": "Operasyonel denetimler, belirlenen hedeflerin gerçekleştirilmesini ve kaynakların ekonomik ve verimli kullanımını değerlendirir. Finansal denetimler ise öncelikle finansal tabloların adilliği hakkında görüş bildirmekle ilgilenir. Operational engagements evaluate accomplishment of objectives and economical use of resources. Financial engagements are primarily concerned with forming an opinion on the fairness of financial statements.", "cmt_en": ""}, {"tr": "Finansal denetimlerde gerekli olmayan analitik beceri ve araçları kullanabilirler.", "en": "Can use analytical skills and tools that are not necessary in financial engagements.", "cmt_tr": "Analitik beceriler her tür denetimde gereklidir. Analytical skills are necessary in all types of engagements.", "cmt_en": ""}, {"tr": "Müşteri kuruluşun finansal tablolarından başlayarak temel süreçlere doğru geriye doğru çalışırlar.", "en": "Start with the financial statements of the client entity and work backward to the basic processes.", "cmt_tr": "Finansal denetim, finansal bilgilerin doğru kaydedilip kaydedilmediğini ve yeterince desteklenip desteklenmediğini belirlemek için finansal tablolardan başlar. A financial engagement starts with financial statements to determine whether financial information was properly recorded and adequately supported.", "cmt_en": ""}]}, {"q_tr": "Üretim fonksiyonuyla ilgili finansal denetimde, kayıtlı maliyetleri fiili maliyetlerle karşılaştırma prosedürünün amacı nedir?", "q_en": "A financial engagement relating to the production function includes a procedure to compare recorded costs with actual costs. The purpose is to?", "answer": 0, "options": [{"tr": "Fiili maliyetlerin kaydedildiği sistemin doğruluğunu belirlemek.", "en": "Determine the accuracy of the system used to record actual costs.", "cmt_tr": "Finansal denetim prosedürü, kayıtlı maliyetlerin fiili maliyetlere eşit olup olmadığını, yani finansal raporlama üzerindeki iç kontrollerin etkinliğini belirler. A financial engagement procedure determines whether recorded costs equal actual costs, focusing on the effectiveness of internal controls over financial reporting.", "cmt_en": ""}, {"tr": "Standart maliyet sisteminin etkinliğini ölçmek.", "en": "Measure the effectiveness of the standard cost system.", "cmt_tr": "Bu karşılaştırma, standart maliyet sisteminin etkinliğini belirlemez. The comparison will not determine the effectiveness of the standard cost system.", "cmt_en": ""}, {"tr": "Fiili maliyetlerin makullüğünü değerlendirmek.", "en": "Assess the reasonableness of actual costs.", "cmt_tr": "Karşılaştırma, fiili maliyetlerin değil, kayıtlı maliyetlerin makullüğünü belirler. The comparison will determine the reasonableness of recorded costs, not actual costs.", "cmt_en": ""}, {"tr": "Yönetimin etkinlik ve verimlilik değerlendirmesine yardımcı olmak.", "en": "Assist management in its evaluation of effectiveness and efficiency.", "cmt_tr": "Fiili ve standart maliyetlerin karşılaştırılması, verimlilik ve ekonomi konularını ele alır; bu, finansal değil operasyonel denetim amacıdır. A comparison of actual and standard costs addresses efficiency and economy issues, which is an objective of operational, not financial audits.", "cmt_en": ""}]}, {"q_tr": "Finansal tablo denetimi sırasında hata bulan bir iç denetçinin ilk sorumluluğu nedir?", "q_en": "Which describes an internal auditor's initial responsibility regarding errors uncovered during a financial statement audit?", "answer": 1, "options": [{"tr": "Önemli hataları raporlamak.", "en": "Report the material errors.", "cmt_tr": "Önemli hatalar, uygun şekilde değerlendirildikten sonra raporlanır. Material errors are reported after they have been properly assessed.", "cmt_en": ""}, {"tr": "Yanlış beyan riskini değerlendirmek.", "en": "Assess the risk of misrepresentation.", "cmt_tr": "İç denetçinin bulduğu hatalar karşısındaki ilk sorumluluğu, yanlış beyan riskini değerlendirmektir. Yalnızca finansal tablolar üzerinde önemli etkisi olan hatalar müşteriye ve denetim komitesine raporlanmalıdır. The internal auditor's initial responsibility when discovering errors is to assess the risk of misrepresentation. Only errors having a material effect must be reported.", "cmt_en": ""}, {"tr": "Durumu denetim müşterisiyle görüşmek.", "en": "Discuss the situation with the engagement client.", "cmt_tr": "İç denetçi, önce yanlış beyan riskini değerlendirmeli, ardından hataları denetim müşterisiyle görüşmelidir. The internal auditor first must assess the risk of misrepresentation before discussing the errors with the engagement client.", "cmt_en": ""}, {"tr": "Denetim komitesini bilgilendirmek.", "en": "Inform the audit committee.", "cmt_tr": "İç denetçi, yalnızca hatalar finansal tablolar üzerinde önemli bir etkiye sahipse denetim komitesini bilgilendirmelidir; bu ancak risk değerlendirmesinden sonra belirlenebilir. The internal auditor should only inform the audit committee if the errors have a material effect, which cannot be determined until after a risk assessment.", "cmt_en": ""}]}, {"q_tr": "Personel departmanı, her bordro döngüsünde işlenen bordro değişikliklerinin düzenleme listesini alır. Bu değişiklikleri doğrulamazsa ne olabilir?", "q_en": "The personnel department receives an edit listing of payroll changes at every payroll cycle. If it does not verify the changes processed, the result could be?", "answer": 0, "options": [{"tr": "Yeni çalışanlar için bordro oranlarında tespit edilemeyen hatalar.", "en": "Undetected errors in payroll rates for new employees.", "cmt_tr": "Personel departmanı, bordro işlemleri için yetkilendirme ve yürütmeden sorumludur. Değişiklikler listesinin doğrulanması, bordro işlemleri üzerindeki önemli bir kontroldür. The personnel department is responsible for authorization and execution of payroll transactions. Verification of the payroll changes listing is an important control over payroll processing.", "cmt_en": ""}, {"tr": "Yanlış bordro kesintileri.", "en": "Inaccurate payroll deductions.", "cmt_tr": "Yanlış bordro kesintileri, bordro oranlarındaki hatalardan kaynaklanabilir. Inaccurate payroll deductions could be caused by errors in payroll rates.", "cmt_en": ""}, {"tr": "Maliyet raporlama sisteminde yanlış hesaba yüklenen iş gücü saatleri.", "en": "Labor hours charged to the wrong account in the cost reporting system.", "cmt_tr": "İş gücü saatleri, bordro değişiklikleri listesinden değil, zaman raporlama sisteminden (mesai kartı) gelir. Labor hours should come from the time reporting system, not the list of payroll changes.", "cmt_en": ""}, {"tr": "Çalışanlara şirket emeklilik planına katkıda bulunmak isteyip istemediklerinin sorulmaması.", "en": "Employees not being asked if they want to contribute to the company pension plan.", "cmt_tr": "Bordro değişiklikleri listesinin incelenmesi, uygun çalışanların katkılarının yapılıp yapılmadığını gösterir; ancak çalışanlara sorulup sorulmadığını değil. Inspection of the listing would indicate whether contributions have begun to be deducted, not whether employees have been asked about contributing.", "cmt_en": ""}]}, {"q_tr": "Önceki yılın denetlenen finansal tablolarında beklenenin üzerinde borç/özkaynak oranı vardı. Bu yılın çalışmasında iç denetçilerin vurgulaması gereken husus nedir?", "q_en": "The previous year's audited financial statements had higher debt-to-equity than was expected. In their work on this year's interim financial statements, auditors are most likely to emphasize?", "answer": 0, "options": [{"tr": "Borçların dönem sonunda uygun şekilde tahakkuk ettirilip ettirilmediği.", "en": "Whether payables were accrued properly at the end of the interim period.", "cmt_tr": "Borçların yanlış gösterilmesi doğrudan borç/özkaynak oranını etkiler; yatırım kararlarında kullanılır. Yükümlülüklerin eksik gösterilmesi oranı düşürür. Misstating payables directly affects the debt-to-equity ratio used by creditors and shareholders. Understating liabilities understates the ratio.", "cmt_en": ""}, {"tr": "Hasılat tahakkukunun zamanlaması ve stok değerlemesi.", "en": "The timing of revenue recognition and the measurement of inventories.", "cmt_tr": "Hasılatlar ve stoklarla ilgili manipülasyonlar, kazanç performansını etkiler; borç/özkaynak oranını değil. Manipulations involving revenues and inventories affect earnings performance, not the debt-to-equity ratio.", "cmt_en": ""}, {"tr": "Muhasebe tahminlerinin geçmiş gerçek sonuçlara göre makul olup olmadığı.", "en": "Whether accounting estimates are reasonable given past actual results.", "cmt_tr": "Geçici finansal tablolarda kullanılan tahminler genellikle yaklaşık değerlerdir ve önemli yanlış tablolara yol açmaz. Estimates used in interim financial statements often are approximate and usually do not materially misstate the financial statements.", "cmt_en": ""}, {"tr": "Finansal tabloları önemli ölçüde etkileyen muhasebe ilkelerinde değişiklik olup olmadığı.", "en": "Whether changes in accounting principles have occurred that materially affect the financial statements.", "cmt_tr": "Muhasebe ilkelerindeki değişiklikler genellikle üst yönetimin onayını gerektirir ve genellikle sürprizlere yol açmaz. Changes in accounting principles usually must be approved by executive management and normally do not lead to surprises.", "cmt_en": ""}]}, {"q_tr": "Bir şirketin harcama döngüsüne ilişkin denetimin spesifik amacı, ödenen tüm malların doğru hesaba yüklenip yüklenmediğini belirlemektir. Bu, Standartlar'da yer alan birincil amaçların hangisini karşılar?", "q_en": "A specific objective of an audit of a company's expenditure cycle is to determine whether all goods paid for have been charged to the correct account. Which primary objective does this address?", "answer": 1, "options": [{"tr": "Yasa, yönetmelik, prosedür ve sözleşmelere uyum.", "en": "Compliance with laws, regulations, procedures, and contracts.", "cmt_tr": "Bu spesifik denetim amacı, uyumu ele almaz. The specific engagement objective does not address compliance.", "cmt_en": ""}, {"tr": "Finansal ve operasyonel bilgilerin güvenilirliği ve bütünlüğü.", "en": "Reliability and integrity of financial and operational information.", "cmt_tr": "Doğru hesapların yüklenip yüklenmediğini belirlemek, finansal bilgilerin güvenilirliğini ve bütünlüğünü ele alır. Determining whether the correct accounts have been charged addresses the reliability and integrity of financial information.", "cmt_en": ""}, {"tr": "Varlıkların korunması.", "en": "Safeguarding of assets.", "cmt_tr": "Bu spesifik denetim amacı, varlıkların korunmasını ele almaz. The specific engagement objective does not address the safeguarding of assets.", "cmt_en": ""}, {"tr": "Operasyon ve programların etkinliği ve verimliliği.", "en": "Effectiveness and efficiency of operations and programs.", "cmt_tr": "Bu spesifik denetim amacı, operasyonların etkinliğini ele alabilir; ancak verimliliği değil. The specific engagement objective may address effectiveness of operations but does not address efficiency.", "cmt_en": ""}]}, {"q_tr": "Baş denetim yöneticisi risk maruziyetleri nedeniyle ek denetimlerin önerildiği raporları inceliyor. En büyük riski temsil eden ve bir sonraki görev olması gereken hangisidir?", "q_en": "The CAE was reviewing reports that recommended additional engagements because of risk exposures. Which represents the greatest risk and should be the next assignment?", "answer": 2, "options": [{"tr": "Üç adet önceden numaralandırılmış teslim alım raporu eksik.", "en": "Three prenumbered receiving reports were missing.", "cmt_tr": "Teslim alım raporunun veya satın alma talebinin olmaması, ödemeler uygun şekilde kontrol ediliyorsa ödemeyi önleyecektir. The absence of a receiving report or purchase requisition will prevent payment if disbursements are properly controlled.", "cmt_en": ""}, {"tr": "Birkaç satın alma emri, satın alma talebi olmaksızın düzenlenmiş.", "en": "There were several purchase orders issued without purchase requisitions.", "cmt_tr": "Belirli rutin satın alımlar için talep gerekmeyebilir. Certain routine purchases may not require requisitions.", "cmt_en": ""}, {"tr": "Rutin stok kalemleri için satın alma emri veya teslim alım raporu olmaksızın ödeme yapılmış.", "en": "Payment had been made for routine inventory items without a purchase order or receiving report.", "cmt_tr": "Mal ödemeleri için; onaylı satın alma talebi, satın alma emri, teslim alım raporu ve satıcı faturası gibi belgeler gerekmektedir. Bu desteğin olmaması yüksek hile riski anlamına gelir. Payment vouchers for merchandise should be supported by a requisition, purchase order, receiving report, and vendor invoice. Lack of such support suggests a high risk of fraud.", "cmt_en": ""}, {"tr": "Nakit tahsilatlar birçok kez yatırılmadan önce fazladan bir gün bekletilmiş.", "en": "Several times cash receipts had been held over an extra day before depositing.", "cmt_tr": "Diğer kontroller yerindeyse, riskin boyutu 1 günlük tahsilat kaybıdır. Assuming other controls are in place, the extent of the risk is the loss of 1 day's receipts.", "cmt_en": ""}]}, {"q_tr": "Finansal tablo denetiminde bir hata bulan iç denetçinin ilk sorumluluğu nedir?", "q_en": "The initial responsibility of the internal auditor who finds an error during a financial statement audit is to?", "answer": 0, "options": [{"tr": "Yalnızca finansal tablolar üzerinde önemli etkisi olan hatalar raporlanacağından, yanlış beyan riskini değerlendirmek.", "en": "Assess the risk of misrepresentation because only errors having a material effect must be reported.", "cmt_tr": "İç denetçiler buldukları her hatayı derhal raporlamamalıdır. Önce hatanın önemliliğini değerlendirmeli ve benzer hataların olup olmadığını belirlemelidir. Internal auditors should not report every error immediately. They must first assess the materiality of the error and evaluate whether there is a pattern of similar errors.", "cmt_en": ""}, {"tr": "Finansal sonuçların yanlış gösterilme riski nedeniyle hatayı derhal yönetim kuruluna bildirmek.", "en": "Report the error to the board immediately because of the risk of misrepresenting financial results.", "cmt_tr": "İç denetçi hatayı yönetim kuruluna derhal bildirmemelidir; çünkü önemsiz olabilir. Eğer önemli değilse, durumu önce CAE ile görüşebilir. The internal auditor should not report the error immediately to the board because it may be immaterial. The auditor should discuss it with the CAE if unsure.", "cmt_en": ""}, {"tr": "Hatayı düzeltmek ve düzeltilmiş finansal tabloları muhasebe departmanına göndermek.", "en": "Correct the error and submit the corrected financial statements to the accounting department.", "cmt_tr": "İç denetçiler, finansal tabloları hazırlamak veya düzeltmekten sorumlu değildir. Internal auditors are not responsible for preparing or correcting the financial statements.", "cmt_en": ""}, {"tr": "Finansal tablo hazırlama süreci üzerindeki iç kontrolleri daha fazla test etmek.", "en": "Further test the internal controls over the process of preparing financial statements.", "cmt_tr": "İç denetçi önce hatanın önemliliğini değerlendirmeli, ardından iç kontrollerdeki herhangi bir zayıflığın bu hataya neden olup olamayacağına karar vermelidir. The internal auditor should first evaluate the materiality of the error and then decide whether any weakness in internal controls could have caused it.", "cmt_en": ""}]}, {"q_tr": "İç denetçilerin değerlendirmesi gereken finansal sermaye ve ödeme döngüsündeki kalıtsal risk nedir?", "q_en": "What is an inherent risk in the financial capital and payment cycle that internal auditors should consider?", "answer": 2, "options": [{"tr": "Harcamaların uygun şekilde aktifleştirilememesi.", "en": "Failure to capitalize expenditures properly.", "cmt_tr": "Harcamaların uygun şekilde aktifleştirilememesi, üretim döngüsündeki aktifleştirilen maliyetlerle ilgilidir. Failure to capitalize expenditures properly relates to capitalized costs in the production cycle.", "cmt_en": ""}, {"tr": "Stok zimmete geçirilmesi.", "en": "Misappropriation of inventory.", "cmt_tr": "Stokun zimmete geçirilmesi, stok döngüsüyle ilgilidir. Misappropriation of inventory pertains to the inventory cycle.", "cmt_en": ""}, {"tr": "Alınan faiz ve kâr paylarının hatalı kaydedilmesi.", "en": "Inaccurate recording of interest and dividends received.", "cmt_tr": "Finansal sermaye ve ödeme döngüsünde, denetçiler finansal işlemlerin doğru kaydedilmesiyle ilgili kalıtsal risklerin farkında olmalıdır; faiz ve kâr payları bunların örnekleridir. In the financial capital and payment cycle, auditors should be aware of inherent risks related to accurate recording of financial transactions like interest and dividends received.", "cmt_en": ""}, {"tr": "İş gücü yasalarının hatalı uygulanması.", "en": "Misapplication of labor laws.", "cmt_tr": "İş gücü yasalarının hatalı uygulanması, finansal sermaye denetimlerine özgü olmayan bir uyum sorunudur. Misapplication of labor laws is a compliance issue not specific to financial capital audits.", "cmt_en": ""}]}, {"q_tr": "Finansal denetim sırasında bir iç denetçi öncelikle neye odaklanmalıdır?", "q_en": "During a financial audit, an internal auditor primarily should focus on?", "answer": 2, "options": [{"tr": "Çalışan iş memnuniyetini araştırmak.", "en": "Surveying employee job satisfaction.", "cmt_tr": "İş memnuniyetini araştırmak, finansal denetimler değil, organizasyonel kültürle ilgilidir. Surveying job satisfaction pertains to organizational culture, not financial audits.", "cmt_en": ""}, {"tr": "Çevre yasalarına uyumu değerlendirmek.", "en": "Assessing compliance with environmental laws.", "cmt_tr": "Çevre yasalarına uyum, finansal denetimde değil, uyum denetiminde ele alınır. Compliance with environmental laws is an issue in a compliance audit.", "cmt_en": ""}, {"tr": "Finansal raporlama üzerindeki iç kontrol etkinliğini değerlendirmek.", "en": "Evaluating internal control effectiveness over financial reporting.", "cmt_tr": "Finansal denetimler, finansal raporlamanın doğruluğuna ve bütünlüğüne odaklanır. İç denetçiler, doğru finansal raporlamayı sağlamak ve hata veya hile riskini azaltmak için iç kontrollerin etkinliğini değerlendirir. Financial audits focus on accuracy and integrity of financial reporting. Internal auditors assess the effectiveness of internal controls to ensure accurate reporting and mitigate risks.", "cmt_en": ""}, {"tr": "Pazarlama stratejilerini geliştirmek.", "en": "Enhancing marketing strategies.", "cmt_tr": "Pazarlama stratejisinin geliştirilmesi, finansal raporlama amacıyla denetlenmez. Marketing strategy enhancement is not audited for financial reporting purposes.", "cmt_en": ""}]}, {"q_tr": "Finansal tabloları değerlendirirken denetim planlama aşamasında iç denetçilerin sağlaması gereken temel amaç nedir?", "q_en": "Which fundamental objective is crucial for internal auditors to ensure during the engagement planning phase when evaluating financial statements?", "answer": 3, "options": [{"tr": "Operasyonel maliyetlerin azaltılmasını sağlamak.", "en": "Ensuring the reduction of operational costs.", "cmt_tr": "Operasyonel maliyetlerin azaltılması bir kuruluşa fayda sağlasa da, finansal tablolarla ilgili denetim planlamasında birincil odak noktası değildir. Although reducing operational costs can benefit an organization, it is not the primary focus during engagement planning related to financial statements.", "cmt_en": ""}, {"tr": "Çalışan verimliliğini artırmak.", "en": "Improving employee productivity.", "cmt_tr": "Çalışan verimliliğinin artırılması yararlı olmakla birlikte, finansal tabloların değerlendirilmesiyle doğrudan ilgili değildir. Improving employee productivity, although beneficial, is not directly related to evaluating financial statements.", "cmt_en": ""}, {"tr": "Hissedar değerini maksimize etmek.", "en": "Maximizing shareholder value.", "cmt_tr": "Hissedar değerini maksimize etmek, kuruluşun daha geniş bir hedefi olabilir; ancak denetimde planlama aşamasına özgü değildir. Maximizing shareholder value may be a broader organizational goal but is not specific to engagement planning in auditing.", "cmt_en": ""}, {"tr": "Temel riskleri ve kontrolleri değerlendirmek.", "en": "Assessing key risks and controls.", "cmt_tr": "Denetim planlama aşamasındaki temel amaç, temel riskleri ve kontrolleri değerlendirmektir. Bu, finansal tabloların kuruluşun ekonomik gerçeğini doğru yansıtmasını sağlamak için kritik öneme sahiptir. The fundamental objective during the engagement planning phase is to assess key risks and controls, crucial to ensure that financial statements accurately reflect the organization's economic reality.", "cmt_en": ""}]}], "SU4 - Management Reporting": [{"q_tr": "CEO, yönetim raporlarının denetimini gerçekleştirmesini istedi. Bu tür güvence denetimi neleri içerir?", "q_en": "The CEO has asked the CAE to perform an audit of the company's management reports. This type of assurance engagement would include?", "answer": 3, "options": [{"tr": "Düzenleyici kurumlara uyum kapsamında raporlanan sonuçların doğruluğunu ve zamanındalığını değerlendirmek.", "en": "Assessing the accuracy and timeliness of the reported results in compliance with regulatory agencies.", "cmt_tr": "Düzenleyici kurumlara uyum kapsamında raporların doğruluğunu ve zamanındalığını değerlendirmek bu denetimin bir parçası olmaz. Assessing the accuracy and timeliness of the reports in compliance with regulatory agencies would not be part of this engagement.", "cmt_en": ""}, {"tr": "Raporların dış paydaşlar için faydalı olup olmadığını belirlemek.", "en": "Determining whether the reports are useful to external stakeholders.", "cmt_tr": "Raporların iç karar alıcılara (dış paydaşlara değil) faydalı olup olmadığını belirlemek bu denetimin bir parçası olacaktır. Determining whether the reports are useful to internal decision makers (not external stakeholders) would be part of this engagement.", "cmt_en": ""}, {"tr": "Raporların ABD GAAP ile uyumlu olduğundan emin olmak.", "en": "Ensuring that the reports conform with U.S. GAAP.", "cmt_tr": "Yönetim raporlarına dahil edilen bilgiler ABD GAAP, IFRS veya başka bir muhasebe raporlama sistemine dayanmaz. The information included in management reports is not based on U.S. GAAP, IFRS, or any other accounting reporting system.", "cmt_en": ""}, {"tr": "Her raporun kuruluşun yönetişim sürecine katkısını değerlendirmek.", "en": "Assessing the value of each report to the organization's governance process.", "cmt_tr": "Yönetim raporları yalnızca dahili kullanım içindir. Yöneticiler ve kıdemli yöneticiler bu raporları iş kararları almak ve ilerlemeyi izlemek için kullanır. Management reports are for internal use only. Assessing the value of each report to the organization's governance process would be part of this engagement.", "cmt_en": ""}]}, {"q_tr": "Bir şirket iç raporlama sistemini 1 yıl önce revize etti. Mali Planlama Direktörü, yeni sistemin daha doğru olduğunu belirtiyor. Bu iddiayı test edecek güvence denetimi hangisidir?", "q_en": "A company revised its internal reporting system 1 year ago. The Director of Financial Planning states the revised system is more accurate. Which assurance engagement would test this assertion?", "answer": 1, "options": [{"tr": "Kalite denetimi.", "en": "Quality audit.", "cmt_tr": "Kalite denetimi, kalite süreçlerinin kalite standartlarını karşılayacak şekilde işlediğine güvence sağlar. A quality audit provides assurance that quality processes are operating so that quality standards are met.", "cmt_en": ""}, {"tr": "Yönetim raporlama denetimi.", "en": "Management reporting audit.", "cmt_tr": "İç denetçiler tarafından yapılan yönetim raporlama sürecinin denetimi, raporların doğruluk, zamanındalık, alaka ve amaçları karşılama etkinliği açısından etkinliğini değerlendirir. An audit of the management reporting process assesses the effectiveness of the reports in terms of accuracy, timeliness, relevance, and effectiveness in meeting objectives.", "cmt_en": ""}, {"tr": "Performans denetimi.", "en": "Performance audit.", "cmt_tr": "Performans denetimi, kuruluşun temel performans göstergelerini karşılamadaki ilerlemi hakkında güvence sağlar. A performance audit provides assurance about the organization's progress in meeting its key performance indicators (KPIs).", "cmt_en": ""}, {"tr": "Operasyonel denetim.", "en": "Operational audit.", "cmt_tr": "Operasyonel denetim, bir kuruluşun operasyonlarının verimliliğini ve etkinliğini değerlendirir. An operational audit assesses the efficiency and effectiveness of an organization's operations.", "cmt_en": ""}]}, {"q_tr": "Aşağıdakilerden hangisi bir yönetim raporunu temsil eder?", "q_en": "Which of the following is representative of a management report?", "answer": 3, "options": [{"tr": "Menkul Kıymetler ve Borsa Komisyonu'na bildirilen finansal tablolar.", "en": "Financial statements reported to the Securities and Exchange Commission.", "cmt_tr": "SEC'e gönderilen raporlar, yönetim raporlarına örnek değildir. Reports issued to the SEC are not an example of management reports.", "cmt_en": ""}, {"tr": "Yasal uyum hedeflerini karşılayamama tehlikesindeki temel performans göstergelerini tanımlayan uyarı sinyalleri.", "en": "Advanced warning signals identifying key performance indicators in danger of not meeting regulatory compliance targets.", "cmt_tr": "Yasal uyum hedeflerini karşılayamama tehlikesindeki KPI'ları tanımlayan uyarı sinyali, yönetim raporuna örnek değildir. An advanced warning signal identifying KPIs in danger of not meeting regulatory compliance targets is not an example of a management report.", "cmt_en": ""}, {"tr": "Kamuya açık hedeflere ulaşmak için nelerin değişmesi gerektiğine ilişkin grafik görüntüler.", "en": "Graphical depictions of insights into what should change in order to achieve publicly monitored goals.", "cmt_tr": "Kamuya açık hedeflere ulaşmak için nelerin değişmesi gerektiğine ilişkin grafik görüntü, yönetim raporuna örnek değildir. A graphical depiction of insights into what should change to achieve publicly monitored goals is not an example of a management report.", "cmt_en": ""}, {"tr": "Kuruluşun performansının veri tabanlı gösterge paneli değerlendirmeleri.", "en": "Data-based dashboard evaluations of an organization's performance.", "cmt_tr": "Yönetim raporları yalnızca dahili kullanım içindir. Yöneticiler ve kıdemli yöneticiler bu raporları iş kararları almak için kullanır. Performansı izleyen veri tabanlı bir gösterge paneli, yönetim raporuna örnektir. Management reports are for internal use only. A data-based dashboard monitoring an organization's performance is an example of a management report.", "cmt_en": ""}]}, {"q_tr": "Bir muhasebeci, yılsonunda bütçeyle karşılaştırılan fiili finansal sonuçların varyans analizini hazırladı. Bu rapor türüne örnek nedir?", "q_en": "At year-end, an accountant prepared a variance analysis of actual financial results compared to the budget. This type of report is an example of a?", "answer": 1, "options": [{"tr": "Kalite kontrol raporu.", "en": "Quality control report.", "cmt_tr": "Kalite kontrol raporu, bir şirketin kalite standartlarını nasıl karşıladığını belgeler. A quality control report documents how a company has met quality standards.", "cmt_en": ""}, {"tr": "Yönetim raporu.", "en": "Management report.", "cmt_tr": "Yönetim raporları, kuruluşun faaliyetleri hakkında paydaşları bilgilendiren dahili raporlardır. Varyans analizi, sonuçları izleyen ve yalnızca dahili kullanıma yönelik bir rapor örneğidir. Management reports are internal reports that help stakeholders about activities. A variance analysis is an example of a report that monitors results and is for internal use only.", "cmt_en": ""}, {"tr": "ABD Menkul Kıymetler ve Borsa Komisyonu tarafından gerekli tutulan finansal rapor.", "en": "Financial report required by the U.S. Securities and Exchange Commission.", "cmt_tr": "Bütçeyle karşılaştırılan sonuçların varyans analizi, SEC tarafından zorunlu tutulan harici bir rapor değil, dahili bir rapordur. A variance analysis of results compared to budget is an internal report, not an external report required by the SEC.", "cmt_en": ""}, {"tr": "Harici ABD GAAP finansal tablolarına destekleyici çizelge.", "en": "Supporting schedule for the U.S. GAAP external financial statements.", "cmt_tr": "Bütçeyle karşılaştırılan sonuçların varyans analizi, harici ABD GAAP finansal tablolarına dahil edilmez. A variance analysis of results compared to budget would not be included in external U.S. GAAP financial statements.", "cmt_en": ""}]}, {"q_tr": "Yönetim raporunun birincil amacı nedir?", "q_en": "The primary purpose of a management report is to?", "answer": 2, "options": [{"tr": "Dış paydaşların şirketin performansı hakkında bilgilendirilmesini sağlamak.", "en": "Ensure external stakeholders are informed of the company's performance.", "cmt_tr": "Yönetim raporları dahili kullanım içindir. Management reports are for internal use.", "cmt_en": ""}, {"tr": "Yasal gerekliliklere uygun finansal güvence sağlamak.", "en": "Provide financial assurance in accordance with legal requirements.", "cmt_tr": "Finansal denetimler ve düzenleyici raporlama, yasal gerekliliklere uygun finansal güvence sağlar. Financial audits and regulatory reporting provide financial assurance in accordance with legal requirements.", "cmt_en": ""}, {"tr": "Stratejik karar almayı kolaylaştırmak ve departmanlardaki ilerlemeyi izlemek.", "en": "Facilitate strategic decision making and monitor departmental progress.", "cmt_tr": "Yönetim raporları, stratejik yönetim için temel araçlardır. Yöneticilere ilerlemeyi izlemeleri ve bilinçli kararlar almaları için ilgili veriler sağlayarak stratejik karar almayı destekler. Management reports are integral to strategic management. They support strategic decision making by providing managers with relevant data to monitor progress and make informed decisions.", "cmt_en": ""}, {"tr": "İç kontrollerin etkinliğini değerlendirmek.", "en": "Evaluate the effectiveness of internal controls.", "cmt_tr": "İç kontroller yönetim raporunda ele alınabilse de, birincil amaç stratejik karar almaktır. Although internal controls may be addressed in the management report, its primary purpose is strategic decision making.", "cmt_en": ""}]}, {"q_tr": "Yönetim raporlaması bağlamında birincil amaç nedir?", "q_en": "In the context of management reporting, a primary goal is to?", "answer": 1, "options": [{"tr": "Tüm raporların GAAP ile uyumlu olmasını sağlamak.", "en": "Ensure all reports conform to GAAP.", "cmt_tr": "Yönetim raporları GAAP ile uyumlu olmak zorunda değildir; çünkü kullanımları paydaşlarla sınırlıdır. Management reports do not have to conform to GAAP because their use is limited to stakeholders.", "cmt_en": ""}, {"tr": "Paydaşlar arasındaki iletişimi güçlendirmek.", "en": "Enhance communication among stakeholders.", "cmt_tr": "Yönetim raporları, bilinçli dahili karar alma için araçlardır. Paydaşlar arasındaki iletişimi güçlendirir ve bilinçli karar alma ile denetimi mümkün kılar. Management reports are tools for informed internal decision making. They facilitate better communication among stakeholders, allowing informed decision making and oversight.", "cmt_en": ""}, {"tr": "Olumsuz bilgileri bastırmak.", "en": "Suppress unfavorable information.", "cmt_tr": "Bilgileri bastırmak, yönetim raporlamasının şeffaflık amacıyla çelişir. Suppressing information is contrary to the transparency objective of management reporting.", "cmt_en": ""}, {"tr": "Düzenleyici uyumu artırmak.", "en": "Increase regulatory compliance.", "cmt_tr": "Düzenleyici uyum, yönetim raporlarının değil, uyum denetimlerinin amacıdır. Regulatory compliance is an objective of compliance audits, not management reports.", "cmt_en": ""}]}, {"q_tr": "Yönetim muhasebesi ile finansal muhasebe arasındaki fark nedir? Finansal muhasebe...", "q_en": "Management accounting differs from financial accounting in that financial accounting is?", "answer": 1, "options": [{"tr": "Geleceğe daha fazla yönelik.", "en": "More oriented toward the future.", "cmt_tr": "Yönetim muhasebesi geleceğe yöneliktir; finansal muhasebe değil. Management accounting is future oriented.", "cmt_en": ""}, {"tr": "Öncelikle harici finansal raporlamayla ilgili.", "en": "Primarily concerned with external financial reporting.", "cmt_tr": "Finansal muhasebe öncelikle tarihsel muhasebe ve alacaklılar ile hissedarlara yönelik harici finansal raporlamayla ilgilenir. Financial accounting is primarily concerned with historical accounting and external financial reporting to creditors and shareholders.", "cmt_en": ""}, {"tr": "Öncelikle niceliksel olmayan bilgilerle ilgili.", "en": "Primarily concerned with nonquantitative information.", "cmt_tr": "Finansal muhasebe öncelikle niceliksel bilgilerle ilgilenir. Financial accounting is primarily concerned with quantitative information.", "cmt_en": ""}, {"tr": "Karar analizi ve kararların uygulanmasıyla yoğun biçimde ilgili.", "en": "Heavily involved with decision analysis and implementation of decisions.", "cmt_tr": "Karar analizi ve uygulama, yönetim muhasebesinin özellikleridir. Decision analysis and implementation are characteristics of management accounting.", "cmt_en": ""}]}, {"q_tr": "Finansal ve yönetim muhasebesi arasında bir ayrım yapılırsa, yönetim muhasebesi daha çok neye yöneliktir?", "q_en": "If a distinction is made between financial and managerial accounting, managerial accounting is more oriented toward?", "answer": 3, "options": [{"tr": "Stok değerlemesi.", "en": "Measurement of inventory.", "cmt_tr": "Finansal muhasebe, stok değerlemesine yöneliktir. Financial accounting is oriented toward measurement of inventory.", "cmt_en": ""}, {"tr": "Varyans analizi.", "en": "Analysis of variances.", "cmt_tr": "Finansal muhasebe, varyans analizine yöneliktir. Financial accounting is oriented toward analysis of variances.", "cmt_en": ""}, {"tr": "Üçüncü taraflara maliyet raporlaması.", "en": "Cost reporting to third parties.", "cmt_tr": "Finansal muhasebe, üçüncü taraflara finansal bilgilerin raporlanmasını içerir. Financial accounting involves the reporting of financial information to third parties.", "cmt_en": ""}, {"tr": "Yönetim sürecinin planlama ve kontrol boyutları.", "en": "The planning and controlling aspects of the management process.", "cmt_tr": "Yönetim muhasebesi; öncelikle organizasyonel operasyonların planlanması ve kontrolüne uygulanır, niceliksel olmayan bilgileri dikkate alır ve genellikle finansal muhasebeden daha az kesindir. Managerial accounting primarily applies to the planning and control of organizational operations, considers nonquantitative information, and is usually less precise than financial accounting.", "cmt_en": ""}]}, {"q_tr": "Aşağıdakilerden hangisi yönetim muhasebesinden çok finansal muhasebeyi tanımlar?", "q_en": "Which of the following more closely describes financial accounting than managerial?", "answer": 0, "options": [{"tr": "Stok değerlemesi.", "en": "Inventory measurement.", "cmt_tr": "Yönetim muhasebesi; öncelikle operasyonların planlanması ve kontrolüne uygulanır, niceliksel olmayan bilgileri dikkate alır ve genellikle maliyet muhasebesinden daha az kesindir. Stok değerlemesi, finansal muhasebeyle en çok ilgili maliyet/yönetim muhasebesi konusudur. Managerial accounting applies primarily to planning and control operations and is usually less precise than cost or financial accounting. Inventory measurement is the cost/managerial topic most related to financial accounting.", "cmt_en": ""}, {"tr": "Devam eden operasyonların planlanması ve kontrolü.", "en": "Planning and controlling ongoing operations.", "cmt_tr": "Finansal muhasebe öncelikle tarihsel muhasebe ve alacaklılar ile hissedarlara yönelik harici finansal raporlamayla ilgilenir. Financial accounting primarily involves historical accounting and external financial reporting to creditors and shareholders.", "cmt_en": ""}, {"tr": "Uzun vadeli planlama ve rutin olmayan kararlar.", "en": "Long-range planning and nonroutine decisions.", "cmt_tr": "Finansal muhasebe öncelikle tarihsel muhasebe ve harici finansal raporlamayla ilgilenir; uzun vadeli planlama değil. Financial accounting primarily involves historical accounting and external financial reporting.", "cmt_en": ""}, {"tr": "Niceliksel yöntemler, yani organizasyonel modeller.", "en": "Quantitative methods, i.e., organizational models.", "cmt_tr": "Finansal muhasebe öncelikle tarihsel muhasebe ve harici finansal raporlamayla ilgilenir; niceliksel organizasyonel modeller değil. Financial accounting primarily involves historical accounting and external financial reporting.", "cmt_en": ""}]}, {"q_tr": "Geniş anlamda yönetim muhasebesi nedir?", "q_en": "In a broad sense, managerial accounting is?", "answer": 3, "options": [{"tr": "Rutin olmayan kararların harici raporlanması.", "en": "External reporting of nonroutine decisions.", "cmt_tr": "Yönetim muhasebesi, rutin olmayan kararlar almada ve planlar ve politikalar geliştirmede kullanılabilecek dahili ve harici raporlamayı destekler. Managerial accounting supports internal and external reporting that may be used in making nonroutine decisions and developing plans and policies.", "cmt_en": ""}, {"tr": "Hükümete harici raporlama.", "en": "External reporting to the government.", "cmt_tr": "Finansal muhasebe, hükümete, çeşitli dış taraflara ve hissedarlara harici raporlamayı destekler. Financial accounting supports external reporting to the government, various outside parties, and shareholders.", "cmt_en": ""}, {"tr": "Yalnızca dahili raporlama.", "en": "Internal reporting only.", "cmt_tr": "Yönetim muhasebesi, dahili ve harici raporlamayı destekler. Managerial accounting supports internal and external reporting.", "cmt_en": ""}, {"tr": "Rutin operasyonların planlanmasında kullanılmak üzere dahili raporlama.", "en": "Internal reporting for use in planning routine operations.", "cmt_tr": "Yönetim muhasebesi, rutin operasyonların planlanması ve kontrolü için dahili raporlamayı destekler ve ayrıca yönetim rolü dışındaki paydaşları da destekler. Managerial accounting supports internal reporting for use in planning and controlling routine operations and also supports stakeholders and others not in management roles.", "cmt_en": ""}]}], "SU5 - Organizational Culture": [{"q_tr": "CEO 2 yılı aşkın süredir inovasyonun şirketin birincil hedefi olduğunu belirtiyor, ancak çok az yenilikçi fikir paylaşılıyor. İç denetim fonksiyonu inovasyonun önündeki engelleri belirlemek için hangi denetimi yapmalıdır?", "q_en": "The CEO has stated that innovation is the company's primary goal for over 2 years, but very few innovative ideas have been shared. Which engagement would help determine barriers to innovation?", "answer": 2, "options": [{"tr": "Operasyonel denetim.", "en": "Operational audit.", "cmt_tr": "Operasyonel denetim, operasyonların verimliliğini ve etkinliğini değerlendirir ve inovasyonun önündeki engelleri mutlaka tespit etmez. An operational audit assesses efficiency and effectiveness and would not necessarily identify barriers to innovation.", "cmt_en": ""}, {"tr": "Uyum denetimi.", "en": "Compliance audit.", "cmt_tr": "Uyum denetimi, ilgili yasa, yönetmelik ve prosedürlere uyumu test eder; yenilikçi fikirler üretme konusunda zorunlu tutmak muhtemelen ters etki yapar. A compliance audit tests whether the company is meeting requirements of relevant laws, regulations, and procedures. Forcing compliance with an imperative to generate innovative ideas would likely be counterproductive.", "cmt_en": ""}, {"tr": "Kültür denetimi.", "en": "Culture audit.", "cmt_tr": "Kültür denetimi, bir kuruluşun davranışlarının ve uygulamalarının beyan edilen değerleri ve inançlarıyla uyumunu değerlendiren kapsamlı bir değerlendirmedir. Başarıya yönelik kültürel engelleri tanımlayabilir. A culture audit is a comprehensive evaluation of how an organization's behaviors and practices align with its stated values and beliefs. It can identify cultural barriers to success.", "cmt_en": ""}, {"tr": "Performans denetimi.", "en": "Performance audit.", "cmt_tr": "Performans denetimi, KPI'ları karşılamadaki ilerleme hakkında güvence sağlar. Az sayıda fikir, engellerin olabileceğini gösterir; ancak engellerin ne olduğunu tespit etmez. A performance audit provides assurance about progress in meeting KPIs. A small number indicates there may be barriers, but it does not identify what those barriers are.", "cmt_en": ""}]}, {"q_tr": "Kültür denetiminin en iyi tanımı hangisidir?", "q_en": "Which one of the following is the best description of a culture audit?", "answer": 0, "options": [{"tr": "Bir kuruluşun davranışlarının ve uygulamalarının beyan edilen değerleri ve inançlarıyla nasıl uyum sağladığının kapsamlı bir değerlendirmesi.", "en": "A comprehensive evaluation of how an organization's behaviors and practices align with its stated values and beliefs.", "cmt_tr": "Kültür denetimi, bir kuruluşun davranışlarının ve uygulamalarının beyan edilen değerleri ve inançlarıyla uyumunu ve organizasyonel başarı üzerindeki etkisini değerlendiren kapsamlı bir değerlendirmedir. A culture audit is a comprehensive evaluation of how an organization's behaviors and practices align with its stated values and beliefs and the effect on organizational success.", "cmt_en": ""}, {"tr": "Bir kuruluşun davranış kurallarında özetlenen raporlama prosedürleriyle tutarlılığının testi.", "en": "A test of an organization's consistency in meeting the requirements of the reporting procedures outlined in the code of conduct.", "cmt_tr": "Davranış kurallarıyla uyumun test edilmesi, kültür denetiminin yalnızca bir parçasıdır. A test of compliance with the code of conduct is only one part of a culture audit.", "cmt_en": ""}, {"tr": "Bir kuruluşun yönetişim yapısının verimliliğinin ve etkinliğinin değerlendirmesi.", "en": "An assessment of the efficiency and effectiveness of an organization's governance structure.", "cmt_tr": "Yönetişimin ve kültür üzerindeki etkisinin değerlendirilmesi, kültür denetiminin yalnızca bir bileşenidir. An assessment of governance and how it impacts culture is only one component of a culture audit.", "cmt_en": ""}, {"tr": "Kuruluşun risk yönetimi ve kontrol süreçlerinin etkinliğinin denetimi.", "en": "An audit of the effectiveness of the organization's risk management and control processes.", "cmt_tr": "Risk yönetimi ve kontrol süreçlerinin etkinliğinin denetimi, kapsamlı bir kültür denetimi değildir. Kültür, iç kontrol ortamını etkilediğinden bu yalnızca bir boyuttur. An audit of risk management and control processes is not a comprehensive culture audit. This is only one aspect of the organizational culture audit.", "cmt_en": ""}]}, {"q_tr": "Olumlu bir organizasyonel kültür kuruluşa nasıl fayda sağlar?", "q_en": "A positive organizational culture benefits an organization by?", "answer": 1, "options": [{"tr": "Düzenleyici uyumu sağlamak.", "en": "Ensuring regulatory compliance.", "cmt_tr": "Organizasyonel kültür, uyumu yalnızca dolaylı olarak destekler. Organizational culture supports compliance only indirectly.", "cmt_en": ""}, {"tr": "Verimliliği artırmak ve nitelikli çalışanları çekmek.", "en": "Increasing productivity and attracting well-qualified employees.", "cmt_tr": "Organizasyonel kültür, çalışan bağlılığını önemli ölçüde etkiler. Olumlu bir kültür, destekleyici bir çalışma ortamı oluşturarak çalışan motivasyonunu ve verimliliğini artırır; yetenekli bireyleri çeker ve elde tutar. Organizational culture significantly influences employee engagement. A positive culture fosters a supportive work environment that enhances motivation and productivity, attracting and retaining talented individuals.", "cmt_en": ""}, {"tr": "Finansal denetim sonuçlarını doğrudan iyileştirmek.", "en": "Directly improving financial audit results.", "cmt_tr": "Organizasyonel kültür, finansal denetim sonuçlarını doğrudan etkilemez. The organizational culture does not directly affect financial audit results.", "cmt_en": ""}, {"tr": "Günlük operasyonlarda yönetimin müdahale ihtiyacını azaltmak.", "en": "Reducing the need for management intervention in daily operations.", "cmt_tr": "Organizasyonel kültür, genel etkinliğe yardımcı olur; ancak yönetim ihtiyacını ortadan kaldırmaz. The organizational culture aids in overall effectiveness but does not eliminate management needs.", "cmt_en": ""}]}, {"q_tr": "Güçlü bir organizasyonel kültürü en iyi yansıtan özellik hangisidir?", "q_en": "Which characteristic best reflects a strong organizational culture?", "answer": 2, "options": [{"tr": "Esneklik olmaksızın prosedürlere katı bağlılık.", "en": "Rigid adherence to procedures without flexibility.", "cmt_tr": "Katı prosedürler inovasyonu engelleyebilir ve güçlü bir kültürün göstergesi değildir. Rigid procedures may stifle innovation and are not indicative of a strong culture.", "cmt_en": ""}, {"tr": "Yüksek çalışan devir hızı.", "en": "High employee turnover.", "cmt_tr": "Yüksek devir hızı, dikkat gerektiren olası kültürel sorunları gösterir. High turnover suggests possible cultural issues needing attention.", "cmt_en": ""}, {"tr": "Temel değerlerle uyumlu teşvikler.", "en": "Incentives aligned with core values.", "cmt_tr": "Kültür, çalışan memnuniyetini ve organizasyonel etkinliği etkiler. Teşviklerin temel değerlerle uyumlu hale getirilmesi, çalışan çabalarının paylaşılan organizasyonel değerlere yönlendirilmesini sağlar. A positive culture aligns actions and rewards with organizational values. Aligning incentives with core values supports a positive culture by ensuring employee efforts are directed toward shared values.", "cmt_en": ""}, {"tr": "Kısa vadeli karlara güçlü odaklanma.", "en": "Strong focus on short-term profits.", "cmt_tr": "Kısa vadeli karlara güçlü odaklanma, organizasyonel kültür ve uzun vadeli karlar için hayati sürdürülebilir uygulamaları göz ardı edebilir. A strong focus on short-term profits may ignore sustainable practices vital to the organizational culture and long-term profits.", "cmt_en": ""}]}, {"q_tr": "Aşağıdakilerden hangisi organizasyonel kültür risk faktörüne en iyi örnek teşkil eder?", "q_en": "Which of the following is the best example of an organizational culture risk factor?", "answer": 0, "options": [{"tr": "Mantıksız beklentiler.", "en": "Unreasonable expectations.", "cmt_tr": "Mantıksız beklentiler, çalışanlar üzerinde ne pahasına olursa olsun hedeflere ulaşmaları için aşırı baskıya yol açabilir ve bu çalışan moralini olumsuz etkiler. Unreasonable expectations can lead to excessive pressure on employees to reach goals no matter what the cost, negatively impacting employee morale.", "cmt_en": ""}, {"tr": "Cömert prim planları.", "en": "Generous bonus plans.", "cmt_tr": "Prim planlarına sahip olmak, planın hedefleri makul değilse bir kültür riski faktörü değildir. Prim planları şirketin temel değerleriyle uyumluysa olumlu bir kültürü destekleyebilir. Having bonus plans is not a culture risk factor unless the goals of the plan are unreasonable. If aligned with core values, they can support a positive culture.", "cmt_en": ""}, {"tr": "Çalışanlara karşı olumlu tutum sergileyen deneyimli yönetim hiyerarşisi.", "en": "An experienced management hierarchy that is favorable to employees.", "cmt_tr": "Çalışanlara karşı olumlu tutum sergileyen deneyimli bir yönetim hiyerarşisi, bir organizasyonel kültür risk faktörü olmak zorunda değildir. An experienced management hierarchy that is favorable to employees does not necessarily represent an organizational culture risk factor.", "cmt_en": ""}, {"tr": "Üstten gelen olumlu ton.", "en": "A positive tone at the top.", "cmt_tr": "Üstten gelen olumlu ton, sağlıklı bir organizasyonun ve olumlu bir kültürün özelliklerinden biridir; risk faktörü değildir. A positive tone at the top is a characteristic of a healthy organization with a positive culture, not a risk factor.", "cmt_en": ""}]}, {"q_tr": "Kültürün bir kuruluş üzerindeki etkisine ilişkin doğru olan ifade hangisidir?", "q_en": "Which of the following statements in regard to the effect culture can have on an organization is correct?", "answer": 3, "options": [{"tr": "Güçlü değerlere dayalı kültüre sahip kuruluşlar, hedeflerine ulaşma olasılığı daha yüksektir.", "en": "Organizations with a culture based on strong values are more likely to reach their objectives.", "cmt_tr": "Güçlü değerlere dayalı bir kuruluşun genellikle daha fazla motive edilmiş bir iş gücü vardır ve bu iş gücü hedeflerine ulaşma olasılığı daha yüksektir. An organization based on strong values will generally have a more motivated workforce that will likely reach their objectives.", "cmt_en": ""}, {"tr": "Olumlu bir kültür, morali ve takım ruhunu iyileştirdiğinden riskleri azaltır ve verimliliği artırır.", "en": "A positive culture reduces risks and increases productivity because it improves morale and team spirit.", "cmt_tr": "Olumlu bir kültür, daha fazla yüksek performanslı çalışan ve daha az hoşnutsuz çalışan olduğundan riski azaltır. A positive culture reduces risk because there are likely more high-performing employees and fewer disgruntled employees.", "cmt_en": ""}, {"tr": "Zayıf bir kültür iç kontrolleri zayıflatabildiğinden finansal zarara yol açabilir.", "en": "A poor culture may cause financial harm because it can undermine internal controls.", "cmt_tr": "Kötü bir kültür, işlevsiz takım dinamiklerine ve daha yüksek risk profiline yol açabilir, bu da hile gibi finansal zararlarla sonuçlanabilir. A poor culture can lead to dysfunctional team dynamics and a higher risk profile, resulting in financial harm such as fraud.", "cmt_en": ""}, {"tr": "Tüm cevaplar doğrudur.", "en": "All of the answers are correct.", "cmt_tr": "Kültür, bir kuruluşun başarısında önemli bir faktördür. Güçlü değerlere dayalı kuruluşlar hedeflerine daha çok ulaşır; olumlu kültür verimliliği artırır; zayıf kültür finansal zarara yol açabilir. Culture is a significant factor in organizational success. Organizations with strong values are more likely to reach objectives; positive culture increases productivity; poor culture can cause financial harm.", "cmt_en": ""}]}, {"q_tr": "Organizasyonel kültürün en iyi tanımı hangisidir?", "q_en": "Which one of the following statements is the best description of organizational culture?", "answer": 1, "options": [{"tr": "Bireylerin eylemler, davranışlar ve kararlar aracılığıyla organizasyonel değerlerin somut tezahürü.", "en": "The tangible manifestation of organizational values through the actions, behaviors, and decisions of individuals.", "cmt_tr": "IIA, davranışı kültürün bireyler aracılığıyla eylemler, davranışlar ve kararlar yoluyla somut tezahürü olarak tanımlar. The IIA defines conduct as the tangible manifestation of culture through the actions, behaviors, and decisions of individuals.", "cmt_en": ""}, {"tr": "Bir organizasyondaki bireylerin görünmez inanç sistemleri, değerleri, normları ve tercihleri.", "en": "The invisible belief systems, values, norms, and preferences of individuals in an organization.", "cmt_tr": "IIA, kültürü bir organizasyondaki bireylerin görünmez inanç sistemleri, değerleri, normları ve tercihleri olarak tanımlar. Kültür, organizasyonel riski ve stratejik hedeflerin gerçekleştirilmesini etkiler. The IIA defines culture as the invisible belief systems, values, norms, and preferences of individuals in an organization. Culture affects organizational risk and achievement of strategic objectives.", "cmt_en": ""}, {"tr": "Organizasyon içindeki çalışan davranışını yönlendiren ahlaki ilkeler ve davranış kuralları.", "en": "The moral principles and code of conduct that guide employee behavior within an organization.", "cmt_tr": "Organizasyonel etik, çalışanları yönlendiren ahlaki ilkeleri ve davranış kurallarını ifade eder. Organizational ethics refers to the moral principles and codes of conduct that guide employees.", "cmt_en": ""}, {"tr": "Bir kuruluş için çalışan personelin gelenekleri ve coğrafi geçmişi.", "en": "The customs and geographical background of employees working for an organization.", "cmt_tr": "Kuruluşun insan kaynağının gelenekleri ve coğrafi yapısı kültürü etkiler, ancak organizasyonel kültür değildir. Organizasyonel kültür, daha kapsamlı bir terimdir. The customs and geographic makeup of an organization's human resources affect the culture but are not the organizational culture. Organizational culture is a more encompassing term.", "cmt_en": ""}]}, {"q_tr": "Kuruluşun kültür denetiminde iç denetçilerin işlevi nedir?", "q_en": "What is the function of internal auditors in an organization's culture audit?", "answer": 2, "options": [{"tr": "Kuruluşun kültürünü tanımlamak.", "en": "Defining the organization's culture.", "cmt_tr": "Organizasyonel kültürü tanımlamak, yönetimin sorumluluğudur. Defining the organizational culture is a management responsibility.", "cmt_en": ""}, {"tr": "Günlük kültürel düzenlemeleri yönetmek.", "en": "Managing day-to-day cultural adjustments.", "cmt_tr": "Günlük kültürel değişiklikleri yönetmek, insan kaynakları veya yönetimin yetki alanındadır. Managing day-to-day cultural changes is within the authority of human resources or management.", "cmt_en": ""}, {"tr": "Kültürün organizasyonel değerlerle nasıl uyum sağladığını değerlendirmek.", "en": "Evaluating how culture aligns with organizational values.", "cmt_tr": "Kültür denetimleri, uygulamanın beyan edilen ideallerden saptığı alanları belirler. İç denetçiler, gerçek organizasyonel kültürün beyan edilen değerleri ve standartlarıyla tutarlı olup olmadığını değerlendirir. Culture audits determine areas where practice deviates from stated ideals. Internal auditors evaluate whether the actual organizational culture is consistent with its declared values and standards.", "cmt_en": ""}, {"tr": "Kültürel politikaları uygulamak.", "en": "Enforcing cultural policies.", "cmt_tr": "Politikaları uygulamak genellikle yönetimin yetki alanındadır. Enforcing policies is typically within the purview of management.", "cmt_en": ""}]}, {"q_tr": "Organizasyonel kültür denetiminde yüksek devir ve devamsızlık oranları neden gösterge niteliği taşır?", "q_en": "High turnover and absence rates may be indicators in an organizational culture audit because they?", "answer": 2, "options": [{"tr": "Güçlü çalışan bağlılığını ima eder.", "en": "Imply strong employee engagement.", "cmt_tr": "Yüksek oranlar genellikle bağlılık değil, bağlılığın eksikliğine işaret eder. High rates generally indicate disengagement, not engagement.", "cmt_en": ""}, {"tr": "Olumlu bir organizasyonel ortamı düşündürür.", "en": "Suggest a positive organizational environment.", "cmt_tr": "Bu tür oranlar genellikle olumlu değil, kırmızı bayrak niteliği taşır. Such rates are usually red flags, not positives.", "cmt_en": ""}, {"tr": "Altta yatan bir kültürel sorunun göstergesi olabilir.", "en": "May indicate an underlying cultural problem.", "cmt_tr": "İK verilerindeki olumsuz eğilimler genellikle kültürel eksiklikleri yansıtır. Yüksek devir ve devamsızlık oranları, soruşturma gerektiren organizasyonel kültür içindeki olası sorunlara işaret edebilir. Negative trends in HR data often reflect cultural deficiencies. High turnover and absence rates typically signal potential issues within the organizational culture.", "cmt_en": ""}, {"tr": "Uyum standartlarına bağlılığı doğrular.", "en": "Confirm adherence to compliance standards.", "cmt_tr": "Devir ve devamsızlık oranları, uyum standartlarına bağlılıkla doğrudan ilişkili değildir. Turnover and absences do not directly relate to compliance standard adherence.", "cmt_en": ""}]}, {"q_tr": "Organizasyonel kültürü etkili biçimde denetlemek için hangi özellik gereklidir?", "q_en": "What characteristic is essential for effectively auditing the organizational culture?", "answer": 2, "options": [{"tr": "Kuruluşun finansal tablolarına aşinalık.", "en": "Familiarity with the organization's financial statements.", "cmt_tr": "Finansal konulara aşinalık yardımcı olsa da, organizasyonel kültür denetimleri için gerekli değildir. Although helpful, financial familiarity is not essential for audits of the organizational culture.", "cmt_en": ""}, {"tr": "Finansal denetimlerde güçlü teknik denetim becerileri.", "en": "Strong technical auditing skills in financial audits.", "cmt_tr": "Finansal denetimlerle ilgili teknik beceriler, organizasyonel kültürün değerlendirilmesi için doğrudan gerekmez. Technical skills related to financial audits are not directly needed for assessment of the organizational culture.", "cmt_en": ""}, {"tr": "Kültürel verileri ve uygulamaları değerlendirmede nesnellik.", "en": "Objectivity in evaluating cultural data and practices.", "cmt_tr": "Nesnellik, önyargıları önlemek ve kültürel değerlendirmelerin doğru ve gerçeği yansıtır olmasını sağlamak için organizasyonel kültürü denetlerken kritik öneme sahiptir. Objectivity is crucial when auditing organizational culture to prevent biases and ensure that cultural evaluations are accurate and reflective of reality.", "cmt_en": ""}, {"tr": "Düzenleyici uyum standartları hakkında derinlemesine bilgi.", "en": "In-depth knowledge of regulatory compliance standards.", "cmt_tr": "Düzenleyici bilgi, uyum denetimleriyle daha alakalıdır. Regulatory knowledge is more relevant to compliance audits.", "cmt_en": ""}]}]};
+const SHEETS = ["SU1 - Operational Auditing", "SU2 - Compliance Auditing", "SU3 - Financial Audits", "SU4 - Management Reporting", "SU5 - Organizational Culture"];
+const SHORT_NAMES = {"SU1 - Operational Auditing": "SU1", "SU2 - Compliance Auditing": "SU2", "SU3 - Financial Audits": "SU3", "SU4 - Management Reporting": "SU4", "SU5 - Organizational Culture": "SU5"};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let lang = "tr";         // "tr" | "en"
+let curChapter = 0;
+let curQ = 0;            // index within chapter
+let answered = [];       // per-question answered flag
+let correctArr = [];     // per-question correct flag
+let chapterScore = [];   // [{correct,total}] per chapter
+let quizStarted = false;
+let visitedQ = {};       // {ci: Set of visited qi}
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function totalCorrect() { return correctArr.filter(Boolean).length; }
+function totalAnswered() { return answered.filter(Boolean).length; }
+function totalQuestions() { return SHEETS.reduce((s,k)=>s+QUIZ[k].length,0); }
+
+function optLetter(i) { return ["A","B","C","D"][i]; }
+
+function getChapterStats(ci) {
+  const qs = QUIZ[SHEETS[ci]];
+  const offset = SHEETS.slice(0,ci).reduce((s,k)=>s+QUIZ[k].length,0);
+  let c=0, t=0;
+  for(let i=0;i<qs.length;i++){
+    if(answered[offset+i]){ t++; if(correctArr[offset+i]) c++; }
+  }
+  return {c,t,total:qs.length};
+}
+
+function globalIndex(ci, qi) {
+  return SHEETS.slice(0,ci).reduce((s,k)=>s+QUIZ[k].length,0) + qi;
+}
+
+// ── LOCALSTORAGE KEY ─────────────────────────────────────────────────────────
+const LS_KEY = "cia_quiz_unit3";
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function initState() {
+  const total = totalQuestions();
+  answered   = new Array(total).fill(false);
+  correctArr = new Array(total).fill(false);
+  visitedQ   = {};
+  QUIZ[SHEETS.forEach ? SHEETS[0] : Object.keys(QUIZ)[0]];
+  SHEETS.forEach((_,ci) => { QUIZ[SHEETS[ci]].forEach(q => { q._chosen = undefined; }); });
+}
+
+function saveProgress() {
+  const data = {
+    answered, correctArr, curChapter, curQ, visitedQ: {},
+    chosen: SHEETS.map((s,ci) => QUIZ[s].map(q => q._chosen ?? null))
+  };
+  // visitedQ has Sets — convert to arrays
+  Object.keys(visitedQ).forEach(k => { data.visitedQ[k] = [...visitedQ[k]]; });
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    answered   = data.answered   || [];
+    correctArr = data.correctArr || [];
+    curChapter = data.curChapter || 0;
+    curQ       = data.curQ       || 0;
+    visitedQ   = {};
+    Object.keys(data.visitedQ||{}).forEach(k => { visitedQ[k] = new Set(data.visitedQ[k]); });
+    // Restore _chosen
+    (data.chosen||[]).forEach((arr,ci) => {
+      arr.forEach((ch,qi) => { if(ch !== null) QUIZ[SHEETS[ci]][qi]._chosen = ch; });
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearProgress() {
+  try { localStorage.removeItem(LS_KEY); } catch(e) {}
+}
+
+function startOrResume() {
+  const hasSave = loadProgress();
+  quizStarted = true;
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("chapters-scroll").style.display = "";
+  document.getElementById("overall-result").className = "";
+  buildChapterTabs();
+  if(hasSave && answered.some(Boolean)) {
+    updateScore();
+    updateProgress();
+    goToChapter(curChapter);
+  } else {
+    initState();
+    goToChapter(0);
+  }
+}
+
+function startQuiz() {
+  clearProgress();
+  initState();
+  quizStarted = true;
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("chapters-scroll").style.display = "";
+  document.getElementById("overall-result").className = "";
+  buildChapterTabs();
+  goToChapter(0);
+}
+
+function goToMenu() {
+  saveProgress();
+  window.location.href = "index.html";
+}
+
+// ── CHAPTER TABS ──────────────────────────────────────────────────────────────
+function buildChapterTabs() {
+  const inner = document.getElementById("chapters-inner");
+  inner.innerHTML = "";
+  SHEETS.forEach((sname, ci) => {
+    const btn = document.createElement("button");
+    btn.className = "ch-btn" + (ci===curChapter?" active":"");
+    btn.id = "ch-btn-"+ci;
+    btn.innerHTML = `<span class="ch-dot"></span>${SHORT_NAMES[sname]||sname}`;
+    btn.onclick = () => goToChapter(ci);
+    inner.appendChild(btn);
+  });
+}
+
+function updateChapterTabs() {
+  SHEETS.forEach((sname,ci) => {
+    const btn = document.getElementById("ch-btn-"+ci);
+    if(!btn) return;
+    btn.className = "ch-btn" + (ci===curChapter?" active":"");
+    const stats = getChapterStats(ci);
+    if(stats.t === stats.total) btn.classList.add("ch-done");
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function goToChapter(ci) {
+  curChapter = ci;
+  curQ = 0;
+  document.getElementById("summary-card").className = "";
+  document.getElementById("summary-card").innerHTML = "";
+  document.getElementById("overall-result").className = "";
+  updateChapterTabs();
+  renderQuestion();
+  renderQuestionGrid();
+  scrollTo(0,0);
+}
+
+function nextQuestion() {
+  const qs = QUIZ[SHEETS[curChapter]];
+  curQ++;
+  if(curQ >= qs.length) {
+    showChapterSummary();
+  } else {
+    renderQuestion();
+    renderQuestionGrid();
+    const qa = document.getElementById("question-area");
+    qa.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  updateProgress();
+}
+
+function jumpToQuestion(qi) {
+  curQ = qi;
+  document.getElementById("summary-card").className = "";
+  document.getElementById("summary-card").innerHTML = "";
+  document.getElementById("overall-result").className = "";
+  renderQuestion();
+  renderQuestionGrid();
+  updateProgress();
+  const qa = document.getElementById("question-area");
+  qa.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function renderQuestionGrid() {
+  const qs     = QUIZ[SHEETS[curChapter]];
+  const offset = globalIndex(curChapter, 0);
+  const area   = document.getElementById("q-grid-area");
+  if(!area) return;
+
+  const visited = visitedQ[curChapter] || new Set();
+
+  let btns = qs.map((q, qi) => {
+    const gi = offset + qi;
+    let cls = "q-num-btn ";
+    if(answered[gi]) {
+      cls += correctArr[gi] ? "qst-correct" : "qst-wrong";
+    } else if(visited.has(qi)) {
+      cls += "qst-visited";
+    } else {
+      cls += "qst-unseen";
+    }
+    if(qi === curQ) cls += " qst-current";
+    return `<button class="${cls}" onclick="jumpToQuestion(${qi})" title="Sual ${qi+1}">${qi+1}</button>`;
+  }).join("");
+
+  area.innerHTML = `
+    <div class="q-grid-wrap">
+      <div class="q-grid-label">${lang==="tr" ? "Suallar" : "Questions"}</div>
+      <div class="q-grid">${btns}</div>
+    </div>
+    <button class="reset-unit-btn" onclick="confirmResetUnit()">
+      ↺ ${lang==="tr" ? "Bu unitı sıfırla" : "Reset this unit"}
+    </button>`;
+}
+
+function confirmResetUnit() {
+  const name = SHORT_NAMES[SHEETS[curChapter]] || SHEETS[curChapter];
+  const msg  = lang==="tr"
+    ? `"${name}" üçün bütün cavablar silinəcək. Davam edirsiniz?`
+    : `Reset all answers for "${name}"? This cannot be undone.`;
+  if(!confirm(msg)) return;
+  retryChapter(curChapter);
+  renderQuestionGrid();
+}
+
+// ── RENDER QUESTION ───────────────────────────────────────────────────────────
+function renderQuestion() {
+  const qs   = QUIZ[SHEETS[curChapter]];
+  const q    = qs[curQ];
+  const gi   = globalIndex(curChapter, curQ);
+  const done = answered[gi];
+
+  // Track visited
+  if(!visitedQ[curChapter]) visitedQ[curChapter] = new Set();
+  visitedQ[curChapter].add(curQ);
+
+  const area = document.getElementById("question-area");
+  const card = document.createElement("div");
+  card.className = "q-wrap";
+  card.innerHTML = buildQuestionHTML(q, curQ, qs.length, gi, done);
+  area.innerHTML = "";
+  area.appendChild(card);
+
+  // Restore state if already answered
+  if(done) {
+    const correctIdx = ["A","B","C","D"].indexOf(q.correct);
+    const chosenIdx  = q._chosen !== undefined ? q._chosen : correctIdx;
+    markAnswer(gi, chosenIdx, correctIdx, false);
+  }
+
+  // Show next button if already answered
+  if(done) {
+    const qs2 = QUIZ[SHEETS[curChapter]];
+    const isLastQ  = (curQ === qs2.length - 1);
+    const isLastCh = (curChapter === SHEETS.length - 1);
+    const nextLabel = isLastQ
+      ? (isLastCh ? (lang==="tr" ? "Nəticələrə bax →" : "See Results →")
+                  : (lang==="tr" ? "Növbəti Mövzu →" : "Next Chapter →"))
+      : (lang==="tr" ? "Növbəti Sual →" : "Next Question →");
+    const nextAction = isLastQ ? "showChapterSummary()" : "nextQuestion()";
+    const cardEl = document.getElementById(`card-${gi}`);
+    if(cardEl && !cardEl.querySelector(".next-btn-wrap")) {
+      const wrap = document.createElement("div");
+      wrap.className = "next-btn-wrap visible";
+      wrap.innerHTML = `<button class="btn-next-q" onclick="${nextAction}">${nextLabel}</button>`;
+      cardEl.appendChild(wrap);
+    }
+  }
+
+  renderQuestionGrid();
+}
+
+function buildQuestionHTML(q, qi, total, gi, done) {
+  const qText = lang==="tr" ? q.q_tr : q.q_en;
+  const num   = qi+1;
+  const opts  = q.options.map((opt,i) => {
+    const txt = lang==="tr" ? (opt.tr||opt.en) : (opt.en||opt.tr);
+    // strip "X / Y" pattern if in EN mode — just use after " / " if present
+    const display = (lang==="en" && txt.includes(" / ")) ? txt.split(" / ").pop().trim() : txt;
+    return `
+    <button class="opt-btn" id="opt-${gi}-${i}" onclick="choose(${gi},${i})">
+      <span class="opt-label">${optLetter(i)}</span>
+      <span class="opt-text">${escHtml(display)}</span>
+      <span class="opt-icon" id="icon-${gi}-${i}"></span>
+    </button>
+    <div class="explanation" id="expl-${gi}-${i}">
+      <div class="expl-lang">${lang==="tr"?"Türkçe Açıklama":"TR Açıklama"}</div>
+      <div class="expl-text">${escHtml(opt.cmt_tr)}</div>
+      <div class="expl-divider"></div>
+      <div class="expl-lang">English Explanation</div>
+      <div class="expl-text">${escHtml(opt.cmt_en)}</div>
+    </div>
+    <button class="expl-toggle" id="toggle-${gi}-${i}">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      ${lang==="tr" ? "İzahı göster" : "Show explanation"}
+    </button>`;
+  }).join("");
+
+  return `
+  <div class="q-card" id="card-${gi}">
+    <div class="q-header">
+      <div class="q-number">${num}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px">${SHORT_NAMES[SHEETS[curChapter]]||SHEETS[curChapter]} &nbsp;·&nbsp; ${num} / ${total}</div>
+        <div class="q-text">${escHtml(qText)}</div>
+      </div>
+    </div>
+    <div class="q-options">${opts}</div>
+  </div>`;
+}
+
+// ── ANSWER LOGIC ──────────────────────────────────────────────────────────────
+function choose(gi, chosen) {
+  const ci = getCIFromGI(gi);
+  const qi = gi - globalIndex(ci, 0);
+  const q  = QUIZ[SHEETS[ci]][qi];
+  if(answered[gi]) return;
+
+  const correctIdx = ["A","B","C","D"].indexOf(q.correct);
+  q._chosen = chosen;
+  answered[gi]   = true;
+  correctArr[gi] = (chosen === correctIdx);
+
+  markAnswer(gi, chosen, correctIdx, true);
+  updateScore();
+  updateProgress();
+  saveProgress();
+}
+
+function markAnswer(gi, chosen, correctIdx, animate) {
+  const labels = ["A","B","C","D"];
+
+  for(let i=0;i<4;i++) {
+    const btn    = document.getElementById(`opt-${gi}-${i}`);
+    const icon   = document.getElementById(`icon-${gi}-${i}`);
+    const toggle = document.getElementById(`toggle-${gi}-${i}`);
+    if(!btn) continue;
+    btn.disabled = true;
+
+    if(i === correctIdx) {
+      btn.classList.add("correct");
+      icon.textContent = "✓";
+      if(toggle) toggle.classList.add("visible");
+    } else if(i === chosen && chosen !== correctIdx) {
+      btn.classList.add("wrong");
+      icon.textContent = "✗";
+      if(toggle) toggle.classList.add("visible");
+    }
+  }
+  // Auto-open correct explanation
+  const expl = document.getElementById(`expl-${gi}-${correctIdx}`);
+  const tog  = document.getElementById(`toggle-${gi}-${correctIdx}`);
+  if(expl && animate) {
+    setTimeout(() => {
+      openExpl(gi, correctIdx);
+    }, 400);
+  }
+
+  // Show "Next question" button after answering
+  if(animate) {
+    const ci  = getCIFromGI(gi);
+    const qi  = gi - globalIndex(ci, 0);
+    const qs  = QUIZ[SHEETS[ci]];
+    const isLastQ = (qi === qs.length - 1);
+    const isLastCh = (ci === SHEETS.length - 1);
+
+    const nextLabel = isLastQ
+      ? (isLastCh
+          ? (lang==="tr" ? "Nəticələrə bax →" : "See Results →")
+          : (lang==="tr" ? "Növbəti Mövzu →" : "Next Chapter →"))
+      : (lang==="tr" ? "Növbəti Sual →" : "Next Question →");
+
+    const nextAction = isLastQ
+      ? (isLastCh ? "showChapterSummary()" : "showChapterSummary()")
+      : "nextQuestion()";
+
+    const card = document.getElementById(`card-${gi}`);
+    if(card) {
+      const existing = card.querySelector(".next-btn-wrap");
+      if(!existing) {
+        const wrap = document.createElement("div");
+        wrap.className = "next-btn-wrap";
+        wrap.innerHTML = `<button class="btn-next-q" onclick="${nextAction}">${nextLabel}</button>`;
+        card.appendChild(wrap);
+        setTimeout(() => wrap.classList.add("visible"), 600);
+      }
+    }
+  }
+  // Refresh grid to show new answer state
+  if(animate) {
+    setTimeout(() => renderQuestionGrid(), 50);
+  }
+}
+
+// ── EXPLANATION TOGGLE ────────────────────────────────────────────────────────
+function openExpl(gi, i) {
+  const expl = document.getElementById(`expl-${gi}-${i}`);
+  const tog  = document.getElementById(`toggle-${gi}-${i}`);
+  if(!expl || !tog) return;
+  const isOpen = expl.classList.contains("open");
+  expl.classList.toggle("open", !isOpen);
+  tog.classList.toggle("open", !isOpen);
+  tog.querySelector("span") && (tog.querySelector("span").textContent =
+    isOpen ? (lang==="tr"?"İzahı göster":"Show explanation")
+           : (lang==="tr"?"İzahı gizlə":"Hide explanation"));
+}
+
+// Make toggle buttons call openExpl
+document.addEventListener("click", e => {
+  const tog = e.target.closest(".expl-toggle");
+  if(!tog) return;
+  const [,gi,i] = tog.id.split("-");
+  openExpl(Number(gi), Number(i));
+});
+
+// ── PROGRESS & SCORE ─────────────────────────────────────────────────────────
+function updateScore() {
+  const c = totalCorrect();
+  const a = totalAnswered();
+  document.getElementById("score-badge").textContent = `${c} / ${a}`;
+}
+
+function updateProgress() {
+  const a = totalAnswered();
+  const t = totalQuestions();
+  const pct = t ? (a/t*100).toFixed(1) : 0;
+  document.getElementById("progress-bar-fill").style.width = pct+"%";
+  document.getElementById("prog-left").textContent =
+    lang==="tr" ? `${a} cavablandı` : `${a} answered`;
+  document.getElementById("prog-right").textContent =
+    lang==="tr" ? `${t} sual` : `${t} questions`;
+}
+
+// ── CHAPTER SUMMARY ───────────────────────────────────────────────────────────
+function showChapterSummary() {
+  const stats = getChapterStats(curChapter);
+  const pct   = stats.total ? Math.round(stats.c/stats.total*100) : 0;
+  const circ  = 2*Math.PI*46;
+  const fill  = circ*(1 - pct/100);
+
+  const isLast = curChapter === SHEETS.length-1;
+  const nextLabel = lang==="tr" ? (isLast ? "Bütün Nəticələr" : "Növbəti Mövzu →")
+                                : (isLast ? "All Results" : "Next Chapter →");
+
+  const summaryDiv = document.getElementById("summary-card");
+  summaryDiv.innerHTML = `
+    <div class="summary-header">
+      <h2>${lang==="tr"?"Bölüm Tamamlandı":"Chapter Complete"}</h2>
+      <p>${SHEETS[curChapter]}</p>
+    </div>
+    <div class="summary-score-ring">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 110 110">
+          <circle class="ring-track" cx="55" cy="55" r="46"/>
+          <circle class="ring-fill" cx="55" cy="55" r="46"
+            stroke-dasharray="${circ}" stroke-dashoffset="${circ}"
+            id="ring-fill-anim"/>
+        </svg>
+        <div class="ring-label">
+          <span class="ring-pct">${pct}%</span>
+          <span class="ring-sub">${lang==="tr"?"doğru":"correct"}</span>
+        </div>
+      </div>
+    </div>
+    <div class="summary-stats">
+      <div class="stat-item">
+        <span class="stat-num" style="color:var(--correct)">${stats.c}</span>
+        <span class="stat-label">${lang==="tr"?"Doğru":"Correct"}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" style="color:var(--wrong)">${stats.t-stats.c}</span>
+        <span class="stat-label">${lang==="tr"?"Səhv":"Wrong"}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">${stats.total}</span>
+        <span class="stat-label">${lang==="tr"?"Sual":"Questions"}</span>
+      </div>
+    </div>
+    <div class="summary-actions">
+      <button class="btn-retry" onclick="retryChapter(${curChapter})">
+        ↺ ${lang==="tr"?"Yenidən":"Retry"}
+      </button>
+      <button class="btn-next" onclick="${isLast?"showOverall()":"goToChapter("+(curChapter+1)+")"}">
+        ${nextLabel}
+      </button>
+    </div>
+  `;
+  summaryDiv.classList.add("visible");
+  document.getElementById("question-area").innerHTML = "";
+  document.getElementById("q-grid-area").innerHTML = "";
+
+  // Animate ring
+  setTimeout(() => {
+    const ring = document.getElementById("ring-fill-anim");
+    if(ring) ring.style.strokeDashoffset = fill;
+  }, 100);
+
+  updateChapterTabs();
+}
+
+function retryChapter(ci) {
+  const qs     = QUIZ[SHEETS[ci]];
+  const offset = globalIndex(ci, 0);
+  for(let i=0;i<qs.length;i++){
+    answered[offset+i]   = false;
+    correctArr[offset+i] = false;
+    qs[i]._chosen        = undefined;
+  }
+  visitedQ[ci] = new Set();
+  goToChapter(ci);
+  updateScore();
+  updateProgress();
+  saveProgress();
+}
+
+// ── OVERALL RESULTS ───────────────────────────────────────────────────────────
+function showOverall() {
+  document.getElementById("summary-card").className = "";
+  const tc = totalCorrect();
+  const ta = totalQuestions();
+  const pct = ta ? Math.round(tc/ta*100) : 0;
+
+  const rows = SHEETS.map((sname, ci) => {
+    const s = getChapterStats(ci);
+    const p = s.total ? Math.round(s.c/s.total*100) : 0;
+    return `<div class="cr-row">
+      <div class="cr-name">${SHORT_NAMES[sname]||sname}</div>
+      <div class="cr-bar-bg"><div class="cr-bar-fill" style="width:0%" data-w="${p}%"></div></div>
+      <div class="cr-score">${s.c}/${s.total}</div>
+    </div>`;
+  }).join("");
+
+  const el = document.getElementById("overall-result");
+  el.innerHTML = `
+    <div class="overall-header">
+      <h2>🎓 ${lang==="tr"?"Ümumi Nəticə":"Overall Results"}</h2>
+      <p>${tc} / ${ta} · ${pct}% ${lang==="tr"?"doğru":"correct"}</p>
+    </div>
+    <div class="chapter-results">${rows}</div>
+    <button class="btn-restart" onclick="restartAll()">
+      ↺ ${lang==="tr"?"Yenidən Başla":"Restart All"}
+    </button>
+  `;
+  el.classList.add("visible");
+  updateChapterTabs();
+
+  setTimeout(() => {
+    el.querySelectorAll(".cr-bar-fill").forEach(b => {
+      b.style.transition = "width 1s ease";
+      b.style.width = b.dataset.w;
+    });
+  }, 100);
+}
+
+function restartAll() {
+  clearProgress();
+  initState();
+  updateScore();
+  updateProgress();
+  buildChapterTabs();
+  document.getElementById("overall-result").className = "";
+  document.getElementById("summary-card").className = "";
+  document.getElementById("question-area").innerHTML = "";
+  goToChapter(0);
+}
+
+// ── LANGUAGE TOGGLE ──────────────────────────────────────────────────────────
+function toggleLang() {
+  lang = lang==="tr" ? "en" : "tr";
+  document.getElementById("lang-btn").textContent = lang==="tr" ? "EN" : "TR";
+  if(!quizStarted) {
+    document.getElementById("welcome-desc").textContent =
+      lang==="tr"
+        ? "6 mövzu, 105 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar"
+        : "6 topics, 105 questions — TR/EN bilingual support with explanations";
+    return;
+  }
+  updateProgress();
+  // Re-render current question without resetting state
+  if(document.getElementById("question-area").innerHTML !== "") {
+    renderQuestion();
+    renderQuestionGrid();
+  }
+}
+
+// ── PAGE LOAD ────────────────────────────────────────────────────────────────
+(function() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw) {
+      const data = JSON.parse(raw);
+      if(data.answered && data.answered.some(Boolean)) {
+        const done = data.answered.filter(Boolean).length;
+        const total = data.answered.length;
+        document.getElementById("btn-main-start").textContent =
+          `▶ Davam et (${done}/${total}) / Resume`;
+        document.getElementById("btn-fresh-start").style.display = "";
+      }
+    }
+  } catch(e) {}
+})();
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function getCIFromGI(gi) {
+  let acc=0;
+  for(let ci=0;ci<SHEETS.length;ci++){
+    acc += QUIZ[SHEETS[ci]].length;
+    if(gi < acc) return ci;
+  }
+  return SHEETS.length-1;
+}
+</script>
+</body>
+</html>
