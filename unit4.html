@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CIA Quiz">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 4</title>
+<style>
+:root {
+  --ink:       #0f1923;
+  --paper:     #f8f5ef;
+  --cream:     #ede8df;
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6d2e;
+  --navy:      #1a2e4a;
+  --navy-mid:  #2e4d72;
+  --correct:   #1a6b3c;
+  --correct-bg:#d4edda;
+  --wrong:     #8b1a1a;
+  --wrong-bg:  #f8d7da;
+  --explain-bg:#fffbf0;
+  --r: 12px;
+  --shadow: 0 2px 16px rgba(15,25,35,.10);
+  --shadow-lg: 0 8px 32px rgba(15,25,35,.16);
+  --font-head: -apple-system, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-body: -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-ui:   -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+
+/* ── BACK TO MENU BUTTON ─────────────────────────────── */
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  margin-right: 8px; white-space: nowrap;
+  transition: background .2s;
+}
+#back-btn:hover { background: rgba(255,255,255,.22); }
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 720px; margin: 0 auto;
+}
+#app-title {
+  font-family: var(--font-head);
+  font-size: 16px; font-weight: normal; letter-spacing: .4px;
+  color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#score-badge {
+  font-family: var(--font-ui);
+  font-size: 13px; font-weight: 700; letter-spacing: .5px;
+  background: var(--gold); color: var(--navy);
+  border-radius: 20px; padding: 4px 12px;
+  white-space: nowrap; margin-left: 12px;
+}
+#lang-btn {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  margin-left: 10px; transition: background .2s;
+}
+#lang-btn:hover { background: rgba(255,255,255,.22); }
+
+/* ── PROGRESS ─────────────────────────────────────────── */
+#progress-wrap {
+  background: var(--navy); padding: 0 16px 10px;
+}
+#progress-inner {
+  max-width: 720px; margin: 0 auto;
+}
+#progress-bar-bg {
+  height: 4px; background: rgba(255,255,255,.18); border-radius: 4px; overflow: hidden;
+}
+#progress-bar-fill {
+  height: 100%; background: var(--gold);
+  border-radius: 4px; transition: width .4s ease;
+  width: 0%;
+}
+#progress-label {
+  font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,.55);
+  margin-top: 5px; display: flex; justify-content: space-between;
+}
+
+/* ── MAIN CONTAINER ───────────────────────────────────── */
+#main {
+  max-width: 720px; margin: 0 auto;
+  padding: 0 0 80px;
+}
+
+/* ── CHAPTER TABS ─────────────────────────────────────── */
+#chapters-scroll {
+  padding: 14px 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+#chapters-scroll::-webkit-scrollbar { display: none; }
+#chapters-inner {
+  display: flex; gap: 8px;
+  width: max-content;
+}
+.ch-btn {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  letter-spacing: .3px;
+  background: var(--cream); color: var(--navy-mid);
+  border: 1.5px solid #d4cfc5;
+  border-radius: 20px; padding: 6px 14px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .2s;
+  position: relative;
+}
+.ch-btn:hover { background: #e2dcd0; }
+.ch-btn.active {
+  background: var(--navy); color: #fff;
+  border-color: var(--navy);
+}
+.ch-btn .ch-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 5px; vertical-align: middle;
+  background: rgba(255,255,255,.4);
+}
+.ch-btn.active .ch-dot { background: var(--gold); }
+.ch-btn:not(.active) .ch-dot { background: #b0a890; }
+.ch-done .ch-dot { background: var(--correct) !important; }
+
+/* ── QUESTION CARD ────────────────────────────────────── */
+.q-wrap {
+  padding: 14px 16px 0;
+}
+.q-card {
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid #e8e2d8;
+}
+
+/* Card header: question number + text */
+.q-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 18px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.q-number {
+  font-family: var(--font-ui); font-size: 17px; font-weight: 800;
+  color: var(--navy);
+  background: var(--gold);
+  border-radius: 10px;
+  min-width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 0;
+  letter-spacing: -.3px;
+}
+.q-text {
+  font-family: var(--font-body); font-size: 18px; line-height: 1.5;
+  color: #fff; font-weight: 600; flex: 1;
+}
+
+/* Options */
+.q-options { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; }
+
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--cream); border: 1.5px solid #e0dbd2;
+  border-radius: 10px; padding: 12px 14px;
+  cursor: pointer; text-align: left;
+  transition: all .18s; position: relative;
+  outline: none; -webkit-tap-highlight-color: transparent;
+}
+.opt-btn:hover:not(:disabled) {
+  background: #e8e3d7; border-color: #c0b898;
+  transform: translateX(2px);
+}
+.opt-label {
+  font-family: var(--font-ui); font-size: 13px; font-weight: 800;
+  letter-spacing: .8px; color: var(--navy-mid);
+  background: rgba(46,77,114,.1);
+  border-radius: 5px; padding: 3px 8px;
+  min-width: 28px; text-align: center; margin-top: 2px;
+  flex-shrink: 0;
+}
+.opt-text {
+  font-family: var(--font-body); font-size: 16px; line-height: 1.45;
+  color: var(--ink); flex: 1;
+}
+.opt-icon {
+  font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 2px;
+  opacity: 0; transition: opacity .2s;
+}
+
+/* States */
+.opt-btn.correct {
+  background: var(--correct-bg) !important;
+  border-color: var(--correct) !important;
+}
+.opt-btn.correct .opt-label { background: var(--correct); color: #fff; }
+.opt-btn.correct .opt-icon { opacity: 1; }
+.opt-btn.correct .opt-text { color: var(--correct); font-weight: 600; }
+
+.opt-btn.wrong {
+  background: var(--wrong-bg) !important;
+  border-color: var(--wrong) !important;
+}
+.opt-btn.wrong .opt-label { background: var(--wrong); color: #fff; }
+.opt-btn.wrong .opt-icon { opacity: 1; }
+.opt-btn.wrong .opt-text { color: var(--wrong); }
+
+.opt-btn:disabled { cursor: default; }
+.opt-btn:disabled:not(.correct):not(.wrong) { opacity: .55; }
+
+
+/* Explanation accordion */
+.explanation {
+  background: var(--explain-bg);
+  border-top: 1px solid #e8e0cc;
+  padding: 0 14px;
+  max-height: 0; overflow: hidden;
+  transition: max-height .35s ease, padding .35s ease;
+}
+.explanation.open {
+  max-height: 300px;
+  padding: 12px 14px;
+}
+.expl-lang {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--gold-dim); margin-bottom: 5px;
+}
+.expl-text {
+  font-family: var(--font-body); font-size: 14.5px; line-height: 1.55;
+  color: #444;
+}
+.expl-divider {
+  height: 1px; background: #e0d8c8; margin: 9px 0;
+}
+
+/* Explanation toggle arrow */
+.expl-toggle {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  padding: 0;
+  max-height: 0; overflow: hidden;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  color: var(--gold-dim); letter-spacing: .3px;
+  border-top: none;
+  width: 100%;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, max-height .2s, padding .2s;
+}
+.expl-toggle.visible {
+  opacity: 1; pointer-events: auto;
+  max-height: 40px;
+  padding: 10px 14px 8px;
+  border-top: 1px solid #ece6da;
+}
+.expl-toggle svg {
+  transition: transform .3s; flex-shrink: 0;
+}
+.expl-toggle.open svg { transform: rotate(180deg); }
+
+/* ── CHAPTER SUMMARY CARD ─────────────────────────────── */
+#summary-card {
+  display: none;
+  margin: 20px 16px 0;
+  background: #fff; border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; border: 1px solid #e8e2d8;
+}
+#summary-card.visible { display: block; }
+.summary-header {
+  background: linear-gradient(135deg, #1a4a2e 0%, #2e7a50 100%);
+  padding: 20px 20px;
+  text-align: center;
+}
+.summary-header h2 {
+  font-family: var(--font-head); font-size: 20px; color: #fff;
+  font-weight: normal; margin-bottom: 4px;
+}
+.summary-header p {
+  font-family: var(--font-ui); font-size: 13px;
+  color: rgba(255,255,255,.7);
+}
+.summary-score-ring {
+  display: flex; align-items: center; justify-content: center;
+  margin: 20px 0 10px;
+}
+.ring-wrap {
+  position: relative; width: 110px; height: 110px;
+}
+.ring-wrap svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+.ring-track { fill: none; stroke: #e0d8c8; stroke-width: 8; }
+.ring-fill {
+  fill: none; stroke: var(--gold); stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease;
+}
+.ring-label {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center;
+}
+.ring-pct {
+  font-family: var(--font-head); font-size: 26px; font-weight: bold;
+  color: var(--navy); display: block; line-height: 1;
+}
+.ring-sub {
+  font-family: var(--font-ui); font-size: 11px; color: #888; margin-top: 2px;
+}
+.summary-stats {
+  display: flex; justify-content: space-around; padding: 0 20px 16px;
+  border-bottom: 1px solid #ece6da;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: var(--font-head); font-size: 24px;
+  color: var(--navy); display: block;
+}
+.stat-label {
+  font-family: var(--font-ui); font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.summary-actions {
+  padding: 16px 20px;
+  display: flex; gap: 10px;
+}
+.btn-retry, .btn-next {
+  flex: 1; font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  letter-spacing: .3px; border-radius: 9px; padding: 13px 10px;
+  border: none; cursor: pointer; transition: all .2s;
+}
+.btn-retry {
+  background: var(--cream); color: var(--navy);
+  border: 1.5px solid #c8c0b0;
+}
+.btn-retry:hover { background: #e0d8c8; }
+.btn-next {
+  background: var(--navy); color: #fff;
+}
+.btn-next:hover { background: var(--navy-mid); }
+
+/* ── WELCOME SCREEN ───────────────────────────────────── */
+#welcome {
+  padding: 40px 24px 20px;
+  text-align: center;
+}
+#welcome h1 {
+  font-family: var(--font-head); font-size: 26px; font-weight: normal;
+  color: var(--navy); line-height: 1.25; margin-bottom: 10px;
+}
+#welcome p {
+  font-family: var(--font-ui); font-size: 14px; color: #666;
+  line-height: 1.55; max-width: 400px; margin: 0 auto 24px;
+}
+.welcome-stats {
+  display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.ws-item {
+  background: #fff; border: 1px solid #e0d8cc;
+  border-radius: 10px; padding: 12px 18px; min-width: 90px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.ws-num {
+  font-family: var(--font-head); font-size: 28px; color: var(--navy);
+  display: block;
+}
+.ws-label {
+  font-family: var(--font-ui); font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.btn-start {
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 15px; font-weight: 700;
+  letter-spacing: .5px; border: none; border-radius: 10px;
+  padding: 15px 40px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(26,46,74,.3);
+  transition: all .2s;
+}
+.btn-start:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+/* ── OVERALL RESULTS ──────────────────────────────────── */
+#overall-result {
+  display: none;
+  margin: 20px 16px 0;
+  background: #fff; border-radius: var(--r);
+  box-shadow: var(--shadow-lg); border: 1px solid #e8e2d8;
+  overflow: hidden;
+}
+#overall-result.visible { display: block; }
+.overall-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #c9a84c 200%);
+  padding: 24px 20px; text-align: center;
+}
+.overall-header h2 {
+  font-family: var(--font-head); font-size: 22px; color: #fff;
+  font-weight: normal;
+}
+.overall-header p {
+  font-family: var(--font-ui); font-size: 13px; color: rgba(255,255,255,.7);
+  margin-top: 4px;
+}
+.chapter-results { padding: 16px 20px; }
+.cr-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid #ece6da;
+}
+.cr-row:last-child { border-bottom: none; }
+.cr-name {
+  font-family: var(--font-ui); font-size: 13px; color: var(--navy);
+  font-weight: 600; flex: 1;
+}
+.cr-score {
+  font-family: var(--font-ui); font-size: 12px; color: #666;
+  min-width: 60px; text-align: right;
+}
+.cr-bar-bg {
+  flex: 2; height: 7px; background: var(--cream);
+  border-radius: 4px; overflow: hidden;
+}
+.cr-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--correct), #2ea862);
+  transition: width 1s ease;
+}
+.btn-restart {
+  display: block; margin: 16px 20px 20px;
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  border: none; border-radius: 9px; padding: 13px; cursor: pointer;
+  width: calc(100% - 40px); text-align: center;
+  transition: background .2s;
+}
+.btn-restart:hover { background: var(--navy-mid); }
+
+
+/* ── QUESTION GRID (number nav) ──────────────────────────────────────── */
+.q-grid-wrap {
+  padding: 14px 14px 6px;
+  border-top: 1px solid #ece6da;
+}
+.q-grid-label {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase;
+  color: #999; margin-bottom: 8px;
+}
+.q-grid {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.q-num-btn {
+  width: 30px; height: 30px; border-radius: 6px; border: none;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: transform .1s, opacity .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.q-num-btn:active { transform: scale(.92); }
+.q-num-btn.qst-unseen  { background: #d0d0d0; color: #555; }
+.q-num-btn.qst-current { background: var(--gold); color: #333; box-shadow: 0 0 0 2px var(--navy); }
+.q-num-btn.qst-visited { background: #ffe082; color: #7a5c00; }
+.q-num-btn.qst-correct { background: #4caf50; color: #fff; }
+.q-num-btn.qst-wrong   { background: #e53935; color: #fff; }
+
+/* ── RESET BUTTON ─────────────────────────────────────────────────────── */
+.reset-unit-btn {
+  display: block; width: calc(100% - 28px);
+  margin: 8px 14px 14px;
+  background: transparent; border: 1.5px solid #c0b090; border-radius: 9px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  color: #8a6a30; padding: 10px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.reset-unit-btn:hover { background: #fff3cd; color: #5a3e10; }
+
+/* ── NEXT QUESTION BUTTON ─────────────────────────────── */
+.next-btn-wrap {
+  padding: 12px 14px 14px;
+  border-top: 1px solid #ece6da;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.next-btn-wrap.visible {
+  opacity: 1; transform: translateY(0);
+}
+.btn-next-q {
+  width: 100%;
+  background: var(--navy); color: #fff;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  letter-spacing: .4px; border: none; border-radius: 9px;
+  padding: 13px; cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.btn-next-q:hover { background: var(--navy-mid); transform: translateY(-1px); }
+.btn-next-q:active { transform: translateY(0); }
+
+/* ── ANIMATIONS ───────────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.q-card { animation: slideIn .3s ease; }
+.opt-btn.correct { animation: pop .4s ease; }
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 400px) {
+  .q-text { font-size: 16px; }
+  .opt-text { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="goToMenu()">← Menyu</button>
+    <div id="app-title">Unit 4</div>
+    <div id="score-badge">0 / 0</div>
+    <button id="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</div>
+<!-- PROGRESS -->
+<div id="progress-wrap">
+  <div id="progress-inner">
+    <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
+    <div id="progress-label">
+      <span id="prog-left">Başlangıç</span>
+      <span id="prog-right">68 sual</span>
+    </div>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- WELCOME -->
+  <div id="welcome">
+    <h1>CIA Sınav Quiz<br><span style="color:var(--gold);font-size:.75em">Unit 4 · Danışmanlık Hizmetleri</span></h1>
+    <p id="welcome-desc">4 mövzu, 68 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar</p>
+    <div class="welcome-stats">
+      <div class="ws-item"><span class="ws-num">4</span><span class="ws-label">Mövzu</span></div>
+      <div class="ws-item"><span class="ws-num">68</span><span class="ws-label">Sual</span></div>
+      <div class="ws-item"><span class="ws-num">272</span><span class="ws-label">İzah</span></div>
+    </div>
+    <button class="btn-start" onclick="startOrResume()" id="btn-main-start">Başla / Start</button>
+    <button class="btn-start" id="btn-fresh-start"
+      style="display:none;margin-top:8px;background:transparent;border:1.5px solid var(--gold);color:var(--gold);font-size:13px;padding:10px"
+      onclick="startQuiz()">↺ Yenidən başla / Restart</button>
+  </div>
+
+  <!-- CHAPTER TABS (hidden until started) -->
+  <div id="chapters-scroll" style="display:none">
+    <div id="chapters-inner"></div>
+  </div>
+
+  <!-- QUESTION AREA -->
+  <div id="question-area"></div>
+
+  <!-- QUESTION NUMBER GRID -->
+  <div id="q-grid-area"></div>
+
+  <!-- CHAPTER SUMMARY -->
+  <div id="summary-card"></div>
+
+  <!-- OVERALL RESULTS -->
+  <div id="overall-result"></div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const QUIZ = {"Subunit 1 - Overview": [{"q_tr": "Kapsamı müşteriyle mutabık kılınan müşteri hizmet faaliyetleri en iyi nasıl tanımlanır?", "q_en": "Client service activities, the nature and scope of which are agreed upon with the client, are best described as", "answer": 2, "options": [{"tr": "İç denetim hizmetleri", "en": "Internal audit services", "cmt_tr": "🇹🇷 İç denetim; bağımsız, nesnel bir güvence ve danışmanlık hizmetidir. Yönetişim, risk yönetimi ve kontrol süreçlerini değerlendirerek organizasyona değer katar.", "cmt_en": "🇬🇧 Internal auditing is an independent, objective assurance and advisory service designed to add value and improve operations. It evaluates governance, risk management, and control processes."}, {"tr": "Güvence hizmetleri", "en": "Assurance services", "cmt_tr": "🇹🇷 Güvence hizmetleri; iç denetçilerin nesnel değerlendirmeler yaparak güvence sağladığı hizmetlerdir. Uyumluluk, finansal, operasyonel ve teknoloji denetimlerini kapsar.", "cmt_en": "🇬🇧 Assurance services involve objective assessments to provide assurance. They include compliance, financial, operational/performance, and technology engagements."}, {"tr": "Danışmanlık hizmetleri", "en": "Advisory services", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri; iç denetçilerin yönetim sorumluluğu üstlenmeksizin paydaşlara tavsiye verdiği hizmetlerdir. Kapsam ve nitelik ilgili paydaşlarla mutabık kılınır.", "cmt_en": "🇬🇧 Advisory services are those through which internal auditors provide advice to stakeholders without assuming management responsibilities. Nature and scope are agreed with stakeholders."}, {"tr": "Dış güvence hizmetleri", "en": "External assurance services", "cmt_tr": "🇹🇷 Dış güvence hizmetleri, bağımsız CPA firmaları gibi harici hizmet sağlayıcılar tarafından yürütülür; iç denetçiler tarafından değil.", "cmt_en": "🇬🇧 External assurance services are performed by external service providers such as independent CPA firms, not internal auditors."}]}, {"q_tr": "İç denetçilerin sunduğu danışmanlık hizmetleri güvence hizmetlerinden nasıl ayrılır?", "q_en": "Advisory services provided by internal auditors differ from assurance services because they", "answer": 2, "options": [{"tr": "Resmi değerlendirmeler içerir", "en": "Involve providing formal evaluations", "cmt_tr": "🇹🇷 Resmi değerlendirmeler, danışmanlık değil güvence hizmetlerinin bir parçasıdır.", "cmt_en": "🇬🇧 Formal evaluations are part of assurance services, not advisory services."}, {"tr": "Yönetim sorumluluğu üstlenmeyi içerir", "en": "Include assuming management responsibilities", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri, nesnelliği korumak amacıyla yönetim rollerini özellikle dışlar.", "cmt_en": "🇬🇧 Advisory services specifically avoid management roles to maintain objectivity."}, {"tr": "Resmi güvence olmaksızın operasyonları iyileştirir", "en": "Improve operations without formal assurance", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri; paydaşlara rehberlik ve önerilerle operasyonları iyileştirmeye yardımcı olur. Güvence hizmetlerinin aksine resmi değerlendirme içermez.", "cmt_en": "🇬🇧 Advisory services help stakeholders improve operations through guidance and recommendations without providing formal evaluations, unlike assurance services."}, {"tr": "Denetçilerin finansal tablolar hakkında görüş vermesini gerektirir", "en": "Require auditors to issue opinions on financial statements", "cmt_tr": "🇹🇷 Finansal tablolar hakkında görüş içeren geleneksel denetimler güvence hizmetleridir.", "cmt_en": "🇬🇧 Traditional audits involving financial statement opinions are assurance services, not advisory."}]}, {"q_tr": "İç denetçiler danışmanlık hizmetleri sunabilir. Bu hizmetlerin yapılması", "q_en": "Internal auditors may provide advisory services. The performance of these services", "answer": 2, "options": [{"tr": "Aynı müşteriyle yapılacak güvence hizmetinde nesnelliği zedeler", "en": "Impairs internal auditors' objectivity with respect to an assurance service for the same client", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri nesnelliği mutlaka zedelemez. Önerilerin uygulanması yönetimin kararıdır; bu durum iç denetçinin nesnelliğini bozmaz.", "cmt_en": "🇬🇧 Advisory services do not necessarily impair objectivity. Implementation decisions are made by management, which does not impair the internal auditors' objectivity."}, {"tr": "Danışmanlık görevinden güvence üretilmesini engeller", "en": "Precludes generation of assurance from an advisory engagement", "cmt_tr": "🇹🇷 Güvence ve danışmanlık hizmetleri birbirini dışlamaz. YDY, görevlerin sınıflandırılma yöntemini belirler; karma görevler uygun olabilir.", "cmt_en": "🇬🇧 Assurance and advisory services are not mutually exclusive. The CAE determines classification methods; blended engagements may be appropriate."}, {"tr": "İç denetim fonksiyonunun tüzükteki yetki kapsamıyla tutarlı olmalıdır", "en": "Should be consistent with the internal audit function's empowerment reflected in the charter", "cmt_tr": "🇹🇷 Danışmanlık hizmetlerinin niteliği tüzükte tanımlanır. Yönetim kurulu, çıkar çatışması veya yükümlülük ihlali yoksa iç denetim fonksiyonunu ek hizmetler için yetkilendirebilir.", "cmt_en": "🇬🇧 The nature of advisory services is defined in the charter. The board empowers the internal audit function for additional services if no conflicts of interest or obligation impairments exist."}, {"tr": "Müşteri dışında bilgi paylaşma sorumluluğu doğurmaz", "en": "Imposes no responsibility to communicate information other than to the engagement client", "cmt_tr": "🇹🇷 İç denetimin temel değerlerinden biri üst yönetim ve yönetim kuruluna güvence sunmaktır. Danışmanlık görevleri, YDY'nin yöneticilere ve yönetim kuruluna sunulması gerektiğini düşündüğü bilgileri kısıtlayan biçimde yürütülemez.", "cmt_en": "🇬🇧 A primary internal audit value is providing assurance to senior management and the board. Advisory engagements cannot restrict information that the CAE judges should be presented to executives and board members."}]}, {"q_tr": "İç denetçilerin yürüttüğü danışmanlık hizmetleri büyük olasılıkla organizasyona nasıl yarar sağlar?", "q_en": "Advisory services performed by internal auditors most likely benefit the organization because", "answer": 2, "options": [{"tr": "İç denetim tüzüğünde tanımlanmaları gerekmez", "en": "They need not be defined in the internal audit charter", "cmt_tr": "🇹🇷 Danışmanlık hizmetlerinin niteliği iç denetim tüzüğünde mutlaka tanımlanmalıdır.", "cmt_en": "🇬🇧 The nature of advisory services must be defined in the internal audit charter."}, {"tr": "Değer önerisi yalnızca güvence hizmetleri için geçerlidir", "en": "The value proposition applies only to assurance services", "cmt_tr": "🇹🇷 Değer önerisi hem güvence hem de danışmanlık hizmetlerini kapsar; yönetişim, risk yönetimi ve kontrolleri değerlendirerek organizasyona değer katar.", "cmt_en": "🇬🇧 The value proposition includes both assurance and advisory services designed to add value by evaluating and improving governance, risk management, and control."}, {"tr": "Organizasyonun kontrollerini iyileştirmeye yöneliktirler", "en": "They are intended to improve the organization's controls", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri; yönetim sorumluluğu üstlenmeksizin yeni politika, süreç, sistem ve ürünlerin tasarımında tavsiye, eğitim ve risk/kontrol tartışmaları gibi yollarla kontrolleri iyileştirmeye yönelik tavsiyeler içerir.", "cmt_en": "🇬🇧 Advisory services provide advice to improve controls through advising on design of new policies, processes, systems and products; providing forensic services; training; and facilitating risk and control discussions."}, {"tr": "IIA Global İç Denetim Standartları'nın kısıtlamaları uygulanmaz", "en": "The constraints of The IIA Global Internal Audit Standards do not apply", "cmt_tr": "🇹🇷 İç denetçiler tüm hizmetlerde Standartlara uymak zorundadır.", "cmt_en": "🇬🇧 In the performance of all services, internal auditors must adhere to the Standards."}]}, {"q_tr": "Üst yönetim, iç denetim fonksiyonundan manuel envanter sisteminden otomatik sisteme geçişte yardım istedi. Bu hizmet en uygun biçimde nasıl yürütülmelidir?", "q_en": "Senior management requested that internal audit assist switching from manual to automated inventory system. This service is best performed in a(n)", "answer": 2, "options": [{"tr": "Resmi danışmanlık görev sözleşmesi", "en": "Formal advisory engagement agreement", "cmt_tr": "🇹🇷 Resmi danışmanlık görev sözleşmesi planlanmış ve sürekli düzenlemeler için uygundur; tek seferlik özel düzenlemeler için değil.", "cmt_en": "🇬🇧 A formal advisory engagement agreement applies to planned and continuous arrangements, not one-time special arrangements."}, {"tr": "Gayri resmi danışmanlık görev sözleşmesi", "en": "Informal advisory engagement agreement", "cmt_tr": "🇹🇷 Gayri resmi danışmanlık görev sözleşmesi rutin görevler için uygundur.", "cmt_en": "🇬🇧 An informal advisory engagement agreement applies to routine tasks."}, {"tr": "Özel danışmanlık görev sözleşmesi", "en": "Special advisory engagement agreement", "cmt_tr": "🇹🇷 Özel danışmanlık görev sözleşmesi, ara sıra gerçekleşen tek seferlik özel düzenlemeler için uygundur. Manuel sistemden otomatik sisteme geçiş bu kapsamdadır.", "cmt_en": "🇬🇧 A special advisory engagement agreement applies to occasional, one-time special arrangements. Transitioning from a manual to automated system falls under this category."}, {"tr": "Acil danışmanlık görev sözleşmesi", "en": "Emergency advisory engagement agreement", "cmt_tr": "🇹🇷 Acil danışmanlık görev sözleşmesi planlanmamış görevler için uygundur.", "cmt_en": "🇬🇧 An emergency advisory engagement agreement applies to unplanned engagements."}]}, {"q_tr": "İç denetçiler yeni bilgi sistemi geliştirmede kontrolleri analiz eden bir danışmanlık görevi yürüttü ve çeşitli kontrol sorunları tespit etti. Bu görevin sonucu büyük olasılıkla ne olacaktır?", "q_en": "Internal auditors conducted an advisory engagement analyzing controls in development of a new information system and noted control issues. The result would most likely be", "answer": 1, "options": [{"tr": "İç denetçilerin yeni, daha güçlü kontroller uygulaması", "en": "Implementation of new, stronger internal controls by the internal auditors", "cmt_tr": "🇹🇷 İç denetim bir yönetim karar alma birimi değildir. Önerilerin uygulanması yönetimin sorumluluğundadır.", "cmt_en": "🇬🇧 Internal auditing is not a management decision-making function; implementation of recommendations is management's responsibility."}, {"tr": "Sorunları belgeleyen ve kontrolleri iyileştirmeye yönelik öneriler içeren bir rapor", "en": "A report documenting the issues and providing recommendations on how to improve controls", "cmt_tr": "🇹🇷 İç denetim danışmanlık hizmetleri; sorunları belgeleyerek ve daha güçlü kontrollerin nasıl uygulanacağına dair öneriler sunarak organizasyona değer katar. Denetçiler rehberlik sağlar; resmi değerlendirme yapmaz veya yönetim rolü üstlenmez.", "cmt_en": "🇬🇧 Internal audit advisory services add value by documenting issues and recommending stronger controls. Auditors offer guidance without providing formal evaluations or assuming management roles."}, {"tr": "Yönetimin zayıf iç kontrollerini eleştiren ve doğrudan yönetim kuruluna gönderilen bir rapor", "en": "A report criticizing weak controls sent directly to the board", "cmt_tr": "🇹🇷 Kontrol sorunları, yönetim kuruluna iletilmeden önce yönetime bildirilmeli; denetçi aynı zamanda bu sorunların nasıl giderileceğini de önermelidir.", "cmt_en": "🇬🇧 Management should be informed of control issues before the board, and the auditor should also recommend how to mitigate those issues."}, {"tr": "İç denetimden üyeler içeren geçici çapraz fonksiyonlu bir ekibin oluşturulması", "en": "Formation of a temporary cross-functional team including internal audit members to implement controls", "cmt_tr": "🇹🇷 İç denetçiler yeni kontroller uygulayan bir ekibin parçası olmamalıdır; bağımsız ve nesnel tavsiye sunarlar.", "cmt_en": "🇬🇧 Internal auditors should not be members of a team implementing new controls; they provide independent, objective advice."}]}, {"q_tr": "Aşağıdakilerden hangisi danışmanlık görevine örnektir?", "q_en": "Which of the following is an example of an advisory engagement?", "answer": 1, "options": [{"tr": "İç denetimin organizasyonun politika gerekliliklerine uyup uymadığını doğrulaması", "en": "Internal audit asked to verify the organization is adhering to policy requirements", "cmt_tr": "🇹🇷 Organizasyonun politika gerekliliklerine uyup uymadığını doğrulamak uyumluluk denetimine örnektir.", "cmt_en": "🇬🇧 Verifying that the organization is adhering to policy requirements is an example of a compliance audit, not advisory."}, {"tr": "Nakit kontrollerinin yeterliliğini inceleme ve iyileştirme önerileri sunma", "en": "Review and recommend improvements for adequacy of cash controls at an offsite location", "cmt_tr": "🇹🇷 Nakit kontrollerinin yeterliliğini inceleyerek iyileştirme önerileri sunmak danışmanlık hizmetidir; güvence sağlamaz veya yönetim sorumluluğu üstlenmez.", "cmt_en": "🇬🇧 Reviewing and recommending improvements for cash controls adequacy is an advisory service because it does not provide assurance or assume management responsibilities."}, {"tr": "Yönetimin kârlılık iddiasına ilişkin görüş sunma", "en": "Provide an opinion on management's claim that the segment was profitable in the first quarter", "cmt_tr": "🇹🇷 Yönetimin kârlılık iddiasına ilişkin görüş sunmak finansal göreve örnektir ve güvence hizmetleri kapsamındadır.", "cmt_en": "🇬🇧 Providing an opinion on management's profitability claim is an example of a financial engagement within assurance services."}, {"tr": "Organizasyonun operasyon etkinliğini değerlendirme", "en": "Evaluate the effectiveness of the organization's operations", "cmt_tr": "🇹🇷 Organizasyon operasyonlarının etkinliğini değerlendirmek operasyonel denetime örnektir.", "cmt_en": "🇬🇧 Evaluating the effectiveness of operations is an example of an operational audit, not advisory."}]}, {"q_tr": "Bir yönetici finansal verinin manipüle edilmesini önerdiğinde iç denetçi etik standartları korumak için nasıl davranmalıdır?", "q_en": "A manager suggests manipulating financial data for favorable reporting. How should the auditor respond to maintain ethical standards?", "answer": 1, "options": [{"tr": "Çatışmayı önlemek için yöneticinin isteğine uymak", "en": "Comply with the manager's request to avoid conflict", "cmt_tr": "🇹🇷 Yöneticinin isteğine uymak etik dışı davranışa katılmak anlamına gelir ve mesleki standartları ihlal eder.", "cmt_en": "🇬🇧 Complying with the manager's request violates ethical standards by participating in unethical behavior."}, {"tr": "Öneriyi derhal etik komiteye veya üst makama bildirmek", "en": "Report the suggestion to the ethics committee or a superior immediately", "cmt_tr": "🇹🇷 Etik dışı davranışı bildirmek, bütünlük ve mesleki standartlara uyum için zorunludur. Etik komite veya üst makamı bilgilendirmek; şeffaflık ve hesap verebilirlik ilkelerini destekler.", "cmt_en": "🇬🇧 Reporting unethical behavior is crucial for maintaining integrity and compliance. Informing the ethics committee or superior upholds transparency and accountability principles."}, {"tr": "Manipülasyonun potansiyel fayda ve zararlarını yöneticiyle tartışmak", "en": "Discuss the potential benefits versus drawbacks of the manipulation with the manager", "cmt_tr": "🇹🇷 Bu tür bir tartışma, manipülasyon fikrini değerlendirerek suça ortaklık anlamı taşır.", "cmt_en": "🇬🇧 Such a discussion suggests complicity by entertaining the idea of manipulation."}, {"tr": "Öneriyi şaka saydığını düşünerek görmezden gelmek", "en": "Ignore the suggestion, assuming it was a joke", "cmt_tr": "🇹🇷 Öneriyi görmezden gelmek, konunun ciddiyetini ele almayı başaramaz ve etik standartları koruma fırsatını kaçırır.", "cmt_en": "🇬🇧 Ignoring the suggestion fails to address the seriousness of the issue and misses an opportunity to uphold ethical standards."}]}, {"q_tr": "Üst yönetim, tüm yönetici personel için sürekli iç kontrol eğitimi talep etti. Bu talep en uygun biçimde nasıl karşılanmalıdır?", "q_en": "Senior management requested ongoing internal control training for all managerial personnel. This request most likely should be addressed by a(n)", "answer": 0, "options": [{"tr": "Resmi danışmanlık görevi", "en": "Formal advisory engagement", "cmt_tr": "🇹🇷 Eğitim danışmanlık hizmetlerinin bir örneğidir. Bu tür sürekli eğitim planlanmalı ve yazılı bir anlaşmaya tabi olmalıdır; bu da resmi danışmanlık görevini uygun kılar.", "cmt_en": "🇬🇧 Training is an example of advisory services. Such continuous training should be planned and subject to written agreement, making a formal advisory engagement appropriate."}, {"tr": "Gayri resmi danışmanlık görevi", "en": "Informal advisory engagement", "cmt_tr": "🇹🇷 Gayri resmi danışmanlık görevi rutin görevler için uygundur; planlanmış sürekli eğitim programları için değil.", "cmt_en": "🇬🇧 An informal advisory engagement applies to routine tasks, not planned continuous training programs."}, {"tr": "Özel danışmanlık görevi", "en": "Special advisory engagement", "cmt_tr": "🇹🇷 Özel danışmanlık görevi, birleşme veya sistem dönüşümü gibi tek seferlik özel düzenlemeler için uygundur.", "cmt_en": "🇬🇧 A special advisory engagement applies to occasional, one-time special arrangements like mergers or system conversions."}, {"tr": "Acil danışmanlık görevi", "en": "Emergency advisory engagement", "cmt_tr": "🇹🇷 Acil danışmanlık görevi, felaket sonrası operasyonların yeniden kurulması gibi planlanmamış görevler için uygundur.", "cmt_en": "🇬🇧 An emergency advisory engagement applies to unplanned engagements, e.g., recovery of operations after a disaster."}]}, {"q_tr": "Her iç denetçinin çatışmaları çözmenin doğru yolu nedir?", "q_en": "The proper way for every internal auditor to resolve conflict is by following the", "answer": 3, "options": [{"tr": "Organizasyonun davranış kurallarındaki yönergeler", "en": "Guidelines set out in the organization's code of conduct", "cmt_tr": "🇹🇷 İç denetçi organizasyonel olarak bir davranış kuralına uymak zorunda olabilir; ancak her iç denetçi Standartlara uymak zorundadır.", "cmt_en": "🇬🇧 An internal auditor may be organizationally required to follow a code of conduct, but every internal auditor must comply with the Standards."}, {"tr": "YDY tarafından belirlenen prosedürler", "en": "Procedures designated by the CAE", "cmt_tr": "🇹🇷 İç denetçi YDY tarafından belirlenen prosedürlere uymak zorunda olabilir; ancak her iç denetçi Standartlara uymak zorundadır.", "cmt_en": "🇬🇧 An internal auditor may be required to follow CAE procedures, but every internal auditor must comply with the Standards."}, {"tr": "AICPA Mesleki Davranış Kuralları", "en": "AICPA Code of Professional Conduct", "cmt_tr": "🇹🇷 AICPA Mesleki Davranış Kuralları, dış denetim yapan CPA'lar için geçerlidir. İç denetçiler için IIA'nın Global İç Denetim Standartları uygulanır.", "cmt_en": "🇬🇧 The AICPA Code of Professional Conduct applies to CPAs performing external audits. For internal auditors, The IIA's Global Internal Audit Standards apply."}, {"tr": "IIA'nın Global İç Denetim Standartları'ndaki yönergeler", "en": "Guidelines set out in The IIA's Global Internal Audit Standards", "cmt_tr": "🇹🇷 Tüm hizmetlerin sunumunda iç denetçi IIA'nın Global İç Denetim Standartları tarafından yönlendirilir. Bu rehberlik iç denetim hizmetleri sunan herkes için zorunludur.", "cmt_en": "🇬🇧 In the performance of all services, the internal auditor is guided by The IIA's Global Internal Audit Standards. Their guidance is mandatory for all those who perform internal audit services."}]}, {"q_tr": "İç denetim danışmanlık hizmetleri", "q_en": "Internal audit advisory services", "answer": 1, "options": [{"tr": "Risklerin yönetilmesinde belirli yönetim sorumluluklarının üstlenilmesini içerir", "en": "Involve assuming certain responsibilities for managing risks", "cmt_tr": "🇹🇷 Risk yönetimi süreçlerinin oluşturulmasına veya iyileştirilmesine yardımcı olurken iç denetçiler riskleri fiilen yöneterek yönetim sorumluluğu üstlenmekten kaçınmalıdır.", "cmt_en": "🇬🇧 When assisting management with risk management processes, internal auditors must refrain from assuming any management responsibility by actually managing risks."}, {"tr": "Eğitimi kapsar", "en": "Include training", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri; yeni politika, süreç, sistem ve ürünlerin tasarımında tavsiye, adli hizmetler, eğitim ve risk/kontrol tartışmalarını kolaylaştırmayı kapsar.", "cmt_en": "🇬🇧 Advisory services include advising on new policies, processes, systems and products; providing forensic services; providing training; and facilitating discussions about risks and controls."}, {"tr": "Soruşturmaları ve denetim dışı rolleri dışlar", "en": "Exclude investigations and nonaudit roles", "cmt_tr": "🇹🇷 Güvence ve danışmanlık hizmetleri birbirini dışlamaz ve soruşturmalar ile denetim dışı roller gibi diğer iç denetim hizmetlerini de engellemez.", "cmt_en": "🇬🇧 Assurance and advisory services are not mutually exclusive and do not preclude other internal audit services such as investigations and nonaudit roles."}, {"tr": "İç denetim tanımıyla mutlaka tutarlı olmayan biçimlerde değer katar", "en": "Add value in ways not necessarily consistent with the definition of internal auditing", "cmt_tr": "🇹🇷 İç denetim, değer katan ve operasyonları geliştiren bir güvence ve danışmanlık hizmetidir. Sunulan hizmetler iç denetimin geniş tanımıyla tutarlı olmalıdır.", "cmt_en": "🇬🇧 Internal auditing is an assurance and advisory service designed to add value. Services performed must be consistent with the broad definition of internal auditing."}]}, {"q_tr": "Aşağıdakilerden hangisi kolaylaştırıcı danışmanlık görevini tanımlar?", "q_en": "Which of the following statements describes a facilitative advisory engagement?", "answer": 2, "options": [{"tr": "Özel bir talebi karşılamak için geçici bir ekipte yer almayı içerir", "en": "Participation in a team assembled to supply temporary help for a special request", "cmt_tr": "🇹🇷 Özel bir talebi karşılamak için geçici bir ekipte yer almak acil bir görevdir; kolaylaştırıcı danışmanlık görevi değil.", "cmt_en": "🇬🇧 Participating in a team to supply temporary help for a special request is an emergency engagement, not a facilitative advisory engagement."}, {"tr": "Devamlı komitelere katılım gibi rutin faaliyetleri içerir", "en": "Routine activities such as participation in standing committees", "cmt_tr": "🇹🇷 Devamlı komitelere katılım gibi rutin faaliyetler gayri resmi danışmanlık görevidir; kolaylaştırıcı danışmanlık değil.", "cmt_en": "🇬🇧 Routine activities such as participation in standing committees represent an informal advisory engagement, not facilitative."}, {"tr": "İç denetçinin uzmanlığını kullanarak yönetimin sorunları ve çözümleri değerlendirmesine yardımcı olmak", "en": "Using internal auditor expertise to assist management in assessing issues and solutions in their areas of responsibility", "cmt_tr": "🇹🇷 Kolaylaştırıcı danışmanlık görevi; iç denetçi uzmanlığını kullanarak yönetim ve personelin kendi sorumluluk alanlarındaki sorunları ve çözümleri değerlendirmesine yardımcı olur.", "cmt_en": "🇬🇧 A facilitative advisory engagement uses internal auditor expertise to assist management and staff in assessing issues and solutions related to their areas of responsibility."}, {"tr": "İç denetçilerin özel bilgilerini ilgili alanlardaki personelle paylaşması", "en": "Imparting specialized knowledge that internal auditors have to staff working in those areas", "cmt_tr": "🇹🇷 İç denetçilerin özel bilgilerini ilgili alanlardaki personelle paylaşması eğitici danışmanlık görevidir; kolaylaştırıcı değil.", "cmt_en": "🇬🇧 Imparting specialized knowledge to staff in specific areas is an educational advisory engagement, not facilitative."}]}, {"q_tr": "Aşağıdakilerden hangisi iç denetçiler tarafından sunulan bir danışmanlık görev türüdür?", "q_en": "Which of the following is a type of advisory engagement provided by internal auditors?", "answer": 0, "options": [{"tr": "Eğitici", "en": "Educational", "cmt_tr": "🇹🇷 Eğitici görevler, eğitim ve özel bilginin aktarılmasını içerir; danışmanlık hizmetlerinin açık bir örneğidir.", "cmt_en": "🇬🇧 Educational engagements involve training and imparting specialized knowledge; they are a clear example of advisory services."}, {"tr": "Güvence", "en": "Assurance", "cmt_tr": "🇹🇷 Güvence görevleri; iç denetçilerin resmi değerlendirmeler ve görüşler sunduğu ayrı bir hizmet kategorisidir. Resmi güvence içermediğinden danışmanlık hizmetlerinden farklıdır.", "cmt_en": "🇬🇧 Assurance engagements are a separate service category where formal evaluations and opinions are provided. They are distinct from advisory services, which do not include formal assurances."}, {"tr": "Finansal görüş", "en": "Financial opinion", "cmt_tr": "🇹🇷 Finansal görüş, bir güvence görevi olan finansal denetimin sonunda verilir.", "cmt_en": "🇬🇧 A financial opinion is issued at the conclusion of a financial audit, which is an assurance engagement, not advisory."}, {"tr": "Sistem uygulaması", "en": "System implementation", "cmt_tr": "🇹🇷 Sistemlerin uygulanması yönetimin sorumluluğundadır; iç denetçilerin değil.", "cmt_en": "🇬🇧 Implementing systems is the responsibility of management, not internal auditors."}]}, {"q_tr": "Danışmanlık hizmetleri organizasyona nasıl değer katar?", "q_en": "Advisory services add value to an organization by", "answer": 2, "options": [{"tr": "Yönetimin karar alma sorumluluklarını üstlenerek", "en": "Assuming management's decision-making responsibilities", "cmt_tr": "🇹🇷 İç denetçiler yönetim rolü üstlenmez; bunun yerine içgörüler sunar.", "cmt_en": "🇬🇧 Internal auditors do not assume a management role; instead they provide insights and guidance."}, {"tr": "Resmi finansal tablo ve denetim görüşleri sunarak", "en": "Providing formal financial statements and audit opinions", "cmt_tr": "🇹🇷 Resmi finansal tablo ve görüşler danışmanlık değil güvence hizmetleri tarafından sağlanır.", "cmt_en": "🇬🇧 Formal financial statements and opinions are provided by assurance, not advisory, services."}, {"tr": "Bağımsız, risk temelli ve ileriye dönük tavsiyeler sunarak", "en": "Supplying independent, risk-based, and forward-looking advice", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri; nesnel, riske dayalı içgörüler sunarak karar almayı geliştirir ve stratejik/operasyonel süreçlere yardımcı olarak önemli değer katar.", "cmt_en": "🇬🇧 Advisory services apply internal auditors' expertise to provide objective, risk-informed insights that enhance decision-making, adding significant value to the organization."}, {"tr": "Tüm iç politika ve prosedürlere uyumu zorunlu kılarak", "en": "Enforcing compliance with all internal policies and procedures", "cmt_tr": "🇹🇷 Uyumluluk önemli olmakla birlikte danışmanlık hizmetleri, zorunlu kılmak yerine rehberlik ve risk temelli stratejileri ön plana çıkarır.", "cmt_en": "🇬🇧 Compliance is important, but advisory services emphasize guidance and risk-based strategies rather than enforcement."}]}, {"q_tr": "Danışmanlık hizmetleri iç denetim nesnelliğini olumsuz etkileyebilir; bu durum ne zaman söz konusu olur?", "q_en": "Advisory services might negatively affect internal audit objectivity when", "answer": 1, "options": [{"tr": "Denetçiler kontrol süreçleri hakkında rutin geri bildirim verdiğinde", "en": "Auditors provide routine feedback on control processes", "cmt_tr": "🇹🇷 Rutin geri bildirim danışmanlık hizmetlerinin tipik bir parçasıdır ve uygun biçimde yönetildiğinde nesnelliği etkilememelidir.", "cmt_en": "🇬🇧 Routine feedback is a typical part of advisory services and should not affect objectivity if appropriately managed."}, {"tr": "Denetçiler yönetim kontrollerini tasarlayıp uygulattığında", "en": "Auditors design and implement management controls", "cmt_tr": "🇹🇷 Kontrolleri tasarlayıp uygulamak nesnelliği tehlikeye atabilir. Bu faaliyetler denetçileri yönetim işlevlerine dahil ederek çıkar çatışmasına yol açabilir. Nesnel danışmanlık hizmetleri yönetim rolü üstlenmekten kaçınmalıdır.", "cmt_en": "🇬🇧 Designing and implementing controls could compromise objectivity. These activities involve auditors in management functions, potentially creating conflicts of interest. Objective advisory services must avoid assuming management roles."}, {"tr": "Denetim sonuçlarının gayri resmi olarak iletildiğinde", "en": "An informal communication of audit results is made", "cmt_tr": "🇹🇷 Gayri resmi iletişim yönergeler çerçevesinde gerçekleşebilir ve nesnelliği koruyabilir.", "cmt_en": "🇬🇧 Informal communication can occur within guidelines and maintain objectivity."}, {"tr": "Risk yönetimi stratejilerinin geliştirilmesine katıldığında", "en": "Participating in developing risk management strategies", "cmt_tr": "🇹🇷 Strateji geliştirme doğası gereği danışmanlık niteliğindedir ve önlemler alındığında nesnelliği doğrudan tehlikeye atmaz.", "cmt_en": "🇬🇧 Developing strategies is advisory by nature and does not inherently compromise objectivity if appropriate safeguards are in place."}]}, {"q_tr": "İç denetim personelini risk değerlendirme ve yönetimi konusunda eğitmek için hangi danışmanlık görevi türü uygundur?", "q_en": "Which type of advisory engagement is appropriate for training internal audit staff in assessing and managing risks?", "answer": 1, "options": [{"tr": "Acil danışmanlık", "en": "Emergency advisory", "cmt_tr": "🇹🇷 Acil görevler; felaket kurtarma veya olağandışı son tarihleri karşılamak için geçici yardım gibi acil durumları kapsar.", "cmt_en": "🇬🇧 Emergency engagements address urgent situations such as disaster recovery or temporary help to meet an unusual deadline."}, {"tr": "Eğitici", "en": "Educational", "cmt_tr": "🇹🇷 Eğitici görevler; risk yönetimi eğitimi gibi bilgi aktarmak için özel olarak tasarlanmıştır. İç denetçilerin özel bilgileri ilgili alanlardaki personelin kapasitesini artırır.", "cmt_en": "🇬🇧 Educational engagements are specifically intended to impart knowledge, such as risk management training. Internal auditors' specialized knowledge enhances staff capabilities."}, {"tr": "Özel danışmanlık", "en": "Special advisory", "cmt_tr": "🇹🇷 Özel görevler genellikle birleşme veya sistem dönüşümü gibi durumları kapsar.", "cmt_en": "🇬🇧 Special engagements typically involve situations like mergers or system conversions, not training."}, {"tr": "Gayri resmi danışmanlık", "en": "Informal advisory", "cmt_tr": "🇹🇷 Gayri resmi görevler; devamlı komitelere katılım, sınırlı süreli projeler, geçici toplantılar ve rutin bilgi alışverişi gibi rutin faaliyetleri kapsar.", "cmt_en": "🇬🇧 Informal engagements involve routine activities such as participation on standing committees, limited-life projects, ad-hoc meetings, and routine information exchange."}]}], "Subunit 2 - IA Responsibilities": [{"q_tr": "Danışmanlık görevlerinde elde edilen ve yönetim kuruluna ve üst yönetime iletilen bilgileri kim belirler?", "q_en": "Who is responsible for determining information obtained in advisory engagements that is communicated to the board and senior management?", "answer": 0, "options": [{"tr": "Yönetim denetim yöneticisi (YDY)", "en": "The chief audit executive", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri iç denetim fonksiyonuna önemli bir kapsam tanısa da temel rol üst yönetime ve yönetim kuruluna tavsiye sunmaktır. YDY, danışmanlık görevlerinden yöneticilere ve yönetim kuruluna iletilmesi gereken bilgileri belirler.", "cmt_en": "🇬🇧 Although advisory services allow significant scope, the primary role is to provide advice to senior management and the board. The CAE determines what information from advisory engagements should be communicated to executives and board members."}, {"tr": "Yönetim", "en": "Management", "cmt_tr": "🇹🇷 Bu bilgileri belirlemekten sorumlu olan yönetim değil, YDY'dir.", "cmt_en": "🇬🇧 It is the CAE, not management, who should determine the information from advisory engagements communicated to the board and senior management."}, {"tr": "Yönetim kurulu", "en": "The board", "cmt_tr": "🇹🇷 Bu bilgileri belirlemekten sorumlu olan yönetim kurulu değil, YDY'dir.", "cmt_en": "🇬🇧 It is the CAE, not the board, who should determine the information from advisory engagements communicated to the board and senior management."}, {"tr": "Denetim komitesi", "en": "The audit committee", "cmt_tr": "🇹🇷 Bu bilgileri belirlemekten sorumlu olan denetim komitesi değil, YDY'dir.", "cmt_en": "🇬🇧 It is the CAE, not the audit committee, who should determine the information from advisory engagements communicated to the board and senior management."}]}, {"q_tr": "İç denetçiler bir danışmanlık görevi gerçekleştirirken risk konusundaki sorumlulukları için en iyi ifade hangisidir?", "q_en": "When internal auditors perform an advisory engagement, what is the best statement of their responsibility regarding risk?", "answer": 2, "options": [{"tr": "Önemli risklerin varlığına karşı uyanık olmak", "en": "Be alert to the existence of significant risks", "cmt_tr": "🇹🇷 İç denetçiler ayrıca görev hedefleriyle tutarlı riskleri de ele almalıdır; yalnızca önemli risklere karşı uyanık olmak yeterli değildir.", "cmt_en": "🇬🇧 Internal auditors must also address risk consistent with engagement objectives, not only be alert to significant risks."}, {"tr": "Yalnızca görev hedefleriyle tutarlı riskleri dikkate almak", "en": "Consider only the risk consistent with engagement objectives", "cmt_tr": "🇹🇷 İç denetçiler ayrıca diğer önemli risklerin varlığına karşı da uyanık olmalıdır.", "cmt_en": "🇬🇧 Internal auditors must also be alert to the existence of other significant risks beyond the engagement objectives."}, {"tr": "Görev hedefleriyle tutarlı riskleri ele almak ve belirli diğer risklere karşı uyanık olmak", "en": "Address risk consistent with engagement objectives and be alert to certain other risks", "cmt_tr": "🇹🇷 Danışmanlık görevlerinde iç denetçiler; hem görev hedefleriyle tutarlı riskleri ele almalı hem de diğer önemli risklerin varlığına karşı uyanık olmalı. Ayrıca danışmanlık görevlerinden edinilen risk bilgisini organizasyonun risk yönetimi süreçlerini değerlendirmeye dahil etmelidir.", "cmt_en": "🇬🇧 During advisory engagements, internal auditors must address risk consistent with objectives and be alert to other significant risks. They must also incorporate knowledge of risks from advisory engagements into evaluation of organizational risk management processes."}, {"tr": "Riskleri yönetme sorumluluğunu üstlenmek", "en": "Assume responsibility for managing risks", "cmt_tr": "🇹🇷 Danışmanlık görevi, risk yönetimi süreçlerinin oluşturulmasına veya iyileştirilmesine yardımı kapsayabilir; ancak iç denetçiler riskleri fiilen yöneterek yönetim sorumluluğu üstlenmemelidir.", "cmt_en": "🇬🇧 An advisory engagement may involve assisting with risk management processes, but internal auditors must not assume any management responsibility by actually managing risks."}]}, {"q_tr": "Bir iç denetçi 1 Haziran Yıl 1'de XYZ Şirketi için resmi bir danışmanlık görevi gerçekleştirdi. Denetçinin bağımsız ve nesnel sayılmak için XYZ'ye güvence hizmetleri sunabileceği en erken tarih hangisidir?", "q_en": "An internal auditor performed a formal advisory engagement for XYZ Corporation on June 1, Year 1. When is the earliest time the auditor can perform assurance services for XYZ and be considered independent?", "answer": 1, "options": [{"tr": "1 Ocak Yıl 2", "en": "January 1, Year 2", "cmt_tr": "🇹🇷 Resmi bir danışmanlık görevinden sonraki 1 yıl içinde güvence hizmetleri sunulursa bağımsızlık ve nesnellik zarar görmüş sayılabilir. 1 Ocak Yıl 2 henüz 1 yıl dolmadan önceki bir tarihtir.", "cmt_en": "🇬🇧 Independence and objectivity may be impaired if assurance services are provided within 1 year after a formal advisory engagement. January 1, Year 2 is before the 1-year period expires."}, {"tr": "1 Haziran Yıl 2", "en": "June 1, Year 2", "cmt_tr": "🇹🇷 Bağımsızlık ve nesnellik, resmi bir danışmanlık görevinden sonraki 1 yıl içinde güvence hizmetleri sunulursa zarar görmüş sayılabilir. Zararın etkisi; farklı denetçiler atamak, bağımsız yönetim ve denetim oluşturmak, ayrı sorumluluk tanımlamak ve tahmini zararı açıklamak yoluyla azaltılabilir.", "cmt_en": "🇬🇧 Independence and objectivity may be impaired if assurance services are provided within 1 year after a formal advisory engagement. Effects of impairment may be mitigated by assigning different auditors, establishing independent management, defining separate accountability, and disclosing the presumed impairment."}, {"tr": "1 Temmuz Yıl 1", "en": "July 1, Year 1", "cmt_tr": "🇹🇷 Resmi bir danışmanlık görevinden sonraki 1 yıl içinde güvence hizmetleri sunulursa bağımsızlık ve nesnellik zarar görmüş sayılabilir.", "cmt_en": "🇬🇧 Independence and objectivity may be impaired if assurance services are provided within 1 year after a formal advisory engagement."}, {"tr": "2 Haziran Yıl 1", "en": "June 2, Year 1", "cmt_tr": "🇹🇷 Resmi bir danışmanlık görevinden sonraki 1 yıl içinde güvence hizmetleri sunulursa bağımsızlık ve nesnellik zarar görmüş sayılabilir.", "cmt_en": "🇬🇧 Independence and objectivity may be impaired if assurance services are provided within 1 year after a formal advisory engagement."}]}, {"q_tr": "YDY danışmanlık hizmetleri sunmak için yönetim kurulundan onay aldıktan sonra ne yapılmalıdır?", "q_en": "After the chief audit executive receives approval from the board to offer advisory services, what should be done?", "answer": 2, "options": [{"tr": "YDY danışmanlık hizmetleri sunmaya başlamalıdır", "en": "The CAE should begin performing advisory services", "cmt_tr": "🇹🇷 YDY yönetim kurulu onayını aldıktan sonra iç denetim tüzüğü değiştirilmeli ve YDY politika ve prosedürleri oluşturmalıdır.", "cmt_en": "🇬🇧 After CAE receives board approval, the internal audit charter must be amended and the CAE must establish policies and procedures before performing services."}, {"tr": "YDY iç denetçilerden onay almalıdır", "en": "The CAE should get approval from the internal auditors", "cmt_tr": "🇹🇷 YDY'nin iç denetçilerden ek onay almasına gerek yoktur; yalnızca yönetim kurulu onayı yeterlidir.", "cmt_en": "🇬🇧 The CAE does not need to obtain additional approval from internal auditors. Only board approval is required."}, {"tr": "İç denetim tüzüğü değiştirilmelidir", "en": "The internal audit charter should be amended", "cmt_tr": "🇹🇷 İç denetim fonksiyonunun amacı, yetkisi ve sorumluluğu iç denetim tüzüğünde resmi olarak tanımlanmalıdır. Danışmanlık hizmetlerinin niteliği de tüzükte yer almalıdır.", "cmt_en": "🇬🇧 The purpose, authority, and responsibility of the internal audit function must be formally defined in the internal audit charter. The nature of advisory services must be defined in the charter."}, {"tr": "Yönetim kurulu bu tür görevlerin yürütülmesi için uygun politika ve prosedürler geliştirmelidir", "en": "The board should develop appropriate policies and procedures for conducting such engagements", "cmt_tr": "🇹🇷 Politika ve prosedürleri geliştirmek yönetim kurulunun değil YDY'nin sorumluluğundadır.", "cmt_en": "🇬🇧 The CAE, not the board, must establish policies and procedures to guide the internal audit function."}]}, {"q_tr": "Önerilen bir danışmanlık göreviyle ilgili olası bir bağımsızlık veya nesnellik zedelenmesi olduğunda ne yapılmalıdır?", "q_en": "When an internal auditor has a potential impairment of independence or objectivity relating to a proposed advisory engagement, what action must be taken?", "answer": 3, "options": [{"tr": "İç denetçi danışmanlık görevini derhal reddetmelidir", "en": "The internal auditor must immediately refuse the advisory engagement", "cmt_tr": "🇹🇷 İç denetçinin görevi reddetmesine gerek yoktur; ancak müşteriye olası zedelenmeyi uygun biçimde açıklamalıdır.", "cmt_en": "🇬🇧 The internal auditor does not need to refuse the engagement but must properly disclose the potential impairment to the client."}, {"tr": "İç denetçi olası zedelenmeyi YDY'ye açıklamamalıdır", "en": "The internal auditor must not disclose the potential impairment to the chief audit executive", "cmt_tr": "🇹🇷 Danışmanlık görevinde iç denetçi olası zedelenmeyi görev müşterisine açıklamalıdır. Uygun taraflara hangi bilgilerin açıklanacağı, YDY'nin tüzükte tanımlanan sorumlulukları çerçevesinde belirlenir.", "cmt_en": "🇬🇧 For an advisory engagement, the internal auditor must disclose the potential impairment to the engagement client. Details depend on the CAE's responsibilities to senior management and the board as described in the charter."}, {"tr": "İç denetçi zedelenmeyi açıklamadan görevi kabul edebilir", "en": "The internal auditor need not disclose the potential impairment and may accept the engagement", "cmt_tr": "🇹🇷 İç denetçi görevi kabul etmeden önce olası zedelenmeyi görev müşterisine uygun biçimde açıklamalıdır.", "cmt_en": "🇬🇧 The internal auditor must properly disclose the potential impairment to the engagement client before accepting the engagement."}, {"tr": "İç denetçi görevi kabul etmeden önce olası zedelenmeyi görev müşterisine açıklamalıdır", "en": "The internal auditor must disclose the potential impairment to the engagement client prior to accepting", "cmt_tr": "🇹🇷 Önerilen bir danışmanlık hizmetiyle ilgili bağımsızlık veya nesnellik zedelenmesi olasılığı varsa görevi kabul etmeden önce görev müşterisine açıklanmalıdır.", "cmt_en": "🇬🇧 If independence or objectivity is potentially impaired in relation to a proposed advisory service, disclosure must be made to the engagement client prior to accepting the engagement."}]}, {"q_tr": "İç denetçilerin danışmanlık hizmetleri sunmaya başlamadan önce gerçekleştirilmesi gereken olayların doğru sırası hangisidir? (1. Tüzük değişikliği, 2. YDY onayı, 3. Politika geliştirme)", "q_en": "What is the correct order for: 1. Charter amended, 2. Board approves advisory services, 3. Policies and procedures developed?", "answer": 2, "options": [{"tr": "1, 2, 3", "en": "1, 2, 3", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. Önce yönetim kurulu onayı, sonra tüzük değişikliği, ardından politika geliştirme yapılmalıdır.", "cmt_en": "🇬🇧 This order is incorrect. Board approval must come first, then charter amendment, then policy development."}, {"tr": "2, 3, 1", "en": "2, 3, 1", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. Politika geliştirme tüzük değişikliğinden önce yapılamaz.", "cmt_en": "🇬🇧 This order is incorrect. Policy development cannot precede charter amendment."}, {"tr": "2, 1, 3", "en": "2, 1, 3", "cmt_tr": "🇹🇷 Doğru sıra şöyledir: Önce YDY yönetim kurulunun danışmanlık hizmetleri konseptini onayladığını doğrular. Onayın ardından iç denetim tüzüğü danışmanlık faaliyetleri için yetki ve sorumlulukları içerecek biçimde değiştirilir. Ardından iç denetim fonksiyonu bu tür görevleri yürütmek için uygun politika ve prosedürler geliştirir.", "cmt_en": "🇬🇧 The correct order is: First, the CAE confirms board approval. Then the charter is amended to include authority for advisory activities. Finally, the internal audit function develops appropriate policies and procedures for conducting such engagements."}, {"tr": "3, 2, 1", "en": "3, 2, 1", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. Politikalar yönetim kurulu onayı ve tüzük değişikliğinden önce geliştirilemez.", "cmt_en": "🇬🇧 This order is incorrect. Policies cannot be developed before board approval and charter amendment."}]}, {"q_tr": "Danışmanlık görevleri sırasında iç denetçiler", "q_en": "During advisory engagements, internal auditors", "answer": 3, "options": [{"tr": "Organizasyonel risk yönetimini değerlendirmeye dahil edilmesi gereken risk bilgisi edinebilir", "en": "May gain knowledge of risks that should be included in evaluating organizational risk management", "cmt_tr": "🇹🇷 Bu doğrudur, ancak tek başına yeterli değil; iç denetçiler ayrıca kontrol bilgisi ve danışmanlık hedefleriyle tutarlı olmayan önemli riskler konusunda da sorumludur.", "cmt_en": "🇬🇧 This is correct but incomplete; internal auditors also have responsibilities for control knowledge and significant risks beyond advisory engagement objectives."}, {"tr": "Hedeflerle tutarlı olmayan önemli risklerden sorumludur", "en": "Are responsible for significant risks not consistent with the objectives", "cmt_tr": "🇹🇷 Bu doğrudur, ancak tek başına yeterli değil; iç denetçiler ayrıca risk ve kontrol bilgisi edinme konusunda da sorumludur.", "cmt_en": "🇬🇧 This is correct but incomplete; internal auditors also have responsibilities for risk and control knowledge gained during advisory engagements."}, {"tr": "Organizasyonel kontrollerin değerlendirilmesine dahil edilmesi gereken kontrol bilgisi edinebilir", "en": "May gain knowledge of controls that should be included in evaluating organizational controls", "cmt_tr": "🇹🇷 Bu doğrudur, ancak tek başına yeterli değil; iç denetçiler ayrıca hedeflerle tutarlı olmayan önemli riskler konusunda da sorumludur.", "cmt_en": "🇬🇧 This is correct but incomplete; internal auditors are also responsible for significant risks not consistent with advisory engagement objectives."}, {"tr": "Yukarıdakilerin hepsi doğrudur", "en": "All of the answers are correct", "cmt_tr": "🇹🇷 İç denetçiler danışmanlık görevlerinden edinilen risk bilgisini organizasyonun risk yönetimi değerlendirmesine dahil etmelidir. Ayrıca görev hedefleriyle tutarlı riskleri ele almalı, diğer önemli risklere karşı uyanık olmalı ve kontrol bilgisini organizasyonun kontrol süreçleri değerlendirmesine dahil etmelidir.", "cmt_en": "🇬🇧 Internal auditors must incorporate knowledge of risks from advisory engagements into evaluation of organizational risk management. They must address risk consistent with objectives, be alert to other significant risks, and incorporate control knowledge into evaluation of organizational control processes."}]}, {"q_tr": "Danışmanlık görevinde iç denetçi yönetimin savunucusu olarak hareket eder. Bu durum ne anlama gelir?", "q_en": "During an advisory engagement, the internal auditor is acting as an advocate for management. This implies that", "answer": 0, "options": [{"tr": "Bağımsızlık gerekli değildir", "en": "Independence is not required", "cmt_tr": "🇹🇷 İç denetçilerin hizmet alanlarla görevin hedefleri ve kapsamı konusunda mutabık kalmaları gerekir. Danışmanlık görevinde iç denetçi yönetimin savunucusu olarak hareket eder ve bağımsızlık zorunlu değildir.", "cmt_en": "🇬🇧 Internal auditors need to reach an understanding of the objectives and scope of the advisory engagement. During an advisory engagement, the internal auditor acts as an advocate for management, and independence is not required."}, {"tr": "Nesnellik gerekli değildir", "en": "Objectivity is not required", "cmt_tr": "🇹🇷 İç denetçiler profesyonellik, bütünlük ve güvenilirliği sağlamak için görev kapsamını tasarlamalı; adil ve tarafsız bir zihinsel tutum korumalı ve yönetim sorumluluğu üstlenmemelidir. Nesnellik zorunludur.", "cmt_en": "🇬🇧 Internal auditors should ensure professionalism, integrity, and credibility are maintained. They must maintain a fair and impartial mindset. Objectivity is required."}, {"tr": "Mesleki şüphecilik gerekli değildir", "en": "Professional skepticism is not required", "cmt_tr": "🇹🇷 İç denetçiler hem güvence hem de danışmanlık görevlerinde mesleki şüphecilik tutumunu korumalıdır. Aksi hâlde yönetimin raporladığı her şeyi doğrulamadan kabul ederek yanıltıcı bulgulara ve hatalı tavsiyelere yol açabilirler.", "cmt_en": "🇬🇧 Internal auditors should maintain an attitude of professional skepticism in both assurance and advisory engagements; otherwise they would accept everything management reports without confirming assertions."}, {"tr": "Gizlilik gerekli değildir", "en": "Confidentiality is not required", "cmt_tr": "🇹🇷 İç denetçiler gizliliği korumalıdır. Danışmanlık görevi kapsamında bazıları yönetim ekibinin belirli üyelerine bile gizli olan bilgilere erişeceklerdir.", "cmt_en": "🇬🇧 Internal auditors must maintain confidentiality. They will have access to confidential information, some of which is confidential even to certain management team members."}]}, {"q_tr": "İç denetçi, yönetimin istediği hedeflerin ötesine geçilmesi gerektiğine inanıyorsa ne yapmalıdır?", "q_en": "The internal auditor believes objectives should go beyond those requested by management. What should the internal auditor do?", "answer": 3, "options": [{"tr": "Yönetimi ek hedefleri eklemeye ikna edemezse görevi reddetmek", "en": "Refuse to accept the engagement unless management can be persuaded to include additional objectives", "cmt_tr": "🇹🇷 İç denetçinin danışmanlık görevini reddetmek için bir nedeni yoktur.", "cmt_en": "🇬🇧 The internal auditor has no reason not to accept the advisory engagement."}, {"tr": "Gerekli hedefleri mevcut göreve dahil etmek ve son iletişimde yönetime bildirmek", "en": "Include necessary objectives in the current engagement and inform management in final communication", "cmt_tr": "🇹🇷 İç denetçi, yönetimle mutabık kalınan kapsam veya hedeflerin ötesine geçen hiçbir hizmet sunmamalıdır.", "cmt_en": "🇬🇧 The internal auditor must not perform any services beyond the scope or objectives agreed upon with management."}, {"tr": "Hedeflerin izlenmediğini belgeleyerek denetim komitesine resmi rapor vermek", "en": "Document that objectives were not pursued and disclose to the audit committee in a formal report", "cmt_tr": "🇹🇷 İç denetçi danışmanlık görevinde yalnızca hizmet alanlara, yani yönetime rapor verir.", "cmt_en": "🇬🇧 The internal auditor is only reporting to those receiving the services during an advisory engagement, i.e., management."}, {"tr": "Yönetimi ek hedefleri danışmanlık görevine eklemeye ikna etmeye çalışmak", "en": "Try to persuade management to include the additional objectives in the advisory engagement", "cmt_tr": "🇹🇷 Resmi danışmanlık görevlerini planlarken iç denetçiler yönetim yetkililerine uygun hedefler tasarlar. Özel yönetim taleplerinde iç denetçi: (1) yönetimi ek hedefleri eklemeye ikna etmeye çalışabilir veya (2) hedeflerin izlenmediğini belgeleyerek son iletişimde açıklayabilir ve sonraki ayrı bir güvence görevine dahil edebilir.", "cmt_en": "🇬🇧 In planning formal advisory engagements, internal auditors design objectives to meet appropriate management needs. For special requests, the auditor may persuade management to include additional objectives or document and disclose that objectives were not pursued in final communication, including them in a subsequent assurance engagement."}]}, {"q_tr": "Resmi bir danışmanlık görevi sırasında tespit edilen önemli risk maruziyetleri veya maddi kontrol zayıflıkları yönetimin dikkatine sunulur. Bazı durumlarda iç denetçinin endişeleri ayrıca kime iletilmelidir?", "q_en": "Substantial risk exposures or material control weaknesses discovered during a formal advisory engagement are brought to management's attention. In some situations, concerns are also communicated to", "answer": 3, "options": [{"tr": "Üst yönetim", "en": "Executive management", "cmt_tr": "🇹🇷 Bu doğrudur, ancak endişeler üst yönetim, denetim komitesi ve yönetim kuruluna da iletilebilir.", "cmt_en": "🇬🇧 This is correct, but concerns may also be communicated to the audit committee and board of directors."}, {"tr": "Denetim komitesi", "en": "Audit committee", "cmt_tr": "🇹🇷 Bu doğrudur, ancak endişeler üst yönetim, denetim komitesi ve yönetim kuruluna da iletilebilir.", "cmt_en": "🇬🇧 This is correct, but concerns may also be communicated to executive management and board of directors."}, {"tr": "Yönetim kurulu", "en": "Board of directors", "cmt_tr": "🇹🇷 Bu doğrudur, ancak endişeler üst yönetim, denetim komitesi ve yönetim kuruluna da iletilebilir.", "cmt_en": "🇬🇧 This is correct, but concerns may also be communicated to executive management and the audit committee."}, {"tr": "Yukarıdakilerin hepsi doğrudur", "en": "All of the answers are correct", "cmt_tr": "🇹🇷 İç denetçilerin resmi danışmanlık görevleri sırasında risk yönetimi ve kontrol süreçlerinin etkinliğine karşı uyanık olmaları gerekir. Önemli risk maruziyetleri veya maddi kontrol zayıflıkları yönetime iletilir. Bazı durumlarda denetçinin endişeleri üst yönetime veya yönetim kuruluna da iletilmelidir.", "cmt_en": "🇬🇧 Internal auditors must be observant of risk management and control process effectiveness during formal advisory engagements. Substantial risk exposures or material control weaknesses are brought to management's attention. In some situations, concerns should also be communicated to senior management or the board."}]}, {"q_tr": "İç denetçi danışmanlık görevinin sonuçlarını daha geniş bir kesime iletmesi gerektiği sonucuna varırsa adımların sırası nasıl olmalıdır? (1. Gönüllü iletişimi genişletme, 2. Davranış kuralları rehberliği, 3. Görev sözleşmesindeki yönlendirme)", "q_en": "In what order should steps be performed when auditor wants to expand communication beyond engagement recipients? (1. Persuade to expand voluntarily, 2. Code of conduct guidance, 3. Agreement direction)", "answer": 2, "options": [{"tr": "2, 1, 3", "en": "2, 1, 3", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. İlk adım görev sözleşmesindeki yönlendirmeyi belirlemektir.", "cmt_en": "🇬🇧 This order is incorrect. The first step is to determine what direction is provided in the engagement agreement."}, {"tr": "1, 2, 3", "en": "1, 2, 3", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. İlk adım görev sözleşmesindeki yönlendirmeyi belirlemektir.", "cmt_en": "🇬🇧 This order is incorrect. The first step is to determine what direction is provided in the engagement agreement."}, {"tr": "3, 1, 2", "en": "3, 1, 2", "cmt_tr": "🇹🇷 Doğru sıra: (1) Danışmanlık görevi sözleşmesinde yönlendirmeyi belirle, (2) İletişimi uygun taraflara gönüllü olarak genişletmeleri için ikna etmeye çalış, (3) Organizasyonun davranış kuralları, etik kuralları ve diğer ilgili politikalarındaki rehberliği belirle.", "cmt_en": "🇬🇧 Correct order: (1) Determine direction in the engagement agreement, (2) Attempt to persuade to expand communication voluntarily, (3) Determine guidance in organization's code of conduct, code of ethics, and other relevant policies and procedures."}, {"tr": "1, 3, 2", "en": "1, 3, 2", "cmt_tr": "🇹🇷 Bu sıra yanlıştır. İlk adım görev sözleşmesindeki yönlendirmeyi belirlemektir.", "cmt_en": "🇬🇧 This order is incorrect. The first step is to determine what direction is provided in the engagement agreement."}]}, {"q_tr": "Danışmanlık görevleri hakkında hangisi doğrudur?", "q_en": "Which statement about advisory engagements is true?", "answer": 2, "options": [{"tr": "Güvence görevlerine uygulanan belgeleme gereklilikleri danışmanlık görevlerine de uygulanır", "en": "Documentation requirements for assurance engagements apply to advisory engagements", "cmt_tr": "🇹🇷 Güvence görevlerine uygulanan belgeleme gereklilikleri danışmanlık görevlerine mutlaka uygulanmaz.", "cmt_en": "🇬🇧 Documentation requirements applicable to assurance engagements do not necessarily apply to advisory engagements."}, {"tr": "İç denetim fonksiyonu müşteriyle mutabık kalınan ölçüde yönetim sorumluluğu üstlenebilir", "en": "The internal audit function may assume management responsibility to the extent agreed with the client", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri, iç denetçinin yönetim sorumluluğu üstlenmeksizin yönetişim, risk yönetimi ve kontrol süreçlerini iyileştirmeyi amaçlar.", "cmt_en": "🇬🇧 Advisory services are intended to improve governance, risk management, and control processes without the internal auditor assuming management responsibilities."}, {"tr": "İç denetçiler üst yönetimi ve yönetim kurulunu denetim kaynaklarının nasıl kullanıldığı konusunda bilgili tutar", "en": "Internal auditors keep senior management and the board informed about how audit resources are being deployed", "cmt_tr": "🇹🇷 İç denetçiler, resmi danışmanlık görevlerinin niteliğini, kapsamını ve genel sonuçlarını üst yönetim ve yönetim kuruluna açıklar. Ayrıntılı raporların veya spesifik sonuç ve önerilerin iletilmesi zorunlu değildir.", "cmt_en": "🇬🇧 Internal auditors disclose the nature, extent, and overall results of formal advisory engagements to management and the board. Neither detailed reports nor specific results and recommendations are required to be communicated."}, {"tr": "Resmi danışmanlık görevleri için iş programları danışmanlık kayıt sahipliğiyle ilgili politika ve konuları ele alır", "en": "Work programs for formal advisory engagements address policies related to ownership of advisory engagement records", "cmt_tr": "🇹🇷 YDY danışmanlık görev kayıtlarının saklanması ve tutulmasına ilişkin politikalar geliştirmelidir. Denetçiler uygun kayıt saklama politikaları benimser ve kayıtların sahipliği gibi konuları ele alır.", "cmt_en": "🇬🇧 The CAE must develop policies governing custody and retention of advisory engagement records. Auditors adopt appropriate record retention policies and address related issues such as ownership of engagement records."}]}, {"q_tr": "İç denetçi hangi tür danışmanlık görevini reddetmelidir?", "q_en": "The internal auditor should decline to perform which of the following types of advisory engagements?", "answer": 1, "options": [{"tr": "İç denetim fonksiyonunun politika ve prosedürleriyle çelişmeyen görevler", "en": "Engagements that have no conflict with the policies and procedures of the internal audit function", "cmt_tr": "🇹🇷 İç denetim fonksiyonunun politika ve prosedürleriyle çelişmeyen görevler kabul edilebilir.", "cmt_en": "🇬🇧 Engagements that have no conflict with the policies and procedures of the internal audit function are permissible."}, {"tr": "İç denetim personelinin görevin bir bölümünü gerçekleştirmek için gerekli bilgiye sahip olmadığı görevler", "en": "Engagements in which the internal audit staff lacks the knowledge needed to perform part of the engagement", "cmt_tr": "🇹🇷 İç denetçi; iç denetim tüzüğünce yasaklanan, iç denetim fonksiyonunun politika ve prosedürleriyle çelişen veya organizasyona değer katmayan ve en iyi çıkarları desteklemeyen danışmanlık görevlerini reddetmelidir.", "cmt_en": "🇬🇧 The internal auditor should decline advisory engagements that are prohibited by the charter, conflict with internal audit policies and procedures, or do not add value and promote the best interests of the organization."}, {"tr": "İç denetim tüzüğünün şartlarına göre izin verilen görevler", "en": "Engagements that are allowed by the terms of the internal audit charter", "cmt_tr": "🇹🇷 İç denetim tüzüğünce izin verilen görevler kabul edilebilir.", "cmt_en": "🇬🇧 Engagements that are allowed by the terms of the internal audit charter are permissible."}, {"tr": "Organizasyonun en iyi çıkarlarını destekleyen ve değer katan görevler", "en": "Engagements that add value and promote the best interests of the organization", "cmt_tr": "🇹🇷 Organizasyona değer katan ve en iyi çıkarları destekleyen görevler kabul edilebilir.", "cmt_en": "🇬🇧 Engagements that add value and promote the best interests of the organization are permissible."}]}, {"q_tr": "George, 10 ay önce XYZ Şirketi'nde bordrodan sorumluydu. Bordroyla ilgili hangi hizmetleri sunması bağımsızlık veya nesnellik zedelenmesi olarak değerlendirilir?", "q_en": "George was in charge of payroll for XYZ just 10 months ago. Performing what services regarding payroll is considered an impairment?", "answer": 1, "options": [{"tr": "Danışmanlık hizmetleri", "en": "Advisory services", "cmt_tr": "🇹🇷 İç denetçiler daha önce sorumlu oldukları operasyonlara ilişkin danışmanlık hizmetleri sunabilir.", "cmt_en": "🇬🇧 Internal auditors may provide advisory services relating to operations for which they had previous responsibilities."}, {"tr": "Güvence hizmetleri", "en": "Assurance services", "cmt_tr": "🇹🇷 Bir iç denetçi önceki yıl içinde sorumluluk üstlendiği bir faaliyet için güvence hizmetleri sunarsa nesnelliği zedelenmiş sayılır. George bordro için güvence hizmetleri sunarsa nesnelliği zedelenmiş olur. Ancak daha önce sorumluluk üstlendiği operasyonlara ilişkin danışmanlık hizmetleri sunabilir.", "cmt_en": "🇬🇧 Objectivity is presumed impaired if an internal auditor provides assurance services for an activity for which the auditor had responsibility within the previous year. George providing assurance services for payroll impairs his objectivity. However, advisory services relating to previous responsibilities are permitted."}, {"tr": "Güvence veya danışmanlık hizmetleri", "en": "Assurance or advisory services", "cmt_tr": "🇹🇷 Yalnızca güvence hizmetleri sunmak George'un bağımsızlığını veya nesnelliğini zedeler; danışmanlık hizmetleri değil.", "cmt_en": "🇬🇧 Only providing assurance services regarding payroll impairs George's independence or objectivity, not advisory services."}, {"tr": "Ne güvence ne de danışmanlık hizmetleri", "en": "Neither assurance nor advisory services", "cmt_tr": "🇹🇷 Bordroyla ilgili güvence hizmetleri sunmak nesnelliği zedeler. Yalnızca danışmanlık hizmetleri sunmak nesnelliği etkilemez.", "cmt_en": "🇬🇧 Providing assurance services regarding payroll does impair objectivity. Only advisory services do not impair objectivity."}]}, {"q_tr": "Danışmanlık görevi başlamadan önce veya görev sırasında bağımsızlık veya nesnellik zedelenmeleri ortaya çıkarsa ne yapılmalıdır?", "q_en": "If impairments of independence or objectivity exist prior to or develop during an advisory engagement, what action should be taken?", "answer": 0, "options": [{"tr": "Açıklama derhal görev müşterisine yapılmalıdır", "en": "Disclosure should be made immediately to the engagement client", "cmt_tr": "🇹🇷 İç denetçilerin önerilen danışmanlık hizmetleriyle ilgili olası bağımsızlık veya nesnellik zedelenmeleri varsa görevi kabul etmeden önce görev müşterisine açıklama yapılmalıdır.", "cmt_en": "🇬🇧 If internal auditors have potential impairments relating to proposed advisory services, disclosure must be made to the engagement client prior to accepting the engagement."}, {"tr": "Açıklama derhal yönetim kuruluna yapılmalıdır", "en": "Disclosure should be made immediately to the board", "cmt_tr": "🇹🇷 Açıklama danışmanlık hizmetlerinden faydalanan taraf olduğundan yönetim kuruluna değil görev müşterisine yapılmalıdır.", "cmt_en": "🇬🇧 Disclosure should be made to the engagement client, as it is the party benefiting from the advisory services, not to the board."}, {"tr": "Açıklama derhal dış denetçilere yapılmalıdır", "en": "Disclosure should be made immediately to the external auditors", "cmt_tr": "🇹🇷 Dış denetçilere herhangi bir açıklama yapılmasına gerek yoktur.", "cmt_en": "🇬🇧 No disclosure need be made to the external auditors."}, {"tr": "İç denetçi görevden çekilmelidir", "en": "The internal auditor should withdraw from the engagement", "cmt_tr": "🇹🇷 Bilgilendirilmiş bir görev müşterisi, bağımsızlık veya nesnellik zedelenmesine itiraz etmeyebilir.", "cmt_en": "🇬🇧 An informed engagement client may not object to an impairment of independence or objectivity, so withdrawal is not necessarily required."}]}, {"q_tr": "İç denetim, yeni bir bilgi sistemi için resmi bir danışmanlık görevi yürüttü. YDY altı ay sonra bu sistem için güvence hizmetleri sunması istendi. Uygun bir sonraki adım hangisidir?", "q_en": "Internal audit performed a formal advisory engagement for a new information system. Six months later, the CAE was asked to provide assurance services. What is the appropriate next step?", "answer": 1, "options": [{"tr": "Çıkar çatışması olduğundan görevi derhal reddetmek", "en": "Immediately refuse the engagement because it is a conflict of interest", "cmt_tr": "🇹🇷 Zedelenmenin etkisini azaltmak için adımlar atılabilir.", "cmt_en": "🇬🇧 Steps may be taken to mitigate the impairment; immediate refusal is not required."}, {"tr": "Yönetime ve yönetim kuruluna bağımsızlık ve nesnelliğin zarar görmüş olabileceğini bildirmek; ancak riski azaltmak için adımlar atılabileceğini açıklamak", "en": "Inform management and board that independence and objectivity may be impaired, but steps can be taken to minimize this risk", "cmt_tr": "🇹🇷 Bağımsızlık ve nesnellik, resmi bir danışmanlık görevinden sonraki 1 yıl içinde güvence hizmetleri sunulursa zarar görmüş sayılabilir. Zararın etkisi; farklı denetçiler atamak, bağımsız yönetim oluşturmak, ayrı sorumluluk tanımlamak ve tahmini zararı açıklamak yoluyla azaltılabilir.", "cmt_en": "🇬🇧 Independence and objectivity may be impaired if assurance services are provided within 1 year after a formal advisory engagement. The effects may be minimized by assigning different auditors, establishing independent management, defining separate accountability, and disclosing the presumed impairment."}, {"tr": "Denetimi gerçekleştirmek üzere bir dış denetçi işe alma sürecini başlatmak", "en": "Begin the process of hiring an external auditor to perform the audit", "cmt_tr": "🇹🇷 Zedelenmenin etkisini azaltmak için adımlar atılabilir; dış denetçi tutmak zorunlu değildir.", "cmt_en": "🇬🇧 Steps may be taken to mitigate the impairment; hiring an external auditor is not mandatory."}, {"tr": "Yönetime ve yönetim kuruluna danışmanlık görevinden en az 1 yıl beklenmesi gerektiğini bildirmek", "en": "Inform management and board that waiting at least 1 year after the advisory engagement is necessary", "cmt_tr": "🇹🇷 Zedelenmenin etkisini azaltmak için adımlar atılabilir; 1 yıl bekleme zorunlu değildir.", "cmt_en": "🇬🇧 Steps may be taken to mitigate the impairment; waiting exactly 1 year is not the only option."}]}, {"q_tr": "İncelenen bir süreçte küçük bir iç kontrol zayıflığı tespit eden iç denetçi bu gözlemi kime bildirmelidir?", "q_en": "An internal auditor observed a minor internal control weakness during an advisory engagement. The auditor should communicate this observation to", "answer": 3, "options": [{"tr": "Yönetim kurulu", "en": "The board", "cmt_tr": "🇹🇷 Gözlemlenen iç kontrol zayıflıkları yalnızca önemli ve maddi nitelikte ise yönetim kuruluna iletilmelidir.", "cmt_en": "🇬🇧 Observed internal control weaknesses should only be communicated to the board if the weakness is significant and material in nature."}, {"tr": "Üst yönetim", "en": "Senior management", "cmt_tr": "🇹🇷 Gözlemlenen iç kontrol zayıflıkları yalnızca önemli ve maddi nitelikte ise üst yönetime iletilmelidir.", "cmt_en": "🇬🇧 Observed internal control weaknesses should only be communicated to senior management if the weakness is significant and material in nature."}, {"tr": "Denetim komitesi", "en": "The audit committee", "cmt_tr": "🇹🇷 Gözlemlenen iç kontrol zayıflıkları yalnızca önemli ve maddi nitelikte ise denetim komitesine iletilmelidir.", "cmt_en": "🇬🇧 Observed internal control weaknesses should only be communicated to the audit committee if the weakness is significant and material in nature."}, {"tr": "Yönetim", "en": "Management", "cmt_tr": "🇹🇷 İç denetçiler danışmanlık görevleri sırasında iç kontrol süreçlerinin etkinliğine karşı uyanık olmalıdır. Önemli maddi kontrol zayıflıkları yönetime bildirilir. Bu durumda kontrol zayıflığı küçük niteliktedir; bu nedenle yönetimi bilgilendirmek uygun eylemdir.", "cmt_en": "🇬🇧 Internal auditors should be aware of internal control process effectiveness during advisory engagements. Substantial material control weaknesses are reported to management. In this situation, the weakness is minor; therefore informing management is the appropriate action."}]}, {"q_tr": "Danışmanlık ve güvence görevleri için hedefler nasıl belirlenir?", "q_en": "Which statement describes how objectives are set for advisory and assurance engagements?", "answer": 0, "options": [{"tr": "Danışmanlık görevinde hedefler ve kapsam genellikle iç denetçiler ve incelenen faaliyetin yönetimi tarafından ortaklaşa belirlenir", "en": "In an advisory engagement, objectives and scope are ordinarily set jointly by internal auditors and management of the reviewed activity", "cmt_tr": "🇹🇷 Danışmanlık görevinde hedefler ve kapsam genellikle iç denetçiler ve incelenen faaliyetin yönetimi tarafından ortaklaşa belirlenir.", "cmt_en": "🇬🇧 In an advisory engagement, the objectives and scope are ordinarily set jointly by the internal auditors and management of the reviewed activity."}, {"tr": "Güvence görevinde hedefler öncelikle incelenen faaliyetin yönetimi tarafından belirlenir", "en": "In an assurance engagement, objectives are primarily set by management of the reviewed activity", "cmt_tr": "🇹🇷 Güvence görevinde hedefler öncelikle iç denetçiler tarafından belirlenir; yönetim tarafından değil.", "cmt_en": "🇬🇧 In an assurance engagement, the objectives are primarily set by the internal auditors, not management of the reviewed activity."}, {"tr": "Danışmanlık görevinde hedefler öncelikle iç denetçiler tarafından belirlenir", "en": "In an advisory engagement, objectives are set primarily by the internal auditors", "cmt_tr": "🇹🇷 Güvence görevinde hedefler öncelikle iç denetçiler tarafından belirlenir; danışmanlık görevinde ise ortaklaşa belirlenir.", "cmt_en": "🇬🇧 In an assurance engagement (not advisory), the objectives are primarily set by the internal auditors. Advisory engagement objectives are set jointly."}, {"tr": "Güvence görevinde hedefler iç denetçiler ve yönetim tarafından ortaklaşa belirlenir", "en": "In an assurance engagement, objectives are set jointly by the internal auditors and management", "cmt_tr": "🇹🇷 Güvence görevinde hedefler öncelikle iç denetçiler tarafından belirlenir; ortaklaşa değil.", "cmt_en": "🇬🇧 In an assurance engagement, the objectives are primarily set by the internal auditors, not set jointly with management."}]}, {"q_tr": "Bir iç denetçinin danışmanlık görevinde gereken özeni göstermesinin bir yolu nedir?", "q_en": "One of the ways that an internal auditor exercises due professional care in conducting an advisory engagement is by", "answer": 3, "options": [{"tr": "Yönetim yetkililerinin tam olarak istediğini ve ihtiyaç duyduğunu sağlamak", "en": "Providing exactly what management officials want and need", "cmt_tr": "🇹🇷 İç denetçiler yönetimin isteklerini ve ihtiyaçlarını anlamalıdır; ancak bunların tamamını sağlayamayabilirler. Örneğin görev, süreçlerdeki beklenmedik eksiklikleri ortaya çıkarabilir.", "cmt_en": "🇬🇧 Internal auditors should understand what management wants and needs, but cannot necessarily provide that; e.g., the engagement may uncover unexpected deficiencies."}, {"tr": "Yıllık denetim planı tamamlandıktan sonra istenen danışmanlık görevlerini derhal dış kaynaklara devretmek", "en": "Immediately outsourcing advisory engagements requested after the annual audit plan has been finalized", "cmt_tr": "🇹🇷 YDY, dış kaynak kullanmayı düşünmeden önce istenen danışmanlık görevlerinin görece değerini belirlemelidir.", "cmt_en": "🇬🇧 The CAE should determine the relative value of requested advisory engagements and prioritize accordingly before considering outsourcing."}, {"tr": "Görevden kesinlikle elde edilecek faydaları gösteren ayrıntılı bir iş gerekçesi talep etmek", "en": "Requesting a detailed business case showing the benefits that will definitely accrue", "cmt_tr": "🇹🇷 Ayrıntılı bir iş gerekçesi gerekli olmayabilir ve kesin faydaları önceden tahmin etmek mümkün değildir.", "cmt_en": "🇬🇧 A detailed business case may not be necessary, and it is impossible to predict definitive benefits in advance."}, {"tr": "Hizmet talep edenlerin olası motivasyonlarını anlamak", "en": "Understanding the possible motivations of those requesting the service", "cmt_tr": "🇹🇷 Danışmanlık fonksiyonu gerekli özeni şu şekilde gösterir: (1) yönetim yetkililerinin ihtiyaçlarını, (2) hizmet talep edenlerin olası motivasyonlarını, (3) hedeflere ulaşmak için gereken çalışma kapsamını, (4) gerekli becerileri ve kaynakları, (5) denetim planı üzerindeki etkiyi, (6) gelecekteki görevler üzerindeki olası etkileri ve (7) olası organizasyonel faydaları anlamak.", "cmt_en": "🇬🇧 Due professional care includes understanding: (1) needs of management officials, (2) possible motivations of those requesting the service, (3) extent of work needed, (4) skills and resources needed, (5) effect on approved audit plan, (6) potential effects on future assignments, and (7) potential organizational benefits."}]}, {"q_tr": "İç denetçiler danışmanlık hizmetlerini sunarken neden bağımsızlık ve nesnelliği korumalıdır?", "q_en": "Internal auditors must maintain independence and objectivity when performing advisory services to", "answer": 1, "options": [{"tr": "Yönetimin iş stratejilerinin başarısını sağlamak", "en": "Ensure the success of management's business strategies", "cmt_tr": "🇹🇷 Yönetimi desteklemek faydalı olmakla birlikte, bağımsızlık ve nesnelliği korumanın temel amacı güvenilirliği sürdürmektir; stratejik başarıyı değil.", "cmt_en": "🇬🇧 Supporting management is beneficial, but the primary purpose of maintaining independence and objectivity is to maintain credibility, not ensure strategic success."}, {"tr": "Çıkar çatışmalarını önlemek ve mesleki güvenilirliği korumak", "en": "Prevent conflicts of interest and maintain professional credibility", "cmt_tr": "🇹🇷 İç denetçiler; yönetim kurulu onayını almak, tüzüğü güncellemek ve açık politikalar oluşturmak suretiyle bağımsızlık ve nesnelliklerini korur. Çıkar çatışmalarından kaçınarak rehberlik sağlarken güvenilirliklerini de muhafaza eder.", "cmt_en": "🇬🇧 Internal auditors maintain independence and objectivity by ensuring board approval, amending the charter, and establishing clear policies. They avoid conflicts of interest while preserving their credibility by adhering to these practices."}, {"tr": "Organizasyonun kârlılığını artırmak", "en": "Enhance the profitability of the organization", "cmt_tr": "🇹🇷 Bağımsızlık ve nesnellik dolaylı olarak kârlılığa katkıda bulunsa da bu özellikler kârlılıktan bağımsız olarak zorunludur.", "cmt_en": "🇬🇧 Although indirectly contributing to profitability, independence and objectivity are required regardless of profitability levels."}, {"tr": "Ayrıntılı finansal analiz ve tahmin sunmak", "en": "Provide detailed financial analysis and forecasting", "cmt_tr": "🇹🇷 İç denetçiler genellikle finansal analizden sorumlu değildir. Bağımsızlıkları, organizasyonel konularda tarafsız rehberlik sağlamalarını güvence altına alır.", "cmt_en": "🇬🇧 Internal auditors are not typically responsible for financial analysis. Their independence ensures unbiased guidance on organizational issues."}]}], "Subunit 3 - Benchmarking": [{"q_tr": "Dahili finansal olmayan kıyaslamaya örnek nedir?", "q_en": "An example of an internal nonfinancial benchmark is", "answer": 3, "options": [{"tr": "Büyük bir rakibin tesisindeki benzer nitelikli çalışanların ücret oranı", "en": "The labor rate of comparably skilled employees at a major competitor's plant", "cmt_tr": "🇹🇷 Rakibin tesisindeki ücret oranı finansal bir ölçümdür; finansal olmayan bir kıyaslama değil.", "cmt_en": "🇬🇧 The labor rate at a competitor's plant is a financial measure, not a nonfinancial benchmark."}, {"tr": "Şirketin en verimli tesisindeki belirli bir ürünün birim başına ortalama fiili maliyeti", "en": "The average actual cost per pound of a specific product at the company's most efficient plant", "cmt_tr": "🇹🇷 Birim başına ortalama fiili maliyet finansal bir ölçümdür.", "cmt_en": "🇬🇧 The average actual cost per pound is a financial measure, not a nonfinancial benchmark."}, {"tr": "Her tesiste çalışan eğitim programları maliyetine getirilen 50.000 dolar sınırı", "en": "A $50,000 limit on the cost of employee training programs at each plant", "cmt_tr": "🇹🇷 50.000 dolar eğitim maliyeti sınırı finansal bir ölçümdür.", "cmt_en": "🇬🇧 A $50,000 limit on training costs is a financial measure, not a nonfinancial benchmark."}, {"tr": "Şirketin en verimli tesisinde zamanında teslim edilen müşteri siparişlerinin yüzdesi", "en": "The percentage of customer orders delivered on time at the company's most efficient plant", "cmt_tr": "🇹🇷 Kıyaslama; en iyi sınıftaki organizasyonların uygulamalarının sürekli değerlendirilmesidir. Zamanında teslim edilen sipariş yüzdesi dahili, finansal olmayan bir kıyaslama örneğidir.", "cmt_en": "🇬🇧 Benchmarking involves continuous evaluation of best-in-class organizations. The percentage of orders delivered on time is an example of an internal nonfinancial benchmark."}]}, {"q_tr": "Şube mağaza finansal raporlamasının doğruluğunu değerlendirmek için bir mağazayı kıyaslayan şirket, aşağıdaki finansal kıyaslama ölçütlerinden hangisini kullanmalıdır?", "q_en": "A company benchmarking a store for accuracy of branch financial reporting. Which is most likely to be included in a financial benchmark?", "answer": 2, "options": [{"tr": "Yüksek çalışan devir hızı", "en": "High turnover of employees", "cmt_tr": "🇹🇷 Çalışan devir hızı finansal bir kıyaslama değildir.", "cmt_en": "🇬🇧 Turnover of employees is not a financial benchmark."}, {"tr": "Çalışanların bütçe belirlemeye yüksek katılımı", "en": "High level of employee participation in setting budgets", "cmt_tr": "🇹🇷 Bütçe belirlemeye çalışan katılımı finansal bir kıyaslama değildir.", "cmt_en": "🇬🇧 Employee participation in setting budgets is not a financial benchmark."}, {"tr": "Yüksek miktarda şüpheli alacak silmesi", "en": "High amount of bad debt write-offs", "cmt_tr": "🇹🇷 Tahsil edilemeyen alacak olarak silinen borçların düzeyi finansal bir kıyaslamadır. Kıyaslama sınırını aşan bir düzey, finansal raporların doğruluğunu etkileyen sahtekârlığa işaret edebilir.", "cmt_en": "🇬🇧 The level of bad debts written off is a benchmark in financial terms. A level exceeding the benchmark could indicate fraud, compromising financial reporting accuracy."}, {"tr": "Yüksek sayıda tedarikçi", "en": "High number of suppliers", "cmt_tr": "🇹🇷 Tedarikçi sayısı finansal bir kıyaslama değildir.", "cmt_en": "🇬🇧 The number of suppliers is not a financial benchmark."}]}, {"q_tr": "Aşağıdakilerden hangisi genel kıyaslamayı en iyi tanımlar?", "q_en": "Which of the following best describes generic benchmarking?", "answer": 2, "options": [{"tr": "Aynı sektördeki bir organizasyonun incelenmesi", "en": "Studying an organization in the same industry", "cmt_tr": "🇹🇷 Aynı sektördeki bir organizasyonun incelenmesi rekabetçi kıyaslamadır; genel kıyaslama değil.", "cmt_en": "🇬🇧 Studying an organization in the same industry is competitive benchmarking, not generic benchmarking."}, {"tr": "Organizasyonun bir süreci nasıl gerçekleştirdiğini optimize etmenin yollarını belirleme", "en": "Identifying ways to optimize how the organization performs a process", "cmt_tr": "🇹🇷 Organizasyonun süreci nasıl gerçekleştirdiğini optimize etme süreç veya fonksiyonel kıyaslamadır; genel kıyaslama değil.", "cmt_en": "🇬🇧 Identifying ways to optimize how the organization performs a process is process or functional benchmarking, not generic."}, {"tr": "Sektörden bağımsız olarak benzer süreçlere sahip organizasyonların operasyonlarını inceleme", "en": "Studying operations of organizations with similar processes regardless of industry", "cmt_tr": "🇹🇷 Genel kıyaslama; sektörden bağımsız olarak benzer süreçlere sahip organizasyonların operasyonlarını inceler. Bu nedenle kıyaslama organizasyonu rakip veya benzer bir kuruluş olmak zorunda değildir.", "cmt_en": "🇬🇧 Generic benchmarking studies the operations of organizations with similar processes regardless of industry. The benchmark need not be a competitor or similar organization."}, {"tr": "Organizasyonun bir bölümündeki en iyi uygulamaları diğer bölümlerine aktarma", "en": "Applying best practices in one part of the organization to its other parts", "cmt_tr": "🇹🇷 Organizasyonun bir bölümündeki en iyi uygulamaları diğer bölümlerine aktarmak dahili kıyaslamadır; genel kıyaslama değil.", "cmt_en": "🇬🇧 Applying best practices in one part of the organization to its other parts is internal benchmarking, not generic."}]}, {"q_tr": "İç denetim, bir mağaza zincirinin sevkiyat ve teslimat departmanını denetlemektedir. En uygun araç hangisidir?", "q_en": "The internal audit function undertakes an audit of the shipping and receiving department of a department store chain. The best engagement tool is", "answer": 3, "options": [{"tr": "Rekabetçi kıyaslama", "en": "Competitive benchmarking", "cmt_tr": "🇹🇷 Rekabetçi kıyaslama aynı sektördeki kuruluşlarla sınırlıdır.", "cmt_en": "🇬🇧 Competitive benchmarking is restricted to entities in the same industry."}, {"tr": "Stratejik kıyaslama", "en": "Strategic benchmarking", "cmt_tr": "🇹🇷 Stratejik kıyaslama, başarılı rekabet stratejilerini aramadır.", "cmt_en": "🇬🇧 Strategic benchmarking is a search for successful competitive strategies."}, {"tr": "Dahili kıyaslama", "en": "Internal benchmarking", "cmt_tr": "🇹🇷 Merkezi bir sevkiyat ve teslimat departmanı için en iyi uygulamalar büyük olasılıkla şirket içindeki başka bir yerde bulunmaz.", "cmt_en": "🇬🇧 Best practices for a centralized shipping and receiving department are not likely to be found elsewhere within the same entity."}, {"tr": "Süreç kıyaslaması", "en": "Process benchmarking", "cmt_tr": "🇹🇷 Süreç kıyaslaması; sektörden bağımsız olarak benzer süreçlere sahip organizasyonların operasyonlarını inceler. Sevkiyat ve teslimat işlevleri için en iyi uygulamalar aynı sektörde bulunamayabilir; bu nedenle süreç kıyaslaması en uygun araçtır.", "cmt_en": "🇬🇧 Process benchmarking studies operations of organizations with similar processes regardless of industry. Best practices for shipping and receiving may not be found in the same industry, making process benchmarking the best tool."}]}, {"q_tr": "Kıyaslama, mevcut operasyon performansını rakip organizasyonlarla ilgili hangi faktörle karşılaştırır?", "q_en": "Benchmarking compares the current performance of operations to which factor related to competing organizations?", "answer": 1, "options": [{"tr": "Performans ölçütleri geliştirmenin standart maliyeti", "en": "Standard cost of developing performance measures", "cmt_tr": "🇹🇷 Kıyaslama sürekli bir süreçtir. Operasyon performansı, performans ölçütleri geliştirmenin standart maliyetiyle değil; rakip organizasyonların performansıyla karşılaştırılmalıdır.", "cmt_en": "🇬🇧 Benchmarking is an ongoing process. Operations performance should be compared with competing organizations' performance, not the standard cost of developing performance measures."}, {"tr": "Mevcut performans ölçütleri", "en": "Current performance measures", "cmt_tr": "🇹🇷 Kıyaslama, anahtar çıktıların en iyi organizasyonlara göre analiz ve ölçümünü içerir. Rekabetçi kıyaslama, aynı sektördeki bir organizasyonu inceler. Bu nedenle mevcut operasyon performansını rakiplerin mevcut performansıyla karşılaştırmak en uygun kıyaslama biçimidir.", "cmt_en": "🇬🇧 Benchmarking involves analysis and measurement of key outputs against best organizations. Competitive benchmarking studies organizations in the same industry. Comparing current performance with competing organizations' current performance is the most appropriate form."}, {"tr": "Önceki performans ölçütleri", "en": "Prior performance measures", "cmt_tr": "🇹🇷 Rakip organizasyonların önceki performans ölçütleri güncel olmayabilir ve mevcut operasyon performansı için doğru bir kıyaslama sağlamayabilir.", "cmt_en": "🇬🇧 Prior performance measures of competing organizations are likely outdated and not an accurate benchmark for current operations performance."}, {"tr": "Beklenen gelecekteki performans ölçütleri", "en": "Anticipated future performance measures", "cmt_tr": "🇹🇷 Beklenen gelecek performans ölçütleri gelecekteki performansa odaklanır. Gelecek performansı mevcut operasyon performansıyla karşılaştırmak uygun değildir.", "cmt_en": "🇬🇧 Anticipated future performance measures focus on future performance. It is inappropriate to compare future performance with current operations performance."}]}, {"q_tr": "Kıyaslama sürecinde ekibin önerilerini gerekçelendirmesi gereken aşama hangisidir?", "q_en": "The phase of the benchmarking process in which the team must be able to justify its recommendations is the", "answer": 1, "options": [{"tr": "Kıyaslama projelerini önceliklendirme aşaması", "en": "Prioritize benchmarking projects phase", "cmt_tr": "🇹🇷 Kıyaslama projelerinin önceliklendirildiği aşama, işletmelerin temel iş süreçlerini ve itici güçlerini anlamasının gerektiği aşamadır.", "cmt_en": "🇬🇧 The phase in which benchmarking projects are prioritized is when businesses must understand key business processes and drivers."}, {"tr": "Uygulama aşaması", "en": "Implementation phase", "cmt_tr": "🇹🇷 Kıyaslama sürecinin uygulama aşamasında liderlik en önemli faktördür; çünkü ekip önerilerini gerekçelendirmelidir. Ayrıca süreç iyileştirme ekipleri onaylanan değişikliklerin uygulanmasını yönetmelidir.", "cmt_en": "🇬🇧 Leadership is most important in the implementation phase because the team must be able to justify its recommendations. Process improvement teams must also manage the implementation of approved changes."}, {"tr": "Veri analizi aşaması", "en": "Data analysis phase", "cmt_tr": "🇹🇷 Veri analizi aşamasında performans boşlukları belirlenir ve bu boşlukların nedenlerini anlamak için çalışılır.", "cmt_en": "🇬🇧 The data analysis phase entails identifying performance gaps and understanding the reasons they exist."}, {"tr": "Sınıfının en iyisi performansı araştırma ve belirleme aşaması", "en": "Researching and identifying best in class performance phase", "cmt_tr": "🇹🇷 Sınıfının en iyisi performansı araştırma ve belirleme aşamasında veri tabanları oluşturulur ve bilgi toplama yöntemleri kurulur.", "cmt_en": "🇬🇧 Researching and identifying best in class performance involves setting up databases and information-gathering methods."}]}, {"q_tr": "Benzer süreçlere sahip kuruluşların operasyonlarını inceleyerek organizasyonun işlevlerini optimize etmenin yollarını belirleyen yönteme ne denir?", "q_en": "A method that identifies ways to optimize functions by studying operations of entities with similar processes is called", "answer": 3, "options": [{"tr": "Süreç haritalama", "en": "Process mapping", "cmt_tr": "🇹🇷 Süreç haritalama; bir iş sürecindeki çeşitli adımları görselleştirmek ve analiz etmek için kullanılan bir yöntemdir. Kıyaslama ile aynı şey değildir.", "cmt_en": "🇬🇧 Process mapping is a method used to visualize and analyze steps in a business process. It is not the same as benchmarking."}, {"tr": "Yeniden yapılanma", "en": "Reengineering", "cmt_tr": "🇹🇷 Yeniden yapılanma, süreç inovasyonu ve çekirdek süreç yeniden tasarımını içerir. Mevcut prosedürleri geliştirmek yerine işleri yapmanın yeni yollarını bulur.", "cmt_en": "🇬🇧 Reengineering involves process innovation and core process redesign. It finds new ways of doing things instead of improving existing procedures."}, {"tr": "En iyi uygulama analizi", "en": "Best-practice analysis", "cmt_tr": "🇹🇷 En iyi uygulama analizi kıyaslamayla yakından ilgilidir. Kıyaslama, organizasyonun kendi süreçlerini diğer organizasyonların süreçleriyle de karşılaştırır.", "cmt_en": "🇬🇧 Best-practice analysis is closely related to benchmarking. Benchmarking compares an organization's processes with other organizations' processes as well as industry best practices."}, {"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama; bir faaliyetin şirket performansı ile sınıfının en iyi organizasyonunun performansı arasındaki farkın nicel ve nitel ölçümünü içeren süregelen bir süreçtir. Kıyaslama organizasyonunun doğrudan rakip olması gerekmez.", "cmt_en": "🇬🇧 Benchmarking is an ongoing process that entails quantitative and qualitative measurement of the difference between the company's performance and the best-in-class organization's performance. The benchmarking organization need not be a direct competitor."}]}, {"q_tr": "Kıyaslama hakkında hangisi doğrudur?", "q_en": "Which of the following is true of benchmarking?", "answer": 3, "options": [{"tr": "Kıyaslama genellikle bir organizasyonun en yakın rakipleriyle performansını karşılaştırarak gerçekleştirilir", "en": "Benchmarking is typically accomplished by comparing performance with the closest competitors", "cmt_tr": "🇹🇷 Kıyaslama, sektör liderleri veya dünya çapında üstün performans gösterenlerle karşılaştırmayı içerir; yalnızca en yakın rakiplerle değil.", "cmt_en": "🇬🇧 Benchmarking involves comparison with industry leaders or world-class operations, not just the closest competitors."}, {"tr": "Kıyaslama yalnızca nitel karşılaştırmalar kullanılarak yapılabilir", "en": "Benchmarking can be performed by using only qualitative comparisons", "cmt_tr": "🇹🇷 Kıyaslama hem nitel hem de nicel karşılaştırmalar kullanılarak yapılabilir; yalnızca birini seçmek gerekmez.", "cmt_en": "🇬🇧 Benchmarking may be performed using both qualitative and quantitative comparisons; a company need not choose just one."}, {"tr": "Kıyaslama normalde yalnızca üretim operasyonları ve üretim süreçleriyle sınırlıdır", "en": "Benchmarking is normally limited to manufacturing operations and production processes", "cmt_tr": "🇹🇷 Kıyaslama, bir organizasyonun tüm fonksiyonel alanlarına uygulanabilir. Üretim dışı fonksiyonlar genellikle küresel liderlerden öğrenerek daha büyük iyileştirme fırsatları sunar.", "cmt_en": "🇬🇧 Benchmarking may be applied to all functional areas. Nonmanufacturing functions often provide greater opportunity to improve by learning from global leaders."}, {"tr": "Kıyaslama, bir organizasyonun performansını en iyi performans gösteren organizasyonlarla karşılaştırarak yapılır", "en": "Benchmarking is accomplished by comparing performance with the best-performing organizations", "cmt_tr": "🇹🇷 Kıyaslama; toplam kalite yönetimi yaklaşımında kullanılan temel araçlardan biridir. En iyi sınıftaki organizasyonların uygulamalarının sürekli değerlendirilmesini ve bu uygulamaları yansıtacak süreçlerin uyarlanmasını gerektirir. Kıyaslama organizasyonunun rakip olması gerekmez.", "cmt_en": "🇬🇧 Benchmarking is a primary TQM tool. It is a continuous evaluation of best-in-class organizations' practices and adaptation of processes to reflect those practices. The benchmark organization need not be a competitor."}]}, {"q_tr": "Yeni bir iş kolu için performans ölçütlerini iyileştirmek isteyen bir organizasyon hangi kıyaslama türünü kullanmalıdır?", "q_en": "An organization wanting to improve performance measures for a new business line. Which type of benchmarking is most likely to provide useful information?", "answer": 0, "options": [{"tr": "Fonksiyonel", "en": "Functional", "cmt_tr": "🇹🇷 Fonksiyonel kıyaslama, yeni bir iş kolu için performans ölçütlerini iyileştirmeye en çok yardımcı olur. Aynı teknoloji alanında benzer işlevleri gerçekleştiren organizasyonlarla karşılaştırma, yeni iş kolunda neler elde edildiğine dair bilgi sağlar.", "cmt_en": "🇬🇧 Functional benchmarking is most likely to help improve performance measures for a new business line. Comparison with organizations performing related functions within the same technological area provides information about what is being achieved in the new business line."}, {"tr": "Rekabetçi", "en": "Competitive", "cmt_tr": "🇹🇷 Rekabetçi kıyaslama aynı sektördeki organizasyonları inceler. En iyi rakiplerle karşılaştırma yeni iş kolyuyla ilgisi olmayan bazı faaliyetleri de içerebilir.", "cmt_en": "🇬🇧 Competitive benchmarking studies organizations in the same industry. Comparison with best competitors focuses on related organizations as a whole and may include activities unrelated to the new business line."}, {"tr": "Genel", "en": "Generic", "cmt_tr": "🇹🇷 Genel kıyaslama, farklı bir sektördeki benzer karakteristiklere sahip süreçleri karşılaştırır. İşlev bakımından benzer süreçlerle karşılaştırmak kadar yardımcı olmaz.", "cmt_en": "🇬🇧 Generic benchmarking compares processes with similar characteristics in different industries. It is not as helpful as comparing functionally similar processes in the new business line."}, {"tr": "Dahili", "en": "Internal", "cmt_tr": "🇹🇷 Dahili kıyaslama, organizasyonun bir bölümündeki en iyi uygulamaların diğer bölümlerine uygulanmasıdır. Yeni iş kolunda organizasyon dışında neler başarıldığı hakkında bilgi sağlamaz.", "cmt_en": "🇬🇧 Internal benchmarking applies best practices in one part of the organization to others. It does not provide information about what is being accomplished outside the organization in the new business line."}]}, {"q_tr": "Bir üretici, hesap ödenebilir uygulamalarını bir yatırım bankasının uygulamalarıyla karşılaştırıyor. Bu karşılaştırma hangi kıyaslama türüne örnektir?", "q_en": "A manufacturer compares its accounts payable practices with those of an investment bank. This is an example of", "answer": 0, "options": [{"tr": "Genel kıyaslama", "en": "Generic benchmarking", "cmt_tr": "🇹🇷 Genel kıyaslama, bir operasyondaki süreci inceler ve farklı bir sektördeki benzer süreçle karşılaştırır. Üretici ile yatırım bankası farklı sektörlerdedir.", "cmt_en": "🇬🇧 Generic benchmarking observes a process in one operation and compares it with a similar process in a different industry. The manufacturer and investment bank are in different industries."}, {"tr": "Stratejik kıyaslama", "en": "Strategic benchmarking", "cmt_tr": "🇹🇷 Stratejik kıyaslama başarılı rekabet stratejilerinin aranmasıdır.", "cmt_en": "🇬🇧 Strategic benchmarking is a search for successful competitive strategies."}, {"tr": "Rekabetçi kıyaslama", "en": "Competitive benchmarking", "cmt_tr": "🇹🇷 Rekabetçi kıyaslama aynı sektördeki organizasyonları inceler; farklı sektörlerdeki organizasyonları değil.", "cmt_en": "🇬🇧 Competitive benchmarking studies organizations in the same industry, not in different industries."}, {"tr": "Dahili kıyaslama", "en": "Internal benchmarking", "cmt_tr": "🇹🇷 Dahili kıyaslama, organizasyonun bir bölümündeki en iyi uygulamaların diğer bölümlerine uygulanmasıdır.", "cmt_en": "🇬🇧 Internal benchmarking is the application of best practices in one part of the organization to its other parts."}]}, {"q_tr": "Rekabetçi finansal kıyaslama örneği hangisidir?", "q_en": "An example of a competitive financial benchmark is", "answer": 0, "options": [{"tr": "Büyük bir rakibin tesisindeki benzer nitelikli çalışanların ücret oranı", "en": "The labor rate of comparably skilled employees at a major competitor's plant", "cmt_tr": "🇹🇷 Büyük bir rakibin tesisindeki ücret oranı; finansal ölçüm biçiminde bir rekabetçi kıyaslama örneğidir. Rekabetçi kıyaslama, rakip bir organizasyonu inceler.", "cmt_en": "🇬🇧 The labor rate at a major competitor's plant is an example of a competitive benchmark in financial form. Competitive benchmarking studies a competitor organization."}, {"tr": "Organizasyonun en verimli tesisinde belirli bir ürünün birim başına ortalama fiili maliyeti", "en": "The average actual cost per pound of a specific product at the organization's most efficient plant", "cmt_tr": "🇹🇷 Bu dahili bir finansal ölçümdür; rekabetçi finansal kıyaslama değil.", "cmt_en": "🇬🇧 This is an internal financial measure, not a competitive financial benchmark."}, {"tr": "Her tesiste bilgi teknolojisi departmanına veri sınırı", "en": "A data cap on the information technology department at each plant", "cmt_tr": "🇹🇷 Her tesisteki bilgi teknolojisi departmanına veri sınırı, bir kıyaslama değil dahili bir kontrol mekanizmasıdır.", "cmt_en": "🇬🇧 A data cap on the IT department is an internal control rather than a benchmark."}, {"tr": "Farklı bir sektördeki organizasyonun benzer sürecinin müşteri memnuniyet puanı", "en": "Customer satisfaction rating of a similar process from an organization in a different industry", "cmt_tr": "🇹🇷 Farklı sektördeki organizasyonun müşteri memnuniyet puanı, finansal olmayan bir süreç kıyaslamasıdır; rekabetçi finansal kıyaslama değil.", "cmt_en": "🇬🇧 The customer satisfaction rating of a similar process from an organization in a different industry is a nonfinancial process benchmark, not a competitive financial benchmark."}]}, {"q_tr": "Bir şirketin yönetimi, optimal tutarları yansıtan yayınlanmış bilgilerle kendi finansal bilgilerini karşılaştırmak için ne yapmalıdır?", "q_en": "The management of a company would do which of the following to compare financial information to published information reflecting optimal amounts?", "answer": 2, "options": [{"tr": "Bütçe", "en": "Budget", "cmt_tr": "🇹🇷 Bütçe geleceğe yönelik bir plandır; kıyaslama değil.", "cmt_en": "🇬🇧 A budget is a plan for the future, not a benchmarking tool."}, {"tr": "Tahmin", "en": "Forecast", "cmt_tr": "🇹🇷 Tahmin, gelecekteki olaylar ve koşullar hakkında bir öngörüdür; kıyaslama değil.", "cmt_en": "🇬🇧 A forecast is a prediction about future events and circumstances, not benchmarking."}, {"tr": "Kıyaslama", "en": "Benchmark", "cmt_tr": "🇹🇷 Kıyaslama; bir faaliyetin performansı ile kıyaslama referans noktasının performansı arasındaki farkın nicel ve nitel ölçümünü gerektiren süregelen bir süreçtir.", "cmt_en": "🇬🇧 Benchmarking is an ongoing process that requires quantitative and qualitative measurement of the difference between the performance of an activity and the performance by the benchmark."}, {"tr": "En iyi uygulamaları kullanmak", "en": "Utilize best practices", "cmt_tr": "🇹🇷 En iyi uygulamalar, alanındaki otoriteler ve müşteriler tarafından üstün sonuçlar ürettiği için tanınan uygulamalardır; ancak bu doğrudan kıyaslama ile aynı şey değildir.", "cmt_en": "🇬🇧 Best practices are recognized for generating outstanding results, but this is not the same as directly benchmarking against published financial information."}]}, {"q_tr": "Hangi yöntem, iyileştirilmesi gereken dahili süreçleri sınıfının en iyisi olarak tanımlanan harici şirketlerle karşılaştırır?", "q_en": "Which method involves comparing internal processes that need to be improved to external companies identified as best in class?", "answer": 1, "options": [{"tr": "Dengeli puan kartı", "en": "Balanced scorecard", "cmt_tr": "🇹🇷 Dengeli puan kartı; yöneticileri finansal ve finansal olmayan faktörler konusunda bilgilendiren bir hedef uyum aracıdır.", "cmt_en": "🇬🇧 The balanced scorecard is a goal congruence tool that informs managers about financial and nonfinancial factors important to upper management."}, {"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama, anahtar çıktıların en iyi organizasyonlara göre analiz ve ölçümünü içerir. Bu prosedür aynı zamanda performans farkına katkıda bulunan temel eylemleri ve nedenleri de belirler.", "cmt_en": "🇬🇧 Benchmarking involves analysis and measurement of key outputs against the best organizations. This procedure also identifies the underlying key actions and causes that contribute to the performance difference."}, {"tr": "Ekonomik katma değer", "en": "Economic value added", "cmt_tr": "🇹🇷 Ekonomik katma değer; sermaye maliyetinin fırsat maliyeti için düzeltilmiş vergi sonrası faaliyet kârları formülüdür.", "cmt_en": "🇬🇧 Economic value added is the formula for after-tax operating profits adjusted for the opportunity cost of capital."}, {"tr": "Performans ölçümü", "en": "Performance measurement", "cmt_tr": "🇹🇷 Performans ölçümü; bir şirketin kendisini diğer şirketlerle veya önceki dönemlerle karşılaştırdığı birçok yöntemi kapsayan geniş bir terimdir.", "cmt_en": "🇬🇧 Performance measurement is a broad term describing the many ways companies compare themselves with others or with prior periods."}]}, {"q_tr": "Bir işletmenin ürün ve hizmetlerinin mümkün olan en iyi performans düzeyine göre ölçüldüğü ve değerlendirildiği süreç nedir?", "q_en": "What is the process by which products and services are measured and evaluated relative to the best possible levels of performance?", "answer": 2, "options": [{"tr": "Performans boşluğunu ölçme", "en": "Measuring the performance gap", "cmt_tr": "🇹🇷 Performans boşluğu iki kuruluş arasındaki performans farkını ölçer; ancak mutlaka en iyi olası performans düzeyiyle karşılaştırmayı ifade etmez.", "cmt_en": "🇬🇧 The performance gap measures the difference in performance between two entities but does not necessarily imply comparison with the best possible levels of performance."}, {"tr": "Standart ölçüm", "en": "Standard measurement", "cmt_tr": "🇹🇷 Standart ölçüm, ürünleri en iyi performans düzeyleriyle karşılaştırmak için kullanılan bir terim değildir.", "cmt_en": "🇬🇧 Standard measurement is not a term used to compare products with best performance levels."}, {"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama, anahtar çıktıların en iyi organizasyonlara göre analiz ve ölçümünü içerir. Aynı zamanda performans farkına katkıda bulunan temel eylemleri ve nedenleri belirler.", "cmt_en": "🇬🇧 Benchmarking involves analysis and measurement of key outputs against the best organizations. It also identifies the underlying key actions and causes that contribute to the performance difference."}, {"tr": "Varyans yönetimi", "en": "Variance management", "cmt_tr": "🇹🇷 Varyans yönetimi veya varyans analizi; bir operasyon döneminde oluşan olumlu ve olumsuz varyansları değerlendirme sürecidir.", "cmt_en": "🇬🇧 Variance management is the process of evaluating favorable and unfavorable variances in a period, not comparing with best possible performance levels."}]}, {"q_tr": "Bir üretici, hazırlama sürecini iyileştirmek istiyor ve prosedürlerini büyük bir havayolunun giriş süreci ile karşılaştırıyor. Üretici hangi aracı kullanıyor?", "q_en": "A manufacturer wanting to improve its staging process compares its procedures against the check-in process for a major airline. Which tool is the manufacturer using?", "answer": 3, "options": [{"tr": "Toplam kalite yönetimi", "en": "Total quality management", "cmt_tr": "🇹🇷 Toplam kalite yönetimi; ilk seferinde doğru yapmak, çalışan eğitimi ve yetkilendirme, ekip çalışması, süreç iyileştirme gibi ilkeleri içerir. Farklı sektörlerdeki iki şirketin süreçlerini karşılaştırmada doğrudan yardımcı olmaz.", "cmt_en": "🇬🇧 TQM involves doing it right the first time, employee training, teamwork, and process improvement. It is not directly helpful in comparing processes of two companies in different industries."}, {"tr": "İstatistiksel süreç kontrolü", "en": "Statistical process control", "cmt_tr": "🇹🇷 İstatistiksel süreç kontrolü üretim sürecini gerçek zamanlı izlemek için kullanılır; farklı sektörlerdeki şirket süreçlerini karşılaştırmada yardımcı olmaz.", "cmt_en": "🇬🇧 Statistical process control is used to monitor manufacturing processes in real time; not helpful in comparing processes of companies in different industries."}, {"tr": "Ekonomik katma değer", "en": "Economic value added", "cmt_tr": "🇹🇷 Ekonomik katma değer parasal tutarlar kullanılarak hesaplanır ve finansal bir performans ölçümüdür. Hazırlama sürecini iyileştirmede yardımcı bir araç değildir.", "cmt_en": "🇬🇧 Economic value added is calculated using monetary amounts and is a financial performance measure. It is not helpful in improving a staging process."}, {"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama, kalite yönetiminde kullanılan temel araçlardan biridir. Süreç kıyaslaması; sektörden bağımsız olarak benzer süreçlere sahip organizasyonların operasyonlarını inceler. Büyük bir havayolunun giriş süreciyle karşılaştırma kıyaslamaya örnektir.", "cmt_en": "🇬🇧 Benchmarking is a primary quality management tool. Process benchmarking studies operations of organizations with similar processes regardless of industry. Comparing with a major airline's check-in process is an example of benchmarking."}]}, {"q_tr": "İç denetçi, bilgi güvenliği sisteminin devlet kurumunun ihtiyaçlarını aşıp aşmadığını değerlendirirken hangi bilgi kaynağı en uygun olacaktır?", "q_en": "Which source of information will be most relevant to the internal auditor's assessment of whether the government unit is being charged for computer security that exceeds its needs?", "answer": 1, "options": [{"tr": "Yüklenicinin dahili yönetim raporlarının incelenmesi", "en": "Review of the contractor's internal management reports", "cmt_tr": "🇹🇷 Yüklenicinin dahili yönetim raporları yüklenici yönetimine gizlidir.", "cmt_en": "🇬🇧 The internal management reports of the contractor are confidential to the management of the contractor."}, {"tr": "Güvenlik sisteminin benzer sistemler için uygulanan en iyi uygulamalarla ve son teknoloji yayınlarla karşılaştırılması", "en": "Comparison of the security system with best practices for similar systems and reviewing publications of state-of-the-art systems", "cmt_tr": "🇹🇷 Güvenlik sistemini benzer sistemler için uygulanan en iyi uygulamalarla ve son yayınlarla karşılaştırmak en iyi yaklaşımdır. Geliştirilmekte olan sistemi son teknoloji sistemlerle karşılaştırarak iç denetçiye yüklenicinin iddiasını ele almak için bir temel sağlar.", "cmt_en": "🇬🇧 Comparison of the security system with best practices for similar systems and recent publications is the best approach. It provides the internal auditor with a basis to address the outsourcer's claim that the system is the minimum necessary."}, {"tr": "Güvenlik sisteminin işlevselliğinin test edilmesi", "en": "Tests of the functionality of the security system", "cmt_tr": "🇹🇷 Sistemin işlevselliğini test etmek, sistemin çalışıp çalışmadığı hakkında bilgi sağlar; ancak kurumun ihtiyaçları için uygun olup olmadığını değil.", "cmt_en": "🇬🇧 Testing the functionality provides information on whether the system works, not whether it is appropriate for the entity's needs."}, {"tr": "Yüklenicinin finansal tablolarının analizi", "en": "Analysis of the contractor's financial statements", "cmt_tr": "🇹🇷 Yüklenicinin halka açık finansal tablolarını analiz etmek iyi bir fikir olmakla birlikte, iç denetçinin kurumun ihtiyaç duymadığı bir güvenlik sistemi için ücretlendirilip ücretlendirilmediğini değerlendirmesine yardımcı olmayabilir.", "cmt_en": "🇬🇧 Analyzing the contractor's public financial statements is a good idea, but unlikely to help assess whether the government is being charged for a security system it does not need."}]}, {"q_tr": "İç denetçiler kıyaslama sürecine nasıl katılabilir?", "q_en": "Internal auditors may participate in the benchmarking process by", "answer": 2, "options": [{"tr": "Temel kıyaslamaları yönetimden bağımsız olarak seçerek", "en": "Selecting key benchmarks independently of management", "cmt_tr": "🇹🇷 Kıyaslama seçimi genellikle çeşitli paydaşları içeren işbirlikçi bir süreçtir.", "cmt_en": "🇬🇧 Benchmark selection is typically a collaborative process involving various stakeholders, not done independently by auditors."}, {"tr": "Kıyaslama faaliyetleri için finansal kaynaklar sağlayarak", "en": "Providing financial resources for benchmarking activities", "cmt_tr": "🇹🇷 Finansal kaynak yönetimi denetçinin kıyaslamadaki rolü değildir.", "cmt_en": "🇬🇧 Financial resources management is not the auditor's role in benchmarking."}, {"tr": "Uygun kıyaslamaların belirlenmesini ve değerlendirilmesini kolaylaştırarak", "en": "Facilitating the identification and evaluation of appropriate benchmarks", "cmt_tr": "🇹🇷 İç denetçiler, kıyaslamaları belirlemeye ve değerlendirmeye yardımcı olarak kıyaslamayı kolaylaştırır. Bu süreçte süreçler ve performans ölçütleri konusundaki içgörülerini kullanır.", "cmt_en": "🇬🇧 Internal auditors often facilitate benchmarking by helping identify and evaluate benchmarks, leveraging their insights to assist management in understanding processes and performance metrics."}, {"tr": "Kıyaslama sonuçlarına göre organizasyonel strateji belirleyerek", "en": "Setting organizational strategy based on benchmarking outcomes", "cmt_tr": "🇹🇷 Denetçiler içgörüler sağlasa da strateji belirleme yönetimin sorumluluğundadır.", "cmt_en": "🇬🇧 While auditors provide insights, setting strategy is a management responsibility."}]}, {"q_tr": "İç denetçiler danışmanlık hizmeti sunarken kıyaslamayı nasıl kullanabilir?", "q_en": "Internal auditors may use benchmarking when performing an advisory service by", "answer": 1, "options": [{"tr": "Yalnızca bir sektör içindeki finansal tabloları karşılaştırarak", "en": "Solely comparing financial statements within an industry", "cmt_tr": "🇹🇷 Kıyaslama aynı zamanda süreç iyileştirme içgörülerini de kapsar; yalnızca finansal tablo karşılaştırmasıyla sınırlı değildir.", "cmt_en": "🇬🇧 Benchmarking also incorporates process improvement insights, not limited to solely comparing financial statements within an industry."}, {"tr": "Organizasyonel performansı artırabilecek en iyi uygulamaları belirleyerek", "en": "Identifying best practices that may improve organizational performance", "cmt_tr": "🇹🇷 Kıyaslama, performansı karşılaştırmak ve iyileştirme alanlarını belirlemek için kullanılır. İç denetçiler, en iyi uygulamaları belirlemeye ve değerlendirmeye yardımcı olarak kıyaslamaya katkı sağlar.", "cmt_en": "🇬🇧 Benchmarking is used to compare performance and identify improvement areas. Internal auditors assist in benchmarking by helping identify and evaluate best practices, facilitating performance improvements."}, {"tr": "Kıyaslama sonuçlarına göre değişiklikler zorunlu kılarak", "en": "Mandating changes based on benchmarking results", "cmt_tr": "🇹🇷 İç denetçiler içgörüler sağlar; ancak yönetimsel kararları veya değişiklikleri zorunlu kılamazlar.", "cmt_en": "🇬🇧 Internal auditors provide insights but cannot mandate managerial decisions or changes."}, {"tr": "Mevzuat uyumluluk yönergeleri oluşturarak", "en": "Creating regulatory compliance guidelines", "cmt_tr": "🇹🇷 Mevzuat uyumluluk yönergeleri oluşturmak genellikle kıyaslama çalışmalarında yapılmaz.", "cmt_en": "🇬🇧 Creating regulatory compliance guidelines is not typically done in benchmarking exercises."}]}, {"q_tr": "CFO, aylık finansal raporların hazırlanma süresini kısaltmak istedi. Muhasebe müdürü diğer sektör şirketlerinin sistemi kapatma ve aylık finansal rapor hazırlama sürelerini araştırıyor. Bu neyin örneğidir?", "q_en": "The CFO asked the controller to shorten monthly financial reporting time. The controller researches how long other industry companies take to close and prepare monthly reports. This is an example of", "answer": 0, "options": [{"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama; mevcut performansı diğer uygun organizasyonlardaki performansla karşılaştırmak için referans noktaları kullanmaktır. Karşılaştırma genellikle aynı sektördeki organizasyonlarla yapılır. Amaç iyileştirmeyi sağlamak için eylemleri belirlemek ve uygulamaktır.", "cmt_en": "🇬🇧 Benchmarking is the use of reference points to compare current performance with appropriate organizations. The comparison is typically with organizations in the same industry. The objective is to identify and implement actions to achieve improvement."}, {"tr": "En iyi uygulama analizi", "en": "Best-practice analysis", "cmt_tr": "🇹🇷 En iyi uygulama analizi kıyaslamaya benzer ancak daha geniş kapsamlıdır. Muhasebe müdürünün yapacağı kıyaslama, sektördeki diğer şirketlerin metriklerini belirleyecektir; bunların tümü mutlaka en iyi uygulamaları kullanmıyor olabilir.", "cmt_en": "🇬🇧 Best-practice analysis is similar but broader in scope. The controller's benchmarking will identify metrics of other industry companies; not all of which are necessarily utilizing best practices."}, {"tr": "Yeniden yapılanma", "en": "Reengineering", "cmt_tr": "🇹🇷 Yeniden yapılanma, müşterilere değer sunmak için iş işlevlerinin tamamen yeniden düşünülmesidir. Küçük iyileştirmeler yerine radikal bir inovasyondur.", "cmt_en": "🇬🇧 Reengineering is the complete rethinking of how business functions are performed. It is a radical innovation instead of a minor improvement."}, {"tr": "Sürekli iyileştirme", "en": "Continuous improvement", "cmt_tr": "🇹🇷 Sürekli iyileştirme; süreçleri analiz etme ve bu süreçlerde kademeli iyileştirmeler yapma sürecidir.", "cmt_en": "🇬🇧 Continuous improvement is an ongoing process of analyzing processes and making incremental improvements to those processes."}]}], "Subunit 4 - Other Advisory": [{"q_tr": "Aşağıdakilerden hangisi iş süreci yeniden yapılanmasına örnektir?", "q_en": "Which of the following is an example of business process reengineering?", "answer": 1, "options": [{"tr": "Üretimi hızlandırmak için mevcut üretim hattına yeni bir makine eklemek", "en": "Adding a new machine to the existing production line to speed up production", "cmt_tr": "🇹🇷 Yeniden yapılanma işleri yapmanın yeni yollarını bulur. Yeni bir makine eklemek mevcut prosedürleri iyileştirme örneğidir.", "cmt_en": "🇬🇧 Reengineering finds new ways of doing things. Adding a new machine is an example of improving existing procedures, not reengineering."}, {"tr": "Üretimi hızlandırmak için üretim hattını yeniden tasarlamak", "en": "Redesigning the production line to speed up production", "cmt_tr": "🇹🇷 Yeniden yapılanma, süreç inovasyonu ve çekirdek süreç yeniden tasarımını içerir. Mevcut prosedürleri iyileştirmek yerine işleri yapmanın yeni yollarını bulur. Üretim hattını yeniden tasarlamak buna örnektir.", "cmt_en": "🇬🇧 Reengineering involves process innovation and core process redesign. Instead of improving existing procedures, it finds new ways of doing things. Redesigning the production line is an example."}, {"tr": "Üretimi hızlandırmak için süreç hattındaki bir makineyi onarmak", "en": "Repairing a machine on the process line to speed up production", "cmt_tr": "🇹🇷 Bir makineyi onarmak mevcut prosedürleri iyileştirme örneğidir; yeniden yapılanma değil.", "cmt_en": "🇬🇧 Repairing a machine is an example of improving existing procedures, not reengineering."}, {"tr": "Üretimi hızlandırmak için üretim hattındaki bilgisayar sistemlerini güncellemek", "en": "Updating computer systems on the production line to speed up production", "cmt_tr": "🇹🇷 Bilgisayar sistemlerini güncellemek mevcut prosedürleri iyileştirme örneğidir; yeniden yapılanma değil.", "cmt_en": "🇬🇧 Updating the computer systems is an example of improving existing procedures, not reengineering."}]}, {"q_tr": "Durum tespiti denetimini en iyi tanımlayan seçenek hangisidir?", "q_en": "Which of the following best describes due diligence auditing?", "answer": 1, "options": [{"tr": "Tehlikeli atık üzerindeki kontrollerin yeterliliğini ve etkinliğini inceleme", "en": "Reviewing the adequacy and effectiveness of the controls over hazardous waste", "cmt_tr": "🇹🇷 Çevre denetimleri, tehlikeli atık üzerindeki kontrollerin yeterliliğini ve etkinliğini inceler; durum tespiti denetimi değil.", "cmt_en": "🇬🇧 Environmental audits review the adequacy and effectiveness of the controls over hazardous waste, not due diligence auditing."}, {"tr": "Büyük bir işlemin iş gerekçesinin geçerliliğini belirleme", "en": "Determining whether the business justification for a major transaction is valid", "cmt_tr": "🇹🇷 Durum tespiti denetimleri; bir iş birleşmesi, elden çıkarma veya ortak girişim gibi büyük bir işlemin iş gerekçesinin geçerli olup olmadığını belirler.", "cmt_en": "🇬🇧 Due diligence audits determine whether the business justification for a major transaction (e.g., business combination, divestiture, or joint venture) is valid."}, {"tr": "Özellikle bilgisayarlı sistemlerde saklanan kişisel bilgilerin güvenliğini ele alma", "en": "Addressing the security of personal information, especially in computerized systems", "cmt_tr": "🇹🇷 Gizlilik denetimleri kişisel bilgilerin güvenliğini ele alır; durum tespiti denetimi değil.", "cmt_en": "🇬🇧 Privacy audits address the security of personal information, not due diligence audits."}, {"tr": "Önemli inşaat sözleşmelerini izleme ve değerlendirme", "en": "Monitoring and evaluating significant construction contracts", "cmt_tr": "🇹🇷 Sözleşme denetimleri önemli inşaat sözleşmelerini ve hizmet sağlamayı içeren faaliyet sözleşmelerini izler ve değerlendirir.", "cmt_en": "🇬🇧 Contract audits monitor and evaluate significant construction contracts and operating contracts involving services."}]}, {"q_tr": "Bir kuruluşun hazine birimi tahvil ihracı için dış danışmanlar tuttu. İç denetçi danışmanların hükümet düzenlemelerine uyup uymadığını değerlendirdi. Denetçi hangi tür görevi gerçekleştirdi?", "q_en": "The treasury function hired consultants for a bond offering. The internal auditor performs an engagement to determine whether consultants followed governmental regulations. What type of engagement?", "answer": 1, "options": [{"tr": "Kıyaslama", "en": "Benchmarking", "cmt_tr": "🇹🇷 Kıyaslama, devlet düzenlemeleri tarafından zorunlu kılınan performansı optimize etmeye odaklanır; uyumu değerlendirmeye değil.", "cmt_en": "🇬🇧 Benchmarking focuses on optimizing performance, which is not mandated by government regulations."}, {"tr": "Uyumluluk", "en": "Compliance", "cmt_tr": "🇹🇷 Uyumluluk; politikalara, planlara, prosedürlere veya diğer gerekliliklere bağlılıktır. İç denetçiler, organizasyonel yönetişimin bir parçası olarak belirli alanlardaki uyumluluğu değerlendirir.", "cmt_en": "🇬🇧 Compliance is adherence to policies, plans, procedures, or other requirements. Internal auditors assess compliance in specific areas as part of organizational governance."}, {"tr": "İş sürekliliği", "en": "Business continuity", "cmt_tr": "🇹🇷 İş sürekliliği denetimi, kuruluşun çeşitli iş süreçleri kesintilerine yeterince hazırlıklı olup olmadığını belirler.", "cmt_en": "🇬🇧 Business continuity auditing determines whether the entity is sufficiently prepared for various types of interruptions of normal business processing."}, {"tr": "Finansal denetim", "en": "Financial audit", "cmt_tr": "🇹🇷 Finansal denetim, finansal bilgilerin doğru raporlanıp raporlanmadığını ve yeterince desteklenip desteklenmediğini belirler.", "cmt_en": "🇬🇧 A financial audit involves determining whether financial information was properly reported and adequately supported."}]}, {"q_tr": "İç denetim fonksiyonu, önerilen bir iş birleşmesinin geçerliliğini doğrulamak için avukat ve M&A uzmanıyla birlikte çalışıyor. Bu neyin örneğidir?", "q_en": "The internal auditing function works with an attorney and financial M&A expert to verify validity of a proposed business combination. This is an example of a(n)", "answer": 3, "options": [{"tr": "Uyumluluk görevi", "en": "Compliance engagement", "cmt_tr": "🇹🇷 Uyumluluk denetimi görevi, şirketin ilgili yasa, yönetmelik, sözleşme ve prosedürlerin gerekliliklerini karşılayıp karşılamadığını test eder.", "cmt_en": "🇬🇧 A compliance audit engagement tests if the company is meeting the requirements of relevant laws, regulations, contracts, and procedures."}, {"tr": "Performans denetimi", "en": "Performance audit", "cmt_tr": "🇹🇷 Performans denetimi, organizasyonun temel performans göstergelerindeki ilerlemesine ilişkin güvence sağlar.", "cmt_en": "🇬🇧 A performance audit provides assurance about the organization's progress in meeting its key performance indicators."}, {"tr": "Operasyonel denetim", "en": "Operational audit", "cmt_tr": "🇹🇷 Operasyonel denetim, organizasyonun operasyonlarının verimliliğini ve etkinliğini değerlendirir.", "cmt_en": "🇬🇧 An operational audit assesses the efficiency and effectiveness of an organization's operations."}, {"tr": "Durum tespiti görevi", "en": "Due diligence engagement", "cmt_tr": "🇹🇷 Durum tespiti görevi; iç denetçilerin ve diğerlerinin büyük bir işlemin iş gerekçesinin geçerliliğini doğruladığı bir hizmettir. İç denetçi yalnızca danışmanlık sağlıyorsa bu danışmanlık görevidir.", "cmt_en": "🇬🇧 A due diligence engagement is a service in which internal auditors and others verify the validity of the business justification for a major transaction. If the internal auditor merely provides counsel and advice, it is an advisory engagement."}]}, {"q_tr": "İç denetçilerin temel performans göstergelerine ulaşmak için organizasyonun ne kadar iyi ilerlediğini ölçmek amacıyla performans denetimleri yürüttüğü görev türü hangisidir?", "q_en": "Which type of engagement involves internal auditors conducting performance audits to measure how well an organization is achieving targets for its KPIs?", "answer": 0, "options": [{"tr": "Performans güvence görevi", "en": "Performance assurance engagement", "cmt_tr": "🇹🇷 Güvence görevinde iç denetçiler, organizasyonun temel performans göstergelerindeki hedeflere ne kadar iyi ulaştığını ölçmek için performans denetimleri yürütür.", "cmt_en": "🇬🇧 In an assurance engagement, internal auditors conduct performance audits to measure how well an organization is achieving the targets for its key performance indicators."}, {"tr": "Performans danışmanlık görevi", "en": "Performance advisory engagement", "cmt_tr": "🇹🇷 Danışmanlık görevinde iç denetçiler performansı ölçmek yerine müşterilerle birlikte performansı iyileştirmek için çalışır.", "cmt_en": "🇬🇧 In an advisory engagement, internal auditors work with clients to improve performance instead of measuring it."}, {"tr": "Operasyonel denetim", "en": "Operational audit", "cmt_tr": "🇹🇷 Operasyonel denetim organizasyon operasyonlarının verimliliğini ve etkinliğini değerlendirir; ancak KPI hedeflerine ulaşmayı ölçmek odak noktası değildir.", "cmt_en": "🇬🇧 Operational audits assess efficiency and effectiveness of operations, but measuring achievement of KPI targets is not the specific focus described here."}, {"tr": "Finansal denetim", "en": "Financial audit", "cmt_tr": "🇹🇷 İç denetçiler, finansal tablolar için temel olan raporların doğruluğunu güvence altına almak amacıyla finansal tabloları oluşturan sistemleri ve kontrolleri değerlendirir.", "cmt_en": "🇬🇧 Internal auditors assess systems and controls responsible for generating financial statements to ensure accuracy of the reports that are the basis for those statements."}]}, {"q_tr": "Yeniden yapılanma projesinin tamamlanmasının ardından yönetim, iç denetim fonksiyonundan yeniden tasarlanan sürecin uygulanmasını yönetmesini istedi. Bu iç denetçiler için uygun bir görev midir?", "q_en": "Upon completion of a reengineering project, management asked internal audit to direct the implementation of the redesigned process. Is this appropriate?", "answer": 1, "options": [{"tr": "Evet, çünkü yeniden tasarlanan süreçleri uygulamak genellikle iç denetim tüzüğüne dahildir", "en": "Yes, because implementing redesigned processes is generally included in the internal audit charter", "cmt_tr": "🇹🇷 İç denetçiler sürecin üst yönetimin desteğine sahip olup olmadığını belirleyebilir; ancak yeni sürecin uygulanmasından sorumlu değillerdir.", "cmt_en": "🇬🇧 Internal auditors may determine if the process has senior management's support, but they are not responsible for implementing the new process."}, {"tr": "Evet, yeniden yapılanma yetkilerinin bir parçası olarak iç denetçiler uygulamayı da yönlendirebilir", "en": "Yes, as part of their mandate to redesign processes internal auditors may also direct the implementation", "cmt_tr": "🇹🇷 İç denetçiler; sürecin üst yönetim desteğine sahip olup olmadığını belirleyebilir, dikkate alınacak alanları önerebilir ve yeni sistem için denetim planları geliştirebilir. Öneride bulunabilirler; ancak zorunlu kılamazlar.", "cmt_en": "🇬🇧 Internal auditors may determine whether the process has senior management's support, recommend areas for consideration, and develop audit plans for the new system. They can recommend but cannot mandate."}, {"tr": "Hayır, çünkü iç denetçiler bir yeniden yapılanma projesine katılmamalıdır; bu çıkar çatışmasıdır", "en": "No, because internal auditors should not participate in a reengineering project because it is a conflict of interest", "cmt_tr": "🇹🇷 İç denetçiler, öneri sunarak ve yeniden yapılanma projesi ekibinin önerdiği yeni sisteme yönelik denetim planları geliştirerek katılabilir; ancak kontrolleri yetkilendiremezler.", "cmt_en": "🇬🇧 Internal auditors may recommend new internal controls or improvements and develop audit plans for a recommended new system, but they cannot authorize controls; management is responsible for that."}, {"tr": "Hayır, iç denetçiler yeniden tasarım sürecinin uygulanmasına doğrudan dahil olmamalıdır", "en": "No, internal auditors should not become directly involved in the implementation of the redesigned process", "cmt_tr": "🇹🇷 İç denetçiler yeniden tasarım sürecinin uygulanmasına doğrudan dahil olmamalıdır; çünkü bu profesyonel çıkarların olası çatışması nedeniyle bağımsızlıklarını ve nesnelliklerini zedeler.", "cmt_en": "🇬🇧 Internal auditors should not become directly involved in the implementation of the redesign process because this involvement impairs their independence and objectivity due to possible conflict of professional interests."}]}, {"q_tr": "İç denetçiler genellikle durum tespiti incelemesi yapmak veya dış denetçilere bu süreçte yardımcı olmak üzere çağrılır. Durum tespiti incelemesi aşağıdakilerden hangisi olabilir?", "q_en": "Internal auditors are often called upon to perform or assist in a due diligence review. A due diligence review may be a(n)", "answer": 3, "options": [{"tr": "Bir yüklenicinin yönlendirmesiyle yapılan ara dönem finansal tablolarının incelenmesi", "en": "Review of interim financial statements as directed by an underwriting firm", "cmt_tr": "🇹🇷 İnceleme yüklenici tarafından kullanılabilse de yüklenici tarafından yönlendirilmez.", "cmt_en": "🇬🇧 Although the review may be used by the underwriter, it is not directed by the underwriter."}, {"tr": "Bölüm yönetiminin yasa ve yönetmeliklere uyup uymadığını belirlemek için bir organizasyonun bölümünün operasyonel denetimi", "en": "Operational audit of a division to determine if divisional management complies with laws and regulations", "cmt_tr": "🇹🇷 Durum tespiti incelemesi dahili bir operasyonel denetim değildir.", "cmt_en": "🇬🇧 The due diligence review is not an internal operational audit."}, {"tr": "Denetim komitesi politikalarına uyumu belirlemek için denetim komitesi tarafından talep edilen operasyon incelemesi", "en": "Review of operations requested by audit committee to determine compliance with audit committee policies", "cmt_tr": "🇹🇷 Durum tespiti incelemesi organizasyonel politikalara uyumluluk için dahili bir inceleme değildir.", "cmt_en": "🇬🇧 The due diligence review is not an internal review for compliance with organizational policies."}, {"tr": "Potansiyel bir satın alma işlemiyle bağlantılı olarak finansal tablolar ve ilgili açıklamaların incelenmesi", "en": "Review of financial statements and related disclosures in conjunction with a potential acquisition", "cmt_tr": "🇹🇷 Durum tespiti görevi, iş birleşmesi gibi büyük bir işlemin iş gerekçesini belirlemeye yöneliktir. İç denetçiler ve diğerleri, hedef şirketin operasyonlarını, kontrollerini, finansmanını veya finansal bilgilerin açıklamalarını inceleyen bir ekibin parçası olabilir.", "cmt_en": "🇬🇧 A due diligence engagement is a service to determine the business justification for a major transaction. Internal auditors may be part of a team that reviews the acquiree's operations, controls, financing, or disclosures of financial information."}]}, {"q_tr": "İç denetim ekibi potansiyel bir birleşme veya satın alma planlarını değerlendirmek için durum tespiti denetimi yapıyor. Bir şirketin başka bir şirketle birleşmesi veya onu satın alması için geçerli bir nedenler hangisi?", "q_en": "An internal audit team is performing a due diligence audit to assess plans for a potential merger or acquisition. Which is a valid reason for a company to merge with or acquire another company?", "answer": 0, "options": [{"tr": "Riski çeşitlendirmek", "en": "To diversify risk", "cmt_tr": "🇹🇷 Birleşme için olağan gerekçe, faaliyet gösterilen iş kollarını çeşitlendirerek risk yönetimidir.", "cmt_en": "🇬🇧 The usual justification for a combination is risk management through diversifying the businesses in which the organization is engaged."}, {"tr": "Rekabeti ortadan kaldırmak", "en": "To eliminate competition", "cmt_tr": "🇹🇷 Rekabet düzeyini azaltmak geçerli bir iş gerekçesi olsa da rekabeti tamamen ortadan kaldırmak, uzun vadede şirkete zarar verecek bir antitröst soruşturmasına yol açabilir.", "cmt_en": "🇬🇧 Reducing competition is a valid business reason, but eliminating competition could attract an antitrust investigation that would be costly and hurt the company in the long run."}, {"tr": "Yapay zekaya yapılan tek seferlik yatırımla süregelen tüm işgücü maliyetlerini ortadan kaldırmak", "en": "To eliminate all ongoing labor costs with a one-time investment in AI", "cmt_tr": "🇹🇷 İşgücü maliyetlerini azaltmak geçerli bir nedendir; ancak tüm işgücü maliyetlerini yapay zeka ile ortadan kaldırmak büyük olasılıkla pratik değildir.", "cmt_en": "🇬🇧 A reduction in labor costs is a valid reason, but to eliminate all labor costs by implementing AI is likely not practical."}, {"tr": "Hisse senedi fiyatlarını artırmak", "en": "To increase stock prices", "cmt_tr": "🇹🇷 Durum tespiti görevi, büyük bir işlemin iş gerekçesinin geçerliliğini belirlemeye yöneliktir. Hisse senedi fiyatlarını artırmak genellikle birleşme veya satın alma için geçerli bir neden değildir.", "cmt_en": "🇬🇧 A due diligence engagement determines if the business justification is valid. Increasing stock prices is not often a valid reason for a merger or acquisition; other methods can achieve this more directly."}]}, {"q_tr": "Organizasyon küçük bir toksik atık işleme işletmesi satın almayı düşünüyor. İç denetçiler durum tespiti ekibinin parçası. Çalışmaları büyük olasılıkla neyi kapsamayacaktır?", "q_en": "Organization considering purchasing a toxic waste disposal business. Internal auditors are part of the due diligence team. The scope will most likely NOT include", "answer": 0, "options": [{"tr": "Hedef şirkete karşı açılan davaların esasının değerlendirilmesi", "en": "Evaluation of the merit of lawsuits currently filed against the acquiree", "cmt_tr": "🇹🇷 Davaların esasının değerlendirilmesi hukuki uzmanlık gerektirir; iç denetim kapsamında değil.", "cmt_en": "🇬🇧 Evaluation of the merit of lawsuits requires legal expertise, which is outside the scope of internal auditing."}, {"tr": "Hedef şirketin atık kabul prosedürlerinin incelenmesi ve yasal gerekliliklerle karşılaştırılması", "en": "Review of acquiree's procedures for acceptance of waste material and comparison with legal requirements", "cmt_tr": "🇹🇷 Yasa, yönetmelik ve sözleşmelere uyumluluk iç denetimin kapsamı dahilindedir.", "cmt_en": "🇬🇧 Compliance with laws, regulations, and contracts is within the scope of internal auditing."}, {"tr": "Hedef şirketin kredi sözleşmelerine uyumu ve açıklamalarının analizi", "en": "Analysis of acquiree's compliance with and disclosure of loan covenants", "cmt_tr": "🇹🇷 Yasa, yönetmelik ve sözleşmelere uyumluluk iç denetimin kapsamı dahilindedir.", "cmt_en": "🇬🇧 Compliance with laws, regulations, and contracts is within the scope of internal auditing."}, {"tr": "Hedef şirketin operasyonlarının verimliliğinin değerlendirilmesi", "en": "Assessment of the efficiency of the operations of the acquiree", "cmt_tr": "🇹🇷 İç denetçiler, operasyonların etkinliği ve verimliliği üzerindeki kontroller dahil olmak üzere kontrolleri değerlendirir.", "cmt_en": "🇬🇧 Internal auditors evaluate controls, including those over effectiveness and efficiency of operations."}]}, {"q_tr": "İç denetçiler bir atık işleme işletmesinin satın alınması için durum tespiti incelemesi yapıyor. Çalışmaları büyük olasılıkla neyi kapsamayacaktır?", "q_en": "Internal auditors performing a due diligence review for purchase of a waste disposal business. The scope will most likely NOT include", "answer": 0, "options": [{"tr": "Hedef şirketin sahip olduğu yatırımların değerinin takdir edilmesi", "en": "An appraisal of the value of investments owned by the acquiree", "cmt_tr": "🇹🇷 Değerleme konusundaki takdir hizmeti durum tespiti incelemesinin kapsamı dışındadır; uzmanlık gerektiren ayrı bir hizmettir.", "cmt_en": "🇬🇧 An appraisal service regarding valuation is outside the scope of a due diligence review; it requires separate specialized expertise."}, {"tr": "Hedef şirketin atık kabul prosedürlerinin incelenmesi ve yasal gerekliliklerle karşılaştırılması", "en": "Review of acquiree's procedures for acceptance of waste material and comparison with legal requirements", "cmt_tr": "🇹🇷 Yasa, yönetmelik ve sözleşmelere uyumluluk iç denetimin kapsamı dahilindedir.", "cmt_en": "🇬🇧 Compliance with laws, regulations, and contracts is within the scope of internal auditing."}, {"tr": "Hedef şirketin istihdam yasalarına uyumunun analizi", "en": "Analysis of the acquiree's compliance with employment laws", "cmt_tr": "🇹🇷 Yasa, yönetmelik ve sözleşmelere uyumluluk iç denetimin kapsamı dahilindedir.", "cmt_en": "🇬🇧 Compliance with laws, regulations, and contracts is within the scope of internal auditing."}, {"tr": "Hedef şirketi satın alanla entegre etmenin faydasının değerlendirilmesi", "en": "Assessment of the benefit of integrating the acquiree with the acquirer's business", "cmt_tr": "🇹🇷 Durum tespiti süreci, işlemin beklenen faydalarının (daha geniş pazarlar, daha yetenekli çalışanlar, fikri mülkiyet erişimi, operasyonel sinerji vb.) gerçekleşip gerçekleşmeyeceğini belirler.", "cmt_en": "🇬🇧 The due diligence process establishes whether the expected benefits of the transaction (wider markets, more skilled employees, access to intellectual property, operating synergies, etc.) are likely to be realized."}]}, {"q_tr": "İş süreci yeniden yapılanmasının bir özelliği hangisidir?", "q_en": "Which of the following is a characteristic of business process reengineering?", "answer": 3, "options": [{"tr": "Mevcut prosedürlerin kademeli ve aşamalı olarak düzenlenmesi", "en": "Gradual, incremental streamlining of existing procedures", "cmt_tr": "🇹🇷 Mevcut prosedürlerin kademeli ve aşamalı olarak düzenlenmesi (kaizen), iş süreci yeniden yapılanması tarafından özellikle reddedilen bir yaklaşımdır.", "cmt_en": "🇬🇧 Gradual, incremental streamlining of existing procedures (kaizen) is specifically rejected by business process reengineering."}, {"tr": "Manuel süreçlerin bilgisayara taşınması", "en": "The movement of manual processes to computers", "cmt_tr": "🇹🇷 Manuel süreçlerin yalnızca bilgisayara taşınması (otomasyon) iş süreci mühendisliğinin bir özelliği değildir.", "cmt_en": "🇬🇧 Simply moving manual processes to computers (automation) is not a characteristic of business process reengineering."}, {"tr": "İşin niteliğinin kendisinde bir değişiklik", "en": "A change in the nature of the business itself", "cmt_tr": "🇹🇷 İşin niteliğinin kendisinde bir değişiklik (paradigma değişimi) iş süreci yeniden yapılanmasının bir özelliği değildir.", "cmt_en": "🇬🇧 A change in the nature of the business itself (paradigm shift) is not a characteristic of business process reengineering."}, {"tr": "Organizasyonun belirli bir iş sürecini yürütme biçiminin aşağıdan yukarıya yeniden gözden geçirilmesi", "en": "The bottom-up revision of the way the organization carries out a particular business process", "cmt_tr": "🇹🇷 İş süreci yeniden yapılanması; organizasyonun belirli bir iş işlevini mevcut durumdan bağımsız olarak nasıl yürütmesi gerektiğini tamamen yeniden düşünen kapsamlı bir aşağıdan yukarıya revizyondur.", "cmt_en": "🇬🇧 Business process reengineering is the complete, bottom-up revision of the way an organization carries out a particular business process. Organizations totally rethink how a particular business function should be carried out, without regard to how it is currently performed."}]}, {"q_tr": "Organizasyon, iş işlevi ortadan kaldırmaya ve küçülmeye yol açabilecek bir iş süreci yeniden yapılanması girişimi yürütüyor. İç denetim fonksiyonunun uygun rolü hangisidir?", "q_en": "An organization is undergoing a business process reengineering initiative that may lead to job function elimination. What would be an appropriate role for internal audit?", "answer": 1, "options": [{"tr": "Süreçleri analiz etmek ve ardından süreç değişikliklerini uygulamak", "en": "Analyzing the processes and then implementing the process changes", "cmt_tr": "🇹🇷 İç denetçiler yeni süreçlerin uygulanmasına doğrudan dahil olmamalıdır; bu durum bağımsızlıklarını ve nesnelliklerini zedeler.", "cmt_en": "🇬🇧 Internal auditors should not become directly involved in the implementation of the new processes; this involvement would impair their independence and objectivity."}, {"tr": "Yeniden yapılanma için değerlendirilecek işlevleri önermek", "en": "Recommending functions to consider for reengineering", "cmt_tr": "🇹🇷 İş süreci yeniden yapılanması; süreç inovasyonu ve yeniden tasarımı içerir. İç denetçiler, yeniden yapılanma için değerlendirilecek işlevleri önerebilir ve yeni sistem için denetim planları geliştirebilir.", "cmt_en": "🇬🇧 Business process reengineering involves process innovation and redesign. Internal auditors may perform the role of recommending functions to consider for reengineering and developing audit plans for the new system."}, {"tr": "Yeniden yapılanma girişimini ve önerileri onaylamak", "en": "Approving the reengineering initiative and recommendations", "cmt_tr": "🇹🇷 Girişimi ve süreç değişikliği önerilerini onaylamaya üst yönetim ve yönetim kurulu dahil olur; YDY değil.", "cmt_en": "🇬🇧 Senior management and the board, not the CAE, would be involved in approving the initiative and process change recommendations."}, {"tr": "Çalışanları pozisyonlarının yeniden yapılanma nedeniyle ortadan kaldırıldığını bildiren toplantılara katılmak", "en": "Participating in meetings informing employees their positions have been eliminated", "cmt_tr": "🇹🇷 Çalışana pozisyonunun ortadan kaldırıldığını bildirmek insan kaynakları fonksiyonunun ve/veya çalışanın yöneticisinin sorumluluğundadır.", "cmt_en": "🇬🇧 Informing an employee that his or her position has been eliminated is the responsibility of the human resources function and/or the employee's manager."}]}, {"q_tr": "İç denetçiler iş süreci yeniden yapılanmasıyla ilgili danışmanlık hizmetleri sunarken ne göz önünde bulundurulmalıdır?", "q_en": "What should be considered when internal auditors perform advisory services related to business process reengineering?", "answer": 1, "options": [{"tr": "Süreç tasarımı ve uygulama üzerinde tam özerklik", "en": "Complete autonomy over the process design and implementation", "cmt_tr": "🇹🇷 Tam özerklik uygun değildir; çünkü çıkar çatışmasına yol açabilir.", "cmt_en": "🇬🇧 Total autonomy is inappropriate because it may result in a conflict of interest."}, {"tr": "Süreç uygulamasına çok fazla dahil olmamayı sağlamak", "en": "Ensuring they do not become too involved in process implementation", "cmt_tr": "🇹🇷 İç denetçiler; süreci uygulayan taraf olmak yerine danışmanlık girdisi sağlayarak bağımsızlıklarını korumalıdır. Süreç yeniden yapılanmasındaki danışmanlık rolü, doğrudan uygulama yapmaksızın tasarıma katkı sağlar.", "cmt_en": "🇬🇧 Internal auditors must maintain independence by providing advisory input without becoming involved in implementing the process. The advisory role in process reengineering contributes to design without direct implementation."}, {"tr": "Kontrolü korumak için tüm değişiklikleri denetlemek", "en": "Overseeing all changes to maintain control of the project", "cmt_tr": "🇹🇷 Denetim (oversight), danışmanlık konumunu korumakla çelişen bir kontrol anlamı taşır.", "cmt_en": "🇬🇧 Oversight implies control, which conflicts with maintaining an advisory position."}, {"tr": "Yalnızca verimliliği artırmak için işgücünü azaltmaya odaklanmak", "en": "Solely focusing on reducing headcount to improve efficiency", "cmt_tr": "🇹🇷 Danışmanlık hizmetleri daha geniş verimlilik stratejileri arar; yalnızca işgücü azaltmaya odaklanmaz.", "cmt_en": "🇬🇧 Advisory services seek broader efficiency strategies, not just headcount reduction."}]}]};
+const SHEETS = ["Subunit 1 - Overview", "Subunit 2 - IA Responsibilities", "Subunit 3 - Benchmarking", "Subunit 4 - Other Advisory"];
+const SHORT_NAMES = {"Subunit 1 - Overview": "SU1", "Subunit 2 - IA Responsibilities": "SU2", "Subunit 3 - Benchmarking": "SU3", "Subunit 4 - Other Advisory": "SU4"};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let lang = "tr";         // "tr" | "en"
+let curChapter = 0;
+let curQ = 0;            // index within chapter
+let answered = [];       // per-question answered flag
+let correctArr = [];     // per-question correct flag
+let chapterScore = [];   // [{correct,total}] per chapter
+let quizStarted = false;
+let visitedQ = {};       // {ci: Set of visited qi}
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function totalCorrect() { return correctArr.filter(Boolean).length; }
+function totalAnswered() { return answered.filter(Boolean).length; }
+function totalQuestions() { return SHEETS.reduce((s,k)=>s+QUIZ[k].length,0); }
+
+function optLetter(i) { return ["A","B","C","D"][i]; }
+
+function getChapterStats(ci) {
+  const qs = QUIZ[SHEETS[ci]];
+  const offset = SHEETS.slice(0,ci).reduce((s,k)=>s+QUIZ[k].length,0);
+  let c=0, t=0;
+  for(let i=0;i<qs.length;i++){
+    if(answered[offset+i]){ t++; if(correctArr[offset+i]) c++; }
+  }
+  return {c,t,total:qs.length};
+}
+
+function globalIndex(ci, qi) {
+  return SHEETS.slice(0,ci).reduce((s,k)=>s+QUIZ[k].length,0) + qi;
+}
+
+// ── LOCALSTORAGE KEY ─────────────────────────────────────────────────────────
+const LS_KEY = "cia_quiz_unit4";
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function initState() {
+  const total = totalQuestions();
+  answered   = new Array(total).fill(false);
+  correctArr = new Array(total).fill(false);
+  visitedQ   = {};
+  QUIZ[SHEETS.forEach ? SHEETS[0] : Object.keys(QUIZ)[0]];
+  SHEETS.forEach((_,ci) => { QUIZ[SHEETS[ci]].forEach(q => { q._chosen = undefined; }); });
+}
+
+function saveProgress() {
+  const data = {
+    answered, correctArr, curChapter, curQ, visitedQ: {},
+    chosen: SHEETS.map((s,ci) => QUIZ[s].map(q => q._chosen ?? null))
+  };
+  // visitedQ has Sets — convert to arrays
+  Object.keys(visitedQ).forEach(k => { data.visitedQ[k] = [...visitedQ[k]]; });
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    answered   = data.answered   || [];
+    correctArr = data.correctArr || [];
+    curChapter = data.curChapter || 0;
+    curQ       = data.curQ       || 0;
+    visitedQ   = {};
+    Object.keys(data.visitedQ||{}).forEach(k => { visitedQ[k] = new Set(data.visitedQ[k]); });
+    // Restore _chosen
+    (data.chosen||[]).forEach((arr,ci) => {
+      arr.forEach((ch,qi) => { if(ch !== null) QUIZ[SHEETS[ci]][qi]._chosen = ch; });
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearProgress() {
+  try { localStorage.removeItem(LS_KEY); } catch(e) {}
+}
+
+function startOrResume() {
+  const hasSave = loadProgress();
+  quizStarted = true;
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("chapters-scroll").style.display = "";
+  document.getElementById("overall-result").className = "";
+  buildChapterTabs();
+  if(hasSave && answered.some(Boolean)) {
+    updateScore();
+    updateProgress();
+    goToChapter(curChapter);
+  } else {
+    initState();
+    goToChapter(0);
+  }
+}
+
+function startQuiz() {
+  clearProgress();
+  initState();
+  quizStarted = true;
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("chapters-scroll").style.display = "";
+  document.getElementById("overall-result").className = "";
+  buildChapterTabs();
+  goToChapter(0);
+}
+
+function goToMenu() {
+  saveProgress();
+  window.location.href = "index.html";
+}
+
+// ── CHAPTER TABS ──────────────────────────────────────────────────────────────
+function buildChapterTabs() {
+  const inner = document.getElementById("chapters-inner");
+  inner.innerHTML = "";
+  SHEETS.forEach((sname, ci) => {
+    const btn = document.createElement("button");
+    btn.className = "ch-btn" + (ci===curChapter?" active":"");
+    btn.id = "ch-btn-"+ci;
+    btn.innerHTML = `<span class="ch-dot"></span>${SHORT_NAMES[sname]||sname}`;
+    btn.onclick = () => goToChapter(ci);
+    inner.appendChild(btn);
+  });
+}
+
+function updateChapterTabs() {
+  SHEETS.forEach((sname,ci) => {
+    const btn = document.getElementById("ch-btn-"+ci);
+    if(!btn) return;
+    btn.className = "ch-btn" + (ci===curChapter?" active":"");
+    const stats = getChapterStats(ci);
+    if(stats.t === stats.total) btn.classList.add("ch-done");
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function goToChapter(ci) {
+  curChapter = ci;
+  curQ = 0;
+  document.getElementById("summary-card").className = "";
+  document.getElementById("summary-card").innerHTML = "";
+  document.getElementById("overall-result").className = "";
+  updateChapterTabs();
+  renderQuestion();
+  renderQuestionGrid();
+  scrollTo(0,0);
+}
+
+function nextQuestion() {
+  const qs = QUIZ[SHEETS[curChapter]];
+  curQ++;
+  if(curQ >= qs.length) {
+    showChapterSummary();
+  } else {
+    renderQuestion();
+    renderQuestionGrid();
+    const qa = document.getElementById("question-area");
+    qa.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  updateProgress();
+}
+
+function jumpToQuestion(qi) {
+  curQ = qi;
+  document.getElementById("summary-card").className = "";
+  document.getElementById("summary-card").innerHTML = "";
+  document.getElementById("overall-result").className = "";
+  renderQuestion();
+  renderQuestionGrid();
+  updateProgress();
+  const qa = document.getElementById("question-area");
+  qa.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function renderQuestionGrid() {
+  const qs     = QUIZ[SHEETS[curChapter]];
+  const offset = globalIndex(curChapter, 0);
+  const area   = document.getElementById("q-grid-area");
+  if(!area) return;
+
+  const visited = visitedQ[curChapter] || new Set();
+
+  let btns = qs.map((q, qi) => {
+    const gi = offset + qi;
+    let cls = "q-num-btn ";
+    if(answered[gi]) {
+      cls += correctArr[gi] ? "qst-correct" : "qst-wrong";
+    } else if(visited.has(qi)) {
+      cls += "qst-visited";
+    } else {
+      cls += "qst-unseen";
+    }
+    if(qi === curQ) cls += " qst-current";
+    return `<button class="${cls}" onclick="jumpToQuestion(${qi})" title="Sual ${qi+1}">${qi+1}</button>`;
+  }).join("");
+
+  area.innerHTML = `
+    <div class="q-grid-wrap">
+      <div class="q-grid-label">${lang==="tr" ? "Suallar" : "Questions"}</div>
+      <div class="q-grid">${btns}</div>
+    </div>
+    <button class="reset-unit-btn" onclick="confirmResetUnit()">
+      ↺ ${lang==="tr" ? "Bu unitı sıfırla" : "Reset this unit"}
+    </button>`;
+}
+
+function confirmResetUnit() {
+  const name = SHORT_NAMES[SHEETS[curChapter]] || SHEETS[curChapter];
+  const msg  = lang==="tr"
+    ? `"${name}" üçün bütün cavablar silinəcək. Davam edirsiniz?`
+    : `Reset all answers for "${name}"? This cannot be undone.`;
+  if(!confirm(msg)) return;
+  retryChapter(curChapter);
+  renderQuestionGrid();
+}
+
+// ── RENDER QUESTION ───────────────────────────────────────────────────────────
+function renderQuestion() {
+  const qs   = QUIZ[SHEETS[curChapter]];
+  const q    = qs[curQ];
+  const gi   = globalIndex(curChapter, curQ);
+  const done = answered[gi];
+
+  // Track visited
+  if(!visitedQ[curChapter]) visitedQ[curChapter] = new Set();
+  visitedQ[curChapter].add(curQ);
+
+  const area = document.getElementById("question-area");
+  const card = document.createElement("div");
+  card.className = "q-wrap";
+  card.innerHTML = buildQuestionHTML(q, curQ, qs.length, gi, done);
+  area.innerHTML = "";
+  area.appendChild(card);
+
+  // Restore state if already answered
+  if(done) {
+    const correctIdx = (q.answer !== undefined) ? q.answer : ["A","B","C","D"].indexOf(q.correct);
+    const chosenIdx  = q._chosen !== undefined ? q._chosen : correctIdx;
+    markAnswer(gi, chosenIdx, correctIdx, false);
+  }
+
+  // Show next button if already answered
+  if(done) {
+    const qs2 = QUIZ[SHEETS[curChapter]];
+    const isLastQ  = (curQ === qs2.length - 1);
+    const isLastCh = (curChapter === SHEETS.length - 1);
+    const nextLabel = isLastQ
+      ? (isLastCh ? (lang==="tr" ? "Nəticələrə bax →" : "See Results →")
+                  : (lang==="tr" ? "Növbəti Mövzu →" : "Next Chapter →"))
+      : (lang==="tr" ? "Növbəti Sual →" : "Next Question →");
+    const nextAction = isLastQ ? "showChapterSummary()" : "nextQuestion()";
+    const cardEl = document.getElementById(`card-${gi}`);
+    if(cardEl && !cardEl.querySelector(".next-btn-wrap")) {
+      const wrap = document.createElement("div");
+      wrap.className = "next-btn-wrap visible";
+      wrap.innerHTML = `<button class="btn-next-q" onclick="${nextAction}">${nextLabel}</button>`;
+      cardEl.appendChild(wrap);
+    }
+  }
+
+  renderQuestionGrid();
+}
+
+function buildQuestionHTML(q, qi, total, gi, done) {
+  const qText = lang==="tr" ? q.q_tr : q.q_en;
+  const num   = qi+1;
+  const opts  = q.options.map((opt,i) => {
+    const txt = lang==="tr" ? (opt.tr||opt.en) : (opt.en||opt.tr);
+    // strip "X / Y" pattern if in EN mode — just use after " / " if present
+    const display = (lang==="en" && txt.includes(" / ")) ? txt.split(" / ").pop().trim() : txt;
+    return `
+    <button class="opt-btn" id="opt-${gi}-${i}" onclick="choose(${gi},${i})">
+      <span class="opt-label">${optLetter(i)}</span>
+      <span class="opt-text">${escHtml(display)}</span>
+      <span class="opt-icon" id="icon-${gi}-${i}"></span>
+    </button>
+    <div class="explanation" id="expl-${gi}-${i}">
+      <div class="expl-lang">${lang==="tr"?"Türkçe Açıklama":"TR Açıklama"}</div>
+      <div class="expl-text">${escHtml(opt.cmt_tr)}</div>
+      <div class="expl-divider"></div>
+      <div class="expl-lang">English Explanation</div>
+      <div class="expl-text">${escHtml(opt.cmt_en)}</div>
+    </div>
+    <button class="expl-toggle" id="toggle-${gi}-${i}">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      ${lang==="tr" ? "İzahı göster" : "Show explanation"}
+    </button>`;
+  }).join("");
+
+  return `
+  <div class="q-card" id="card-${gi}">
+    <div class="q-header">
+      <div class="q-number">${num}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px">${SHORT_NAMES[SHEETS[curChapter]]||SHEETS[curChapter]} &nbsp;·&nbsp; ${num} / ${total}</div>
+        <div class="q-text">${escHtml(qText)}</div>
+      </div>
+    </div>
+    <div class="q-options">${opts}</div>
+  </div>`;
+}
+
+// ── ANSWER LOGIC ──────────────────────────────────────────────────────────────
+function choose(gi, chosen) {
+  const ci = getCIFromGI(gi);
+  const qi = gi - globalIndex(ci, 0);
+  const q  = QUIZ[SHEETS[ci]][qi];
+  if(answered[gi]) return;
+
+  const correctIdx = (q.answer !== undefined) ? q.answer : ["A","B","C","D"].indexOf(q.correct);
+  q._chosen = chosen;
+  answered[gi]   = true;
+  correctArr[gi] = (chosen === correctIdx);
+
+  markAnswer(gi, chosen, correctIdx, true);
+  updateScore();
+  updateProgress();
+  saveProgress();
+}
+
+function markAnswer(gi, chosen, correctIdx, animate) {
+  const labels = ["A","B","C","D"];
+
+  for(let i=0;i<4;i++) {
+    const btn    = document.getElementById(`opt-${gi}-${i}`);
+    const icon   = document.getElementById(`icon-${gi}-${i}`);
+    const toggle = document.getElementById(`toggle-${gi}-${i}`);
+    if(!btn) continue;
+    btn.disabled = true;
+
+    if(i === correctIdx) {
+      btn.classList.add("correct");
+      icon.textContent = "✓";
+      if(toggle) toggle.classList.add("visible");
+    } else if(i === chosen && chosen !== correctIdx) {
+      btn.classList.add("wrong");
+      icon.textContent = "✗";
+      if(toggle) toggle.classList.add("visible");
+    }
+  }
+  // Auto-open correct explanation
+  const expl = document.getElementById(`expl-${gi}-${correctIdx}`);
+  const tog  = document.getElementById(`toggle-${gi}-${correctIdx}`);
+  if(expl && animate) {
+    setTimeout(() => {
+      openExpl(gi, correctIdx);
+    }, 400);
+  }
+
+  // Show "Next question" button after answering
+  if(animate) {
+    const ci  = getCIFromGI(gi);
+    const qi  = gi - globalIndex(ci, 0);
+    const qs  = QUIZ[SHEETS[ci]];
+    const isLastQ = (qi === qs.length - 1);
+    const isLastCh = (ci === SHEETS.length - 1);
+
+    const nextLabel = isLastQ
+      ? (isLastCh
+          ? (lang==="tr" ? "Nəticələrə bax →" : "See Results →")
+          : (lang==="tr" ? "Növbəti Mövzu →" : "Next Chapter →"))
+      : (lang==="tr" ? "Növbəti Sual →" : "Next Question →");
+
+    const nextAction = isLastQ
+      ? (isLastCh ? "showChapterSummary()" : "showChapterSummary()")
+      : "nextQuestion()";
+
+    const card = document.getElementById(`card-${gi}`);
+    if(card) {
+      const existing = card.querySelector(".next-btn-wrap");
+      if(!existing) {
+        const wrap = document.createElement("div");
+        wrap.className = "next-btn-wrap";
+        wrap.innerHTML = `<button class="btn-next-q" onclick="${nextAction}">${nextLabel}</button>`;
+        card.appendChild(wrap);
+        setTimeout(() => wrap.classList.add("visible"), 600);
+      }
+    }
+  }
+  // Refresh grid to show new answer state
+  if(animate) {
+    setTimeout(() => renderQuestionGrid(), 50);
+  }
+}
+
+// ── EXPLANATION TOGGLE ────────────────────────────────────────────────────────
+function openExpl(gi, i) {
+  const expl = document.getElementById(`expl-${gi}-${i}`);
+  const tog  = document.getElementById(`toggle-${gi}-${i}`);
+  if(!expl || !tog) return;
+  const isOpen = expl.classList.contains("open");
+  expl.classList.toggle("open", !isOpen);
+  tog.classList.toggle("open", !isOpen);
+  tog.querySelector("span") && (tog.querySelector("span").textContent =
+    isOpen ? (lang==="tr"?"İzahı göster":"Show explanation")
+           : (lang==="tr"?"İzahı gizlə":"Hide explanation"));
+}
+
+// Make toggle buttons call openExpl
+document.addEventListener("click", e => {
+  const tog = e.target.closest(".expl-toggle");
+  if(!tog) return;
+  const [,gi,i] = tog.id.split("-");
+  openExpl(Number(gi), Number(i));
+});
+
+// ── PROGRESS & SCORE ─────────────────────────────────────────────────────────
+function updateScore() {
+  const c = totalCorrect();
+  const a = totalAnswered();
+  document.getElementById("score-badge").textContent = `${c} / ${a}`;
+}
+
+function updateProgress() {
+  const a = totalAnswered();
+  const t = totalQuestions();
+  const pct = t ? (a/t*100).toFixed(1) : 0;
+  document.getElementById("progress-bar-fill").style.width = pct+"%";
+  document.getElementById("prog-left").textContent =
+    lang==="tr" ? `${a} cavablandı` : `${a} answered`;
+  document.getElementById("prog-right").textContent =
+    lang==="tr" ? `${t} sual` : `${t} questions`;
+}
+
+// ── CHAPTER SUMMARY ───────────────────────────────────────────────────────────
+function showChapterSummary() {
+  const stats = getChapterStats(curChapter);
+  const pct   = stats.total ? Math.round(stats.c/stats.total*100) : 0;
+  const circ  = 2*Math.PI*46;
+  const fill  = circ*(1 - pct/100);
+
+  const isLast = curChapter === SHEETS.length-1;
+  const nextLabel = lang==="tr" ? (isLast ? "Bütün Nəticələr" : "Növbəti Mövzu →")
+                                : (isLast ? "All Results" : "Next Chapter →");
+
+  const summaryDiv = document.getElementById("summary-card");
+  summaryDiv.innerHTML = `
+    <div class="summary-header">
+      <h2>${lang==="tr"?"Bölüm Tamamlandı":"Chapter Complete"}</h2>
+      <p>${SHEETS[curChapter]}</p>
+    </div>
+    <div class="summary-score-ring">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 110 110">
+          <circle class="ring-track" cx="55" cy="55" r="46"/>
+          <circle class="ring-fill" cx="55" cy="55" r="46"
+            stroke-dasharray="${circ}" stroke-dashoffset="${circ}"
+            id="ring-fill-anim"/>
+        </svg>
+        <div class="ring-label">
+          <span class="ring-pct">${pct}%</span>
+          <span class="ring-sub">${lang==="tr"?"doğru":"correct"}</span>
+        </div>
+      </div>
+    </div>
+    <div class="summary-stats">
+      <div class="stat-item">
+        <span class="stat-num" style="color:var(--correct)">${stats.c}</span>
+        <span class="stat-label">${lang==="tr"?"Doğru":"Correct"}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" style="color:var(--wrong)">${stats.t-stats.c}</span>
+        <span class="stat-label">${lang==="tr"?"Səhv":"Wrong"}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">${stats.total}</span>
+        <span class="stat-label">${lang==="tr"?"Sual":"Questions"}</span>
+      </div>
+    </div>
+    <div class="summary-actions">
+      <button class="btn-retry" onclick="retryChapter(${curChapter})">
+        ↺ ${lang==="tr"?"Yenidən":"Retry"}
+      </button>
+      <button class="btn-next" onclick="${isLast?"showOverall()":"goToChapter("+(curChapter+1)+")"}">
+        ${nextLabel}
+      </button>
+    </div>
+  `;
+  summaryDiv.classList.add("visible");
+  document.getElementById("question-area").innerHTML = "";
+  document.getElementById("q-grid-area").innerHTML = "";
+
+  // Animate ring
+  setTimeout(() => {
+    const ring = document.getElementById("ring-fill-anim");
+    if(ring) ring.style.strokeDashoffset = fill;
+  }, 100);
+
+  updateChapterTabs();
+}
+
+function retryChapter(ci) {
+  const qs     = QUIZ[SHEETS[ci]];
+  const offset = globalIndex(ci, 0);
+  for(let i=0;i<qs.length;i++){
+    answered[offset+i]   = false;
+    correctArr[offset+i] = false;
+    qs[i]._chosen        = undefined;
+  }
+  visitedQ[ci] = new Set();
+  goToChapter(ci);
+  updateScore();
+  updateProgress();
+  saveProgress();
+}
+
+// ── OVERALL RESULTS ───────────────────────────────────────────────────────────
+function showOverall() {
+  document.getElementById("summary-card").className = "";
+  const tc = totalCorrect();
+  const ta = totalQuestions();
+  const pct = ta ? Math.round(tc/ta*100) : 0;
+
+  const rows = SHEETS.map((sname, ci) => {
+    const s = getChapterStats(ci);
+    const p = s.total ? Math.round(s.c/s.total*100) : 0;
+    return `<div class="cr-row">
+      <div class="cr-name">${SHORT_NAMES[sname]||sname}</div>
+      <div class="cr-bar-bg"><div class="cr-bar-fill" style="width:0%" data-w="${p}%"></div></div>
+      <div class="cr-score">${s.c}/${s.total}</div>
+    </div>`;
+  }).join("");
+
+  const el = document.getElementById("overall-result");
+  el.innerHTML = `
+    <div class="overall-header">
+      <h2>🎓 ${lang==="tr"?"Ümumi Nəticə":"Overall Results"}</h2>
+      <p>${tc} / ${ta} · ${pct}% ${lang==="tr"?"doğru":"correct"}</p>
+    </div>
+    <div class="chapter-results">${rows}</div>
+    <button class="btn-restart" onclick="restartAll()">
+      ↺ ${lang==="tr"?"Yenidən Başla":"Restart All"}
+    </button>
+  `;
+  el.classList.add("visible");
+  updateChapterTabs();
+
+  setTimeout(() => {
+    el.querySelectorAll(".cr-bar-fill").forEach(b => {
+      b.style.transition = "width 1s ease";
+      b.style.width = b.dataset.w;
+    });
+  }, 100);
+}
+
+function restartAll() {
+  clearProgress();
+  initState();
+  updateScore();
+  updateProgress();
+  buildChapterTabs();
+  document.getElementById("overall-result").className = "";
+  document.getElementById("summary-card").className = "";
+  document.getElementById("question-area").innerHTML = "";
+  goToChapter(0);
+}
+
+// ── LANGUAGE TOGGLE ──────────────────────────────────────────────────────────
+function toggleLang() {
+  lang = lang==="tr" ? "en" : "tr";
+  document.getElementById("lang-btn").textContent = lang==="tr" ? "EN" : "TR";
+  if(!quizStarted) {
+    document.getElementById("welcome-desc").textContent =
+      lang==="tr"
+        ? "6 mövzu, 105 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar"
+        : "6 topics, 105 questions — TR/EN bilingual support with explanations";
+    return;
+  }
+  updateProgress();
+  // Re-render current question without resetting state
+  if(document.getElementById("question-area").innerHTML !== "") {
+    renderQuestion();
+    renderQuestionGrid();
+  }
+}
+
+// ── PAGE LOAD ────────────────────────────────────────────────────────────────
+(function() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw) {
+      const data = JSON.parse(raw);
+      if(data.answered && data.answered.some(Boolean)) {
+        const done = data.answered.filter(Boolean).length;
+        const total = data.answered.length;
+        document.getElementById("btn-main-start").textContent =
+          `▶ Davam et (${done}/${total}) / Resume`;
+        document.getElementById("btn-fresh-start").style.display = "";
+      }
+    }
+  } catch(e) {}
+})();
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function getCIFromGI(gi) {
+  let acc=0;
+  for(let ci=0;ci<SHEETS.length;ci++){
+    acc += QUIZ[SHEETS[ci]].length;
+    if(gi < acc) return ci;
+  }
+  return SHEETS.length-1;
+}
+</script>
+</body>
+</html>
