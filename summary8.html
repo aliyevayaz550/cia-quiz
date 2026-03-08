@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 8 Summary</title>
+<style>
+:root{--navy:#1a2e4a;--navy-mid:#2e4d72;--gold:#c9a84c;--gold-dim:#8a6d2e;--paper:#f8f5ef;--correct:#1a6b3c;--wrong:#8b1a1a;--shadow:0 2px 12px rgba(15,25,35,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;background:var(--paper);color:#0f1923;min-height:100vh;font-size:15px;line-height:1.6;}
+#topbar{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+#topbar-inner{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:680px;margin:0 auto;gap:10px;}
+#back-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#app-title{font-size:15px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#lang-btn{font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;flex-shrink:0;}
+#su-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:0 12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#su-nav::-webkit-scrollbar{display:none;}
+#su-nav-inner{display:flex;gap:8px;max-width:680px;margin:0 auto;padding-top:10px;}
+.su-nav-btn{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;cursor:pointer;transition:all .18s;flex:1;-webkit-tap-highlight-color:transparent;}
+.su-nav-btn:hover{background:rgba(255,255,255,.14);}
+.su-nav-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.su-nav-num{font-size:13px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px;}
+.su-nav-title{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
+.su-nav-btn.active .su-nav-title{color:rgba(255,255,255,.9);}
+#main{max-width:680px;margin:0 auto;padding:16px 14px 40px;}
+.su-header{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.su-header-num{width:48px;height:48px;flex-shrink:0;background:var(--gold);color:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
+.su-header-title{font-size:16px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px;}
+.su-header-sub{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.4px;}
+.lang-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lang-tab{flex:1;padding:9px 0;border:1.5px solid #ddd6ca;border-radius:8px;background:#fff;color:#888;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;}
+.lang-tab.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.lang-content{display:none;}
+.lang-content.active{display:block;}
+.section-heading{background:linear-gradient(135deg,#e8f0f8,#f0f4f9);color:var(--navy);font-size:15px;font-weight:700;padding:10px 14px;border-radius:8px;margin:20px 0 10px 0;border-left:3px solid var(--navy-mid);}
+.section-heading:first-child{margin-top:0;}
+.concept-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--navy-mid);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.concept-title{font-weight:700;color:var(--navy-mid);margin-bottom:5px;font-size:14px;}
+.concept-block p{font-size:14px;color:#333;}
+.key-term{font-weight:700;color:var(--gold-dim);}
+.term-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.term-block p{font-size:14px;color:#333;}
+.trap-block{background:#fff5f5;border:1px solid #f5c6c6;border-left:3px solid var(--wrong);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.trap-label{display:inline-block;background:var(--wrong);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.trap-block p{font-size:14px;color:#4a1a1a;}
+.tip-block{background:#f0faf4;border:1px solid #b8e0c8;border-left:3px solid var(--correct);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:14px;color:#1a3a28;}
+.su-bottom-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid #e8e2d8;}
+.su-prev-btn,.su-next-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.su-prev-btn:hover,.su-next-btn:hover{opacity:.85;}
+.su-counter{font-size:13px;color:#888;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="topbar"><div id="topbar-inner">
+  <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+  <div id="app-title">Unit 8 · Xülasə</div>
+  <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+</div></div>
+
+<div id="su-nav"><div id="su-nav-inner">
+  <button class="su-nav-btn active" id="nav-su-8-1" onclick="showSubunit('su-8-1')">
+    <span class="su-nav-num">8.1</span>
+    <span class="su-nav-title" data-en="Overview of Control" data-az="Nəzarətə Giriş" data-tr="Kontrole Genel Bakış">Overview of Control</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-8-2" onclick="showSubunit('su-8-2')">
+    <span class="su-nav-num">8.2</span>
+    <span class="su-nav-title" data-en="Types of Controls" data-az="Nəzarət Növləri" data-tr="Kontrol Türleri">Types of Controls</span>
+  </button>
+</div></div>
+
+<div id="main">
+
+<!-- ══════════════ SU 8.1 ══════════════ -->
+<div class="subunit-summary" id="su-8-1" style="display:block">
+  <div class="su-header">
+    <div class="su-header-num">8.1</div>
+    <div>
+      <div class="su-header-title" data-en="Overview of Control" data-az="Nəzarətə Giriş" data-tr="Kontrole Genel Bakış">Overview of Control</div>
+      <div class="su-header-sub">Unit 8 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-8-1','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-8-1','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-8-1','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Nature of Control</div><p><strong class="key-term">Controls</strong> are the actions, policies, and procedures implemented by management and the board to manage risk and increase the likelihood of achieving organizational goals. They help ensure data accuracy, safeguard assets, prevent fraud, and ensure compliance.</p></div>
+    <div class="concept-block"><div class="concept-title">The Control Environment</div><p>The <strong class="key-term">control environment</strong> is the foundation of all control processes, encompassing the <strong class="key-term">"tone at the top"</strong>, management's philosophy, organizational structure, and the organization's integrity and ethical values.</p></div>
+    <div class="concept-block"><div class="concept-title">The Control Process Cycle</div><p>Effective control requires continuous feedback: <strong class="key-term">establishing standards</strong> → <strong class="key-term">measuring performance</strong> → <strong class="key-term">analyzing deviations</strong> → <strong class="key-term">taking corrective action</strong> → <strong class="key-term">reappraising the original standards</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Roles and Responsibilities</div><p>Senior management oversees the establishment of controls; operational managers actively assess them in their areas. Internal auditors <strong class="key-term">do not create controls</strong> — they provide independent and objective assurance on whether controls are effective and efficient.</p></div>
+    <div class="concept-block"><div class="concept-title">Automated vs. Manual Processing</div><p>Computer-based systems process transactions <strong class="key-term">uniformly</strong> — eliminating random clerical errors, but guaranteeing that a programming flaw processes <em>all</em> similar transactions incorrectly. Automated systems often <strong class="key-term">consolidate tasks</strong>, which can weaken traditional segregation of duties and require alternative control strategies.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Control Processes</strong> — Specific activities designed and operated to keep risks contained within an organization's accepted risk tolerance.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk and Control Matrix</strong> — A tool that helps auditors link business objectives, potential risks, and specific control processes to evaluate their design and effectiveness.</p></div>
+    <div class="term-block"><p><strong class="key-term">Audit Trail</strong> — A record allowing financial data to be traced back to its source; in IT systems this trail may only exist in computer-readable formats or for a very short duration.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Inherent <strong>limitations of internal control</strong>: controls provide <strong>reasonable assurance only — never absolute assurance</strong>. Limited by human mistakes, management override, collusion, and the cost of implementation.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>When to use <strong>manual vs. automated</strong> controls. <strong>Manual</strong> = large, unusual, nonrecurring transactions or situations requiring judgment. <strong>Automated</strong> = high-volume routine transactions requiring strict mathematical accuracy.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>IT systems do NOT inherently improve segregation of duties. They often <strong>concentrate duties</strong> into the hands of anyone with access — significantly increasing unauthorized data alteration risk if not properly monitored.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Control Environment"</strong> = directly linked to the <strong>"attitude and actions"</strong> of the board and management.</div>
+    <div class="tip-block">✅ Golden rule: the <strong>cost of an internal control must never exceed its benefits</strong>.</div>
+    <div class="tip-block">✅ Control wastes resources / causes delays / creates duplication? → Testing <strong>efficiency</strong>, not <strong>effectiveness</strong>.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Nəzarətin Mahiyyəti</div><p><strong class="key-term">Nəzarətlər (Controls)</strong> riski idarə etmək və təşkilati məqsədlərə nail olma ehtimalını artırmaq üçün rəhbərlik və İdarə Heyəti (Board) tərəfindən tətbiq olunan hərəkətlər, siyasətlər və prosedurlardır. Məlumatın dəqiqliyini təmin etməyə, aktivləri qorumağa, fırıldaqçılığın qarşısını almağa və uyğunluğu təmin etməyə kömək edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Nəzarət Mühiti</div><p><strong class="key-term">Nəzarət mühiti (Control Environment)</strong> bütün nəzarət proseslərinin əsasını təmsil edir — <strong class="key-term">"Yuxarıdan Ton" (Tone at the Top)</strong>, rəhbərliyin fəlsəfəsi, təşkilati struktur, dürüstlük və etik dəyərləri əhatə edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Nəzarət Prosesinin Dövrü</div><p>Effektiv nəzarət davamlı əks əlaqə tələb edir: <strong class="key-term">standartların müəyyən edilməsi</strong> → <strong class="key-term">fəaliyyətin ölçülməsi</strong> → <strong class="key-term">sapmaların təhlili</strong> → <strong class="key-term">düzəldici tədbirlərin görülməsi</strong> → <strong class="key-term">standartların yenidən qiymətləndirilməsi</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Rollar və Məsuliyyətlər</div><p>Yüksək rəhbərlik nəzarətlərin yaradılmasına nəzarət edir; əməliyyat menecerləri onları öz sahələrində qiymətləndirir. Daxili auditorlar <strong class="key-term">nəzarətləri yaratmır</strong> — effektiv və səmərəli olub-olmadığına dair müstəqil və obyektiv əminlik təqdim edirlər.</p></div>
+    <div class="concept-block"><div class="concept-title">Avtomatlaşdırılmış və Əl ilə Emal</div><p>Kompüter əsaslı sistemlər əməliyyatları <strong class="key-term">vahid şəkildə (Uniformly)</strong> emal edir — proqramlaşdırma qüsuru <em>bütün</em> oxşar əməliyyatları yanlış emal edəcəyinə zəmanət verir. Avtomatlaşdırılmış sistemlər tez-tez <strong class="key-term">vəzifələri birləşdirir (Consolidate Tasks)</strong> — bu, ənənəvi vəzifələrin ayrılmasını zəiflədə bilər.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Nəzarət Prosesləri (Control Processes)</strong> — Riskləri təşkilatın qəbul edilmiş risk toleransı daxilində saxlamaq üçün dizayn edilmiş xüsusi fəaliyyətlər.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk və Nəzarət Matrisi (Risk and Control Matrix)</strong> — Auditorlara biznes məqsədlərini, potensial riskləri və nəzarət proseslərini əlaqələndirərək qiymətləndirməyə kömək edən alət.</p></div>
+    <div class="term-block"><p><strong class="key-term">Audit İzi (Audit Trail)</strong> — Maliyyə məlumatlarının mənbəyinə qədər izlənməsinə imkan verən qeyd; İT sistemlərində yalnız kompüter tərəfindən oxunan formatlarda mövcud ola bilər.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Daxili nəzarətin <strong>xas məhdudiyyətləri</strong>: nəzarətlər yalnız <strong>ağlabatan əminlik (Reasonable Assurance) təmin edir — heç vaxt mütləq əminlik (Absolute Assurance) deyil</strong>. İnsan xətaları, rəhbərliyin qaydaları keçməsi (Management Override), sazişçilik (Collusion) ilə məhdudlaşır.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p><strong>Əl ilə (Manual)</strong> vs <strong>avtomatlaşdırılmış (Automated)</strong> nəzarətlər. <strong>Əl ilə</strong> = böyük, qeyri-adi, mühakimə tələb edən əməliyyatlar. <strong>Avtomatlaşdırılmış</strong> = yüksək həcmli, ciddi riyazi dəqiqlik tələb edən tapşırıqlar.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>İT sistemləri vəzifələrin ayrılmasını xas olaraq yaxşılaşdırmır. Tez-tez <strong>vəzifələri girişi olan hər kəsin əlində cəmləşdirir (Concentrate Duties)</strong> — düzgün izlənilmədikdə icazəsiz dəyişiklik riskini artırır.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"Nəzarət Mühiti"</strong> = birbaşa İdarə Heyəti və rəhbərliyin <strong>"münasibəti və hərəkətləri"</strong> ilə əlaqəlidir.</div>
+    <div class="tip-block">✅ Qızıl qayda: <strong>daxili nəzarətin xərci heç vaxt onun faydalarından çox olmamalıdır</strong>.</div>
+    <div class="tip-block">✅ Nəzarət resursları israf edir / gecikmələrə səbəb olur / səyi təkrarlayır? → <strong>Səmərəlilik (Efficiency)</strong> test olunur, <strong>effektivlik (Effectiveness)</strong> deyil.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Kontrolün Doğası</div><p><strong class="key-term">Kontroller (Controls)</strong>, riski yönetmek ve kurumsal hedeflere ulaşma olasılığını artırmak için yönetim ve Yönetim Kurulu tarafından uygulanan eylemler, politikalar ve prosedürlerdir. Veri doğruluğunu sağlamaya, varlıkları korumaya, hileyi önlemeye ve uyumu sağlamaya yardımcı olur.</p></div>
+    <div class="concept-block"><div class="concept-title">Kontrol Ortamı</div><p><strong class="key-term">Kontrol ortamı (Control Environment)</strong>, tüm kontrol süreçlerinin temelini temsil eder — <strong class="key-term">"Üst Yönetim Tonu" (Tone at the Top)</strong>, yönetimin felsefesi, organizasyonel yapı, dürüstlük ve etik değerleri kapsar.</p></div>
+    <div class="concept-block"><div class="concept-title">Kontrol Süreci Döngüsü</div><p>Etkin kontrol sürekli geri bildirim gerektirir: <strong class="key-term">standartların belirlenmesi</strong> → <strong class="key-term">performansın ölçülmesi</strong> → <strong class="key-term">sapmaların analizi</strong> → <strong class="key-term">düzeltici önlemlerin alınması</strong> → <strong class="key-term">standartların yeniden değerlendirilmesi</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Roller ve Sorumluluklar</div><p>Üst yönetim kontrollerin oluşturulmasını denetler; operasyonel yöneticiler kendi alanlarında onları değerlendirir. İç denetçiler <strong class="key-term">kontrolleri oluşturmaz</strong> — etkin ve verimli olup olmadığına dair bağımsız ve objektif güvence sağlar.</p></div>
+    <div class="concept-block"><div class="concept-title">Otomatik ve Manuel İşleme</div><p>Bilgisayar tabanlı sistemler işlemleri <strong class="key-term">tek tip şekilde (Uniformly)</strong> işler — bir programlama kusuru <em>tüm</em> benzer işlemleri yanlış işleyeceğini garanti eder. Otomatik sistemler sıklıkla <strong class="key-term">görevleri birleştirir (Consolidate Tasks)</strong> — bu, geleneksel görev ayrılığını zayıflatabilir.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Kontrol Süreçleri (Control Processes)</strong> — Riskleri kuruluşun kabul edilen risk toleransı dahilinde tutmak için tasarlanmış özel faaliyetler.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk ve Kontrol Matrisi (Risk and Control Matrix)</strong> — Denetçilerin iş hedeflerini, potansiyel riskleri ve kontrol süreçlerini ilişkilendirerek değerlendirmelerine yardımcı olan uzmanlaşmış araç.</p></div>
+    <div class="term-block"><p><strong class="key-term">Denetim İzi (Audit Trail)</strong> — Finansal verilerin kaynağına kadar izlenmesini sağlayan kayıt; BT sistemlerinde yalnızca bilgisayar tarafından okunabilir formatlarda mevcut olabilir.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>İç kontrolün <strong>doğal sınırlamaları</strong>: kontroller yalnızca <strong>makul güvence (Reasonable Assurance) sağlar — asla mutlak güvence (Absolute Assurance) değil</strong>. İnsan hataları, yönetim geçersiz kılması (Management Override), gizli anlaşma (Collusion) ile sınırlıdır.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p><strong>Manuel (Manual)</strong> vs <strong>otomatik (Automated)</strong> kontroller. <strong>Manuel</strong> = büyük, olağandışı, muhakeme gerektiren işlemler. <strong>Otomatik</strong> = yüksek hacimli, kesin matematiksel doğruluk gerektiren görevler.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>BT sistemleri görev ayrılığını doğal olarak iyileştirmez. Sıklıkla <strong>görevleri erişimi olan herkesin elinde yoğunlaştırır (Concentrate Duties)</strong> — düzgün izlenmezse yetkisiz veri değişikliği riskini artırır.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Kontrol Ortamı"</strong> = doğrudan Yönetim Kurulu ve yönetimin <strong>"tutumu ve eylemleri"</strong> ile ilişkilidir.</div>
+    <div class="tip-block">✅ Altın kural: <strong>iç kontrolün maliyeti asla faydalarından büyük olmamalıdır</strong>.</div>
+    <div class="tip-block">✅ Kontrol kaynakları israf eder / gecikmelere neden olur / çabayı tekrarlar? → <strong>Verimlilik (Efficiency)</strong> test edilmektedir, <strong>etkinlik (Effectiveness)</strong> değil.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <div></div><span class="su-counter">1 / 2</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 8.2 ══════════════ -->
+<div class="subunit-summary" id="su-8-2" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">8.2</div>
+    <div>
+      <div class="su-header-title" data-en="Types of Controls" data-az="Nəzarət Növləri" data-tr="Kontrol Türleri">Types of Controls</div>
+      <div class="su-header-sub">Unit 8 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-8-2','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-8-2','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-8-2','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Primary vs. Secondary Controls</div><p><strong class="key-term">Primary controls</strong> (preventive, detective, corrective, and directive) are key measures designed to manage risks directly. <strong class="key-term">Secondary controls</strong> (compensating and complementary) provide additional layers of protection when primary controls are missing or ineffective.</p></div>
+    <div class="concept-block"><div class="concept-title">Control Levels</div><p>Controls are applied at three levels: <strong class="key-term">Entity level</strong> (board governance and management oversight); <strong class="key-term">Process level</strong> (specific business unit objectives); <strong class="key-term">Transaction level</strong> (specific application rules or segregation of duties).</p></div>
+    <div class="concept-block"><div class="concept-title">IT General vs. Application Controls</div><p><strong class="key-term">IT General Controls (ITGCs)</strong> form the umbrella over the entire processing environment — data center security, system development, access management. <strong class="key-term">Application controls</strong> are built into specific software programs (like payroll) to ensure complete and accurate input, processing, and output of data.</p></div>
+    <div class="concept-block"><div class="concept-title">Time-Based Controls</div><p><strong class="key-term">Feedback controls</strong> — learn from past mistakes. <strong class="key-term">Concurrent controls</strong> — monitor and adjust ongoing processes in real-time. <strong class="key-term">Feedforward controls</strong> — anticipate and prevent long-term future problems.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Compensating Control</strong> — A mitigative measure (like increased supervision) used when standard segregation of duties is not possible; does NOT reduce risk to an acceptable level by itself.</p></div>
+    <div class="term-block"><p><strong class="key-term">Hash Total</strong> — A batch input control that sums numerical data without a defined meaning (e.g., list of invoice numbers) strictly to verify all data was processed.</p></div>
+    <div class="term-block"><p><strong class="key-term">Validity Check</strong> — An online input control that compares entered data against a table of valid values (e.g., matching a vendor number against an approved vendor list).</p></div>
+    <div class="term-block"><p><strong class="key-term">Directive Controls</strong> — Primary controls that encourage a desirable event, such as employee training or policy manuals.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p><strong>IT General Controls vs. IT Application Controls</strong>: Physical security / password restrictions for the overall network = <strong>General</strong>. A rule restricting data entry in a specific payroll screen = <strong>Application</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Data input controls: <strong>Batch processing</strong> → financial totals, record counts, hash totals. <strong>Online (real-time) processing</strong> → limits, ranges, check digits, validity checks, field/format checks.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>One control does NOT map perfectly to one risk. A <strong>Control Matrix</strong> reveals that multiple controls may address a single risk, or one control may address several risks.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>Detective controls</strong> = <strong>alert proper people AFTER</strong> an unwanted event occurs (not before).</div>
+    <div class="tip-block">✅ Catching data entry typos in real-time (e.g., a letter typed in a numeric field)? → Look for <strong>"Field or format checks"</strong>.</div>
+    <div class="tip-block">✅ <strong>"Memo Posting"</strong> = bank intermediate step to temporarily show account updates before actual end-of-day batch processing is complete.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Əsas və İkinci Dərəcəli Nəzarətlər</div><p><strong class="key-term">Əsas nəzarətlər (Primary Controls)</strong> (qabaqlayıcı, aşkaredici, düzəldici və istiqamətləndirici) riskləri birbaşa idarə etmək üçün nəzərdə tutulmuş əsas tədbirlərdir. <strong class="key-term">İkinci dərəcəli nəzarətlər (Secondary Controls)</strong> (kompensasiyaedici və tamamlayıcı) əsas nəzarətlər olmadıqda əlavə mühafizə təbəqələri təmin edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Nəzarət Səviyyələri</div><p>Nəzarətlər üç səviyyədə tətbiq olunur: <strong class="key-term">Qurum səviyyəsi (Entity Level)</strong> — İdarə Heyətinin idarəetməsi; <strong class="key-term">Proses səviyyəsi (Process Level)</strong> — xüsusi biznes vahidinin məqsədləri; <strong class="key-term">Əməliyyat səviyyəsi (Transaction Level)</strong> — xüsusi tətbiq qaydaları və ya vəzifələrin ayrılması.</p></div>
+    <div class="concept-block"><div class="concept-title">İT Ümumi və Tətbiq Nəzarətləri</div><p><strong class="key-term">İT Ümumi Nəzarətləri (ITGCs)</strong> məlumat mərkəzinin təhlükəsizliyi, sistem inkişafı, giriş idarəetməsi daxil olmaqla bütün emal mühiti üzərində çətir yaradır. <strong class="key-term">Tətbiq nəzarətləri (Application Controls)</strong> məlumatların tam və dəqiq daxil edilməsini, emalını və çıxışını təmin etmək üçün xüsusi proqramlara daxil edilir.</p></div>
+    <div class="concept-block"><div class="concept-title">Zamana Əsaslanan Nəzarətlər</div><p><strong class="key-term">Əks əlaqə nəzarətləri (Feedback Controls)</strong> — keçmiş xətalardan öyrənmə. <strong class="key-term">Paralel nəzarətlər (Concurrent Controls)</strong> — davam edən prosesləri real vaxtda izləmə. <strong class="key-term">İrəli əlaqə nəzarətləri (Feedforward Controls)</strong> — uzunmüddətli gələcək problemləri proqnozlaşdırma və qarşısını alma.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Kompensasiyaedici Nəzarət (Compensating Control)</strong> — Standart vəzifələrin ayrılması mümkün olmadıqda istifadə olunan yüngülləşdirici tədbir (artırılmış nəzarət kimi); öz-özünə riski məqbul səviyyəyə endirmir.</p></div>
+    <div class="term-block"><p><strong class="key-term">Heş Cəmi (Hash Total)</strong> — Bütün məlumatların emal edildiyini yoxlamaq üçün müəyyən edilmiş mənası olmayan rəqəmsal məlumatları cəmləyən toplu daxiletmə nəzarəti (məsələn, faktura nömrələri siyahısı).</p></div>
+    <div class="term-block"><p><strong class="key-term">Etibarlılıq Yoxlaması (Validity Check)</strong> — Daxil edilmiş məlumatı etibarlı dəyərlər cədvəli ilə müqayisə edən onlayn nəzarət (məsələn, satıcı nömrəsini təsdiq edilmiş satıcı siyahısı ilə uyğunlaşdırma).</p></div>
+    <div class="term-block"><p><strong class="key-term">İstiqamətləndirici Nəzarətlər (Directive Controls)</strong> — İşçi təlimi və ya siyasət təlimatları kimi arzu olunan hadisənin baş verməsini təşviq edən əsas nəzarətlər.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p><strong>İT Ümumi (General)</strong> vs <strong>İT Tətbiq (Application) Nəzarətləri</strong>: Ümumi şəbəkə üçün fiziki təhlükəsizlik / parol məhdudiyyətləri = <strong>Ümumi (General)</strong>. Xüsusi əmək haqqı ekranında məlumat daxiletməsini məhdudlaşdıran qayda = <strong>Tətbiq (Application)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Məlumat daxiletmə nəzarətləri: <strong>Toplu emal (Batch Processing)</strong> → maliyyə cəmləri, qeyd sayları, heş cəmləri. <strong>Onlayn emal (Online Processing)</strong> → limitlər, aralıqlar, yoxlama rəqəmləri, etibarlılıq yoxlamaları, sahə/format yoxlamaları.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Bir nəzarət bir riskə mükəmməl uyğun gəlmir. <strong>Nəzarət Matrisi (Control Matrix)</strong> bir neçə nəzarətin bir riskə cavab verə biləcəyini və ya bir nəzarətin bir neçə riskə cavab verə biləcəyini göstərir.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>Aşkaredici nəzarətlər (Detective Controls)</strong> = arzuolunmaz hadisə baş verdikdən <strong>SONRA müvafiq şəxsləri xəbərdar edir</strong> (əvvəl deyil).</div>
+    <div class="tip-block">✅ Real vaxtda məlumat daxiletmə xətalarının tutulması (rəqəmsal sahədə hərf yazmaq kimi)? → <strong>"Sahə və ya format yoxlamaları" (Field or Format Checks)</strong> axtarın.</div>
+    <div class="tip-block">✅ <strong>"Memo Göndərmə" (Memo Posting)</strong> = banklar tərəfindən faktiki gün sonu toplu emalı tamamlanmamışdan əvvəl hesab yeniləmələrini müvəqqəti göstərmək üçün aralıq addım.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Birincil ve İkincil Kontroller</div><p><strong class="key-term">Birincil kontroller (Primary Controls)</strong> (önleyici, tespit edici, düzeltici ve yönlendirici) riskleri doğrudan yönetmek için tasarlanmış temel önlemlerdir. <strong class="key-term">İkincil kontroller (Secondary Controls)</strong> (telafi edici ve tamamlayıcı) birincil kontroller eksik veya etkisiz olduğunda ek koruma katmanları sağlar.</p></div>
+    <div class="concept-block"><div class="concept-title">Kontrol Seviyeleri</div><p>Kontroller üç seviyede uygulanır: <strong class="key-term">Kuruluş seviyesi (Entity Level)</strong> — Yönetim Kurulu yönetişimi; <strong class="key-term">Süreç seviyesi (Process Level)</strong> — belirli iş birimi hedefleri; <strong class="key-term">İşlem seviyesi (Transaction Level)</strong> — belirli uygulama kuralları veya görev ayrılığı.</p></div>
+    <div class="concept-block"><div class="concept-title">BT Genel ve Uygulama Kontrolleri</div><p><strong class="key-term">BT Genel Kontrolleri (ITGCs)</strong> veri merkezi güvenliği, sistem geliştirme, erişim yönetimi dahil tüm işleme ortamı üzerinde şemsiye oluşturur. <strong class="key-term">Uygulama kontrolleri (Application Controls)</strong> verilerin eksiksiz ve doğru girişini, işlenmesini ve çıkışını sağlamak için belirli yazılımlara yerleştirilir.</p></div>
+    <div class="concept-block"><div class="concept-title">Zamana Dayalı Kontroller</div><p><strong class="key-term">Geribildirim kontrolleri (Feedback Controls)</strong> — geçmiş hatalardan öğrenme. <strong class="key-term">Eşzamanlı kontroller (Concurrent Controls)</strong> — devam eden süreçleri gerçek zamanlı izleme. <strong class="key-term">İleri bildirim kontrolleri (Feedforward Controls)</strong> — uzun vadeli gelecek sorunları önceden tahmin etme ve önleme.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Telafi Edici Kontrol (Compensating Control)</strong> — Standart görev ayrılığı mümkün olmadığında kullanılan hafifletici önlem; tek başına riski kabul edilebilir seviyeye indirmez.</p></div>
+    <div class="term-block"><p><strong class="key-term">Özetleme Toplamı (Hash Total)</strong> — Tüm verilerin işlendiğini doğrulamak amacıyla tanımlanmış bir anlamı olmayan sayısal verileri toplayan toplu giriş kontrolü (örneğin, fatura numaraları listesi).</p></div>
+    <div class="term-block"><p><strong class="key-term">Geçerlilik Kontrolü (Validity Check)</strong> — Girilen veriyi geçerli değerler tablosuyla karşılaştıran çevrimiçi giriş kontrolü (örneğin, satıcı numarasını onaylı satıcı listesiyle eşleştirme).</p></div>
+    <div class="term-block"><p><strong class="key-term">Yönlendirici Kontroller (Directive Controls)</strong> — Çalışan eğitimi veya politika kılavuzları gibi arzu edilen bir olayın gerçekleşmesini teşvik eden birincil kontroller.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p><strong>BT Genel (General)</strong> vs <strong>BT Uygulama (Application) Kontrolleri</strong>: Genel ağ için fiziksel güvenlik / şifre kısıtlamaları = <strong>Genel (General)</strong>. Belirli bordro ekranında veri girişini kısıtlayan kural = <strong>Uygulama (Application)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Veri giriş kontrolleri: <strong>Toplu işleme (Batch Processing)</strong> → finansal toplamlar, kayıt sayıları, özetleme toplamları. <strong>Çevrimiçi işleme (Online Processing)</strong> → limitler, aralıklar, kontrol rakamları, geçerlilik kontrolleri, alan/format kontrolleri.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Bir kontrol bir riske mükemmel şekilde eşleşmez. <strong>Kontrol Matrisi (Control Matrix)</strong> birden fazla kontrolün tek riski ele alabileceğini veya tek kontrolün birkaç riski ele alabileceğini ortaya koyar.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>Tespit edici kontroller (Detective Controls)</strong> = istenmeyen olay gerçekleştikten <strong>SONRA ilgili kişileri uyarır</strong> (önce değil).</div>
+    <div class="tip-block">✅ Gerçek zamanlı veri giriş hatalarının yakalanması (sayısal alana harf yazmak gibi)? → <strong>"Alan veya format kontrolleri" (Field or Format Checks)</strong> arayın.</div>
+    <div class="tip-block">✅ <strong>"Memo Gönderme" (Memo Posting)</strong> = bankalar tarafından fiili gün sonu toplu işleme tamamlanmadan önce hesap güncellemelerini geçici göstermek için kullanılan ara adım.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">2 / 2</span>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS=["su-8-1","su-8-2"];
+let currentSU=SUBUNIT_IDS[0],globalLang='en';
+function showSubunit(id){
+  SUBUNIT_IDS.forEach(sid=>{document.getElementById(sid).style.display='none';document.getElementById('nav-'+sid).classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  document.getElementById('nav-'+id).classList.add('active');
+  currentSU=id;
+  document.getElementById('nav-'+id).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  applyLangToSubunit(id,globalLang);
+}
+function showLang(unitId,lang){
+  globalLang=lang;
+  const unit=document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el=>el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el=>el.classList.remove('active'));
+  unit.querySelector('.lang-content.'+lang).classList.add('active');
+  const tabs=unit.querySelectorAll('.lang-tab');
+  const langMap={'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  document.getElementById('lang-btn').textContent={'en':'AZ','az':'TR','tr':'EN'}[lang];
+}
+function applyLangToSubunit(id,lang){
+  showLang(id,lang);
+  const su=document.getElementById(id);
+  const titleEl=su.querySelector('.su-header-title');
+  if(titleEl)titleEl.textContent=titleEl.dataset[lang]||titleEl.dataset.en;
+  const navBtn=document.getElementById('nav-'+id);
+  const navTitle=navBtn.querySelector('.su-nav-title');
+  if(navTitle)navTitle.textContent=navTitle.dataset[lang]||navTitle.dataset.en;
+}
+function toggleGlobalLang(){
+  const langs=['en','az','tr'],idx=langs.indexOf(globalLang);
+  globalLang=langs[(idx+1)%3];
+  applyLangToSubunit(currentSU,globalLang);
+  SUBUNIT_IDS.forEach(sid=>{const t=document.querySelector('#nav-'+sid+' .su-nav-title');if(t)t.textContent=t.dataset[globalLang]||t.dataset.en;});
+  document.getElementById('app-title').textContent={en:'Unit 8 · Summary',az:'Unit 8 · Xülasə',tr:'Unit 8 · Özet'}[globalLang];
+}
+function nextSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx<SUBUNIT_IDS.length-1)showSubunit(SUBUNIT_IDS[idx+1]);}
+function prevSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx>0)showSubunit(SUBUNIT_IDS[idx-1]);}
+</script>
+</body>
+</html>

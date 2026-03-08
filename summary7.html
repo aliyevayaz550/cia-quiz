@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 7 Summary</title>
+<style>
+:root{--navy:#1a2e4a;--navy-mid:#2e4d72;--gold:#c9a84c;--gold-dim:#8a6d2e;--paper:#f8f5ef;--correct:#1a6b3c;--wrong:#8b1a1a;--shadow:0 2px 12px rgba(15,25,35,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;background:var(--paper);color:#0f1923;min-height:100vh;font-size:15px;line-height:1.6;}
+#topbar{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+#topbar-inner{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:680px;margin:0 auto;gap:10px;}
+#back-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#app-title{font-size:15px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#lang-btn{font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;flex-shrink:0;}
+#su-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:0 12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#su-nav::-webkit-scrollbar{display:none;}
+#su-nav-inner{display:flex;gap:8px;max-width:680px;margin:0 auto;padding-top:10px;}
+.su-nav-btn{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 10px;cursor:pointer;transition:all .18s;flex:1;min-width:70px;-webkit-tap-highlight-color:transparent;}
+.su-nav-btn:hover{background:rgba(255,255,255,.14);}
+.su-nav-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.su-nav-num{font-size:13px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px;}
+.su-nav-title{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;}
+.su-nav-btn.active .su-nav-title{color:rgba(255,255,255,.9);}
+#main{max-width:680px;margin:0 auto;padding:16px 14px 40px;}
+.su-header{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.su-header-num{width:48px;height:48px;flex-shrink:0;background:var(--gold);color:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
+.su-header-title{font-size:16px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px;}
+.su-header-sub{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.4px;}
+.lang-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lang-tab{flex:1;padding:9px 0;border:1.5px solid #ddd6ca;border-radius:8px;background:#fff;color:#888;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;}
+.lang-tab.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.lang-content{display:none;}
+.lang-content.active{display:block;}
+.section-heading{background:linear-gradient(135deg,#e8f0f8,#f0f4f9);color:var(--navy);font-size:15px;font-weight:700;padding:10px 14px;border-radius:8px;margin:20px 0 10px 0;border-left:3px solid var(--navy-mid);}
+.section-heading:first-child{margin-top:0;}
+.concept-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--navy-mid);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.concept-title{font-weight:700;color:var(--navy-mid);margin-bottom:5px;font-size:14px;}
+.concept-block p{font-size:14px;color:#333;}
+.key-term{font-weight:700;color:var(--gold-dim);}
+.term-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.term-block p{font-size:14px;color:#333;}
+.trap-block{background:#fff5f5;border:1px solid #f5c6c6;border-left:3px solid var(--wrong);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.trap-label{display:inline-block;background:var(--wrong);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.trap-block p{font-size:14px;color:#4a1a1a;}
+.tip-block{background:#f0faf4;border:1px solid #b8e0c8;border-left:3px solid var(--correct);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:14px;color:#1a3a28;}
+.su-bottom-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid #e8e2d8;}
+.su-prev-btn,.su-next-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.su-prev-btn:hover,.su-next-btn:hover{opacity:.85;}
+.su-counter{font-size:13px;color:#888;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="topbar"><div id="topbar-inner">
+  <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+  <div id="app-title">Unit 7 · Xülasə</div>
+  <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+</div></div>
+
+<div id="su-nav"><div id="su-nav-inner">
+  <button class="su-nav-btn active" id="nav-su-7-1" onclick="showSubunit('su-7-1')">
+    <span class="su-nav-num">7.1</span>
+    <span class="su-nav-title" data-en="Risk Mgmt Process" data-az="Risk İdarəetməsi" data-tr="Risk Yönetimi">Risk Mgmt Process</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-7-2" onclick="showSubunit('su-7-2')">
+    <span class="su-nav-num">7.2</span>
+    <span class="su-nav-title" data-en="COSO ERM Overview" data-az="COSO MRİ" data-tr="COSO KRY">COSO ERM Overview</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-7-3" onclick="showSubunit('su-7-3')">
+    <span class="su-nav-num">7.3</span>
+    <span class="su-nav-title" data-en="COSO Components" data-az="COSO Komponentləri" data-tr="COSO Bileşenleri">COSO Components</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-7-4" onclick="showSubunit('su-7-4')">
+    <span class="su-nav-num">7.4</span>
+    <span class="su-nav-title" data-en="ISO 31000" data-az="ISO 31000" data-tr="ISO 31000">ISO 31000</span>
+  </button>
+</div></div>
+
+<div id="main">
+
+<!-- ══════════════ SU 7.1 ══════════════ -->
+<div class="subunit-summary" id="su-7-1" style="display:block">
+  <div class="su-header">
+    <div class="su-header-num">7.1</div>
+    <div>
+      <div class="su-header-title" data-en="Risk Management Processes" data-az="Risk İdarəetmə Prosesləri" data-tr="Risk Yönetimi Süreçleri">Risk Management Processes</div>
+      <div class="su-header-sub">Unit 7 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-7-1','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-7-1','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-7-1','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Goal of Risk Management</div><p>This process helps an organization achieve its objectives while minimizing unexpected problems. It involves a systematic cycle: <strong class="key-term">identifying the context</strong>, <strong class="key-term">identifying specific risks</strong>, <strong class="key-term">assessing and prioritizing</strong> them, <strong class="key-term">executing a risk response</strong>, and <strong class="key-term">continuously monitoring</strong> the results.</p></div>
+    <div class="concept-block"><div class="concept-title">Evaluating the Program</div><p>The <strong class="key-term">CAE</strong> must understand and evaluate the sophistication of the organization's risk management program — determining if the entity understands its <strong class="key-term">risk appetite</strong> and if an effective risk management strategy is in place.</p></div>
+    <div class="concept-block"><div class="concept-title">The IIA's Three Lines Model</div><p>The <strong class="key-term">Governing Body</strong> provides ultimate oversight. <strong class="key-term">First Line</strong>: directly delivers products and manages day-to-day risk. <strong class="key-term">Second Line</strong>: provides specialized expertise, support, and risk monitoring. <strong class="key-term">Third Line (Internal Audit)</strong>: provides independent and objective assurance and advice on how well the first two lines are achieving objectives.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Risk</strong> — A function of the severity of consequences, probability of occurrence, and effects on organizational goals.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Appetite</strong> — The specific level of risk an organization is prepared to accept in pursuit of its goals.</p></div>
+    <div class="term-block"><p><strong class="key-term">Residual Risk</strong> — The risk that remains after management executes risk responses.</p></div>
+    <div class="term-block"><p><strong class="key-term">Control Risk</strong> — The risk that established controls fail to effectively manage the controllable risk.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Exact roles in the <strong>Three Lines Model</strong>: first-line managers <strong>own the risk</strong>; second-line managers <strong>support and monitor</strong>; third-line auditors provide <strong>independent assurance</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Most reliable source for ongoing risk monitoring? Operational managers aren't always objective — they designed the mitigation strategy. <strong>Internal auditors provide the necessary objective analysis</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Internal audit does NOT create the risk management framework. The <strong>board oversees it</strong>, <strong>management ensures it functions</strong>, and internal audit <strong>assesses its effectiveness</strong>.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Governing Body"</strong> = <strong>"oversight"</strong>; <strong>"Management"</strong> = <strong>"day-to-day responsibility"</strong>.</div>
+    <div class="tip-block">✅ Risk assessment components: assess <strong>significance (impact)</strong>, assess <strong>likelihood</strong>, consider <strong>how to manage it</strong>.</div>
+    <div class="tip-block">✅ No formal risk management process? → CAE must <strong>initiate formal discussions</strong> with management and the board about their risk obligations.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Risk İdarəetməsinin Məqsədi</div><p>Bu proses sistematik bir dövrəni əhatə edir: <strong class="key-term">kontekstin müəyyən edilməsi</strong>, <strong class="key-term">xüsusi risklərin müəyyən edilməsi</strong>, onların <strong class="key-term">qiymətləndirilməsi və prioritetləşdirilməsi</strong>, <strong class="key-term">riskə cavabın icra edilməsi</strong> və nəticələrin <strong class="key-term">davamlı monitorinqi</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Proqramın Qiymətləndirilməsi</div><p><strong class="key-term">Baş Audit İcraçısı (CAE)</strong> təşkilatın risk idarəetməsi proqramının mürəkkəbliyini başa düşməli və qiymətləndirməlidir — qurumun öz <strong class="key-term">risk iştahını (Risk Appetite)</strong> anlayıb-anlamadığını və effektiv risk idarəetmə strategiyasının mövcud olub-olmadığını müəyyən etməklə.</p></div>
+    <div class="concept-block"><div class="concept-title">DDA-nın Üç Xətt Modeli</div><p><strong class="key-term">İdarəetmə Orqanı (Governing Body)</strong> ali nəzarəti təmin edir. <strong class="key-term">Birinci Xətt</strong>: gündəlik riski idarə edir. <strong class="key-term">İkinci Xətt</strong>: ixtisaslaşmış ekspertiza, dəstək və monitorinq. <strong class="key-term">Üçüncü Xətt — Daxili Audit</strong>: ilk iki xəttin məqsədlərə nə dərəcədə nail olduğu barədə müstəqil və obyektiv əminlik və məsləhət verir.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Risk</strong> — Nəticələrin ciddiliyi, baş vermə ehtimalı və təşkilati məqsədlərə təsirinin funksiyası.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk İştahı (Risk Appetite)</strong> — Təşkilatın məqsədlərinə çatmaq uğrunda qəbul etməyə hazır olduğu xüsusi risk səviyyəsi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Qalıq Risk (Residual Risk)</strong> — Rəhbərlik riskə cavabları icra etdikdən sonra qalan risk.</p></div>
+    <div class="term-block"><p><strong class="key-term">Nəzarət Riski (Control Risk)</strong> — Müəyyən edilmiş nəzarətlərin riski effektiv şəkildə idarə edə bilməməsi riski.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p><strong>Üç Xətt Modeli</strong> daxilindəki dəqiq rollar: birinci xətt — <strong>riskə sahibdir (Own the Risk)</strong>; ikinci xətt — <strong>dəstəkləyir və izləyir</strong>; üçüncü xətt — <strong>müstəqil əminlik (Independent Assurance)</strong> təmin edir.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Davamlı risk monitorinqi üçün ən etibarlı mənbə? Əməliyyat menecerləri həmişə obyektiv deyillər — riski özləri dizayn etdilər. <strong>Daxili auditorlar lazımi obyektiv təhlili təmin edir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Daxili audit risk idarəetməsi çərçivəsini yaratmır. <strong>İdarə Heyəti nəzarət edir</strong>, <strong>rəhbərlik işləməsini təmin edir</strong>, daxili audit isə <strong>effektivliyini qiymətləndirir</strong>.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"İdarəetmə Orqanı"</strong> = <strong>"nəzarət"</strong>; <strong>"Rəhbərlik"</strong> = <strong>"gündəlik məsuliyyət"</strong>.</div>
+    <div class="tip-block">✅ Risk qiymətləndirməsi: <strong>əhəmiyyətin (təsirin)</strong> qiymətləndirilməsi, <strong>ehtimalın</strong> qiymətləndirilməsi, <strong>necə idarə ediləcəyinin</strong> nəzərə alınması.</div>
+    <div class="tip-block">✅ Rəsmi risk idarəetmə prosesi yoxdursa → CAE rəhbərlik və İdarə Heyəti ilə <strong>rəsmi müzakirələr başlatmalıdır</strong>.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Risk Yönetiminin Amacı</div><p>Bu süreç sistematik bir döngüyü içerir: <strong class="key-term">bağlamın belirlenmesi</strong>, <strong class="key-term">belirli risklerin tanımlanması</strong>, bunların <strong class="key-term">değerlendirilmesi ve önceliklendirilmesi</strong>, <strong class="key-term">risk yanıtının uygulanması</strong> ve sonuçların <strong class="key-term">sürekli izlenmesi</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Programın Değerlendirilmesi</div><p><strong class="key-term">Denetim Yöneticisi (CAE)</strong> kuruluşun risk yönetimi programının gelişmişliğini anlamalı ve değerlendirmelidir — kuruluşun <strong class="key-term">risk iştahını (Risk Appetite)</strong> anlayıp anlamadığını ve etkili bir stratejinin mevcut olup olmadığını belirleyerek.</p></div>
+    <div class="concept-block"><div class="concept-title">UDD'nin Üç Hat Modeli</div><p><strong class="key-term">Yönetim Organı (Governing Body)</strong> nihai gözetimi sağlar. <strong class="key-term">Birinci Hat</strong>: günlük riski yönetir. <strong class="key-term">İkinci Hat</strong>: uzmanlaşmış destek ve risk izlemesi. <strong class="key-term">Üçüncü Hat — İç Denetim</strong>: ilk iki hattın hedeflere ne kadar iyi ulaştığı konusunda bağımsız güvence ve tavsiye sağlar.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Risk</strong> — Sonuçların ciddiyeti, gerçekleşme olasılığı ve organizasyonel hedefler üzerindeki etkilerinin bir fonksiyonu.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk İştahı (Risk Appetite)</strong> — Kuruluşun hedeflerine ulaşmak uğruna kabul etmeye hazır olduğu belirli risk düzeyi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Artık Risk (Residual Risk)</strong> — Yönetim risk yanıtlarını uyguladıktan sonra kalan risk.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kontrol Riski (Control Risk)</strong> — Yerleşik kontrollerin riski etkili bir şekilde yönetememesi riski.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p><strong>Üç Hat Modeli</strong> içindeki tam roller: birinci hat — <strong>riske sahiptir (Own the Risk)</strong>; ikinci hat — <strong>destekler ve izler</strong>; üçüncü hat — <strong>bağımsız güvence (Independent Assurance)</strong> sağlar.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Süregelen risk izleme için en güvenilir kaynak? Operasyonel yöneticiler her zaman objektif değildir. <strong>İç denetçiler gerekli objektif analizi sağlar</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İç denetim risk yönetimi çerçevesini oluşturmaz. <strong>Yönetim Kurulu denetler</strong>, <strong>yönetim işleyişini sağlar</strong>, iç denetim ise <strong>etkinliğini değerlendirir</strong>.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Yönetim Organı"</strong> = <strong>"gözetim"</strong>; <strong>"Yönetim"</strong> = <strong>"günlük sorumluluk"</strong>.</div>
+    <div class="tip-block">✅ Risk değerlendirmesi bileşenleri: <strong>önem (etki)</strong> değerlendirmesi, <strong>olasılık</strong> değerlendirmesi, <strong>nasıl yönetileceğinin</strong> dikkate alınması.</div>
+    <div class="tip-block">✅ Resmi risk yönetimi süreci yoksa → CAE yönetim ve Yönetim Kurulu ile <strong>resmi tartışmalar başlatmalıdır</strong>.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <div></div><span class="su-counter">1 / 4</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 7.2 ══════════════ -->
+<div class="subunit-summary" id="su-7-2" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">7.2</div>
+    <div>
+      <div class="su-header-title" data-en="COSO ERM Framework Overview" data-az="COSO MRİ Çərçivəsinə Giriş" data-tr="COSO KRY Çerçevesine Giriş">COSO ERM Framework Overview</div>
+      <div class="su-header-sub">Unit 7 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-7-2','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-7-2','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-7-2','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Nature of ERM</div><p><strong class="key-term">Enterprise Risk Management (ERM)</strong> is a structured approach that integrates risk management with an organization's overall strategy and performance. It relies on the organization's culture, capabilities, and practices to <strong class="key-term">create, preserve, and realize value</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Integrating with Strategy</div><p>Risk must be evaluated actively when setting strategies and performance targets. Effective ERM <strong class="key-term">improves decision-making</strong>, <strong class="key-term">reduces performance variability</strong>, and <strong class="key-term">enhances organizational resilience</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Roles &amp; Responsibilities</div><p>The board provides <strong class="key-term">risk oversight</strong> (delegable to audit/risk committees). However, <strong class="key-term">management — specifically the CEO</strong> — holds ultimate responsibility for ERM and day-to-day risk management.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Risk Capacity</strong> — The maximum amount of risk the organization can safely assume.</p></div>
+    <div class="term-block"><p><strong class="key-term">Inherent Risk</strong> — The level of risk that exists absent any management actions to alter its severity.</p></div>
+    <div class="term-block"><p><strong class="key-term">Target Residual Risk</strong> — The risk level the entity prefers after taking action. &nbsp;|&nbsp; <strong class="key-term">Actual Residual Risk</strong> — What truly remains after those actions.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Profile</strong> — Composite view of risks for a specific strategy/unit. &nbsp;|&nbsp; <strong class="key-term">Portfolio View</strong> — Composite risks across the entire entity.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Risk limit hierarchy: <strong>Risk Capacity</strong> (absolute max) &gt; <strong>Risk Appetite</strong> (willing to accept) &gt; <strong>Risk Tolerance</strong> (acceptable variation in performance).</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Confusing Inherent vs Residual risk: <strong>Inherent = before management acts</strong>; <strong>Residual = after management acts</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>The board does NOT actively manage ERM. The board only provides <strong>oversight</strong>; the <strong>CEO and management implement it</strong>.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ Always ensure <strong>Actual Residual Risk ≤ Target Residual Risk</strong>.</div>
+    <div class="tip-block">✅ <strong>"Portfolio View"</strong> → exclusively linked to <strong>"entity-wide" strategy</strong>.</div>
+    <div class="tip-block">✅ <strong>Risk Appetite</strong> is rarely set above <strong>Risk Capacity</strong>.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">MRİ-nin Mahiyyəti</div><p><strong class="key-term">Müəssisə Risk İdarəetməsi (ERM)</strong> risk idarəetməsini təşkilatın ümumi strategiyası və fəaliyyəti ilə inteqrasiya edən strukturlaşdırılmış yanaşmadır. Riski idarə edərkən <strong class="key-term">dəyər yaratmaq, qorumaq və reallaşdırmaq</strong> üçün təşkilatın mədəniyyətinə əsaslanır.</p></div>
+    <div class="concept-block"><div class="concept-title">Strategiya ilə İnteqrasiya</div><p>Strategiyaları müəyyən edərkən risk fəal şəkildə qiymətləndirilməlidir. Effektiv MRİ <strong class="key-term">qərar qəbulunu yaxşılaşdırır</strong>, <strong class="key-term">fəaliyyət dəyişkənliyini azaldır</strong> və <strong class="key-term">təşkilati dayanıqlılığı gücləndirir</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Rollar və Məsuliyyətlər</div><p>İdarə Heyəti <strong class="key-term">riskə nəzarət (Risk Oversight)</strong> təmin edir. Lakin <strong class="key-term">rəhbərlik — xüsusilə CEO</strong> — MRİ üçün son nəticədə məsuliyyət daşıyır.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Risk Tutumu (Risk Capacity)</strong> — Təşkilatın təhlükəsiz şəkildə üzərinə götürə biləcəyi maksimum risk miqdarı.</p></div>
+    <div class="term-block"><p><strong class="key-term">Xas Risk (Inherent Risk)</strong> — Rəhbərliyin heç bir hərəkət etmədiyi halda mövcud olan risk səviyyəsi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Hədəf Qalıq Risk (Target Residual Risk)</strong> — Tədbirlər gördükdən sonra üstünlük verilən risk səviyyəsi. &nbsp;|&nbsp; <strong class="key-term">Faktiki Qalıq Risk (Actual Residual Risk)</strong> — Həmin tədbirlərdən sonra həqiqətən qalan risk.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Profili (Risk Profile)</strong> — Xüsusi strategiya/vahidlə bağlı risklərin birləşmiş görünüşü. &nbsp;|&nbsp; <strong class="key-term">Portfel Görünüşü (Portfolio View)</strong> — Bütün qurum boyunca birləşmiş risklər.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Risk limitlərinin iyerarxiyası: <strong>Risk Tutumu (Risk Capacity)</strong> — mütləq maksimum &gt; <strong>Risk İştahı (Risk Appetite)</strong> — qəbul etməyə hazır &gt; <strong>Risk Toleransı (Risk Tolerance)</strong> — məqbul dəyişkənlik.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Xas Risk vs Qalıq Risk: <strong>Xas = rəhbərlik hərəkət etməzdən əvvəl</strong>; <strong>Qalıq = rəhbərlik hərəkət etdikdən sonra</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>İdarə Heyəti MRİ-ni fəal şəkildə idarə etmir. Yalnız <strong>nəzarət</strong> təmin edir; <strong>CEO və rəhbərlik onu həyata keçirir</strong>.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ Həmişə təmin edin: <strong>Faktiki Qalıq Risk ≤ Hədəf Qalıq Risk</strong>.</div>
+    <div class="tip-block">✅ <strong>"Portfel Görünüşü"</strong> → yalnız <strong>"bütün qurum miqyaslı"</strong> strategiya ilə əlaqəlidir.</div>
+    <div class="tip-block">✅ <strong>Risk İştahı</strong> nadir hallarda <strong>Risk Tutumundan</strong> yuxarı müəyyən edilir.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">KRY'nin Doğası</div><p><strong class="key-term">Kurumsal Risk Yönetimi (ERM)</strong>, risk yönetimini kuruluşun genel stratejisi ve performansıyla entegre eden yapılandırılmış bir yaklaşımdır. Riski yönetirken <strong class="key-term">değer yaratmak, korumak ve gerçekleştirmek</strong> için kuruluşun kültürüne dayanır.</p></div>
+    <div class="concept-block"><div class="concept-title">Strateji ile Entegrasyon</div><p>Stratejiler belirlenirken risk aktif olarak değerlendirilmelidir. Etkili KRY <strong class="key-term">karar almayı iyileştirir</strong>, <strong class="key-term">performans değişkenliğini azaltır</strong> ve <strong class="key-term">kurumsal dayanıklılığı güçlendirir</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Roller ve Sorumluluklar</div><p>Yönetim Kurulu <strong class="key-term">risk gözetimi (Risk Oversight)</strong> sağlar. Ancak <strong class="key-term">yönetim — özellikle CEO</strong> — KRY için nihai sorumluluğu taşır.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Risk Kapasitesi (Risk Capacity)</strong> — Kuruluşun güvenli şekilde üstlenebileceği maksimum risk miktarı.</p></div>
+    <div class="term-block"><p><strong class="key-term">Doğal Risk (Inherent Risk)</strong> — Yönetimin herhangi bir eylemde bulunmadığı durumda var olan risk düzeyi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Hedef Artık Risk (Target Residual Risk)</strong> — Önlem alındıktan sonra tercih edilen risk düzeyi. &nbsp;|&nbsp; <strong class="key-term">Fiili Artık Risk (Actual Residual Risk)</strong> — Önlemlerden sonra gerçekten kalan risk.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Profili</strong> — Belirli strateji/birim için bileşik risk görünümü. &nbsp;|&nbsp; <strong class="key-term">Portföy Görünümü (Portfolio View)</strong> — Tüm kuruluş genelindeki bileşik riskler.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Risk limitleri hiyerarşisi: <strong>Risk Kapasitesi</strong> — mutlak max &gt; <strong>Risk İştahı</strong> — kabul etmeye hazır olunan &gt; <strong>Risk Toleransı</strong> — kabul edilebilir değişkenlik.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Doğal Risk vs Artık Risk: <strong>Doğal = yönetim harekete geçmeden önce</strong>; <strong>Artık = yönetim harekete geçtikten sonra</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Yönetim Kurulu KRY'yi aktif olarak yönetmez. Yalnızca <strong>gözetim</strong> sağlar; <strong>CEO ve yönetim onu uygular</strong>.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ Her zaman sağlayın: <strong>Fiili Artık Risk ≤ Hedef Artık Risk</strong>.</div>
+    <div class="tip-block">✅ <strong>"Portföy Görünümü"</strong> → yalnızca <strong>"kuruluş geneli"</strong> stratejisiyle ilişkilendirilir.</div>
+    <div class="tip-block">✅ <strong>Risk İştahı</strong> nadiren <strong>Risk Kapasitesinin</strong> üzerinde belirlenir.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">2 / 4</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 7.3 ══════════════ -->
+<div class="subunit-summary" id="su-7-3" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">7.3</div>
+    <div>
+      <div class="su-header-title" data-en="COSO ERM Components &amp; Limitations" data-az="COSO MRİ Komponentləri və Məhdudiyyətlər" data-tr="COSO KRY Bileşenleri ve Sınırlamalar">COSO ERM Components &amp; Limitations</div>
+      <div class="su-header-sub">Unit 7 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-7-3','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-7-3','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-7-3','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Five Components &amp; 20 Principles</div><p>COSO ERM is structured into five interrelated components: <strong class="key-term">Governance and Culture</strong>, <strong class="key-term">Strategy and Objective Setting</strong>, <strong class="key-term">Performance</strong>, <strong class="key-term">Review and Revision</strong>, and <strong class="key-term">Information, Communication, and Reporting</strong>. These are supported by 20 distinct principles.</p></div>
+    <div class="concept-block"><div class="concept-title">The Five Risk Responses</div><p><strong class="key-term">Acceptance</strong> — take no action; <strong class="key-term">Avoidance</strong> — remove the risk entirely; <strong class="key-term">Pursuit</strong> — accept more risk for better performance; <strong class="key-term">Reduction</strong> — mitigate the severity; <strong class="key-term">Sharing</strong> — transfer risk to a third party.</p></div>
+    <div class="concept-block"><div class="concept-title">The Portfolio View</div><p>The ultimate goal of risk assessment is developing a <strong class="key-term">"portfolio view"</strong> — evaluating composite risk across the entire entity to see how it affects overall strategy and performance.</p></div>
+    <div class="concept-block"><div class="concept-title">Inherent Limitations</div><p>ERM cannot guarantee perfect outcomes. It is fundamentally limited by <strong class="key-term">faulty judgment, simple errors, cost-benefit constraints, collusion, and management override</strong>.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Severity</strong> — Risk measure that considers impact, likelihood of occurring, and time required to recover.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Modeling</strong> — Assessing and prioritizing risks (using risk maps) by weighting factors based on professional judgment.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Inventory</strong> — A comprehensive list of all identified risks that could potentially affect the entity.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p><strong>Five risk responses</strong> — recognize practical examples: selling an asset = <strong>Avoidance</strong>; buying insurance = <strong>Sharing</strong>; accepting increased risk for better performance = <strong>Pursuit</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p><strong>"Risk profile view"</strong> = partially integrated (linked to specific business objectives). <strong>"Portfolio view"</strong> = fully integrated (linked to entity-wide strategy).</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Quantitative methods aren't always better. <strong>Qualitative methods</strong> (like interviews) are often preferred — they are <strong>more efficient and less costly</strong>.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Severity"</strong> = combination of <strong>"impact"</strong> + <strong>"likelihood"</strong> + <strong>"recovery time"</strong>.</div>
+    <div class="tip-block">✅ Any chosen risk response must bring risk within the organization's <strong>risk appetite</strong>.</div>
+    <div class="tip-block">✅ COSO ERM = <strong>5 components</strong> + <strong>20 principles</strong>. Memorize the component names.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Beş Komponent və 20 Prinsip</div><p>COSO MRİ çərçivəsi beş bir-birilə əlaqəli komponentə bölünüb: <strong class="key-term">İdarəetmə və Mədəniyyət</strong>, <strong class="key-term">Strategiya və Məqsəd Müəyyən Etmə</strong>, <strong class="key-term">Fəaliyyət (Performance)</strong>, <strong class="key-term">Nəzərdən Keçirmə və Düzəliş</strong>, <strong class="key-term">Məlumat, Kommunikasiya və Hesabatlılıq</strong>. Bunlar 20 fərqli prinsiplə dəstəklənir.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş Riskə Cavab</div><p><strong class="key-term">Qəbul etmə (Acceptance)</strong> — heç bir hərəkət etməmək; <strong class="key-term">Qaçınma (Avoidance)</strong> — riski tamamilə aradan qaldırmaq; <strong class="key-term">Axtarış (Pursuit)</strong> — daha yaxşı fəaliyyət üçün daha çox risk qəbul etmək; <strong class="key-term">Azaltma (Reduction)</strong> — ciddiliyi yüngülləşdirmək; <strong class="key-term">Paylaşma (Sharing)</strong> — riski üçüncü tərəfə ötürmək.</p></div>
+    <div class="concept-block"><div class="concept-title">Portfel Görünüşü</div><p>Risk qiymətləndirməsinin son məqsədi bütün qurum boyunca birləşmiş riski qiymətləndirən <strong class="key-term">"portfel görünüşü" (Portfolio View)</strong> hazırlamaqdır.</p></div>
+    <div class="concept-block"><div class="concept-title">Xas Məhdudiyyətlər</div><p>MRİ mükəmməl nəticələrə zəmanət verə bilməz. İnsan amilləri ilə məhdudlaşır: <strong class="key-term">səhv mühakimə, sadə xətalar, xərc-fayda məhdudiyyətləri, sazişçilik (Collusion) və rəhbərliyin keçməsi (Management Override)</strong>.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Ciddilik (Severity)</strong> — Riskin təsirini, baş vermə ehtimalını və bərpa üçün tələb olunan vaxtı nəzərə alan risk ölçüsü.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Modelləşdirməsi (Risk Modeling)</strong> — Peşəkar mühakiməyə əsaslanan çəki amilləri ilə riskləri qiymətləndirmə (risk xəritələrindən istifadə edir).</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk İnventarı (Risk Inventory)</strong> — Quruma potensial təsir edə biləcək bütün müəyyən edilmiş risklərin hərtərəfli siyahısı.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p><strong>Beş riskə cavab</strong> — praktik nümunələr: aktivin satılması = <strong>Qaçınma (Avoidance)</strong>; sığorta almaq = <strong>Paylaşma (Sharing)</strong>; artan riski fəaliyyət üçün qəbul etmək = <strong>Axtarış (Pursuit)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p><strong>"Risk profili görünüşü"</strong> = qismən inteqrasiya (xüsusi biznes məqsədləri ilə əlaqəli). <strong>"Portfel görünüşü"</strong> = tam inteqrasiya (bütün qurum miqyaslı strategiya ilə əlaqəli).</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Kəmiyyət metodları həmişə daha yaxşı deyil. <strong>Keyfiyyət metodları (Qualitative Methods)</strong> çox vaxt <strong>daha səmərəli və daha az xərcli</strong> olduğu üçün üstünlük verilir.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"Ciddilik" (Severity)</strong> = <strong>"təsir" (Impact)</strong> + <strong>"ehtimal" (Likelihood)</strong> + <strong>"bərpa vaxtı"</strong> birləşməsi.</div>
+    <div class="tip-block">✅ Seçilən istənilən riskə cavab riski təşkilatın <strong>risk iştahı</strong> daxilinə gətirməlidir.</div>
+    <div class="tip-block">✅ COSO MRİ = <strong>5 komponent</strong> + <strong>20 prinsip</strong>. Komponentlərin adlarını əzbərləyin.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Beş Bileşen ve 20 İlke</div><p>COSO KRY çerçevesi birbiriyle ilişkili beş bileşene yapılandırılmıştır: <strong class="key-term">Yönetişim ve Kültür</strong>, <strong class="key-term">Strateji ve Hedef Belirleme</strong>, <strong class="key-term">Performans</strong>, <strong class="key-term">Gözden Geçirme ve Revizyon</strong>, <strong class="key-term">Bilgi, İletişim ve Raporlama</strong>. Bunlar 20 ayrı ilke ile desteklenir.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş Risk Yanıtı</div><p><strong class="key-term">Kabul Etme (Acceptance)</strong> — eylem almama; <strong class="key-term">Kaçınma (Avoidance)</strong> — riski tamamen ortadan kaldırma; <strong class="key-term">Peşinde Koşma (Pursuit)</strong> — daha iyi performans için daha fazla risk; <strong class="key-term">Azaltma (Reduction)</strong> — ciddiyeti hafifletme; <strong class="key-term">Paylaşma (Sharing)</strong> — riski üçüncü tarafa aktarma.</p></div>
+    <div class="concept-block"><div class="concept-title">Portföy Görünümü</div><p>Risk değerlendirmesinin nihai amacı tüm kuruluş genelindeki bileşik riski değerlendiren <strong class="key-term">"portföy görünümü" (Portfolio View)</strong> geliştirmektir.</p></div>
+    <div class="concept-block"><div class="concept-title">Doğal Sınırlamalar</div><p>KRY mükemmel sonuçları garanti edemez. İnsan faktörleriyle sınırlıdır: <strong class="key-term">hatalı muhakeme, basit hatalar, maliyet-fayda kısıtlamaları, gizli anlaşma (Collusion) ve yönetim geçersiz kılması (Management Override)</strong>.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Ciddiyet (Severity)</strong> — Riskin etkisini, gerçekleşme olasılığını ve kurtulma için gereken süreyi dikkate alan risk ölçüsü.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Modellemesi (Risk Modeling)</strong> — Mesleki muhakemeye dayalı ağırlık faktörleri ile riskleri değerlendirme yöntemi (risk haritaları kullanılır).</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Envanteri (Risk Inventory)</strong> — Kuruluşu potansiyel olarak etkileyebilecek tüm tanımlanmış risklerin kapsamlı listesi.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p><strong>Beş risk yanıtı</strong> — pratik örnekler: varlık satışı = <strong>Kaçınma (Avoidance)</strong>; sigorta satın alma = <strong>Paylaşma (Sharing)</strong>; artan riski kabul etme = <strong>Peşinde Koşma (Pursuit)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p><strong>"Risk profili görünümü"</strong> = kısmen entegre (belirli iş hedeflerine bağlı). <strong>"Portföy görünümü"</strong> = tam entegre (kuruluş geneli stratejiye bağlı).</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Nicel yöntemler her zaman daha iyi değildir. <strong>Nitel yöntemler (Qualitative Methods)</strong> genellikle <strong>daha verimli ve daha az maliyetli</strong> oldukları için tercih edilir.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Ciddiyet" (Severity)</strong> = <strong>"etki"</strong> + <strong>"olasılık"</strong> + <strong>"kurtarma süresi"</strong> birleşimi.</div>
+    <div class="tip-block">✅ Seçilen her risk yanıtı riski kuruluşun <strong>risk iştahı</strong> dahiline getirmelidir.</div>
+    <div class="tip-block">✅ COSO KRY = <strong>5 bileşen</strong> + <strong>20 ilke</strong>. Bileşen adlarını ezberleyin.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">3 / 4</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 7.4 ══════════════ -->
+<div class="subunit-summary" id="su-7-4" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">7.4</div>
+    <div>
+      <div class="su-header-title" data-en="ISO 31000 Risk Management" data-az="ISO 31000 Risk İdarəetməsi" data-tr="ISO 31000 Risk Yönetimi">ISO 31000 Risk Management</div>
+      <div class="su-header-sub">Unit 7 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-7-4','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-7-4','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-7-4','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Nature of ISO 31000</div><p><strong class="key-term">ISO 31000</strong> is a globally recognized, <strong class="key-term">principles-based</strong> approach to risk management. Unlike the highly detailed COSO ERM, ISO 31000 focuses on <strong class="key-term">flexibility</strong> — providing broad guidelines that integrate risk management into all facets and operations of an organization.</p></div>
+    <div class="concept-block"><div class="concept-title">Value Creation</div><p>The ultimate purpose of risk management under ISO 31000 is the <strong class="key-term">creation and protection of value</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Responsibilities</div><p><strong class="key-term">Board</strong> → oversight. <strong class="key-term">Management</strong> → sets the organization's "risk attitude" and manages daily risks. <strong class="key-term">Internal Audit</strong> → provides assurance over the entire system.</p></div>
+    <div class="concept-block"><div class="concept-title">Three Assurance Approaches</div><p><strong class="key-term">Key Principles Approach</strong> — checking if principles are followed. <strong class="key-term">Process Element Approach</strong> — checking if elements are in practice. <strong class="key-term">Maturity Model Approach</strong> — evaluating how the system is developing over time.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Risk Attitude</strong> — The organization's specific approach to assess and eventually pursue, retain, take, or turn away from risk.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Treatment</strong> — The repetitive process of selecting a risk response, implementing it, and checking if the remaining residual risk is acceptable.</p></div>
+    <div class="term-block"><p><strong class="key-term">Maturity Model Approach</strong> — Assurance method based on the principle that effective risk management develops, improves, and adds more value as it matures over time.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>COSO vs ISO 31000: <strong>COSO</strong> = prescriptive, structured, tied to specific strategic objectives. <strong>ISO 31000</strong> = broad adaptability and flexibility.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Auditor evaluates risk management based on a <em>"development curve"</em>? → Correct answer is the <strong>maturity model approach</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Risk assessment does NOT only happen at the beginning. ISO 31000 emphasizes <strong>monitoring, review, and communication must happen continuously</strong> across all phases.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Value creation and protection"</strong> → always linked to the core purpose of <strong>ISO 31000</strong>.</div>
+    <div class="tip-block">✅ ISO 31000 explicitly highlights that <strong>"human and cultural factors"</strong> affect all levels of risk management.</div>
+    <div class="tip-block">✅ COSO = structured/prescriptive &nbsp;|&nbsp; ISO 31000 = flexible/principles-based. This contrast is a common exam question.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">ISO 31000-in Mahiyyəti</div><p><strong class="key-term">ISO 31000</strong> risk idarəetməsinə qlobal miqyasda tanınan, <strong class="key-term">prinsiplərə əsaslanan (Principles-Based)</strong> yanaşmadır. Yüksək dərəcədə ətraflı COSO MRİ-dən fərqli olaraq, ISO 31000 <strong class="key-term">çevikliyə (Flexibility)</strong> fokuslanır — risk idarəetməsini təşkilatın bütün aspektlərinə inteqrasiya edən geniş istiqamətlər təqdim edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Dəyər Yaratma</div><p>ISO 31000 çərçivəsində risk idarəetməsinin son məqsədi <strong class="key-term">dəyərin yaradılması və qorunmasıdır (Creation and Protection of Value)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Məsuliyyətlər</div><p><strong class="key-term">İdarə Heyəti</strong> → nəzarət. <strong class="key-term">Rəhbərlik</strong> → "risk münasibətini" müəyyən edir və gündəlik riskləri idarə edir. <strong class="key-term">Daxili Audit</strong> → bütün sistem üzrə əminlik təqdim edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Üç Əminlik Yanaşması</div><p><strong class="key-term">Əsas Prinsiplər Yanaşması</strong> — prinsiplərə riayət olunub-olunmadığının yoxlanması. <strong class="key-term">Proses Elementləri Yanaşması</strong> — elementlərin tətbiq edilib-edilmədiyinin yoxlanması. <strong class="key-term">Yetkinlik Modeli Yanaşması</strong> — sistemin zamanla necə inkişaf etdiyinin qiymətləndirilməsi.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Risk Münasibəti (Risk Attitude)</strong> — Təşkilatın riski qiymətləndirmək və onu axtarmaq, saxlamaq, götürmək və ya ondan qaçmaq üçün xüsusi yanaşması.</p></div>
+    <div class="term-block"><p><strong class="key-term">Riskə Müalicə (Risk Treatment)</strong> — Riskə cavabın seçilməsi, tətbiq edilməsi və qalan qalıq riskin məqbul olub-olmadığının yoxlanması təkrarlanan prosesi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Yetkinlik Modeli Yanaşması (Maturity Model Approach)</strong> — Effektiv risk idarəetməsi proseslərinin zamanla yetkinləşdikcə inkişaf etdiyi prinsipinə əsaslanan əminlik metodu.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>COSO vs ISO 31000: <strong>COSO</strong> = preskriptiv, strukturlaşdırılmış, xüsusi strateji məqsədlərə bağlı. <strong>ISO 31000</strong> = geniş uyğunlaşma qabiliyyəti və çeviklik.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Auditor risk idarəetmə prosesini <em>"inkişaf əyrisində"</em> harada olduğuna əsasən qiymətləndirirsə? → Düzgün cavab <strong>yetkinlik modeli yanaşmasıdır</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Risk qiymətləndirməsi yalnız əvvəldə baş vermir. ISO 31000 vurğulayır: <strong>monitorinq, nəzərdən keçirmə və kommunikasiya</strong> bütün mərhələlərdə <strong>davamlı olaraq</strong> baş verməlidir.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"Dəyərin yaradılması və qorunması"</strong> → həmişə <strong>ISO 31000</strong>-in əsas məqsədi ilə əlaqəlidir.</div>
+    <div class="tip-block">✅ ISO 31000 açıq şəkildə <strong>"insan və mədəni amillərin"</strong> risk idarəetməsinin bütün səviyyələrinə təsir etdiyini vurğulayır.</div>
+    <div class="tip-block">✅ COSO = strukturlaşdırılmış/preskriptiv &nbsp;|&nbsp; ISO 31000 = çevik/prinsiplərə əsaslanan. Bu kontrast tez-tez imtahana çıxır.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">ISO 31000'in Doğası</div><p><strong class="key-term">ISO 31000</strong>, risk yönetimine küresel olarak tanınan, <strong class="key-term">ilkelere dayalı (Principles-Based)</strong> bir yaklaşımdır. Oldukça ayrıntılı COSO KRY'den farklı olarak, ISO 31000 <strong class="key-term">esnekliğe (Flexibility)</strong> odaklanır — risk yönetimini kuruluşun tüm yönlerine entegre eden geniş kılavuzlar sunar.</p></div>
+    <div class="concept-block"><div class="concept-title">Değer Yaratma</div><p>ISO 31000 kapsamında risk yönetiminin nihai amacı <strong class="key-term">değerin yaratılması ve korunmasıdır (Creation and Protection of Value)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Sorumluluklar</div><p><strong class="key-term">Yönetim Kurulu</strong> → gözetim. <strong class="key-term">Yönetim</strong> → "risk tutumunu" belirler ve günlük riskleri yönetir. <strong class="key-term">İç Denetim</strong> → tüm sistem üzerinde güvence sağlar.</p></div>
+    <div class="concept-block"><div class="concept-title">Üç Güvence Yaklaşımı</div><p><strong class="key-term">Temel İlkeler Yaklaşımı</strong> — ilkelere uyulup uyulmadığının kontrolü. <strong class="key-term">Süreç Elemanları Yaklaşımı</strong> — elemanların uygulanıp uygulanmadığının kontrolü. <strong class="key-term">Olgunluk Modeli Yaklaşımı</strong> — sistemin zamanla nasıl geliştiğinin değerlendirilmesi.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Risk Tutumu (Risk Attitude)</strong> — Kuruluşun riski değerlendirmek ve nihayetinde onu takip etmek, elde tutmak, üstlenmek veya geri çevirmek için özel yaklaşımı.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Tedavisi (Risk Treatment)</strong> — Risk yanıtının seçilmesi, uygulanması ve kalan artık riskin kabul edilebilir olup olmadığının kontrol edilmesi tekrarlayan süreci.</p></div>
+    <div class="term-block"><p><strong class="key-term">Olgunluk Modeli Yaklaşımı (Maturity Model Approach)</strong> — Etkili risk yönetimi süreçlerinin zamanla olgunlaştıkça geliştiği ilkesine dayanan güvence yöntemi.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>COSO vs ISO 31000: <strong>COSO</strong> = kuralcı, yapılandırılmış, belirli stratejik hedeflere bağlı. <strong>ISO 31000</strong> = geniş uyarlanabilirlik ve esneklik.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Denetçi riski bir <em>"gelişim eğrisine"</em> göre değerlendiriyorsa? → Doğru cevap <strong>olgunluk modeli yaklaşımıdır</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Risk değerlendirmesi yalnızca başlangıçta gerçekleşmez. ISO 31000 vurgular: <strong>izleme, gözden geçirme ve iletişim</strong> tüm aşamalarda <strong>sürekli olarak</strong> gerçekleşmelidir.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Değerin yaratılması ve korunması"</strong> → her zaman <strong>ISO 31000</strong>'in temel amacıyla ilişkilendirilir.</div>
+    <div class="tip-block">✅ ISO 31000 açıkça <strong>"insan ve kültürel faktörlerin"</strong> risk yönetiminin tüm düzeylerini etkilediğini vurgular.</div>
+    <div class="tip-block">✅ COSO = yapılandırılmış/kuralcı &nbsp;|&nbsp; ISO 31000 = esnek/ilkelere dayalı. Bu karşıtlık sık sık sınava çıkar.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">4 / 4</span>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS=["su-7-1","su-7-2","su-7-3","su-7-4"];
+let currentSU=SUBUNIT_IDS[0],globalLang='en';
+function showSubunit(id){
+  SUBUNIT_IDS.forEach(sid=>{document.getElementById(sid).style.display='none';document.getElementById('nav-'+sid).classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  document.getElementById('nav-'+id).classList.add('active');
+  currentSU=id;
+  document.getElementById('nav-'+id).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  applyLangToSubunit(id,globalLang);
+}
+function showLang(unitId,lang){
+  globalLang=lang;
+  const unit=document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el=>el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el=>el.classList.remove('active'));
+  unit.querySelector('.lang-content.'+lang).classList.add('active');
+  const tabs=unit.querySelectorAll('.lang-tab');
+  const langMap={'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  document.getElementById('lang-btn').textContent={'en':'AZ','az':'TR','tr':'EN'}[lang];
+}
+function applyLangToSubunit(id,lang){
+  showLang(id,lang);
+  const su=document.getElementById(id);
+  const titleEl=su.querySelector('.su-header-title');
+  if(titleEl)titleEl.textContent=titleEl.dataset[lang]||titleEl.dataset.en;
+  const navBtn=document.getElementById('nav-'+id);
+  const navTitle=navBtn.querySelector('.su-nav-title');
+  if(navTitle)navTitle.textContent=navTitle.dataset[lang]||navTitle.dataset.en;
+}
+function toggleGlobalLang(){
+  const langs=['en','az','tr'],idx=langs.indexOf(globalLang);
+  globalLang=langs[(idx+1)%3];
+  applyLangToSubunit(currentSU,globalLang);
+  SUBUNIT_IDS.forEach(sid=>{const t=document.querySelector('#nav-'+sid+' .su-nav-title');if(t)t.textContent=t.dataset[globalLang]||t.dataset.en;});
+  document.getElementById('app-title').textContent={en:'Unit 7 · Summary',az:'Unit 7 · Xülasə',tr:'Unit 7 · Özet'}[globalLang];
+}
+function nextSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx<SUBUNIT_IDS.length-1)showSubunit(SUBUNIT_IDS[idx+1]);}
+function prevSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx>0)showSubunit(SUBUNIT_IDS[idx-1]);}
+</script>
+</body>
+</html>

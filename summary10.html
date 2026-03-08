@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 10 Summary</title>
+<style>
+:root{--navy:#1a2e4a;--navy-mid:#2e4d72;--gold:#c9a84c;--gold-dim:#8a6d2e;--paper:#f8f5ef;--correct:#1a6b3c;--wrong:#8b1a1a;--shadow:0 2px 12px rgba(15,25,35,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;background:var(--paper);color:#0f1923;min-height:100vh;font-size:15px;line-height:1.6;}
+#topbar{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+#topbar-inner{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:680px;margin:0 auto;gap:10px;}
+#back-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#app-title{font-size:15px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#lang-btn{font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;flex-shrink:0;}
+#su-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:0 12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#su-nav::-webkit-scrollbar{display:none;}
+#su-nav-inner{display:flex;gap:8px;max-width:680px;margin:0 auto;padding-top:10px;}
+.su-nav-btn{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 10px;cursor:pointer;transition:all .18s;flex:1;-webkit-tap-highlight-color:transparent;}
+.su-nav-btn:hover{background:rgba(255,255,255,.14);}
+.su-nav-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.su-nav-num{font-size:13px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px;}
+.su-nav-title{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;}
+.su-nav-btn.active .su-nav-title{color:rgba(255,255,255,.9);}
+#main{max-width:680px;margin:0 auto;padding:16px 14px 40px;}
+.su-header{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.su-header-num{width:48px;height:48px;flex-shrink:0;background:var(--gold);color:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;}
+.su-header-title{font-size:16px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px;}
+.su-header-sub{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.4px;}
+.lang-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lang-tab{flex:1;padding:9px 0;border:1.5px solid #ddd6ca;border-radius:8px;background:#fff;color:#888;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;}
+.lang-tab.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.lang-content{display:none;}
+.lang-content.active{display:block;}
+.section-heading{background:linear-gradient(135deg,#e8f0f8,#f0f4f9);color:var(--navy);font-size:15px;font-weight:700;padding:10px 14px;border-radius:8px;margin:20px 0 10px 0;border-left:3px solid var(--navy-mid);}
+.section-heading:first-child{margin-top:0;}
+.concept-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--navy-mid);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.concept-title{font-weight:700;color:var(--navy-mid);margin-bottom:5px;font-size:14px;}
+.concept-block p{font-size:14px;color:#333;}
+.key-term{font-weight:700;color:var(--gold-dim);}
+.term-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.term-block p{font-size:14px;color:#333;}
+.trap-block{background:#fff5f5;border:1px solid #f5c6c6;border-left:3px solid var(--wrong);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.trap-label{display:inline-block;background:var(--wrong);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.trap-block p{font-size:14px;color:#4a1a1a;}
+.tip-block{background:#f0faf4;border:1px solid #b8e0c8;border-left:3px solid var(--correct);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:14px;color:#1a3a28;}
+.su-bottom-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid #e8e2d8;}
+.su-prev-btn,.su-next-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.su-prev-btn:hover,.su-next-btn:hover{opacity:.85;}
+.su-counter{font-size:13px;color:#888;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="topbar"><div id="topbar-inner">
+  <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+  <div id="app-title">Unit 10 · Xülasə</div>
+  <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+</div></div>
+
+<div id="su-nav"><div id="su-nav-inner">
+  <button class="su-nav-btn active" id="nav-su-10-1" onclick="showSubunit('su-10-1')">
+    <span class="su-nav-num">10.1</span>
+    <span class="su-nav-title" data-en="Fraud Risks &amp; Types" data-az="Fraud Riskləri" data-tr="Hile Riskleri">Fraud Risks &amp; Types</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-10-2" onclick="showSubunit('su-10-2')">
+    <span class="su-nav-num">10.2</span>
+    <span class="su-nav-title" data-en="Fraud Controls" data-az="Fraud Nəzarəti" data-tr="Hile Kontrolleri">Fraud Controls</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-10-3" onclick="showSubunit('su-10-3')">
+    <span class="su-nav-num">10.3</span>
+    <span class="su-nav-title" data-en="Investigation" data-az="Araşdırma" data-tr="Soruşturma">Investigation</span>
+  </button>
+</div></div>
+
+<div id="main">
+
+<!-- ══════════════ SU 10.1 ══════════════ -->
+<div class="subunit-summary" id="su-10-1" style="display:block">
+  <div class="su-header">
+    <div class="su-header-num">10.1</div>
+    <div>
+      <div class="su-header-title" data-en="Fraud Risks &amp; Types" data-az="Fırıldaqçılıq Riskləri və Növləri" data-tr="Hile Riskleri ve Türleri">Fraud Risks &amp; Types</div>
+      <div class="su-header-sub">Unit 10 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-10-1','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-10-1','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-10-1','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Nature of Fraud</div><p><strong class="key-term">Fraud</strong> is any intentional act of deceit, concealment, or violation of trust used to secure an unfair or illegal advantage. It requires three elements: <strong class="key-term">intent to defraud</strong>, the <strong class="key-term">commission of the act</strong>, and the <strong class="key-term">accomplishment of the fraud</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">The Fraud Triangle</div><p>Three conditions ordinarily present when fraud occurs: <strong class="key-term">Pressure</strong> (personal or organizational motive) · <strong class="key-term">Opportunity</strong> (ability to commit the act, usually due to weak controls) · <strong class="key-term">Rationalization</strong> (ability to justify the dishonest act).</p></div>
+    <div class="concept-block"><div class="concept-title">Low-Level vs. Executive Fraud</div><p><strong class="key-term">Low-level fraud</strong> (e.g., embezzlement) is intended to benefit the individual perpetrator. <strong class="key-term">Executive fraud</strong> (e.g., misstating financial statements) is intended to benefit the organization or inflate stock prices to secure executive bonuses.</p></div>
+    <div class="concept-block"><div class="concept-title">Roles and Responsibilities</div><p><strong class="key-term">Management</strong> holds primary responsibility for designing controls and preventing fraud. Internal auditors evaluate the effectiveness of those controls and must recognize fraud indicators, but are <strong class="key-term">not responsible for designing fraud controls</strong> or determining a perpetrator's legal intent.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Skimming</strong> — Stealing cash before it is ever recorded in the accounting system.</p></div>
+    <div class="term-block"><p><strong class="key-term">Lapping</strong> — Stealing a customer's payment and covering the shortage with a subsequent payment from a different customer.</p></div>
+    <div class="term-block"><p><strong class="key-term">Check Kiting</strong> — Writing a check with insufficient funds from one bank account and depositing it into another.</p></div>
+    <div class="term-block"><p><strong class="key-term">Social Engineering Threats</strong> — Deceptive methods to obtain sensitive information: <strong class="key-term">Phishing</strong> (email) · <strong class="key-term">Vishing</strong> (voice/phone) · <strong class="key-term">Smishing</strong> (text messages) · <strong class="key-term">Quishing</strong> (QR codes).</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>The <strong>Fraud Triangle</strong>: categorize examples correctly — lack of segregation of duties = <strong>"Opportunity"</strong>; feeling underpaid = <strong>"Rationalization"</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p><strong>Symptoms</strong> vs. <strong>Red Flags</strong>: Symptoms (sudden lifestyle change, forced book reconciliations) suggest fraud <em>may currently be occurring</em>. Red flags (complex org structure, excessive voids) indicate the <em>opportunity for fraud exists</em>.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Internal audit's standard objectives <strong>do not include guaranteeing fraud detection</strong>. Auditors must be alert to fraud risks, but hunting all fraud is not their primary mandate.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Opportunity"</strong> is the only leg of the Fraud Triangle the organization can <strong>directly control and minimize</strong>.</div>
+    <div class="tip-block">✅ Always associate <strong>"Channel Stuffing"</strong> with fraudulent financial reporting — shipping unrequested products to distributors just to record a premature sale.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Fırıldaqçılığın Mahiyyəti</div><p><strong class="key-term">Fırıldaqçılıq (Fraud)</strong> ədalətsiz və ya qanunsuz üstünlük əldə etmək üçün istifadə olunan istənilən qəsdli aldatma, gizlətmə və ya etibar pozulması aktıdır. Üç element tələb edir: <strong class="key-term">fırıldaqçılıq niyyəti (Intent to Defraud)</strong>, <strong class="key-term">aktın törədilməsi (Commission of the Act)</strong> və <strong class="key-term">fırıldaqçılığın həyata keçirilməsi (Accomplishment of the Fraud)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Fırıldaqçılıq Üçbucağı</div><p>Fırıldaqçılıq baş verdikdə adətən mövcud olan üç şərt: <strong class="key-term">Təzyiq (Pressure)</strong> — şəxsi və ya təşkilati motiv · <strong class="key-term">İmkan (Opportunity)</strong> — adətən zəif nəzarətlər səbəbindən aktı törətmə qabiliyyəti · <strong class="key-term">Əsaslandırma (Rationalization)</strong> — qeyri-vicdanlı hərəkəti haqlı çıxarma qabiliyyəti.</p></div>
+    <div class="concept-block"><div class="concept-title">Aşağı Səviyyəli və İcraçı Fırıldaqçılığı</div><p><strong class="key-term">Aşağı səviyyəli fırıldaqçılıq (Low-Level Fraud)</strong> (mənimsəmə kimi) fərdi cinayətkarın faydasına yönəlib. <strong class="key-term">İcraçı fırıldaqçılığı (Executive Fraud)</strong> (maliyyə hesabatlarının təhrif edilməsi kimi) təşkilatın faydasına və ya icraçı bonuslarını təmin etmək üçün səhm qiymətlərini şişirtmək məqsədi daşıyır.</p></div>
+    <div class="concept-block"><div class="concept-title">Rollar və Məsuliyyətlər</div><p><strong class="key-term">Rəhbərlik (Management)</strong> nəzarətlərin dizayn edilməsi və fırıldaqçılığın qarşısının alınması üçün əsas məsuliyyəti daşıyır. Daxili auditorlar nəzarətlərin effektivliyini qiymətləndirir, lakin <strong class="key-term">fırıldaqçılıq nəzarətlərini dizayn etməyə cavabdeh deyillər</strong> və cinayətkarın hüquqi niyyətini müəyyən etmirlər.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Qaymağını Yığma (Skimming)</strong> — Nağd pulu mühasibat sisteminə qeyd edilməzdən əvvəl oğurlamaq.</p></div>
+    <div class="term-block"><p><strong class="key-term">Örtbas Etmə / Ləpping (Lapping)</strong> — Müştərinin ödəmişini oğurlamaq və çatışmazlığı fərqli müştəridən sonrakı ödəmə ilə örtmək.</p></div>
+    <div class="term-block"><p><strong class="key-term">Çek Uçurtması (Check Kiting)</strong> — Bir bank hesabından kifayət qədər vəsait olmadan çek yazmaq və onu digər hesaba yatırmaq.</p></div>
+    <div class="term-block"><p><strong class="key-term">Sosial Mühəndislik Təhdidləri (Social Engineering Threats)</strong> — Həssas məlumat əldə etmək üçün aldadıcı metodlar: <strong class="key-term">Fişinq (Phishing)</strong> — e-poçt · <strong class="key-term">Vişinq (Vishing)</strong> — telefon · <strong class="key-term">Smişinq (Smishing)</strong> — mətn mesajları · <strong class="key-term">Kuşinq (Quishing)</strong> — QR kodları.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p><strong>Fırıldaqçılıq Üçbucağı:</strong> nümunələri düzgün təsnif edin — vəzifələrin ayrılmasının olmaması = <strong>"İmkan" (Opportunity)</strong>; az maaş aldığını hiss etmək = <strong>"Əsaslandırma" (Rationalization)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p><strong>Simptomlar (Symptoms)</strong> vs. <strong>Xəbərdarlıq Əlamətləri (Red Flags)</strong>: Simptomlar (qəfil həyat tərzi dəyişikliyi) fırıldaqçılığın <em>hazırda baş verə biləcəyini</em> göstərir. Xəbərdarlıq əlamətləri (mürəkkəb struktur, həddindən artıq ləğvetmələr) sadəcə <em>fırıldaqçılıq imkanının mövcud olduğunu</em> göstərir.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Daxili auditin standart məqsədləri <strong>fırıldaqçılığın aşkarlanmasına zəmanət verməyi əhatə etmir</strong>. Auditorlar fırıldaqçılıq risklərinə diqqətli olmalı, lakin bütün fırıldaqçılığı axtarıb tapmaq onların əsas mandatı deyil.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"İmkan" (Opportunity)</strong> Fırıldaqçılıq Üçbucağının təşkilatın <strong>birbaşa nəzarət edə və minimuma endirə biləcəyi</strong> yeganə elementi.</div>
+    <div class="tip-block">✅ <strong>"Kanal Doldurma" (Channel Stuffing)</strong> terminini həmişə saxta maliyyə hesabatlılığı ilə əlaqələndirin — vaxtından əvvəl satış qeyd etmək üçün sifariş verilməmiş məhsulların distributorlara göndərilməsi.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Hilenin Doğası</div><p><strong class="key-term">Hile (Fraud)</strong>, haksız veya yasa dışı bir avantaj elde etmek için kullanılan herhangi bir kasıtlı aldatma, gizleme veya güven ihlali eylemidir. Üç unsur gerektirir: <strong class="key-term">hile niyeti (Intent to Defraud)</strong>, <strong class="key-term">eylemin işlenmesi (Commission of the Act)</strong> ve <strong class="key-term">hilenin gerçekleştirilmesi (Accomplishment of the Fraud)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Hile Üçgeni</div><p>Hile gerçekleştiğinde genellikle mevcut olan üç koşul: <strong class="key-term">Baskı (Pressure)</strong> — kişisel veya kurumsal güdü · <strong class="key-term">Fırsat (Opportunity)</strong> — genellikle zayıf kontroller nedeniyle eylemi gerçekleştirme yeteneği · <strong class="key-term">Meşrulaştırma (Rationalization)</strong> — dürüst olmayan eylemi haklı çıkarma yeteneği.</p></div>
+    <div class="concept-block"><div class="concept-title">Alt Düzey ve Üst Düzey Hile</div><p><strong class="key-term">Alt düzey hile (Low-Level Fraud)</strong> (zimmete geçirme gibi) bireysel failin yararına yöneliktir. <strong class="key-term">Üst düzey hile (Executive Fraud)</strong> (finansal tabloların yanlış beyanı gibi) kuruluşun yararına veya yönetici bonuslarını güvence altına almak için hisse fiyatlarını şişirmek amacıyla yapılır.</p></div>
+    <div class="concept-block"><div class="concept-title">Roller ve Sorumluluklar</div><p><strong class="key-term">Yönetim (Management)</strong>, kontrollerin tasarlanması ve hilenin önlenmesi için birincil sorumluluğu taşır. İç denetçiler kontrollerin etkinliğini değerlendirir, ancak <strong class="key-term">hile kontrollerini tasarlamaktan sorumlu değildirler</strong> ve failin hukuki niyetini belirlemezler.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Kaymağını Alma (Skimming)</strong> — Nakit parayı muhasebe sistemine kaydedilmeden önce çalmak.</p></div>
+    <div class="term-block"><p><strong class="key-term">Örtbas Etme / Lapping</strong> — Bir müşterinin ödemesini çalmak ve açığı farklı bir müşteriden gelen sonraki ödemeyle kapatmak.</p></div>
+    <div class="term-block"><p><strong class="key-term">Çek Uçurma (Check Kiting)</strong> — Bir banka hesabından yetersiz bakiyeyle çek yazmak ve başka bir hesaba yatırmak.</p></div>
+    <div class="term-block"><p><strong class="key-term">Sosyal Mühendislik Tehditleri (Social Engineering Threats)</strong> — Hassas bilgi elde etmek için aldatıcı yöntemler: <strong class="key-term">Phishing</strong> — e-posta · <strong class="key-term">Vishing</strong> — telefon · <strong class="key-term">Smishing</strong> — kısa mesaj · <strong class="key-term">Quishing</strong> — QR kodu.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p><strong>Hile Üçgeni:</strong> örnekleri doğru sınıflandırın — görev ayrılığı eksikliği = <strong>"Fırsat" (Opportunity)</strong>; düşük maaş aldığını hissetme = <strong>"Meşrulaştırma" (Rationalization)</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p><strong>Belirtiler (Symptoms)</strong> vs. <strong>Uyarı İşaretleri (Red Flags)</strong>: Belirtiler (ani yaşam tarzı değişikliği) hilenin <em>şu anda gerçekleşiyor olabileceğini</em> gösterir. Uyarı işaretleri (karmaşık yapı, aşırı iptal) sadece <em>hile fırsatının var olduğunu</em> gösterir.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İç denetimin standart hedefleri <strong>hile tespitini garanti etmeyi kapsamaz</strong>. Denetçiler hile risklerine karşı uyanık olmalı, ancak tüm hileyi avlamak asıl amaç değildir.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Fırsat" (Opportunity)</strong>, Hile Üçgeninin kuruluşun <strong>doğrudan kontrol edebileceği ve en aza indirebileceği</strong> tek unsurudur.</div>
+    <div class="tip-block">✅ <strong>"Kanal Doldurma" (Channel Stuffing)</strong> terimini her zaman hileli finansal raporlama ile ilişkilendirin — erken satış kaydetmek için sipariş edilmemiş ürünlerin distribütörlere gönderilmesi.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <div></div><span class="su-counter">1 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 10.2 ══════════════ -->
+<div class="subunit-summary" id="su-10-2" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">10.2</div>
+    <div>
+      <div class="su-header-title" data-en="Fraud Controls" data-az="Fırıldaqçılıq Nəzarətləri" data-tr="Hile Kontrolleri">Fraud Controls</div>
+      <div class="su-header-sub">Unit 10 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-10-2','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-10-2','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-10-2','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Fraud Management Program</div><p>An effective program includes a <strong class="key-term">company ethics policy</strong>, <strong class="key-term">fraud awareness training</strong>, risk assessments, ongoing reviews, and formal prevention, detection, and investigation processes.</p></div>
+    <div class="concept-block"><div class="concept-title">Applying COSO to Fraud</div><p>Starts with a strong <strong class="key-term">control environment ("tone at the top")</strong> and a clear <strong class="key-term">code of conduct</strong>. Requires targeted <strong class="key-term">fraud risk assessments</strong> and specific control activities like authorization limits and continuous supervision.</p></div>
+    <div class="concept-block"><div class="concept-title">Roles and Responsibilities</div><p><strong class="key-term">Management</strong> is primarily responsible for establishing and maintaining fraud prevention controls. Internal auditors serve as <strong class="key-term">advisers</strong> who evaluate controls and raise fraud awareness, but must <strong class="key-term">never design or implement</strong> the controls themselves.</p></div>
+    <div class="concept-block"><div class="concept-title">Management Override</div><p>A major risk where management circumvents established controls — falsely boosting revenue or manipulating period-end cutoffs. Best mitigated by <strong class="key-term">strong ethical cultures</strong>, <strong class="key-term">anonymous whistleblower hotlines</strong>, and an <strong class="key-term">effective internal audit function</strong>.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Fraud Awareness</strong> — Understanding of the nature and characteristics of fraud, developed through periodic risk assessments and tailored employee training.</p></div>
+    <div class="term-block"><p><strong class="key-term">Management Override</strong> — When management intentionally bypasses the entity's internal controls for personal gain or to manipulate financial presentations.</p></div>
+    <div class="term-block"><p><strong class="key-term">Device Authorization Table</strong> — A computer access control that restricts system access based on the physical terminal or device being used, even if the user enters a valid password.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Strict division of duties: <strong>management owns</strong> fraud prevention controls → <strong>internal audit solely evaluates</strong> them and advises.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>IT security: <strong>programmers should never have access to operational, in-use programs</strong>, and <strong>actual users should be the ones testing new programs</strong> to prevent fraudulent code insertion.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>A strong password policy alone is not enough. <strong>Device authorization tables</strong> and <strong>data encryption</strong> are equally critical preventive controls.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ Because fraud involves falsifying transactions, an auditor's examination for fraud primarily tests the <strong>existence assertion</strong>.</div>
+    <div class="tip-block">✅ Minimizing the <strong>"opportunity"</strong> to commit AND conceal fraud → always link to strict <strong>segregation of duties</strong> (separating recording, authorization, and custody).</div>
+    <div class="tip-block">✅ Assessment of <strong>management override risk</strong> is directly overseen by the <strong>board of directors or the audit committee</strong>.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Fırıldaqçılığın İdarə Edilməsi Proqramı</div><p>Effektiv proqram <strong class="key-term">şirkət etika siyasətini (Company Ethics Policy)</strong>, <strong class="key-term">fırıldaqçılıq maarifləndirmə təlimini (Fraud Awareness Training)</strong>, risk qiymətləndirmələrini, davamlı nəzərdən keçirmələri və rəsmi qarşısının alınması, aşkarlanması və araşdırma proseslərini əhatə edir.</p></div>
+    <div class="concept-block"><div class="concept-title">COSO-nun Fırıldaqçılığa Tətbiqi</div><p>Güclü <strong class="key-term">nəzarət mühitindən ("Yuxarıdan Ton")</strong> və aydın <strong class="key-term">davranış kodeksindən (Code of Conduct)</strong> başlayır. Hədəfli <strong class="key-term">fırıldaqçılıq risk qiymətləndirmələri (Fraud Risk Assessments)</strong> və icazə limitləri, davamlı nəzarət kimi xüsusi nəzarət fəaliyyətləri tələb edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Rollar və Məsuliyyətlər</div><p><strong class="key-term">Rəhbərlik (Management)</strong> fırıldaqçılığın qarşısını almaq üçün nəzarətlərin yaradılmasına əsasən cavabdehdir. Daxili auditorlar <strong class="key-term">məsləhətçilər (Advisers)</strong> kimi qiymətləndirir, lakin nəzarətləri özləri <strong class="key-term">heç vaxt dizayn etməməli və ya tətbiq etməməlidirlər</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Rəhbərliyin Keçməsi (Management Override)</div><p>Rəhbərliyin qeyri-qanuni səbəblərlə nəzarətləri keçdiyi böyük risk. Ən yaxşı şəkildə <strong class="key-term">güclü etik mədəniyyətlər</strong>, <strong class="key-term">anonim xəbərçi qaynar xətləri (Whistleblower Hotlines)</strong> və <strong class="key-term">effektiv daxili audit funksiyası</strong> vasitəsilə azaldılır.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Fırıldaqçılıq Maarifləndirməsi (Fraud Awareness)</strong> — Vaxtaşırı risk qiymətləndirmələri və uyğunlaşdırılmış işçi təlimi vasitəsilə inkişaf etdirilən fırıldaqçılığın xarakter və xüsusiyyətlərinin anlaşılması.</p></div>
+    <div class="term-block"><p><strong class="key-term">Rəhbərliyin Keçməsi (Management Override)</strong> — Rəhbərliyin şəxsi qazanc əldə etmək və ya maliyyə təqdimatlarını manipulyasiya etmək üçün daxili nəzarətləri qəsdən keçməsi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Cihaz İcazə Cədvəli (Device Authorization Table)</strong> — İstifadəçi etibarlı parol daxil etsə belə, fiziki terminal və ya cihaza əsaslanaraq sistemə girişi məhdudlaşdıran kompüter giriş nəzarəti.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Ciddi vəzifə bölgüsü: <strong>rəhbərlik fırıldaqçılığın qarşısının alınması nəzarətlərinə sahibdir</strong> → <strong>daxili audit isə yalnızca qiymətləndirir</strong> və məsləhət verir.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>İT təhlükəsizliyi: <strong>proqramçıların əməliyyat zamanı istifadə olunan proqramlara heç vaxt girişi olmamalıdır</strong> və <strong>yeni proqramları faktiki istifadəçilər test etməlidir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Güclü parol siyasəti tək başına kifayət deyil. <strong>Cihaz icazə cədvəlləri (Device Authorization Tables)</strong> və <strong>məlumat şifrələməsi (Data Encryption)</strong> eyni dərəcədə kritik qabaqlayıcı nəzarətlərdir.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ Fırıldaqçılıq mahiyyət etibarilə əməliyyatların saxtalaşdırılmasını əhatə etdiyinə görə, auditorun fırıldaqçılıq üçün araşdırması əsasən <strong>mövcudluq iddiasını (Existence Assertion)</strong> test edir.</div>
+    <div class="tip-block">✅ Fırıldaqçılığı həm törətmək, həm də gizlətmək <strong>"imkanını"</strong> minimuma endirmək → həmişə ciddi <strong>vəzifələrin ayrılması (Segregation of Duties)</strong> ilə əlaqələndirin.</div>
+    <div class="tip-block">✅ <strong>Rəhbərliyin keçməsi riskinin (Management Override Risk)</strong> qiymətləndirilməsi birbaşa <strong>İdarə Heyəti (Board) və ya Audit Komitəsi (Audit Committee)</strong> tərəfindən nəzarət edilir.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Hile Yönetimi Programı</div><p>Etkili bir program <strong class="key-term">şirket etik politikasını (Company Ethics Policy)</strong>, <strong class="key-term">hile farkındalık eğitimini (Fraud Awareness Training)</strong>, risk değerlendirmelerini, süregelen incelemeleri ve resmi önleme, tespit ve soruşturma süreçlerini kapsar.</p></div>
+    <div class="concept-block"><div class="concept-title">COSO'nun Hileye Uygulanması</div><p>Güçlü <strong class="key-term">kontrol ortamından ("Üst Yönetim Tonu")</strong> ve açık <strong class="key-term">davranış kurallarından (Code of Conduct)</strong> başlar. Hedefli <strong class="key-term">hile risk değerlendirmeleri (Fraud Risk Assessments)</strong> ve yetkilendirme limitleri, sürekli denetim gibi belirli kontrol faaliyetleri gerektirir.</p></div>
+    <div class="concept-block"><div class="concept-title">Roller ve Sorumluluklar</div><p><strong class="key-term">Yönetim (Management)</strong>, hile önleme kontrollerinin oluşturulmasından birincil olarak sorumludur. İç denetçiler <strong class="key-term">danışmanlar (Advisers)</strong> olarak değerlendirir, ancak kontrolleri kendileri <strong class="key-term">asla tasarlamamalı veya uygulamamalıdırlar</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Yönetimin Geçersiz Kılması (Management Override)</div><p>Yönetimin gayri meşru nedenlerle kontrolleri atladığı büyük risk. En iyi şekilde <strong class="key-term">güçlü etik kültürler</strong>, <strong class="key-term">anonim ihbar hatları (Whistleblower Hotlines)</strong> ve <strong class="key-term">etkili iç denetim fonksiyonu</strong> aracılığıyla azaltılır.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Hile Farkındalığı (Fraud Awareness)</strong> — Periyodik risk değerlendirmeleri ve uyarlanmış çalışan eğitimi yoluyla geliştirilen hilenin doğası ve özelliklerinin anlaşılması.</p></div>
+    <div class="term-block"><p><strong class="key-term">Yönetimin Geçersiz Kılması (Management Override)</strong> — Yönetimin kişisel kazanç elde etmek veya finansal sunumları manipüle etmek için iç kontrolleri kasıtlı olarak atlaması.</p></div>
+    <div class="term-block"><p><strong class="key-term">Cihaz Yetkilendirme Tablosu (Device Authorization Table)</strong> — Kullanıcı geçerli şifre girse bile, kullanılan fiziksel terminal veya cihaza dayalı olarak sistem erişimini kısıtlayan bilgisayar erişim kontrolü.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Sıkı görev dağılımı: <strong>yönetim hile önleme kontrollerine sahiptir</strong> → <strong>iç denetim yalnızca değerlendirir</strong> ve tavsiye verir.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>BT güvenliği: <strong>programcıların operasyonel, kullanımdaki programlara asla erişimi olmamalıdır</strong> ve <strong>yeni programları gerçek kullanıcılar test etmelidir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Güçlü şifre politikası tek başına yeterli değildir. <strong>Cihaz yetkilendirme tabloları</strong> ve <strong>veri şifreleme</strong> eşit derecede kritik önleyici kontrollerdir.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ Hile özünde işlemlerin sahteciliğini içerdiğinden, denetçinin hile için işlemleri incelemesi esas olarak <strong>varlık iddiasını (Existence Assertion)</strong> test eder.</div>
+    <div class="tip-block">✅ Hileyi hem işleme hem de gizleme <strong>"fırsatını"</strong> en aza indirmek → her zaman sıkı <strong>görev ayrılığı (Segregation of Duties)</strong> ile ilişkilendirin.</div>
+    <div class="tip-block">✅ <strong>Yönetimin geçersiz kılma riskinin (Management Override Risk)</strong> değerlendirmesi doğrudan <strong>Yönetim Kurulu (Board) veya Denetim Komitesi (Audit Committee)</strong> tarafından gözetilir.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">2 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 10.3 ══════════════ -->
+<div class="subunit-summary" id="su-10-3" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">10.3</div>
+    <div>
+      <div class="su-header-title" data-en="Fraud Investigation" data-az="Fırıldaqçılıq Araşdırması" data-tr="Hile Soruşturması">Fraud Investigation</div>
+      <div class="su-header-sub">Unit 10 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-10-3','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-10-3','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-10-3','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Goal of an Investigation</div><p>A fraud investigation seeks to discover the <strong class="key-term">full nature and extent</strong> of the fraud — whether it occurred, the loss exposures, who was involved, and how it happened.</p></div>
+    <div class="concept-block"><div class="concept-title">Internal Audit's Role</div><p>Internal audit can <strong class="key-term">lead</strong> an investigation, act as a <strong class="key-term">resource</strong>, or avoid direct involvement to solely <strong class="key-term">assess the investigation process</strong>. All roles are acceptable as long as threats to independence and objectivity are properly managed.</p></div>
+    <div class="concept-block"><div class="concept-title">Conducting Interviews</div><p>Fraud interviews differ from standard fact-finding — the auditor usually already has the facts and is seeking <strong class="key-term">confirmation</strong>. <strong class="key-term">Two people</strong> should always conduct the interview, transitioning from general open questions to specific closed questions.</p></div>
+    <div class="concept-block"><div class="concept-title">Reporting and Resolution</div><p>The <strong class="key-term">CAE</strong> is responsible for reporting investigation status and results to management and the board. <strong class="key-term">Management and the board</strong> hold responsibility for resolving the incident — disciplining employees or notifying law enforcement.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Forensic Auditing</strong> — Using accounting and auditing knowledge in matters that have civil or criminal legal implications.</p></div>
+    <div class="term-block"><p><strong class="key-term">Discovery Sampling</strong> — A statistical testing method used to find a specified probability of at least one rare item (like a fraudulent transaction) in a population.</p></div>
+    <div class="term-block"><p><strong class="key-term">Ground Truth Testing</strong> — Verifying if fraud exists by comparing actual practices against stated policies, relying on direct observation rather than statistical sampling.</p></div>
+    <div class="term-block"><p><strong class="key-term">First-Digit Test</strong> — Data analysis technique based on the principle that naturally occurring numbers often start with lower digits (like 1), while assigned or fraudulent numbers more likely start with higher digits (like 9).</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Internal auditors can give an opinion on the <strong>effectiveness of fraud-related controls</strong>, but must <strong>never express an opinion on the actual guilt or culpability</strong> of a suspect. Legal intent is determined by the judicial system.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>To maintain <strong>attorney-client privilege</strong>, the investigation report draft must be <strong>addressed directly to legal counsel</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>The accused should generally be interviewed <strong>after most of the relevant evidence has already been gathered</strong> — not immediately upon suspicion.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ An interviewed suspect must <strong>not be allowed to return to their normal work area</strong> — they might destroy valuable evidence.</div>
+    <div class="tip-block">✅ If <strong>significant fraud</strong> occurs, or if <strong>previously issued financial statements</strong> might be affected, it must be reported to <strong>senior management and the board in a timely manner</strong>.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Araşdırmanın Məqsədi</div><p>Fırıldaqçılıq araşdırması fırıldaqçılığın <strong class="key-term">tam xarakterini və həcmini (Full Nature and Extent)</strong> aşkar etməyə çalışır — baş verib-vermədiyi, itki təsirləri, kimin cəlb olunduğu və necə baş verdiyi daxil olmaqla.</p></div>
+    <div class="concept-block"><div class="concept-title">Daxili Auditin Rolu</div><p>Daxili audit araşdırmanı <strong class="key-term">idarə edə (Lead)</strong>, <strong class="key-term">resurs kimi (Resource)</strong> fəaliyyət göstərə və ya yalnız <strong class="key-term">araşdırma prosesini qiymətləndirmək (Assess the Investigation Process)</strong> üçün birbaşa iştirakdan çəkinə bilər. Müstəqillik və obyektivliyə təhdidlər düzgün idarə olunduğu müddətcə bu rolların istənilən biri məqbuldur.</p></div>
+    <div class="concept-block"><div class="concept-title">Müsahibələrin Aparılması</div><p>Fırıldaqçılıq müsahibələri standart müsahibələrdən fərqlənir — auditor adətən faktlara artıq sahibdir və <strong class="key-term">təsdiqləmə (Confirmation)</strong> axtarır. Müsahibəni həmişə <strong class="key-term">iki nəfər (Two People)</strong> aparmalıdır — ümumi, açıq suallardan xüsusi, qapalı suallara keçiş etməklə.</p></div>
+    <div class="concept-block"><div class="concept-title">Hesabatlılıq və Həll</div><p><strong class="key-term">Baş Audit İcraçısı (CAE)</strong> araşdırmaların vəziyyətini rəhbərliyə və İdarə Heyətinə bildirməyə cavabdehdir. Hadisənin həlli məsuliyyəti — işçilərin intizamlı cəzalandırılması və ya hüquq-mühafizə orqanlarına bildirmə — <strong class="key-term">rəhbərlik və İdarə Heyətinə (Management and the Board)</strong> aiddir.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Məhkəmə Auditi (Forensic Auditing)</strong> — Mülki və ya cinayət hüquqi nəticələri olan məsələlərdə mühasibat və audit biliyinin istifadə edilməsi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kəşf Nümunəsi (Discovery Sampling)</strong> — Populyasiyada ən azı bir nadir element (saxta əməliyyat kimi) tapmağın müəyyən ehtimalı üçün istifadə olunan statistik test metodu.</p></div>
+    <div class="term-block"><p><strong class="key-term">Yerində Həqiqətin Yoxlanması (Ground Truth Testing)</strong> — Statistik nümunə əvəzinə birbaşa müşahidəyə əsaslanaraq faktiki təcrübələri bəyan edilmiş siyasətlərlə müqayisə etməklə fırıldaqçılığın yoxlanması.</p></div>
+    <div class="term-block"><p><strong class="key-term">İlk Rəqəm Testi (First-Digit Test)</strong> — Təbii rəqəmlərin tez-tez aşağı rəqəmlərlə (1 kimi) başladığı, saxta rəqəmlərin isə yüksək rəqəmlərlə (9 kimi) başlama ehtimalının daha yüksək olduğu prinsipinə əsaslanan məlumat təhlili texnikası.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Daxili auditorlar <strong>fırıldaqçılıqla bağlı nəzarətlərin effektivliyi</strong> barədə rəy verə bilər, lakin şübhəlinin <strong>faktiki günahı barədə heç vaxt rəy bildirməməlidir</strong>. Hüquqi niyyət məhkəmə sistemi tərəfindən müəyyən edilir.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p><strong>Vəkil-müştəri imtiyazını (Attorney-Client Privilege)</strong> qorumaq üçün araşdırma hesabatının layihəsi birbaşa <strong>hüquqi məsləhətçiyə (Legal Counsel) ünvanlanmalıdır</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>İttiham olunan şəxslə ümumiyyətlə <strong>müvafiq sübutların əksəriyyəti artıq toplandıqdan sonra</strong> müsahibə aparılmalıdır — şübhə yarandıqda dərhal deyil.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ Müsahibə aparılmış şübhəli <strong>normal iş sahəsinə qayıtmağa icazə verilməməlidir</strong> — dəyərli sübutları məhv edə bilər.</div>
+    <div class="tip-block">✅ <strong>Əhəmiyyətli fırıldaqçılıq (Significant Fraud)</strong> hadisəsi baş verərsə və ya <strong>əvvəllər verilmiş maliyyə hesabatları</strong> təsirlənə bilərsə, bu <strong>yüksək rəhbərliyə və İdarə Heyətinə vaxtında bildirilməlidir</strong>.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Soruşturmanın Amacı</div><p>Hile soruşturması hilenin <strong class="key-term">tam niteliğini ve kapsamını (Full Nature and Extent)</strong> keşfetmeye çalışır — gerçekleşip gerçekleşmediği, kayıp riskleri, kimlerin dahil olduğu ve nasıl gerçekleştiği dahil.</p></div>
+    <div class="concept-block"><div class="concept-title">İç Denetimin Rolü</div><p>İç denetim soruşturmayı <strong class="key-term">yönetebilir (Lead)</strong>, <strong class="key-term">kaynak olarak (Resource)</strong> hareket edebilir veya yalnızca <strong class="key-term">soruşturma sürecini değerlendirmek (Assess the Investigation Process)</strong> için doğrudan katılımdan kaçınabilir. Bağımsızlık ve objektifliğe yönelik tehditler düzgün yönetildiği sürece tüm roller kabul edilebilir.</p></div>
+    <div class="concept-block"><div class="concept-title">Mülakatların Yapılması</div><p>Hile mülakatları standart mülakatlardan farklıdır — denetçi genellikle gerçeklere zaten sahiptir ve <strong class="key-term">doğrulama (Confirmation)</strong> aramaktadır. Mülakatı her zaman <strong class="key-term">iki kişi (Two People)</strong> yürütmeli — genel açık sorulardan özel kapalı sorulara geçiş yapmalıdır.</p></div>
+    <div class="concept-block"><div class="concept-title">Raporlama ve Çözüm</div><p><strong class="key-term">Denetim Yöneticisi (CAE)</strong> soruşturma durumunu ve sonuçlarını yönetime ve Yönetim Kuruluna bildirmekten sorumludur. Olayın çözümlenmesi sorumluluğu — çalışanların disipline edilmesi veya kolluk kuvvetlerine bildirilmesi — <strong class="key-term">yönetim ve Yönetim Kuruluna (Management and the Board)</strong> aittir.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Adli Denetim (Forensic Auditing)</strong> — Hukuki veya cezai sonuçları olan konularda muhasebe ve denetim bilgisinin kullanılması.</p></div>
+    <div class="term-block"><p><strong class="key-term">Keşif Örneklemesi (Discovery Sampling)</strong> — Bir popülasyonda en az bir nadir öğeyi (hileli işlem gibi) bulmanın belirli bir olasılığı için kullanılan istatistiksel test yöntemi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Yerinde Gerçek Testi (Ground Truth Testing)</strong> — İstatistiksel örnekleme yerine doğrudan gözleme dayanarak fiili uygulamaları beyan edilen politikalarla karşılaştırarak hilenin doğrulanması.</p></div>
+    <div class="term-block"><p><strong class="key-term">İlk Basamak Testi (First-Digit Test)</strong> — Doğal sayıların genellikle düşük rakamlarla (1 gibi), sahte sayıların ise yüksek rakamlarla (9 gibi) başlama olasılığının daha yüksek olduğu ilkesine dayanan veri analizi tekniği.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>İç denetçiler <strong>hileyle ilgili kontrollerin etkinliği</strong> hakkında görüş bildirebilir, ancak şüphelinin <strong>fiili suçluluğu hakkında asla görüş bildirmemelidir</strong>. Hukuki niyet yargı sistemi tarafından belirlenir.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p><strong>Avukat-müvekkil ayrıcalığını (Attorney-Client Privilege)</strong> korumak için soruşturma raporu taslağı doğrudan <strong>hukuk danışmanına (Legal Counsel) hitaben yazılmalıdır</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İtham edilen kişiyle genellikle <strong>ilgili kanıtların büyük bölümü zaten toplandıktan sonra</strong> mülakat yapılmalıdır — şüphe anında hemen değil.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ Mülakata alınan şüpheli <strong>normal çalışma alanına dönmesine izin verilmemelidir</strong> — değerli kanıtları yok edebilir.</div>
+    <div class="tip-block">✅ <strong>Önemli hile (Significant Fraud)</strong> meydana gelirse veya <strong>daha önce yayınlanmış finansal tablolar</strong> etkilenebilirse, bu <strong>üst yönetime ve Yönetim Kuruluna zamanında bildirilmelidir</strong>.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">3 / 3</span>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS=["su-10-1","su-10-2","su-10-3"];
+let currentSU=SUBUNIT_IDS[0],globalLang='en';
+function showSubunit(id){
+  SUBUNIT_IDS.forEach(sid=>{document.getElementById(sid).style.display='none';document.getElementById('nav-'+sid).classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  document.getElementById('nav-'+id).classList.add('active');
+  currentSU=id;
+  document.getElementById('nav-'+id).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  applyLangToSubunit(id,globalLang);
+}
+function showLang(unitId,lang){
+  globalLang=lang;
+  const unit=document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el=>el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el=>el.classList.remove('active'));
+  unit.querySelector('.lang-content.'+lang).classList.add('active');
+  const tabs=unit.querySelectorAll('.lang-tab');
+  const langMap={'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  document.getElementById('lang-btn').textContent={'en':'AZ','az':'TR','tr':'EN'}[lang];
+}
+function applyLangToSubunit(id,lang){
+  showLang(id,lang);
+  const su=document.getElementById(id);
+  const titleEl=su.querySelector('.su-header-title');
+  if(titleEl)titleEl.textContent=titleEl.dataset[lang]||titleEl.dataset.en;
+  const navBtn=document.getElementById('nav-'+id);
+  const navTitle=navBtn.querySelector('.su-nav-title');
+  if(navTitle)navTitle.textContent=navTitle.dataset[lang]||navTitle.dataset.en;
+}
+function toggleGlobalLang(){
+  const langs=['en','az','tr'],idx=langs.indexOf(globalLang);
+  globalLang=langs[(idx+1)%3];
+  applyLangToSubunit(currentSU,globalLang);
+  SUBUNIT_IDS.forEach(sid=>{const t=document.querySelector('#nav-'+sid+' .su-nav-title');if(t)t.textContent=t.dataset[globalLang]||t.dataset.en;});
+  document.getElementById('app-title').textContent={en:'Unit 10 · Summary',az:'Unit 10 · Xülasə',tr:'Unit 10 · Özet'}[globalLang];
+}
+function nextSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx<SUBUNIT_IDS.length-1)showSubunit(SUBUNIT_IDS[idx+1]);}
+function prevSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx>0)showSubunit(SUBUNIT_IDS[idx-1]);}
+</script>
+</body>
+</html>

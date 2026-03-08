@@ -191,7 +191,7 @@ body {
     <div class="card-body">
       <div class="card-title" id="test-title">Testlər</div>
       <div class="card-desc" id="test-desc">Unit 1–10 üzrə çoxseçimli suallar, izahlı cavablar, TR / EN dil dəstəyi</div>
-      <div class="card-meta ready" id="test-meta">4 Unit hazır · 363 sual</div>
+      <div class="card-meta ready" id="test-meta">10 Unit hazır · 1031 sual</div>
     </div>
     <div class="card-arrow">›</div>
   </a>
@@ -202,7 +202,7 @@ body {
     <div class="card-body">
       <div class="card-title" id="sum-title">Kitabın Xülasəsi</div>
       <div class="card-desc" id="sum-desc">Hər SubUnit üçün əsas anlayışlar, açar terminlər, imtahan məsləhətləri — AZ / EN / TR</div>
-      <div class="card-meta ready" id="summary-meta">Unit 1 hazır · 4 SubUnit</div>
+      <div class="card-meta ready" id="summary-meta">10 Unit hazır</div>
     </div>
     <div class="card-arrow">›</div>
   </a>
@@ -241,10 +241,10 @@ const LANGS = {
     sectionLabel:"Bölmələr",
     testTitle:   "Testlər",
     testDesc:    "Unit 1–10 üzrə çoxseçimli suallar, izahlı cavablar, TR / EN dil dəstəyi",
-    testMeta:    "4 Unit hazır · 363 sual",
+    testMeta:    "10 Unit hazır · 1031 sual",
     sumTitle:    "Kitabın Xülasəsi",
     sumDesc:     "Hər SubUnit üçün əsas anlayışlar, açar terminlər, imtahan məsləhətləri — AZ / EN / TR",
-    sumMeta:     "Unit 1 hazır · 4 SubUnit",
+    sumMeta:     "10 Unit hazır",
     audioTitle:  "Səsli Dərslər",
     audioDesc:   "Audio dərslər — dinləyərək öyrən",
     audioMeta:   "Tezliklə",
@@ -259,10 +259,10 @@ const LANGS = {
     sectionLabel:"Sections",
     testTitle:   "Practice Tests",
     testDesc:    "Multiple-choice questions for Units 1–10, explained answers, TR / EN support",
-    testMeta:    "4 Units ready · 363 questions",
+    testMeta:    "10 Units ready · 1031 questions",
     sumTitle:    "Study Summary",
     sumDesc:     "Core concepts, key terms, exam tips for each SubUnit — AZ / EN / TR",
-    sumMeta:     "Unit 1 ready · 4 SubUnits",
+    sumMeta:     "10 Units ready",
     audioTitle:  "Audio Lessons",
     audioDesc:   "Audio lessons — learn by listening",
     audioMeta:   "Coming Soon",
@@ -277,10 +277,10 @@ const LANGS = {
     sectionLabel:"Bölümler",
     testTitle:   "Testler",
     testDesc:    "Ünite 1–10 çoktan seçmeli sorular, açıklamalı cevaplar, TR / EN dil desteği",
-    testMeta:    "4 Ünite hazır · 363 soru",
+    testMeta:    "10 Ünite hazır · 1031 soru",
     sumTitle:    "Kitap Özeti",
     sumDesc:     "Her Alt Ünite için temel kavramlar, anahtar terimler, sınav ipuçları — AZ / EN / TR",
-    sumMeta:     "Ünite 1 hazır · 4 Alt Ünite",
+    sumMeta:     "10 Ünite hazır",
     audioTitle:  "Sesli Dersler",
     audioDesc:   "Sesli dersler — dinleyerek öğren",
     audioMeta:   "Yakında",
@@ -328,6 +328,12 @@ function cycleLang() {
     { key: 'cia_quiz_unit2', q: 105 },
     { key: 'cia_quiz_unit3', q: 83  },
     { key: 'cia_quiz_unit4', q: 68  },
+    { key: 'cia_quiz_unit5', q: 104 },
+    { key: 'cia_quiz_unit6', q: 90  },
+    { key: 'cia_quiz_unit7', q: 134 },
+    { key: 'cia_quiz_unit8', q: 137 },
+    { key: 'cia_quiz_unit9', q: 92  },
+    { key: 'cia_quiz_unit10', q: 111 },
   ];
   let totalDone = 0;
   UNIT_KEYS.forEach(u => {

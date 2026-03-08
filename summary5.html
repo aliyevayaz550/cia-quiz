@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 5 Summary</title>
+<style>
+:root {
+  --navy:       #1a2e4a;
+  --navy-mid:   #2e4d72;
+  --gold:       #c9a84c;
+  --gold-dim:   #8a6d2e;
+  --paper:      #f8f5ef;
+  --cream:      #ede8df;
+  --ink:        #0f1923;
+  --correct:    #1a6b3c;
+  --wrong:      #8b1a1a;
+  --font:       -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+  --r:          10px;
+  --shadow:     0 2px 12px rgba(15,25,35,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+#topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+#topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; max-width: 680px; margin: 0 auto; gap: 10px;
+}
+#back-btn {
+  background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0;
+}
+#app-title {
+  font-size: 15px; font-weight: 700; color: #fff; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#lang-btn {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer; flex-shrink: 0;
+}
+#su-nav {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0 12px 10px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+#su-nav::-webkit-scrollbar { display: none; }
+#su-nav-inner {
+  display: flex; gap: 8px;
+  max-width: 680px; margin: 0 auto; padding-top: 10px;
+}
+.su-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 7px 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: all .18s; min-width: 70px;
+  -webkit-tap-highlight-color: transparent;
+}
+.su-nav-btn:hover { background: rgba(255,255,255,.14); }
+.su-nav-btn.active { background: rgba(201,168,76,.18); border-color: var(--gold); }
+.su-nav-num { font-size: 13px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 3px; }
+.su-nav-title {
+  font-size: 10px; color: rgba(255,255,255,.6);
+  font-weight: 500; text-align: center; max-width: 72px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.su-nav-btn.active .su-nav-title { color: rgba(255,255,255,.9); }
+#main { max-width: 680px; margin: 0 auto; padding: 16px 14px 40px; }
+.su-header {
+  display: flex; gap: 14px; align-items: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r); padding: 16px 18px; margin-bottom: 16px;
+}
+.su-header-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--gold); color: var(--navy);
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 800;
+}
+.su-header-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: 4px; }
+.su-header-sub { font-size: 11px; color: rgba(255,255,255,.45); font-weight: 500; letter-spacing: .4px; }
+.lang-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.lang-tab {
+  flex: 1; padding: 9px 0;
+  border: 1.5px solid #ddd6ca; border-radius: 8px;
+  background: #fff; color: #888; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .18s;
+}
+.lang-tab.active { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+.section-heading {
+  background: linear-gradient(135deg, #e8f0f8, #f0f4f9);
+  color: var(--navy); font-size: 15px; font-weight: 700;
+  padding: 10px 14px; border-radius: 8px;
+  margin: 20px 0 10px 0; border-left: 3px solid var(--navy-mid);
+}
+.section-heading:first-child { margin-top: 0; }
+.concept-block {
+  background: #fff; border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--navy-mid); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.concept-block .concept-title { font-weight: 700; color: var(--navy-mid); margin-bottom: 5px; font-size: 14px; }
+.concept-block p { font-size: 14px; color: #333; }
+.key-term { font-weight: 700; color: var(--gold-dim); }
+.term-block {
+  background: #fff; border: 1px solid #e8e2d8;
+  border-left: 3px solid var(--gold); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.term-block p { font-size: 14px; color: #333; }
+.trap-block {
+  background: #fff5f5; border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--wrong); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.trap-label {
+  display: inline-block; background: var(--wrong); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.trap-block p { font-size: 14px; color: #4a1a1a; }
+.tip-block {
+  background: #f0faf4; border: 1px solid #b8e0c8;
+  border-left: 3px solid var(--correct); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px; font-size: 14px; color: #1a3a28;
+}
+.su-bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 16px; border-top: 1px solid #e8e2d8;
+}
+.su-prev-btn, .su-next-btn {
+  background: var(--navy); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .18s;
+}
+.su-prev-btn:hover, .su-next-btn:hover { opacity: .85; }
+.su-counter { font-size: 13px; color: #888; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-inner">
+    <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+    <div id="app-title">Unit 5 · Xülasə</div>
+    <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+  </div>
+</div>
+
+<div id="su-nav">
+  <div id="su-nav-inner">
+    <button class="su-nav-btn" id="nav-su-5-1" onclick="showSubunit('su-5-1')">
+      <span class="su-nav-num">5.1</span>
+      <span class="su-nav-title" data-en="Integrity" data-az="Dürüstlük" data-tr="Dürüstlük">Integrity</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-5-2" onclick="showSubunit('su-5-2')">
+      <span class="su-nav-num">5.2</span>
+      <span class="su-nav-title" data-en="Objectivity" data-az="Obyektivlik" data-tr="Objektiflik">Objectivity</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-5-3" onclick="showSubunit('su-5-3')">
+      <span class="su-nav-num">5.3</span>
+      <span class="su-nav-title" data-en="Competency" data-az="Səriştə" data-tr="Yetkinlik">Competency</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-5-4" onclick="showSubunit('su-5-4')">
+      <span class="su-nav-num">5.4</span>
+      <span class="su-nav-title" data-en="Due Prof. Care" data-az="Peşəkar Diqqət" data-tr="Mesleki Özen">Due Prof. Care</span>
+    </button>
+    <button class="su-nav-btn" id="nav-su-5-5" onclick="showSubunit('su-5-5')">
+      <span class="su-nav-num">5.5</span>
+      <span class="su-nav-title" data-en="Confidentiality" data-az="Məxfilik" data-tr="Gizlilik">Confidentiality</span>
+    </button>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- ══ SUBUNIT 5.1 ══ -->
+  <div class="subunit-summary" id="su-5-1" style="display:block">
+    <div class="su-header">
+      <div class="su-header-num">5.1</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Integrity" data-az="Dürüstlük" data-tr="Dürüstlük">Integrity</div>
+        <div class="su-header-sub">Unit 5 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-5-1','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-5-1','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-5-1','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Foundation of Ethics</div>
+        <p><strong class="key-term">Integrity</strong> is the absolute foundation of all other ethical and professional principles. It requires adherence to ethical principles, honesty, and doing the right thing regardless of the circumstances.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Honesty and Professional Courage</div>
+        <p>Auditors must disclose all <strong class="key-term">material facts</strong> that could affect decision-making. <strong class="key-term">Professional courage</strong> means communicating truthfully and taking appropriate action even when situations are difficult or results are highly unfavorable to management.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Reporting Violations</div>
+        <p>If a <strong class="key-term">senior manager</strong> violates ethical rules → CAE reports to the <strong class="key-term">board</strong>. If the <strong class="key-term">board chair</strong> is involved → CAE reports to the <strong class="key-term">entire board</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Legal &amp; Ethical Behavior</div>
+        <p>Auditors must adhere to laws and avoid activities that could tarnish the organization's reputation. <strong class="key-term">Legal violations</strong> must be reported to the authorities able to take action.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Integrity</strong> — Adherence to ethical principles, including honesty and the courage to act based on relevant facts.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Professional Courage</strong> — Communicating truthfully and taking appropriate action, even when situations are difficult.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Discreditable Acts</strong> — Actions that harm the profession's reputation: bullying, misrepresenting qualifications, intentionally omitting findings, or overlooking illegal activities.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>Reporting escalation: <strong>Senior management violations → report to the board</strong>. <strong>Board chair violations → report to the entire board</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>An auditor should <em>never</em> omit a finding to preserve a relationship with management — professional courage and integrity require truthful reporting always.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p><strong>Overlooking illegal activities</strong> — even if the organization "tolerates" them — is a <strong>discreditable act</strong> and a violation of integrity.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always link <strong>"Integrity"</strong> to <strong>"Honesty and Professional Courage"</strong>.</div>
+      <div class="tip-block">✅ If an auditor is <strong>pressured to hide facts</strong> or <strong>afraid to report a finding</strong> → the principle being tested is <strong>Integrity</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Etikanın Əsası</div>
+        <p><strong class="key-term">Dürüstlük (Integrity)</strong> bütün digər etik və peşəkar prinsiplərin mütləq əsasıdır. Etik prinsiplərə riayət, düzgünlük və şəraitdən asılı olmayaraq doğru olanı etməyi tələb edir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Düzgünlük və Peşəkar Cəsarət</div>
+        <p>Auditorlar təşkilatın qərar qəbuluna təsir edə biləcək bütün <strong class="key-term">əhəmiyyətli faktları (Material Facts)</strong> açıqlamalıdırlar. <strong class="key-term">Peşəkar cəsarət (Professional Courage)</strong> vəziyyətlər çətin olduqda belə doğru şəkildə məlumat çatdırmaq deməkdir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Pozuntuların Bildirilməsi</div>
+        <p><strong class="key-term">Yüksək rəhbərlik (Senior Management)</strong> etik qaydaları pozarsa → CAE <strong class="key-term">İdarə Heyətinə (Board)</strong> bildirir. <strong class="key-term">İdarə Heyəti sədri (Board Chair)</strong> cəlb olunubsa → CAE <strong class="key-term">bütün İdarə Heyətinə (Entire Board)</strong> bildirir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Hüquqi və Etik Davranış</div>
+        <p>Auditorlar qanunlara riayət etməli, reputasiyaya xələl gətirəcək fəaliyyətlərdən çəkinməlidirlər. <strong class="key-term">Qanun pozuntuları (Legal Violations)</strong> səlahiyyətli orqanlara bildirilməlidir.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Dürüstlük (Integrity)</strong> — Düzgünlük və müvafiq faktlara əsaslanaraq hərəkət etmə cəsarəti daxil olmaqla, etik prinsiplərə riayət.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Peşəkar Cəsarət (Professional Courage)</strong> — Vəziyyətlər çətin olduqda belə doğru şəkildə məlumat çatdırmaq və müvafiq tədbirlər görmək.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Nüfuzdan Salan Hərəkətlər (Discreditable Acts)</strong> — Peşənin reputasiyasına zərər verən hərəkətlər: təqib etmə, ixtisasların təhrif edilməsi, tapıntıların qəsdən buraxılması, qanunsuz fəaliyyətlərə göz yumulması.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Hesabat eskalasiyası: <strong>Yüksək rəhbərlik pozuntuları → İdarə Heyətinə bildirilir</strong>. <strong>İdarə Heyəti sədri pozuntuları → bütün İdarə Heyətinə bildirilir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Auditor heç vaxt rəhbərliklə münasibəti qorumaq üçün tapıntını buraxmamalıdır — peşəkar cəsarət həmişə doğru hesabatlılığı tələb edir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p><strong>Qanunsuz fəaliyyətlərə göz yummaq</strong> — təşkilat onlara "dözümlü" olsa belə — <strong>nüfuzdan salan hərəkətdir</strong> və dürüstlüyün pozulmasıdır.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>\"Dürüstlük\" (Integrity)</strong> konsepsiyasını həmişə <strong>\"Düzgünlük və Peşəkar Cəsarət\"</strong> ilə əlaqələndirin.</div>
+      <div class="tip-block">✅ Auditor <strong>faktları gizlətmək üçün təzyiqə məruz qalarsa</strong> → test edilən prinsip <strong>Dürüstlükdür (Integrity)</strong>.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Etiğin Temeli</div>
+        <p><strong class="key-term">Dürüstlük (Integrity)</strong>, diğer tüm etik ve mesleki ilkelerin mutlak temelidir. Etik ilkelere bağlılık, doğruluk ve koşullardan bağımsız olarak doğru olanı yapmayı gerektirir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Doğruluk ve Mesleki Cesaret</div>
+        <p>Denetçiler karar almayı etkileyebilecek tüm <strong class="key-term">önemli gerçekleri (Material Facts)</strong> açıklamalıdır. <strong class="key-term">Mesleki cesaret (Professional Courage)</strong>, durumlar zor olduğunda bile doğru iletişim kurmak demektir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">İhlallerin Bildirilmesi</div>
+        <p><strong class="key-term">Üst yönetim (Senior Management)</strong> ihlal ederse → CAE <strong class="key-term">Yönetim Kuruluna (Board)</strong> bildirir. <strong class="key-term">Yönetim Kurulu başkanı (Board Chair)</strong> dahilse → CAE <strong class="key-term">tüm Yönetim Kuruluna (Entire Board)</strong> bildirir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Hukuki ve Etik Davranış</div>
+        <p>Denetçiler yasalara uymalı, itibara zarar verecek faaliyetlerden kaçınmalıdır. <strong class="key-term">Hukuki ihlaller (Legal Violations)</strong> yetkili makamlara bildirilmelidir.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Dürüstlük (Integrity)</strong> — Doğruluk ve ilgili gerçeklere dayanarak hareket etme cesareti dahil olmak üzere, etik ilkelere bağlılık.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Mesleki Cesaret (Professional Courage)</strong> — Durumlar zor olduğunda bile doğru iletişim kurmak ve uygun eylem almak.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">İtibar Zedeleyici Eylemler (Discreditable Acts)</strong> — Mesleğin itibarına zarar veren eylemler: zorbalık, niteliklerin yanlış beyanı, bulguların kasıtlı atlanması, yasa dışı faaliyetlere göz yumulması.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Raporlama eskalasyonu: <strong>Üst yönetim ihlalleri → Yönetim Kuruluna bildirilir</strong>. <strong>Yönetim Kurulu başkanı ihlalleri → tüm Yönetim Kuruluna bildirilir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Denetçi yönetimle ilişkiyi korumak için hiçbir zaman bulguyu atlamamalıdır — mesleki cesaret her zaman doğru raporlamayı gerektirir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p><strong>Yasa dışı faaliyetlere göz yummak</strong> — kuruluş bunlara "tolerans" gösterse bile — <strong>itibar zedeleyici eylemdir</strong> ve dürüstlüğün ihlalidir.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>"Dürüstlük" (Integrity)</strong> kavramını her zaman <strong>"Doğruluk ve Mesleki Cesaret"</strong> ile ilişkilendirin.</div>
+      <div class="tip-block">✅ Denetçi <strong>gerçekleri gizlemesi için baskıya maruz kalırsa</strong> → test edilen ilke <strong>Dürüstlüktür (Integrity)</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <div></div>
+      <span class="su-counter">1 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 5.2 ══ -->
+  <div class="subunit-summary" id="su-5-2" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">5.2</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Objectivity" data-az="Obyektivlik" data-tr="Objektiflik">Objectivity</div>
+        <div class="su-header-sub">Unit 5 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-5-2','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-5-2','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-5-2','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Unbiased Mindset</div>
+        <p><strong class="key-term">Objectivity</strong> is a fair and impartial mental attitude that allows internal auditors to make sound, professional judgments without compromise. Auditors must actively recognize and manage potential <strong class="key-term">biases</strong>, external pressures, and personal interests.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Safeguarding Against Impairments</div>
+        <p>Auditors must avoid <strong class="key-term">gifts or favors</strong> and relationships that create a <strong class="key-term">conflict of interest</strong>. Compensation should not be based on metrics that encourage biased reporting, like the number of findings identified.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Disclosing Impairments</div>
+        <p>If objectivity is impaired <strong class="key-term">in fact or even just in appearance</strong>, it must be disclosed promptly to the CAE. If the <strong class="key-term">CAE's objectivity</strong> is impaired → disclose directly to the <strong class="key-term">board</strong>.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Conflict of Interest</strong> — A situation, activity, or relationship that may influence, or appear to influence, an auditor's ability to make objective professional judgments.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Self-Review Bias</strong> — A lack of critical perspective when evaluating one's own work.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Familiarity Bias</strong> — Making assumptions based on past experience that compromise professional skepticism.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>Reviewing procedures or recommending control standards <strong>does not impair</strong> objectivity. But designing, installing, or drafting procedures <strong>does impair</strong> it.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>If <strong>CAE's objectivity</strong> is impaired → correct action: CAE must <strong>disclose the impairment directly to the board</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>The <strong>mere appearance</strong> of a conflict or impropriety <strong>can impair objectivity</strong> — the auditor does not need to actually act improperly.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ <strong>12-month rule</strong>: An auditor cannot provide assurance for an activity they managed or were responsible for in the <strong>previous 12 months</strong>.</div>
+      <div class="tip-block">✅ If the organization's gift policy and the internal audit department's gift policy clash → follow the <strong>more restrictive policy</strong>.</div>
+      <div class="tip-block">✅ Direct involvement in <strong>BPR</strong> (complete redesign of core processes) will <strong>always impair</strong> independence and objectivity.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Qərəzsiz Düşüncə Tərzi</div>
+        <p><strong class="key-term">Obyektivlik (Objectivity)</strong> güzəştə getmədən sağlam, peşəkar mühakimə yürütməyə imkan verən ədalətli və qərəzsiz zehni münasibətdir. Auditorlar potensial <strong class="key-term">qərəzləri (Biases)</strong>, xarici təzyiqləri və şəxsi maraqları fəal şəkildə tanımalı və idarə etməlidirlər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Pozulmalara Qarşı Mühafizə</div>
+        <p><strong class="key-term">Maraqlar münaqişəsi (Conflict of Interest)</strong> yarada biləcək <strong class="key-term">hədiyyələr və ya xidmətlər (Gifts or Favors)</strong>dən çəkinmək lazımdır. Kompensasiya tapıntıların sayı kimi qərəzli hesabatlılığı təşviq edən göstəricilərə əsaslanmamalıdır.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Pozulmaların Açıqlanması</div>
+        <p>Obyektivlik <strong class="key-term">faktiki olaraq və ya görünüş baxımından (In Fact or in Appearance)</strong> pozulubsa, dərhal CAE-yə açıqlanmalıdır. <strong class="key-term">CAE-nin obyektivliyi</strong> pozulubsa → birbaşa <strong class="key-term">İdarə Heyətinə (Board)</strong> açıqlanmalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Maraqlar Münaqişəsi (Conflict of Interest)</strong> — Auditorun obyektiv peşəkar mühakimə yürütmə qabiliyyətinə təsir edən və ya təsir edən görünən vəziyyət, fəaliyyət və ya münasibət.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Öz-özünü Nəzərdən Keçirmə Qərəzi (Self-Review Bias)</strong> — Öz işini qiymətləndirərkən tənqidi perspektivin olmaması.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Tanışlıq Qərəzi (Familiarity Bias)</strong> — Peşəkar şübhəcilliyi zəiflədən keçmiş təcrübəyə əsaslanaraq fərziyyələr irəli sürmək.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Prosedurların nəzərdən keçirilməsi və ya nəzarət standartlarının tövsiyə edilməsi obyektivliyi <strong>pozmur</strong>. Lakin onların dizayn edilməsi, quraşdırılması və ya hazırlanması obyektivliyi <strong>pozur</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p><strong>CAE-nin obyektivliyi</strong> pozulubsa → düzgün hərəkət: CAE <strong>pozulmanı birbaşa İdarə Heyətinə açıqlamalıdır</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Münaqişənin <strong>sadəcə görünüşü (Mere Appearance)</strong> belə <strong>obyektivliyi poza bilər</strong> — auditorun faktiki olaraq yanlış hərəkət etməsi lazım deyil.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>12 aylıq qayda (12-Month Rule)</strong>: Auditor <strong>əvvəlki 12 ay ərzində</strong> idarə etdiyi fəaliyyət üçün əminlik xidməti göstərə bilməz.</div>
+      <div class="tip-block">✅ Təşkilatın hədiyyə siyasəti ilə daxili auditin hədiyyə siyasəti ziddiyyət təşkil edərsə → <strong>daha məhdudlaşdırıcı siyasətə</strong> riayət edin.</div>
+      <div class="tip-block">✅ <strong>BPR-ə</strong> birbaşa cəlb olmaq auditorun müstəqilliyini və obyektivliyini <strong>həmişə pozacaqdır</strong>.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Tarafsız Zihinsel Tutum</div>
+        <p><strong class="key-term">Objektiflik (Objectivity)</strong>, taviz vermeden sağlam, mesleki yargılarda bulunmayı sağlayan adil ve tarafsız bir zihinsel tutumdur. Denetçiler potansiyel <strong class="key-term">önyargıları (Biases)</strong>, dış baskıları ve kişisel çıkarları aktif olarak yönetmelidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Bozulmalara Karşı Koruma</div>
+        <p><strong class="key-term">Çıkar çatışması (Conflict of Interest)</strong> yaratabilecek <strong class="key-term">hediyeler veya iyilikler (Gifts or Favors)</strong>den kaçınmak gerekir. Ücretlendirme, taraflı raporlamayı teşvik eden ölçütlere dayandırılmamalıdır.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Bozulmaların Açıklanması</div>
+        <p>Objektiflik <strong class="key-term">fiilen veya görünüş olarak (In Fact or in Appearance)</strong> bozulmuşsa, derhal CAE'ye açıklanmalıdır. <strong class="key-term">CAE'nin objektifliği</strong> bozulmuşsa → doğrudan <strong class="key-term">Yönetim Kuruluna (Board)</strong> açıklanmalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Çıkar Çatışması (Conflict of Interest)</strong> — Denetçinin objektif mesleki yargılarda bulunma kapasitesini etkileyen veya etkiliyormuş gibi görünen durum, faaliyet veya ilişki.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Öz Değerlendirme Önyargısı (Self-Review Bias)</strong> — Kendi çalışmasını değerlendirirken eleştirel bakış açısının eksikliği.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Aşinalık Önyargısı (Familiarity Bias)</strong> — Mesleki şüpheciliği zayıflatan geçmiş deneyime dayalı varsayımlarda bulunmak.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Prosedürlerin gözden geçirilmesi veya kontrol standartlarının önerilmesi objektifliği <strong>bozmaz</strong>. Ancak onların tasarlanması, kurulması veya hazırlanması objektifliği <strong>bozar</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p><strong>CAE'nin objektifliği</strong> bozulmuşsa → doğru eylem: CAE <strong>bozulmayı doğrudan Yönetim Kuruluna açıklamalıdır</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Çatışmanın <strong>sadece görünümü (Mere Appearance)</strong> bile <strong>objektifliği bozabilir</strong> — denetçinin gerçekten uygunsuz davranması gerekmez.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>12 aylık kural (12-Month Rule)</strong>: Denetçi, <strong>önceki 12 ay içinde</strong> yönettiği faaliyet için güvence hizmetleri sağlayamaz.</div>
+      <div class="tip-block">✅ Kuruluşun ve iç denetim departmanının hediye politikaları çelişirse → <strong>daha kısıtlayıcı politikaya</strong> uyun.</div>
+      <div class="tip-block">✅ <strong>BPR'ye</strong> doğrudan dahil olmak bağımsızlığı ve objektifliği <strong>her zaman bozacaktır</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">2 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 5.3 ══ -->
+  <div class="subunit-summary" id="su-5-3" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">5.3</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Competency" data-az="Səriştə" data-tr="Yetkinlik">Competency</div>
+        <div class="su-header-sub">Unit 5 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-5-3','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-5-3','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-5-3','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">Required Skills</div>
+        <p>Internal auditors must possess or acquire the relevant <strong class="key-term">knowledge, skills, and expertise</strong> necessary to effectively fulfill their roles. If an auditor lacks the skills for a specific service, they must <strong class="key-term">develop them before proceeding</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">The CAE's Responsibility</div>
+        <p>The <strong class="key-term">CAE</strong> ensures the team collectively holds the skills required by the audit charter. If the team lacks these competencies, the CAE should consider <strong class="key-term">contracting an independent, external service provider</strong> to fill the gap.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Continuing Professional Development (CPD)</div>
+        <p>Competency is not static. Auditors must continuously engage in <strong class="key-term">ongoing education, training, mentorship, and self-study</strong> to keep their skills up to date.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Competency</strong> — Having the necessary knowledge, abilities, and expertise that match a specific job role and experience level.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Continuing Professional Education (CPE)</strong> — Mandatory educational hours: <strong class="key-term">40 hours</strong> annually for practicing CIAs; <strong class="key-term">20 hours</strong> for nonpracticing CIAs. At least <strong class="key-term">2 hours</strong> must be ethics-related.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>For CIA credential holders, at least <strong>2 hours</strong> of annual CPE must be <strong>ethics-related</strong> — even without a specific additional certification.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>While the CAE provides support, <strong>internal auditors are individually responsible</strong> for assessing their own skills and pursuing professional development.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>If the audit team lacks a skill, the engagement should NOT be cancelled — the CAE should <strong>contract an external expert</strong> to fill the gap.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ When internal audit staff lacks specialized knowledge → best solution: <strong>"contracting an external service provider"</strong>.</div>
+      <div class="tip-block">✅ Competency goes beyond audit methodology — auditors must also understand <strong>business operations, IT, governance, and industry trends</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Tələb Olunan Bacarıqlar</div>
+        <p>Daxili auditorlar rollarını effektiv şəkildə yerinə yetirmək üçün lazım olan <strong class="key-term">bilik, bacarıq və ekspertizaya (Knowledge, Skills, and Expertise)</strong> sahib olmalıdırlar. Auditor xüsusi xidmət üçün bacarıqlara malik deyilsə, <strong class="key-term">davam etməzdən əvvəl onları inkişaf etdirməlidir</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Baş Audit İcraçısının Məsuliyyəti</div>
+        <p><strong class="key-term">Baş Audit İcraçısı (CAE)</strong> komandanın birlikdə audit nizamnaməsinin tələb etdiyi bacarıqlara sahib olmasını təmin etməlidir. Bacarıqlar çatışmırsa, <strong class="key-term">müstəqil, xarici xidmət təminatçısı ilə müqavilə bağlamağı</strong> nəzərdən keçirməlidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Davamlı Peşəkar İnkişaf (CPD)</div>
+        <p>Səriştə statik deyil. Auditorlar bacarıqlarını aktual saxlamaq üçün <strong class="key-term">davamlı təhsil, təlim, mentorluq və öz-özünə öyrənmə</strong> ilə daimi şəkildə məşğul olmalıdırlar.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Səriştə (Competency)</strong> — Xüsusi iş roluna və təcrübə səviyyəsinə uyğun gələn lazımi bilik, bacarıq və ekspertizaya sahib olmaq.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Davamlı Peşəkar Təhsil (CPE)</strong> — Məcburi təhsil saatları: fəal CIA-lar üçün ildə <strong class="key-term">40 saat</strong>; qeyri-fəal CIA-lar üçün <strong class="key-term">20 saat</strong>. Bunun ən azı <strong class="key-term">2 saatı</strong> etika ilə bağlı olmalıdır.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>CIA sertifikatı sahibləri üçün illik CPE-nin ən azı <strong>2 saatı etika</strong> ilə bağlı olmalıdır.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>CAE dəstək versə də, <strong>daxili auditorlar öz bacarıqlarını qiymətləndirməyə və peşəkar inkişafa fərdi olaraq cavabdehdirlər</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Komandada bacarıq çatışmırsa tapşırıq ləğv edilməməlidir — CAE <strong>xarici ekspertlə müqavilə bağlamalıdır</strong>.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ Daxili audit personalında ixtisaslaşmış bilik çatışmadıqda → ən yaxşı həll: <strong>\"xarici xidmət təminatçısı ilə müqavilə bağlamaq\"</strong>.</div>
+      <div class="tip-block">✅ Səriştə yalnız audit metodologiyasından ibarət deyil — auditorlar həmçinin <strong>biznes əməliyyatları, İT, idarəetmə və sənaye tendensiyalarını</strong> başa düşməlidirlər.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Gerekli Beceriler</div>
+        <p>İç denetçiler rollerini etkin bir şekilde yerine getirmek için ilgili <strong class="key-term">bilgi, beceri ve uzmanlığa (Knowledge, Skills, and Expertise)</strong> sahip olmalıdır. Denetçi belirli bir hizmet için becerilere sahip değilse, <strong class="key-term">devam etmeden önce bunları geliştirmelidir</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Denetim Yöneticisinin Sorumluluğu</div>
+        <p><strong class="key-term">Denetim Yöneticisi (CAE)</strong>, ekibin denetim yönetmeliğinin gerektirdiği becerilere sahip olmasını sağlamalıdır. Yetkinlikler eksikse, <strong class="key-term">bağımsız, dış hizmet sağlayıcısıyla sözleşme yapmayı</strong> değerlendirmelidir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Sürekli Mesleki Gelişim (CPD)</div>
+        <p>Yetkinlik statik değildir. Denetçiler becerilerini güncel tutmak için <strong class="key-term">sürekli eğitim, öğretim, mentorluk ve kendi kendine çalışmayla</strong> sürekli meşgul olmalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Yetkinlik (Competency)</strong> — Belirli bir iş roluna ve deneyim düzeyine uygun gerekli bilgi, yetenek ve uzmanlığa sahip olmak.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Sürekli Mesleki Eğitim (CPE)</strong> — Zorunlu eğitim saatleri: aktif CIA'lar için yılda <strong class="key-term">40 saat</strong>; aktif olmayan CIA'lar için <strong class="key-term">20 saat</strong>. Bunun en az <strong class="key-term">2 saati</strong> etik ile ilgili olmalıdır.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>CIA sertifika sahipleri için yıllık CPE'nin en az <strong>2 saati etik</strong> ile ilgili olmalıdır.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>CAE destek sağlasa da, <strong>iç denetçiler kendi becerilerini değerlendirmekten ve mesleki gelişimi sürdürmekten bireysel olarak sorumludur</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Ekipte beceri eksikse görev iptal edilmemelidir — CAE <strong>dış uzmanla sözleşme yapmalıdır</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ İç denetim personelinde uzmanlaşmış bilgi eksik olduğunda → en iyi çözüm: <strong>"dış hizmet sağlayıcısıyla sözleşme yapmak"</strong>.</div>
+      <div class="tip-block">✅ Yetkinlik sadece denetim metodolojisinin ötesine geçer — denetçiler ayrıca <strong>iş operasyonları, BT, yönetişim ve sektör trendlerini</strong> anlamalıdır.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">3 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 5.4 ══ -->
+  <div class="subunit-summary" id="su-5-4" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">5.4</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Due Professional Care" data-az="Lazımi Peşəkar Diqqət" data-tr="Gerekli Mesleki Özen">Due Professional Care</div>
+        <div class="su-header-sub">Unit 5 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-5-4','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-5-4','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-5-4','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Standard of Care</div>
+        <p>Exercising <strong class="key-term">due professional care</strong> means planning and conducting work with the care, sound judgment, and critical thinking expected of skilled professionals. However, auditors are <strong class="key-term">not expected to be perfect or infallible</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Conformance with Standards</div>
+        <p>Auditors must carry out services in accordance with the <strong class="key-term">Global Internal Audit Standards</strong>. If laws prevent compliance with a specific standard, auditors must still comply with all other standards and <strong class="key-term">clearly explain the limitations</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Balancing Costs and Benefits</div>
+        <p>Due professional care requires <strong class="key-term">comparing the costs of audit services with their potential benefits</strong>. If an area's controls are already known to be inadequate, a full expensive evaluation may not be worth the cost.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Professional Skepticism</div>
+        <p>Auditors must maintain a <strong class="key-term">questioning mindset</strong> — continuously seeking evidence to validate management's statements rather than simply trusting them.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Due Professional Care</strong> — Carefully evaluating the implications of an audit, including complexity of risks, probability of fraud, and cost versus benefit of the engagement.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Professional Skepticism</strong> — Approaching audit work with a questioning mindset and critically evaluating the validity, truthfulness, and completeness of information.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>Due professional care implies <strong>reasonable care and competence</strong> — it does <strong>NOT imply infallibility or absolute assurance</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>If the team cannot comply with a specific Standard: <strong>record the noncompliance</strong>, <strong>document alternative steps taken</strong>, and <strong>communicate the rationale</strong> to appropriate parties.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>You do NOT need to test every single control — apply due care by <strong>prioritizing risks</strong> and evaluating whether the <strong>cost of testing outweighs the benefit</strong>.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Always associate <strong>"Professional Skepticism"</strong> with a <strong>"questioning mindset"</strong>.</div>
+      <div class="tip-block">✅ Utilizing <strong>suitable technology and data analysis software</strong> is an explicit requirement for demonstrating due professional care.</div>
+      <div class="tip-block">✅ When IIA Standards and other authoritative body guidelines conflict → auditors may choose to <strong>conform with the more stringent requirements</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Diqqət Standartı</div>
+        <p><strong class="key-term">Lazımi peşəkar diqqəti (Due Professional Care)</strong> göstərmək işi peşəkar mütəxəssislərdən gözlənilən diqqət, sağlam mühakimə və tənqidi düşüncə ilə planlamaq deməkdir. Lakin auditorların <strong class="key-term">mükəmməl və ya xətasız olmaları gözlənilmir</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Standartlara Uyğunluq</div>
+        <p>Auditorlar xidmətlərini <strong class="key-term">Qlobal Daxili Audit Standartlarına (Global Internal Audit Standards)</strong> uyğun yerinə yetirməlidirlər. Qanunlar müəyyən standarta riayəti maneə törədirsə, bütün digər standartlara riayət etməli və <strong class="key-term">məhdudiyyətləri aydın izah etməlidirlər</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Xərc və Faydanın Balanslaşdırılması</div>
+        <p>Lazımi peşəkar diqqət <strong class="key-term">audit xidmətlərinin xərclərini potensial faydaları ilə müqayisə etməyi</strong> tələb edir. Nəzarətlərin artıq qeyri-adekvat olduğu məlumsa, tam qiymətləndirmənin faydaları xərclərə dəyməyə bilər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Peşəkar Şübhəcilik</div>
+        <p>Auditorlar <strong class="key-term">sorgulayan düşüncə tərzi (Questioning Mindset)</strong> saxlamalıdırlar — ifadələrin doğru olduğuna sadəcə güvənmək əvəzinə, rəhbərliyin bəyanatlarını təsdiqləmək üçün davamlı olaraq sübut axtarmalıdırlar.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Lazımi Peşəkar Diqqət (Due Professional Care)</strong> — Risklərin mürəkkəbliyi, fırıldaqçılıq ehtimalı və tapşırığın xərc ilə fayda nisbəti daxil olmaqla, auditin nəticələrinin diqqətlə qiymətləndirilməsi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Peşəkar Şübhəcilik (Professional Skepticism)</strong> — Audit işinə sorgulayan düşüncə tərzi ilə yanaşmaq və məlumatın etibarlılığını, doğruluğunu və tamlığını tənqidi qiymətləndirmək.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Lazımi peşəkar diqqət <strong>ağlabatan diqqət və səriştəni</strong> nəzərdə tutur — <strong>xətasızlıq və ya mütləq əminliyi nəzərdə TUTMUR</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Xüsusi standarta riayət edilə bilmirsə: <strong>uyğunsuzluğu qeyd etmək</strong>, <strong>alternativ addımları sənədləşdirmək</strong> və <strong>əsaslandırmanı müvafiq tərəflərə çatdırmaq</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Hər bir nəzarəti test etmək lazım deyil — <strong>riskləri prioritetləşdirin</strong> və <strong>test etmənin xərci faydasından artıq olub-olmadığını</strong> qiymətləndirin.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ <strong>\"Peşəkar Şübhəciliyi\" (Professional Skepticism)</strong> həmişə <strong>\"sorgulayan düşüncə tərzi\"</strong> ilə əlaqələndirin.</div>
+      <div class="tip-block">✅ <strong>Uyğun texnologiya və məlumat təhlili proqramından</strong> istifadə lazımi peşəkar diqqətin nümayiş etdirilməsi üçün açıq tələbdir.</div>
+      <div class="tip-block">✅ DDA (IIA) Standartları ilə digər orqanların qaydaları arasında uyğunsuzluq olduqda → <strong>daha ciddi tələblərə uyğunlaşmağı</strong> seçə bilərlər.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Özen Standardı</div>
+        <p><strong class="key-term">Gerekli mesleki özeni (Due Professional Care)</strong> göstermek, çalışmaları yetenekli profesyonellerden beklenen dikkat ve eleştirel düşünceyle yürütmek demektir. Ancak denetçilerin <strong class="key-term">mükemmel veya yanılmaz olmaları beklenmez</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Standartlara Uyum</div>
+        <p>Denetçiler hizmetlerini <strong class="key-term">Küresel İç Denetim Standartlarına (Global Internal Audit Standards)</strong> uygun yerine getirmelidir. Yasalar belirli bir standarda uyumu engellerse, diğer tüm standartlara uymalı ve <strong class="key-term">sınırlamaları açıkça belirtmelidir</strong>.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Maliyet ve Faydanın Dengelenmesi</div>
+        <p>Gerekli mesleki özen, <strong class="key-term">denetim hizmetlerinin maliyetlerini potansiyel faydalarıyla karşılaştırmayı</strong> gerektirir. Kontrollerin zaten yetersiz olduğu biliniyorsa, tam değerlendirme maliyetlere değmeyebilir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Mesleki Şüphecilik</div>
+        <p>Denetçiler <strong class="key-term">sorgulayıcı bir zihinsel tutum (Questioning Mindset)</strong> sürdürmelidir — yönetimin beyanlarına basitçe güvenmek yerine, sürekli kanıt aramalıdır.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Gerekli Mesleki Özen (Due Professional Care)</strong> — Risklerin karmaşıklığı, hile olasılığı ve görevin maliyet ile fayda oranı dahil olmak üzere, denetimin sonuçlarının dikkatle değerlendirilmesi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Mesleki Şüphecilik (Professional Skepticism)</strong> — Denetim çalışmasına sorgulayıcı bir zihinsel tutumla yaklaşmak ve bilginin geçerliliğini, doğruluğunu ve tamlığını eleştirel olarak değerlendirmek.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Gerekli mesleki özen <strong>makul dikkat ve yetkinliği</strong> ima eder — <strong>yanılmazlık veya mutlak güvenceyi ima ETMEZ</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Belirli bir Standarda uyulamazsa: <strong>uyumsuzluğu kaydetmek</strong>, <strong>alternatif adımları belgelemek</strong> ve <strong>gerekçeyi ilgili taraflara iletmek</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Her kontrolü test etmek gerekmez — <strong>riskleri önceliklendirin</strong> ve <strong>test etmenin maliyetinin faydasından ağır basıp basmadığını</strong> değerlendirin.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ <strong>"Mesleki Şüpheciliği" (Professional Skepticism)</strong> her zaman <strong>"sorgulayıcı zihinsel tutum"</strong> ile ilişkilendirin.</div>
+      <div class="tip-block">✅ <strong>Uygun teknoloji ve veri analizi yazılımı</strong> kullanmak, gerekli mesleki özenin gösterilmesi için açık bir gerekliliktir.</div>
+      <div class="tip-block">✅ UDD (IIA) Standartları ile diğer yetkili organ kuralları çeliştiğinde → <strong>daha katı gerekliliklere uymayı</strong> seçebilirler.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">4 / 5</span>
+      <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBUNIT 5.5 ══ -->
+  <div class="subunit-summary" id="su-5-5" style="display:none">
+    <div class="su-header">
+      <div class="su-header-num">5.5</div>
+      <div class="su-header-titles">
+        <div class="su-header-title" data-en="Confidentiality" data-az="Məxfilik" data-tr="Gizlilik">Confidentiality</div>
+        <div class="su-header-sub">Unit 5 · CIA Part 1</div>
+      </div>
+    </div>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('su-5-5','en')">EN</button>
+      <button class="lang-tab" onclick="showLang('su-5-5','az')">AZ</button>
+      <button class="lang-tab" onclick="showLang('su-5-5','tr')">TR</button>
+    </div>
+
+    <!-- EN -->
+    <div class="lang-content en active">
+      <div class="section-heading">🎯 Core Concepts</div>
+      <div class="concept-block">
+        <div class="concept-title">The Privilege of Access</div>
+        <p>Internal auditors are granted <strong class="key-term">unrestricted access</strong> to confidential information to fulfill their duties. This comes with the strict obligation to use information <strong class="key-term">solely for professional purposes</strong> and protect it from unauthorized release.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Appropriate Use</div>
+        <p>Information must never be used for <strong class="key-term">personal gain</strong> or in any way that harms the organization's lawful and ethical objectives. Misuse can result in serious reputational damage and legal fines.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Protection Protocols</div>
+        <p>Auditors must follow all laws and policies regarding the <strong class="key-term">security, retention, and disposal</strong> of information — including passwords, encryption, and controlling physical access to sensitive areas.</p>
+      </div>
+      <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+      <div class="term-block">
+        <p><strong class="key-term">Confidentiality</strong> — The obligation to respect the privacy and ownership of information gathered during audit services and protect it from unauthorized disclosure.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Misuse of Information</strong> — Using organizational data for personal benefit: insider trading (buying/selling stocks based on confidential information) or using proprietary data to develop a competing product.</p>
+      </div>
+      <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+      <div class="trap-block">
+        <span class="trap-label">Frequently Tested</span>
+        <p>Auditors must NOT share confidential information with unauthorized parties — <strong>unless explicitly required to do so by law or professional obligations</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Tricky Questions</span>
+        <p>Once an audit is complete: <strong>digital permissions should be canceled immediately</strong> and printed materials must be <strong>disposed of according to set policies</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Common Wrong Assumption</span>
+        <p>Auditors must manage risks of <strong>accidental disclosures</strong> too — not just intentional leaks — by being cautious with email distribution and limiting social media usage.</p>
+      </div>
+      <div class="section-heading">💡 Exam Tips</div>
+      <div class="tip-block">✅ Confidentiality applies to information in <strong>all formats</strong>: paper, digital, and even <strong>verbal discussions</strong> from meetings.</div>
+      <div class="tip-block">✅ Uncertainty about releasing information externally (e.g., <strong>attorney-client privilege</strong>) → CAE should <strong>consult legal counsel</strong>.</div>
+    </div>
+
+    <!-- AZ -->
+    <div class="lang-content az">
+      <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+      <div class="concept-block">
+        <div class="concept-title">Giriş İmtiyazı</div>
+        <p>Daxili auditorlara vəzifələrini yerinə yetirmək üçün məxfi məlumatlara <strong class="key-term">məhdudiyyətsiz giriş (Unrestricted Access)</strong> verilir. Bu, məlumatı <strong class="key-term">yalnız peşəkar məqsədlər üçün</strong> istifadə etmək və icazəsiz yayılmadan qorumaq öhdəliyi ilə müşayiət olunur.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Uyğun İstifadə</div>
+        <p>Məlumat heç vaxt <strong class="key-term">şəxsi qazanc (Personal Gain)</strong> üçün istifadə edilməməlidir. Sui-istifadə ciddi reputasiya zərəri və hüquqi cərimələrlə nəticələnə bilər.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Mühafizə Protokolları</div>
+        <p>Auditorlar məlumatın <strong class="key-term">təhlükəsizliyi, saxlanması və məhv edilməsi (Security, Retention, and Disposal)</strong> ilə bağlı bütün qanunlara və siyasətlərə riayət etməlidirlər — parollar, şifrələmə və fiziki girişin nəzarəti daxil olmaqla.</p>
+      </div>
+      <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+      <div class="term-block">
+        <p><strong class="key-term">Məxfilik (Confidentiality)</strong> — Audit xidmətləri zamanı toplanmış məlumatın məxfiliyinə hörmət etmək və icazəsiz açıqlanmadan qorumaq öhdəliyi.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Məlumatdan Sui-istifadə (Misuse of Information)</strong> — Təşkilati məlumatlardan şəxsi fayda üçün istifadə: insayder ticarəti və ya rəqabət edən məhsul hazırlamaq üçün mülkiyyət məlumatından istifadə.</p>
+      </div>
+      <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+      <div class="trap-block">
+        <span class="trap-label">Tez-tez Test Edilir</span>
+        <p>Auditorlar məxfi məlumatı icazəsiz tərəflərlə paylaşmamalıdırlar — <strong>yalnız qanun və ya peşəkar öhdəliklər tərəfindən açıq şəkildə tələb olunduqda</strong> istisna edilir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Çətin Suallar</span>
+        <p>Audit tamamlandıqdan sonra: <strong>rəqəmsal icazələr dərhal ləğv edilməli</strong> və çap olunmuş materiallar <strong>müəyyən edilmiş siyasətlərə uyğun məhv edilməlidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yanlış Fərziyyə</span>
+        <p>Auditorlar yalnız qəsdli sızmalarla deyil, həm də e-poçt paylanmasında ehtiyatlı olmaq yolu ilə <strong>təsadüfi açıqlama (Accidental Disclosures)</strong> risklərini idarə etməlidirlər.</p>
+      </div>
+      <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+      <div class="tip-block">✅ Məxfilik <strong>bütün formatlardakı</strong> məlumatlara tətbiq olunur: kağız, rəqəmsal və hətta <strong>şifahi müzakirələr (Verbal Discussions)</strong>.</div>
+      <div class="tip-block">✅ Məlumatın xaricə verilməsi ilə bağlı qeyri-müəyyənlik varsa (<strong>vəkil-müştəri imtiyazı</strong>) → CAE <strong>hüquqi məsləhətçiyə müraciət etməlidir</strong>.</div>
+    </div>
+
+    <!-- TR -->
+    <div class="lang-content tr">
+      <div class="section-heading">🎯 Temel Kavramlar</div>
+      <div class="concept-block">
+        <div class="concept-title">Erişim Ayrıcalığı</div>
+        <p>İç denetçilere gizli bilgilere <strong class="key-term">sınırsız erişim (Unrestricted Access)</strong> verilir. Bu, bilgiyi <strong class="key-term">yalnızca mesleki amaçlarla</strong> kullanmak ve yetkisiz yayılmadan korumak yükümlülüğü ile birlikte gelir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Uygun Kullanım</div>
+        <p>Bilgi asla <strong class="key-term">kişisel kazanç (Personal Gain)</strong> için kullanılmamalıdır. Kötüye kullanım ciddi itibar zararı ve yasal para cezalarıyla sonuçlanabilir.</p>
+      </div>
+      <div class="concept-block">
+        <div class="concept-title">Koruma Protokolleri</div>
+        <p>Denetçiler bilginin <strong class="key-term">güvenliği, saklanması ve imhası (Security, Retention, and Disposal)</strong> ile ilgili tüm yasalara ve politikalara uymalıdır — şifre kullanımı, şifreleme ve fiziksel erişim kontrolü dahil.</p>
+      </div>
+      <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+      <div class="term-block">
+        <p><strong class="key-term">Gizlilik (Confidentiality)</strong> — Denetim hizmetleri sırasında toplanan bilginin mahremiyetine saygı göstermek ve yetkisiz ifşadan korumak yükümlülüğü.</p>
+      </div>
+      <div class="term-block">
+        <p><strong class="key-term">Bilginin Kötüye Kullanımı (Misuse of Information)</strong> — Organizasyonel verilerin kişisel fayda için kullanılması: içeriden öğrenenlerin ticareti veya rakip ürün geliştirmek için tescilli veri kullanımı.</p>
+      </div>
+      <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+      <div class="trap-block">
+        <span class="trap-label">Sık Test Edilir</span>
+        <p>Denetçiler gizli bilgiyi yetkisiz taraflarla paylaşmamalıdır — <strong>yalnızca yasa veya mesleki yükümlülükler tarafından açıkça zorunlu kılındığında</strong> istisna edilir.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Zor Sorular</span>
+        <p>Denetim tamamlandıktan sonra: <strong>dijital izinler derhal iptal edilmeli</strong> ve basılı materyaller <strong>belirlenmiş politikalara göre imha edilmelidir</strong>.</p>
+      </div>
+      <div class="trap-block">
+        <span class="trap-label">Yaygın Yanlış Varsayım</span>
+        <p>Denetçiler kasıtlı sızıntıların yanı sıra e-posta dağıtımında dikkatli olarak <strong>kazara ifşa (Accidental Disclosures)</strong> risklerini de aktif olarak yönetmelidir.</p>
+      </div>
+      <div class="section-heading">💡 Sınav İpuçları</div>
+      <div class="tip-block">✅ Gizlilik <strong>tüm formatlardaki</strong> bilgilere uygulanır: kağıt, dijital ve hatta <strong>sözlü tartışmalar (Verbal Discussions)</strong>.</div>
+      <div class="tip-block">✅ Bilginin dışarıya verilmesiyle ilgili belirsizlik varsa (<strong>avukat-müvekkil ayrıcalığı</strong>) → CAE <strong>hukuk danışmanına başvurmalıdır</strong>.</div>
+    </div>
+
+    <div class="su-bottom-nav">
+      <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+      <span class="su-counter">5 / 5</span>
+      <div></div>
+    </div>
+  </div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS = ["su-5-1","su-5-2","su-5-3","su-5-4","su-5-5"];
+let currentSU = SUBUNIT_IDS[0];
+let globalLang = 'en';
+
+function showSubunit(id) {
+  SUBUNIT_IDS.forEach(sid => {
+    document.getElementById(sid).style.display = 'none';
+    document.getElementById('nav-' + sid).classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('nav-' + id).classList.add('active');
+  currentSU = id;
+  document.getElementById('nav-' + id).scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  applyLangToSubunit(id, globalLang);
+}
+
+function showLang(unitId, lang) {
+  globalLang = lang;
+  const unit = document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+  unit.querySelector('.lang-content.' + lang).classList.add('active');
+  const tabs = unit.querySelectorAll('.lang-tab');
+  const langMap = {'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  const labels = {'en':'AZ','az':'TR','tr':'EN'};
+  document.getElementById('lang-btn').textContent = labels[lang];
+}
+
+function applyLangToSubunit(id, lang) {
+  showLang(id, lang);
+  const su = document.getElementById(id);
+  const titleEl = su.querySelector('.su-header-title');
+  if(titleEl) titleEl.textContent = titleEl.dataset[lang] || titleEl.dataset.en;
+  const navBtn = document.getElementById('nav-' + id);
+  const navTitle = navBtn.querySelector('.su-nav-title');
+  if(navTitle) navTitle.textContent = navTitle.dataset[lang] || navTitle.dataset.en;
+}
+
+function toggleGlobalLang() {
+  const langs = ['en','az','tr'];
+  const labels = ['AZ','TR','EN'];
+  const idx = langs.indexOf(globalLang);
+  globalLang = langs[(idx+1)%3];
+  document.getElementById('lang-btn').textContent = labels[(idx+1)%3];
+  applyLangToSubunit(currentSU, globalLang);
+  SUBUNIT_IDS.forEach(sid => {
+    const btn = document.getElementById('nav-' + sid);
+    const t = btn.querySelector('.su-nav-title');
+    if(t) t.textContent = t.dataset[globalLang] || t.dataset.en;
+  });
+  const titleMap = {en:'Unit 5 · Summary', az:'Unit 5 · Xülasə', tr:'Unit 5 · Özet'};
+  document.getElementById('app-title').textContent = titleMap[globalLang];
+}
+
+function nextSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx < SUBUNIT_IDS.length - 1) showSubunit(SUBUNIT_IDS[idx+1]);
+}
+
+function prevSubunit() {
+  const idx = SUBUNIT_IDS.indexOf(currentSU);
+  if(idx > 0) showSubunit(SUBUNIT_IDS[idx-1]);
+}
+
+document.getElementById('nav-' + SUBUNIT_IDS[0]).classList.add('active');
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 9 Summary</title>
+<style>
+:root{--navy:#1a2e4a;--navy-mid:#2e4d72;--gold:#c9a84c;--gold-dim:#8a6d2e;--paper:#f8f5ef;--correct:#1a6b3c;--wrong:#8b1a1a;--shadow:0 2px 12px rgba(15,25,35,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;background:var(--paper);color:#0f1923;min-height:100vh;font-size:15px;line-height:1.6;}
+#topbar{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+#topbar-inner{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:680px;margin:0 auto;gap:10px;}
+#back-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#app-title{font-size:15px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#lang-btn{font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;flex-shrink:0;}
+#su-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:0 12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#su-nav::-webkit-scrollbar{display:none;}
+#su-nav-inner{display:flex;gap:8px;max-width:680px;margin:0 auto;padding-top:10px;}
+.su-nav-btn{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 10px;cursor:pointer;transition:all .18s;flex:1;-webkit-tap-highlight-color:transparent;}
+.su-nav-btn:hover{background:rgba(255,255,255,.14);}
+.su-nav-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.su-nav-num{font-size:13px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px;}
+.su-nav-title{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;}
+.su-nav-btn.active .su-nav-title{color:rgba(255,255,255,.9);}
+#main{max-width:680px;margin:0 auto;padding:16px 14px 40px;}
+.su-header{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.su-header-num{width:48px;height:48px;flex-shrink:0;background:var(--gold);color:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
+.su-header-title{font-size:16px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px;}
+.su-header-sub{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.4px;}
+.lang-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lang-tab{flex:1;padding:9px 0;border:1.5px solid #ddd6ca;border-radius:8px;background:#fff;color:#888;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;}
+.lang-tab.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.lang-content{display:none;}
+.lang-content.active{display:block;}
+.section-heading{background:linear-gradient(135deg,#e8f0f8,#f0f4f9);color:var(--navy);font-size:15px;font-weight:700;padding:10px 14px;border-radius:8px;margin:20px 0 10px 0;border-left:3px solid var(--navy-mid);}
+.section-heading:first-child{margin-top:0;}
+.concept-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--navy-mid);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.concept-title{font-weight:700;color:var(--navy-mid);margin-bottom:5px;font-size:14px;}
+.concept-block p{font-size:14px;color:#333;}
+.key-term{font-weight:700;color:var(--gold-dim);}
+.term-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.term-block p{font-size:14px;color:#333;}
+.trap-block{background:#fff5f5;border:1px solid #f5c6c6;border-left:3px solid var(--wrong);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.trap-label{display:inline-block;background:var(--wrong);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.trap-block p{font-size:14px;color:#4a1a1a;}
+.tip-block{background:#f0faf4;border:1px solid #b8e0c8;border-left:3px solid var(--correct);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:14px;color:#1a3a28;}
+.su-bottom-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid #e8e2d8;}
+.su-prev-btn,.su-next-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.su-prev-btn:hover,.su-next-btn:hover{opacity:.85;}
+.su-counter{font-size:13px;color:#888;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="topbar"><div id="topbar-inner">
+  <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+  <div id="app-title">Unit 9 · Xülasə</div>
+  <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+</div></div>
+
+<div id="su-nav"><div id="su-nav-inner">
+  <button class="su-nav-btn active" id="nav-su-9-1" onclick="showSubunit('su-9-1')">
+    <span class="su-nav-num">9.1</span>
+    <span class="su-nav-title" data-en="Accounting Cycles" data-az="Mühasibat Dövrləri" data-tr="Muhasebe Döngüleri">Accounting Cycles</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-9-2" onclick="showSubunit('su-9-2')">
+    <span class="su-nav-num">9.2</span>
+    <span class="su-nav-title" data-en="Management Controls" data-az="Rəhbərlik Nəzarəti" data-tr="Yönetim Kontrolleri">Management Controls</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-9-3" onclick="showSubunit('su-9-3')">
+    <span class="su-nav-num">9.3</span>
+    <span class="su-nav-title" data-en="Control Frameworks" data-az="Nəzarət Çərçivələri" data-tr="Kontrol Çerçeveleri">Control Frameworks</span>
+  </button>
+</div></div>
+
+<div id="main">
+
+<!-- ══════════════ SU 9.1 ══════════════ -->
+<div class="subunit-summary" id="su-9-1" style="display:block">
+  <div class="su-header">
+    <div class="su-header-num">9.1</div>
+    <div>
+      <div class="su-header-title" data-en="Accounting Cycles &amp; Controls" data-az="Mühasibat Dövrləri və Nəzarətlər" data-tr="Muhasebe Döngüleri ve Kontroller">Accounting Cycles &amp; Controls</div>
+      <div class="su-header-sub">Unit 9 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-9-1','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-9-1','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-9-1','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Purpose of Controls</div><p>Internal controls safeguard assets, ensure accurate financial reporting, and promote regulatory compliance. Every control is subject to a <strong class="key-term">cost-benefit analysis</strong> — the resources spent to implement it must be justified by the benefits it provides.</p></div>
+    <div class="concept-block"><div class="concept-title">Segregation of Duties — ARC</div><p>This is a primary risk management strategy to prevent fraud and errors by ensuring no single person controls an entire transaction. Three critical functions that must always be separated: <strong class="key-term">Authorization (A)</strong>, <strong class="key-term">Recordkeeping (R)</strong>, and <strong class="key-term">Custody (C)</strong> of assets.</p></div>
+    <div class="concept-block"><div class="concept-title">The Five Accounting Cycles</div><p>Activities are broken into structured cycles: <strong class="key-term">Sales/Receivables</strong>, <strong class="key-term">Cash Receipts</strong>, <strong class="key-term">Purchases/Payables</strong>, <strong class="key-term">Cash Disbursements</strong>, and <strong class="key-term">Payroll</strong>.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Lockbox System</strong> — A bank service where customer payments are mailed to a special PO box instead of the organization, expediting funds and improving control.</p></div>
+    <div class="term-block"><p><strong class="key-term">Blind Copy</strong> — A purchase order copy sent to Receiving with quantities left blank, forcing employees to physically count items upon arrival.</p></div>
+    <div class="term-block"><p><strong class="key-term">Tickler File</strong> — A file organized by due dates acting as a reminder system; used in accounts payable to ensure bills are paid on time to capture discounts.</p></div>
+    <div class="term-block"><p><strong class="key-term">Imprest Account</strong> — A bank account that receives deposits exactly equal to planned disbursements; heavily used in payroll processing.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>The <strong>ARC memory aid</strong> (Authorization, Recordkeeping, Custody) is a foundational principle of internal control — expect multiple questions on this.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Payroll cycle roles: <strong>Human Resources</strong> authorizes pay rates → <strong>Timekeeping</strong> records the hours → <strong>Treasurer / Cash Disbursements</strong> maintains custody by actually distributing the paychecks.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>A perfectly designed internal control system cannot stop all fraud. It catches a single person acting alone, but <strong>cannot prevent collusion among employees or management override</strong>.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>Cash receipts:</strong> Mail Room uses <strong>two clerks</strong> to open mail and immediately stamps checks <strong>"For Deposit Only"</strong> to prevent diversion.</div>
+    <div class="tip-block">✅ <strong>Cash disbursements:</strong> The same department that signs the check must also <strong>cancel supporting documents</strong> (stamp "Paid") to prevent duplicate payments.</div>
+    <div class="tip-block">✅ <strong>Purchases cycle — Three-Way Match:</strong> Accounts Payable must match the approved vendor invoice + receiving report + purchase order before issuing a payment voucher.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Nəzarətlərin Məqsədi</div><p>Daxili nəzarətlər aktivləri qoruyur, dəqiq maliyyə hesabatlılığını təmin edir və tənzimləmə uyğunluğunu təşviq edir. Hər bir nəzarət <strong class="key-term">xərc-fayda təhlilinə (Cost-Benefit Analysis)</strong> tabedir — onu tətbiq etmək üçün xərclənən resurslar təmin etdiyi faydalarla əsaslandırılmalıdır.</p></div>
+    <div class="concept-block"><div class="concept-title">Vəzifələrin Ayrılması — ARC</div><p>Heç bir şəxsin bütün əməliyyatı nəzarət etməməsini təmin edərək fırıldaqçılıq və xətaların qarşısını almaq üçün əsas risk idarəetmə strategiyası. Həmişə ayrılmalı olan üç kritik funksiya: <strong class="key-term">İcazə (Authorization — A)</strong>, <strong class="key-term">Qeydiyyat (Recordkeeping — R)</strong> və aktivlərin <strong class="key-term">Mühafizəsi (Custody — C)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş Mühasibat Dövrü</div><p>Fəaliyyətlər strukturlaşdırılmış dövrələrə bölünür: <strong class="key-term">Satış/Debitor Borcları</strong>, <strong class="key-term">Nağd Daxilolmalar</strong>, <strong class="key-term">Satınalmalar/Kreditor Borcları</strong>, <strong class="key-term">Nağd Ödəmələr</strong> və <strong class="key-term">Əmək Haqqı</strong>.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Kilidli Qutu Sistemi (Lockbox System)</strong> — Müştəri ödəmələrinin təşkilata deyil, xüsusi poçt qutusuna göndərildiyi bank xidməti; vəsaitləri sürətləndirir və nəzarəti yaxşılaşdırır.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kor Surət (Blind Copy)</strong> — Miqdarları boş buraxılmış şəkildə Qəbul şöbəsinə göndərilən satınalma sifarişinin surəti; işçiləri mallar gəldikdə fiziki olaraq saymağa məcbur edir.</p></div>
+    <div class="term-block"><p><strong class="key-term">Xatırlatma Faylı (Tickler File)</strong> — Ödəmə tarixlərinə görə təşkil edilmiş xatırlatma sistemi; kreditor borclarında hesabların vaxtında ödənilməsini təmin etmək üçün istifadə olunur.</p></div>
+    <div class="term-block"><p><strong class="key-term">İmprest Hesab (Imprest Account)</strong> — Planlaşdırılmış ödəmələrə tam bərabər depozitlər alan bank hesabı; əmək haqqı emalında geniş istifadə olunur.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p><strong>ARC yaddaş köməkçisi</strong> — İcazə (Authorization), Qeydiyyat (Recordkeeping), Mühafizə (Custody) — daxili nəzarətin əsas prinsipi; bu mövzuda çoxsaylı suallar gözləyin.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Əmək haqqı dövrüsü rolları: <strong>Kadr Resursları</strong> əmək haqqı dərəcələrini icazələndirir → <strong>Vaxt Uçotu</strong> saatları qeyd edir → <strong>Xəzinədar / Nağd Ödəmələr</strong> çekləri faktiki olaraq paylamaqla mühafizəni saxlayır.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Mükəmməl dizayn edilmiş daxili nəzarət sistemi bütün fırıldaqçılığı dayandıra bilmir. <strong>İşçilər arasında sazişçiliyin (Collusion) və ya rəhbərliyin keçməsinin (Management Override) qarşısını ala bilməz</strong>.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>Nağd daxilolmalar:</strong> Poçt Otağı məktubları açmaq üçün <strong>iki katib (Two Clerks)</strong> istifadə edir, çekləri dərhal <strong>"Yalnız Depozit Üçün" (For Deposit Only)</strong> möhürlər.</div>
+    <div class="tip-block">✅ <strong>Nağd ödəmələr:</strong> Çeki imzalayan eyni şöbə təkrar ödəmələrin qarşısını almaq üçün <strong>dəstəkləyici sənədləri ləğv etməlidir</strong> ("Ödənilib" möhürlə).</div>
+    <div class="tip-block">✅ <strong>Satınalma dövrü — Üçtərəfli Uyğunlaşdırma (Three-Way Match):</strong> Kreditor Borcları ödəmə vauçeri verməzdən əvvəl satıcı fakturasını + qəbul hesabatını + satınalma sifarişini uyğunlaşdırmalıdır.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Kontrollerin Amacı</div><p>İç kontroller varlıkları korur, doğru finansal raporlamayı sağlar ve düzenleyici uyumu teşvik eder. Her kontrol <strong class="key-term">maliyet-fayda analizine (Cost-Benefit Analysis)</strong> tabidir — uygulamak için harcanan kaynaklar sağladığı faydalarla gerekçelendirilmelidir.</p></div>
+    <div class="concept-block"><div class="concept-title">Görev Ayrılığı — ARC</div><p>Tek bir kişinin tüm işlemi kontrol etmemesini sağlayarak hile ve hataları önlemek için temel risk yönetimi stratejisi. Her zaman ayrılması gereken üç kritik işlev: <strong class="key-term">Yetkilendirme (Authorization — A)</strong>, <strong class="key-term">Kayıt Tutma (Recordkeeping — R)</strong> ve varlıkların <strong class="key-term">Muhafazası (Custody — C)</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş Muhasebe Döngüsü</div><p>Faaliyetler yapılandırılmış döngülere ayrılır: <strong class="key-term">Satış/Alacaklar</strong>, <strong class="key-term">Nakit Tahsilatlar</strong>, <strong class="key-term">Satın Alma/Borçlar</strong>, <strong class="key-term">Nakit Ödemeler</strong> ve <strong class="key-term">Bordro</strong>.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Kilitli Kutu Sistemi (Lockbox System)</strong> — Müşteri ödemelerinin kuruluşa değil özel posta kutusuna gönderildiği banka hizmeti; fonları hızlandırır ve kontrolü iyileştirir.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kör Kopya (Blind Copy)</strong> — Miktarları boş bırakılarak Teslim Alma departmanına gönderilen satın alma siparişi kopyası; çalışanları mallar geldiğinde fiziksel olarak saymaya zorlar.</p></div>
+    <div class="term-block"><p><strong class="key-term">Hatırlatma Dosyası (Tickler File)</strong> — Vade tarihlerine göre düzenlenmiş hatırlatma sistemi; borç hesaplarında faturaların iskontolardan yararlanmak için zamanında ödenmesini sağlar.</p></div>
+    <div class="term-block"><p><strong class="key-term">Avans Hesabı (Imprest Account)</strong> — Planlanan ödemelere tam olarak eşit mevduat alan banka hesabı; bordro işlemlerinde yoğun olarak kullanılır.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p><strong>ARC hafıza yardımcısı</strong> — Yetkilendirme (Authorization), Kayıt Tutma (Recordkeeping), Muhafaza (Custody) — iç kontrolün temel ilkesi; bu konuda çok sayıda soru bekleyin.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Bordro döngüsü rolleri: <strong>İnsan Kaynakları</strong> ücret oranlarını yetkilendirir → <strong>Zaman Takibi</strong> saatleri kaydeder → <strong>Sayman / Nakit Ödemeler</strong> maaş çeklerini fiilen dağıtarak muhafazayı sürdürür.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Mükemmel tasarlanmış iç kontrol sistemi tüm hileyi durduramaz. <strong>Çalışanlar arası gizli anlaşmayı (Collusion) veya yönetimin geçersiz kılmasını (Management Override) engelleyemez</strong>.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>Nakit tahsilatlar:</strong> Posta Odası mektupları açmak için <strong>iki memur (Two Clerks)</strong> kullanır, çekleri derhal <strong>"Yalnızca Yatırma İçin" (For Deposit Only)</strong> damgalar.</div>
+    <div class="tip-block">✅ <strong>Nakit ödemeler:</strong> Çeki imzalayan aynı departman mükerrer ödemeleri önlemek için <strong>destekleyici belgeleri iptal etmelidir</strong> ("Ödendi" damgası).</div>
+    <div class="tip-block">✅ <strong>Satın alma döngüsü — Üç Yönlü Eşleştirme (Three-Way Match):</strong> Borç Hesapları ödeme makbuzu düzenlemeden önce satıcı faturasını + teslim alma raporunu + satın alma siparişini eşleştirmelidir.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <div></div><span class="su-counter">1 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 9.2 ══════════════ -->
+<div class="subunit-summary" id="su-9-2" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">9.2</div>
+    <div>
+      <div class="su-header-title" data-en="Management Controls" data-az="Rəhbərlik Nəzarətləri" data-tr="Yönetim Kontrolleri">Management Controls</div>
+      <div class="su-header-sub">Unit 9 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-9-2','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-9-2','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-9-2','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Purpose of Management Controls</div><p><strong class="key-term">Management controls</strong> guide, monitor, and evaluate organizational activities using tools like performance reviews, budgets, and forecasting. They ensure day-to-day operations align with strategic goals.</p></div>
+    <div class="concept-block"><div class="concept-title">Roles and Responsibilities</div><p>The <strong class="key-term">CEO</strong> establishes the "tone at the top." The <strong class="key-term">board</strong> demonstrates its commitment to ethics through its selection of senior management. <strong class="key-term">Everyone</strong> in the entity is involved in internal control and is expected to report poor or failing controls to superiors.</p></div>
+    <div class="concept-block"><div class="concept-title">Internal Audit's Role</div><p>Internal auditors evaluate the internal control system and serve in an <strong class="key-term">advisory role</strong>. To maintain strict independence, they must <strong class="key-term">never be responsible for selecting or executing</strong> those controls.</p></div>
+    <div class="concept-block"><div class="concept-title">Organization and Policies</div><p>Organizational structure should clearly define responsibilities, keeping the chain of authority as <strong class="key-term">simple and flexible</strong> as possible. A highly developed <strong class="key-term">ethical culture</strong> can reduce the need for formal written policies.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Management Controls</strong> — Tools and processes implemented to track financial progress and operational effectiveness.</p></div>
+    <div class="term-block"><p><strong class="key-term">Policy</strong> — Any stated principle that requires, guides, or restricts action within the organization.</p></div>
+    <div class="term-block"><p><strong class="key-term">Procedures</strong> — The specific methods of performing activities in conformity with prescribed policies.</p></div>
+    <div class="term-block"><p><strong class="key-term">Budget</strong> — A statement of expected results expressed in numerical terms; acts as a control standard for resource input and operational output.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Division of internal control responsibilities: <strong>management designs</strong> the controls → <strong>everyone executes</strong> them → <strong>internal audit only evaluates</strong> them.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Reports should <strong>emphasize exceptions</strong>. A <strong>timely report based partly on estimates</strong> is often more useful than a delayed report that is perfectly precise.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Auditors cannot design a control to fix a weakness they find. Internal auditors <strong>cannot select or execute controls</strong> without impairing their independence.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>Bank reconciliations</strong> must always be prepared by a <strong>third party</strong> to independently detect discrepancies between recorded deposits and bank statements.</div>
+    <div class="tip-block">✅ Access to physical assets must be limited to personnel responsible for <strong>custody</strong> — strictly away from those responsible for accounting or authorization.</div>
+    <div class="tip-block">✅ Periodically <strong>rotating staff responsibilities</strong> (e.g., rotating buyer assignments) is a highly effective control to prevent fraudulent vendor relationships.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Rəhbərlik Nəzarətlərinin Məqsədi</div><p><strong class="key-term">Rəhbərlik nəzarətləri (Management Controls)</strong> fəaliyyət icmalları, büdcələr və proqnozlaşdırma kimi alətlərdən istifadə edərək təşkilati fəaliyyətləri istiqamətləndirir, izləyir və qiymətləndirir. Gündəlik əməliyyatların strateji məqsədlərə uyğun olmasını təmin edir.</p></div>
+    <div class="concept-block"><div class="concept-title">Rollar və Məsuliyyətlər</div><p><strong class="key-term">CEO</strong> "Yuxarıdan Ton"u müəyyən edir. <strong class="key-term">İdarə Heyəti</strong> yüksək rəhbərliyin seçimi vasitəsilə etikaya bağlılığını nümayiş etdirir. Qurumda <strong class="key-term">hər kəs</strong> daxili nəzarətdə iştirak edir və zəif nəzarətləri rəhbərlərə bildirməsi gözlənilir.</p></div>
+    <div class="concept-block"><div class="concept-title">Daxili Auditin Rolu</div><p>Daxili auditorlar daxili nəzarət sistemini qiymətləndirir və <strong class="key-term">məsləhətçi rolunda (Advisory Role)</strong> xidmət göstərir. Ciddi müstəqilliyi qorumaq üçün həmin nəzarətləri <strong class="key-term">seçmək və ya icra etmək üçün heç vaxt cavabdeh olmamalıdırlar</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Təşkilat və Siyasətlər</div><p>Təşkilati struktur məsuliyyətləri aydın şəkildə müəyyən etməli, səlahiyyət zəncirini mümkün qədər <strong class="key-term">sadə və çevik (Simple and Flexible)</strong> saxlamalıdır. Yüksək inkişaf etmiş <strong class="key-term">etik mədəniyyət</strong> rəsmi yazılı siyasətlərə ehtiyacı azalda bilər.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Rəhbərlik Nəzarətləri (Management Controls)</strong> — Maliyyə irəliləyişini və əməliyyat effektivliyini izləmək üçün tətbiq olunan alətlər və proseslər.</p></div>
+    <div class="term-block"><p><strong class="key-term">Siyasət (Policy)</strong> — Təşkilat daxilində hərəkəti tələb edən, istiqamətləndirən və ya məhdudlaşdıran hər hansı bəyan edilmiş prinsip.</p></div>
+    <div class="term-block"><p><strong class="key-term">Prosedurlar (Procedures)</strong> — Müəyyən edilmiş siyasətlərə uyğun olaraq fəaliyyətlərin yerinə yetirilməsinin xüsusi metodları.</p></div>
+    <div class="term-block"><p><strong class="key-term">Büdcə (Budget)</strong> — Rəqəmsal ifadələrlə gözlənilən nəticələrin bəyanatı; resurs daxilolmaları və əməliyyat çıxışları üçün nəzarət standartı kimi fəaliyyət göstərir.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Daxili nəzarət məsuliyyətlərinin bölgüsü: <strong>rəhbərlik dizayn edir</strong> → <strong>hər kəs icra edir</strong> → <strong>daxili audit yalnız qiymətləndirir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Hesabatlar <strong>istisnaları vurğulamalıdır (Emphasize Exceptions)</strong>. Qismən proqnozlara əsaslanan <strong>vaxtında hesabat</strong> çox vaxt tam dəqiq olan gecikmiş hesabatdan daha faydalıdır.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Daxili auditorlar müstəqilliklərinə xələl gətirmədən <strong>nəzarətləri seçə və ya icra edə bilməzlər</strong>.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>Bank üzləşdirmələrini (Bank Reconciliations)</strong> həmişə <strong>üçüncü tərəf</strong> hazırlamalıdır — qeydə alınmış depozitlər ilə bank hesabatları arasındakı uyğunsuzluqları müstəqil aşkar etmək üçün.</div>
+    <div class="tip-block">✅ Fiziki aktivlərə giriş həmişə <strong>mühafizəyə (Custody)</strong> cavabdeh personalla məhdudlaşdırılmalıdır — mühasibat və ya icazə üçün cavabdeh şəxslərdən ciddi şəkildə uzaq tutulmalıdır.</div>
+    <div class="tip-block">✅ <strong>İşçi məsuliyyətlərinin vaxtaşırı rotasiyası</strong> (məsələn, satınalma agentləri arasında alıcı təyinatlarının rotasiyası) saxta satıcı münasibətlərinin qarşısını almaq üçün yüksək effektiv nəzarətdir.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Yönetim Kontrollerinin Amacı</div><p><strong class="key-term">Yönetim kontrolleri (Management Controls)</strong> performans değerlendirmeleri, bütçeler ve tahminleme gibi araçlar kullanarak organizasyonel faaliyetleri yönlendirir, izler ve değerlendirir. Günlük operasyonların stratejik hedeflerle uyumlu olmasını sağlar.</p></div>
+    <div class="concept-block"><div class="concept-title">Roller ve Sorumluluklar</div><p><strong class="key-term">CEO</strong> "Üst Yönetim Tonu"nu belirler. <strong class="key-term">Yönetim Kurulu</strong> üst yönetim seçimi yoluyla etiğe bağlılığını gösterir. Kuruluştaki <strong class="key-term">herkes</strong> iç kontrole dahildir ve zayıf kontrolleri üstlerine bildirmesi beklenir.</p></div>
+    <div class="concept-block"><div class="concept-title">İç Denetimin Rolü</div><p>İç denetçiler iç kontrol sistemini değerlendirir ve <strong class="key-term">danışmanlık rolünde (Advisory Role)</strong> hizmet verir. Sıkı bağımsızlığı korumak için bu kontrolleri <strong class="key-term">seçmek veya uygulamaktan asla sorumlu olmamalıdırlar</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Organizasyon ve Politikalar</div><p>Organizasyonel yapı sorumlulukları açıkça tanımlamalı, yetki zincirini mümkün olduğunca <strong class="key-term">basit ve esnek (Simple and Flexible)</strong> tutmalıdır. Yüksek düzeyde gelişmiş <strong class="key-term">etik kültür</strong> resmi yazılı politikalara olan ihtiyacı azaltabilir.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Yönetim Kontrolleri (Management Controls)</strong> — Finansal ilerlemeyi ve operasyonel etkinliği izlemek için uygulanan araçlar ve süreçler.</p></div>
+    <div class="term-block"><p><strong class="key-term">Politika (Policy)</strong> — Kuruluş içinde eylemi gerektiren, yönlendiren veya kısıtlayan herhangi bir beyan edilmiş ilke.</p></div>
+    <div class="term-block"><p><strong class="key-term">Prosedürler (Procedures)</strong> — Belirlenmiş politikalara uygun olarak faaliyetlerin gerçekleştirilmesinin özel yöntemleri.</p></div>
+    <div class="term-block"><p><strong class="key-term">Bütçe (Budget)</strong> — Sayısal terimlerle ifade edilen beklenen sonuçların beyanı; kaynak girdileri ve operasyonel çıktılar için kontrol standardı olarak işlev görür.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>İç kontrol sorumluluklarının dağılımı: <strong>yönetim tasarlar</strong> → <strong>herkes uygular</strong> → <strong>iç denetim yalnızca değerlendirir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Raporlar <strong>istisnaları vurgulamalıdır (Emphasize Exceptions)</strong>. Kısmen tahminlere dayanan <strong>zamanında rapor</strong> genellikle tamamen kesin olan gecikmeli rapordan daha yararlıdır.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İç denetçiler bağımsızlıklarını bozmadan <strong>kontrolleri seçemez veya uygulayamaz</strong>.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>Banka mutabakatları (Bank Reconciliations)</strong> kaydedilen mevduatlar ile banka ekstreleri arasındaki tutarsızlıkları bağımsız olarak tespit etmek için her zaman <strong>üçüncü taraf</strong> tarafından hazırlanmalıdır.</div>
+    <div class="tip-block">✅ Fiziksel varlıklara erişim her zaman <strong>muhafazadan (Custody)</strong> sorumlu personelle sınırlandırılmalıdır — muhasebe veya yetkilendirmeden sorumlu kişilerden kesinlikle uzak tutulmalıdır.</div>
+    <div class="tip-block">✅ <strong>Personel sorumluluklarının periyodik rotasyonu</strong> (örneğin, alıcı atamalarının rotasyonu) hileli satıcı ilişkilerini önlemek için son derece etkili bir kontroldür.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">2 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SU 9.3 ══════════════ -->
+<div class="subunit-summary" id="su-9-3" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">9.3</div>
+    <div>
+      <div class="su-header-title" data-en="Control Frameworks" data-az="Nəzarət Çərçivələri" data-tr="Kontrol Çerçeveleri">Control Frameworks</div>
+      <div class="su-header-sub">Unit 9 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-9-3','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-9-3','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-9-3','tr')">TR</button>
+  </div>
+
+  <!-- EN -->
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Big Three Frameworks</div><p><strong class="key-term">COSO</strong> (governance, risk, compliance) · <strong class="key-term">COBIT 2019</strong> (IT governance) · <strong class="key-term">ISO 31000</strong> (broad risk principles) — the most recognized frameworks used to ensure robust internal controls.</p></div>
+    <div class="concept-block"><div class="concept-title">COSO Objectives</div><p>Internal control provides <strong class="key-term">reasonable assurance</strong> across three categories: <strong class="key-term">Operations, Reporting, and Compliance</strong>. Controls are more likely to ensure <em>reporting and compliance</em> objectives (internally manageable) than <em>operational</em> ones (subject to unpredictable external factors).</p></div>
+    <div class="concept-block"><div class="concept-title">The Five COSO Components — CRIME</div><p>Five integrated components that must work together: <strong class="key-term">C</strong>ontrol Activities · <strong class="key-term">R</strong>isk Assessment · <strong class="key-term">I</strong>nformation &amp; Communication · <strong class="key-term">M</strong>onitoring Activities · control <strong class="key-term">E</strong>nvironment.</p></div>
+    <div class="concept-block"><div class="concept-title">COBIT 2019</div><p>An internationally accepted <strong class="key-term">IT governance system</strong> built on the reality that IT pervades every facet of operations. Structured around <strong class="key-term">6 Governance System principles</strong> (e.g., providing stakeholder value, tailoring to organizational needs) and <strong class="key-term">3 Governance Framework principles</strong> (e.g., open, flexible, aligned with major standards).</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Internal Control</strong> — A continuous process, affected by the board, management, and personnel, designed to provide reasonable (but not absolute) assurance regarding organizational objectives.</p></div>
+    <div class="term-block"><p><strong class="key-term">Control Environment</strong> — The foundational standard establishing the "tone at the top," reflecting management's and the board's commitment to integrity, structure, and ethical values.</p></div>
+    <div class="term-block"><p><strong class="key-term">Control Activities</strong> — Specific preventive or detective policies, procedures, and verifications (including segregation of duties) established to mitigate risks.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Memorize the <strong>CRIME</strong> acronym for the five COSO components: <strong>C</strong>ontrol activities, <strong>R</strong>isk assessment, <strong>I</strong>nformation &amp; communication, <strong>M</strong>onitoring, control <strong>E</strong>nvironment.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>COBIT <strong>System vs. Framework</strong> principles: A <strong>System</strong> directs and regulates the entity (dynamic, holistic, tailored). A <strong>Framework</strong> is the underlying structure it is built upon (open, flexible, aligned with major standards).</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Internal controls do NOT guarantee operational success. Controls can only ever provide <strong>reasonable assurance</strong> — never absolute assurance.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>"Tone at the Top"</strong> → always linked directly to the <strong>"Control Environment"</strong>.</div>
+    <div class="tip-block">✅ <strong>"Monitoring"</strong> = evaluating whether the <strong>other four COSO components are present and functioning correctly</strong>.</div>
+    <div class="tip-block">✅ COSO = governance/risk/compliance · COBIT = IT governance · ISO 31000 = flexible risk principles. Know which framework fits which scenario.</div>
+  </div>
+
+  <!-- AZ -->
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Üç Böyük Çərçivə</div><p><strong class="key-term">COSO</strong> (idarəetmə, risk, uyğunluq) · <strong class="key-term">COBIT 2019</strong> (İT idarəetməsi) · <strong class="key-term">ISO 31000</strong> (geniş risk prinsipləri) — güclü daxili nəzarətləri təmin etmək üçün istifadə olunan ən tanınmış çərçivələr.</p></div>
+    <div class="concept-block"><div class="concept-title">COSO Məqsədləri</div><p>Daxili nəzarət üç kateqoriya üzrə <strong class="key-term">ağlabatan əminlik (Reasonable Assurance)</strong> təmin edir: <strong class="key-term">Əməliyyatlar (Operations), Hesabatlılıq (Reporting) və Uyğunluq (Compliance)</strong>. Nəzarətlər hesabatlılıq və uyğunluq məqsədlərini (daxili idarə olunan) əməliyyat məqsədlərindən (xarici amillərə tabe) daha çox təmin edə bilər.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş COSO Komponenti — CRIME</div><p>Birlikdə işləməli olan beş inteqrasiya olunmuş komponent: <strong class="key-term">C</strong>ontrol Activities — Nəzarət Fəaliyyətləri · <strong class="key-term">R</strong>isk Assessment — Risk Qiymətləndirməsi · <strong class="key-term">I</strong>nformation &amp; Communication — Məlumat və Kommunikasiya · <strong class="key-term">M</strong>onitoring — Monitorinq · control <strong class="key-term">E</strong>nvironment — Nəzarət Mühiti.</p></div>
+    <div class="concept-block"><div class="concept-title">COBIT 2019</div><p>Beynəlxalq səviyyədə qəbul edilmiş <strong class="key-term">İT idarəetmə sistemi (IT Governance System)</strong>. <strong class="key-term">6 İdarəetmə Sistemi prinsipi</strong> (maraqlı tərəflərə dəyər yaratmaq, təşkilati ehtiyaclara uyğunlaşdırmaq) və <strong class="key-term">3 İdarəetmə Çərçivəsi prinsipi</strong> (açıq, çevik, əsas standartlara uyğun) ətrafında strukturlaşdırılıb.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Daxili Nəzarət (Internal Control)</strong> — İdarə Heyəti, rəhbərlik və personal tərəfindən təsir olunan, təşkilati məqsədlərə dair ağlabatan (lakin mütləq deyil) əminlik təmin etmək üçün nəzərdə tutulmuş davamlı proses.</p></div>
+    <div class="term-block"><p><strong class="key-term">Nəzarət Mühiti (Control Environment)</strong> — "Yuxarıdan Ton"u müəyyən edən təməl standart; rəhbərliyin və İdarə Heyətinin dürüstlüyə, struktura və etik dəyərlərə bağlılığını əks etdirir.</p></div>
+    <div class="term-block"><p><strong class="key-term">Nəzarət Fəaliyyətləri (Control Activities)</strong> — Riskləri azaltmaq üçün müəyyən edilmiş xüsusi qabaqlayıcı və ya aşkaredici siyasətlər, prosedurlar və yoxlamalar (vəzifələrin ayrılması daxil olmaqla).</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Beş COSO komponenti üçün <strong>CRIME</strong> yaddaş köməkçisini əzbərləyin: <strong>C</strong>ontrol activities, <strong>R</strong>isk assessment, <strong>I</strong>nformation &amp; communication, <strong>M</strong>onitoring, control <strong>E</strong>nvironment.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>COBIT <strong>Sistem vs. Çərçivə</strong> prinsipləri: <strong>Sistem</strong> qurumu istiqamətləndirir və tənzimləyir (dinamik, bütöv, uyğunlaşdırılmış). <strong>Çərçivə</strong> isə üzərində qurulduğu əsas strukturdur (açıq, çevik, əsas standartlara uyğun).</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Daxili nəzarətlər əməliyyat uğuruna zəmanət vermir. Nəzarətlər yalnız <strong>ağlabatan əminlik (Reasonable Assurance)</strong> təmin edə bilər — heç vaxt mütləq əminlik deyil.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>"Yuxarıdan Ton" (Tone at the Top)</strong> → həmişə birbaşa <strong>"Nəzarət Mühiti" (Control Environment)</strong> ilə əlaqəlidir.</div>
+    <div class="tip-block">✅ <strong>"Monitorinq" (Monitoring)</strong> = <strong>digər dörd COSO komponentinin mövcud olub-olmadığının və düzgün işləyib-işləmədiyinin</strong> qiymətləndirilməsi.</div>
+    <div class="tip-block">✅ COSO = idarəetmə/risk/uyğunluq · COBIT = İT idarəetməsi · ISO 31000 = çevik risk prinsipləri. Hansı çərçivənin hansı ssenarilə uyğun olduğunu bilin.</div>
+  </div>
+
+  <!-- TR -->
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Üç Büyük Çerçeve</div><p><strong class="key-term">COSO</strong> (yönetişim, risk, uyum) · <strong class="key-term">COBIT 2019</strong> (BT yönetişimi) · <strong class="key-term">ISO 31000</strong> (geniş risk ilkeleri) — güçlü iç kontrolleri sağlamak için kullanılan en tanınmış çerçeveler.</p></div>
+    <div class="concept-block"><div class="concept-title">COSO Hedefleri</div><p>İç kontrol üç kategori genelinde <strong class="key-term">makul güvence (Reasonable Assurance)</strong> sağlar: <strong class="key-term">Faaliyetler (Operations), Raporlama (Reporting) ve Uyum (Compliance)</strong>. Kontroller raporlama ve uyum hedeflerini (dahili yönetilebilir) faaliyet hedeflerinden (dış faktörlere tabi) daha fazla sağlayabilir.</p></div>
+    <div class="concept-block"><div class="concept-title">Beş COSO Bileşeni — CRIME</div><p>Birlikte çalışması gereken beş entegre bileşen: <strong class="key-term">C</strong>ontrol Activities — Kontrol Faaliyetleri · <strong class="key-term">R</strong>isk Assessment — Risk Değerlendirmesi · <strong class="key-term">I</strong>nformation &amp; Communication — Bilgi ve İletişim · <strong class="key-term">M</strong>onitoring — İzleme · control <strong class="key-term">E</strong>nvironment — Kontrol Ortamı.</p></div>
+    <div class="concept-block"><div class="concept-title">COBIT 2019</div><p>Uluslararası kabul görmüş <strong class="key-term">BT yönetişim sistemi (IT Governance System)</strong>. <strong class="key-term">6 Yönetişim Sistemi ilkesi</strong> (paydaşlara değer sağlama, organizasyonel ihtiyaçlara uyarlama) ve <strong class="key-term">3 Yönetişim Çerçevesi ilkesi</strong> (açık, esnek, büyük standartlarla uyumlu) etrafında yapılandırılmıştır.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">İç Kontrol (Internal Control)</strong> — Yönetim Kurulu, yönetim ve personel tarafından etkilenen, kurumsal hedeflere ilişkin makul (ancak mutlak olmayan) güvence sağlamak için tasarlanmış sürekli süreç.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kontrol Ortamı (Control Environment)</strong> — "Üst Yönetim Tonu"nu belirleyen temel standart; yönetimin ve Yönetim Kurulunun dürüstlüğe, yapıya ve etik değerlere bağlılığını yansıtır.</p></div>
+    <div class="term-block"><p><strong class="key-term">Kontrol Faaliyetleri (Control Activities)</strong> — Riskleri azaltmak için oluşturulan özel önleyici veya tespit edici politikalar, prosedürler ve doğrulamalar (görev ayrılığı dahil).</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Beş COSO bileşeni için <strong>CRIME</strong> hafıza yardımcısını ezberleyin: <strong>C</strong>ontrol activities, <strong>R</strong>isk assessment, <strong>I</strong>nformation &amp; communication, <strong>M</strong>onitoring, control <strong>E</strong>nvironment.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>COBIT <strong>Sistem vs. Çerçeve</strong> ilkeleri: <strong>Sistem</strong> kuruluşu yönlendirir ve düzenler (dinamik, bütüncül, uyarlanmış). <strong>Çerçeve</strong> ise üzerine inşa edilen temel yapıdır (açık, esnek, büyük standartlarla uyumlu).</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İç kontroller operasyonel başarıyı garanti etmez. Kontroller yalnızca <strong>makul güvence (Reasonable Assurance)</strong> sağlayabilir — asla mutlak güvence değil.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Üst Yönetim Tonu" (Tone at the Top)</strong> → her zaman doğrudan <strong>"Kontrol Ortamı" (Control Environment)</strong> ile ilişkilendirilir.</div>
+    <div class="tip-block">✅ <strong>"İzleme" (Monitoring)</strong> = <strong>diğer dört COSO bileşeninin mevcut olup olmadığının ve doğru şekilde işleyip işlemediğinin</strong> değerlendirilmesi.</div>
+    <div class="tip-block">✅ COSO = yönetişim/risk/uyum · COBIT = BT yönetişimi · ISO 31000 = esnek risk ilkeleri. Hangi çerçevenin hangi senaryoya uyduğunu bilin.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">3 / 3</span>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS=["su-9-1","su-9-2","su-9-3"];
+let currentSU=SUBUNIT_IDS[0],globalLang='en';
+function showSubunit(id){
+  SUBUNIT_IDS.forEach(sid=>{document.getElementById(sid).style.display='none';document.getElementById('nav-'+sid).classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  document.getElementById('nav-'+id).classList.add('active');
+  currentSU=id;
+  document.getElementById('nav-'+id).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  applyLangToSubunit(id,globalLang);
+}
+function showLang(unitId,lang){
+  globalLang=lang;
+  const unit=document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el=>el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el=>el.classList.remove('active'));
+  unit.querySelector('.lang-content.'+lang).classList.add('active');
+  const tabs=unit.querySelectorAll('.lang-tab');
+  const langMap={'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  document.getElementById('lang-btn').textContent={'en':'AZ','az':'TR','tr':'EN'}[lang];
+}
+function applyLangToSubunit(id,lang){
+  showLang(id,lang);
+  const su=document.getElementById(id);
+  const titleEl=su.querySelector('.su-header-title');
+  if(titleEl)titleEl.textContent=titleEl.dataset[lang]||titleEl.dataset.en;
+  const navBtn=document.getElementById('nav-'+id);
+  const navTitle=navBtn.querySelector('.su-nav-title');
+  if(navTitle)navTitle.textContent=navTitle.dataset[lang]||navTitle.dataset.en;
+}
+function toggleGlobalLang(){
+  const langs=['en','az','tr'],idx=langs.indexOf(globalLang);
+  globalLang=langs[(idx+1)%3];
+  applyLangToSubunit(currentSU,globalLang);
+  SUBUNIT_IDS.forEach(sid=>{const t=document.querySelector('#nav-'+sid+' .su-nav-title');if(t)t.textContent=t.dataset[globalLang]||t.dataset.en;});
+  document.getElementById('app-title').textContent={en:'Unit 9 · Summary',az:'Unit 9 · Xülasə',tr:'Unit 9 · Özet'}[globalLang];
+}
+function nextSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx<SUBUNIT_IDS.length-1)showSubunit(SUBUNIT_IDS[idx+1]);}
+function prevSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx>0)showSubunit(SUBUNIT_IDS[idx-1]);}
+</script>
+</body>
+</html>

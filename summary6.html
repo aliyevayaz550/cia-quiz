@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2e4a">
+<title>CIA Quiz – Unit 6 Summary</title>
+<style>
+:root{--navy:#1a2e4a;--navy-mid:#2e4d72;--gold:#c9a84c;--gold-dim:#8a6d2e;--paper:#f8f5ef;--correct:#1a6b3c;--wrong:#8b1a1a;--shadow:0 2px 12px rgba(15,25,35,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;background:var(--paper);color:#0f1923;min-height:100vh;font-size:15px;line-height:1.6;}
+#topbar{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+#topbar-inner{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:680px;margin:0 auto;gap:10px;}
+#back-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#app-title{font-size:15px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#lang-btn{font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;flex-shrink:0;}
+#su-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:0 12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#su-nav::-webkit-scrollbar{display:none;}
+#su-nav-inner{display:flex;gap:8px;max-width:680px;margin:0 auto;padding-top:10px;}
+.su-nav-btn{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;cursor:pointer;transition:all .18s;flex:1;-webkit-tap-highlight-color:transparent;}
+.su-nav-btn:hover{background:rgba(255,255,255,.14);}
+.su-nav-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.su-nav-num{font-size:13px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px;}
+.su-nav-title{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;}
+.su-nav-btn.active .su-nav-title{color:rgba(255,255,255,.9);}
+#main{max-width:680px;margin:0 auto;padding:16px 14px 40px;}
+.su-header{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.su-header-num{width:48px;height:48px;flex-shrink:0;background:var(--gold);color:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
+.su-header-title{font-size:16px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px;}
+.su-header-sub{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.4px;}
+.lang-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lang-tab{flex:1;padding:9px 0;border:1.5px solid #ddd6ca;border-radius:8px;background:#fff;color:#888;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;}
+.lang-tab.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.lang-content{display:none;}
+.lang-content.active{display:block;}
+.section-heading{background:linear-gradient(135deg,#e8f0f8,#f0f4f9);color:var(--navy);font-size:15px;font-weight:700;padding:10px 14px;border-radius:8px;margin:20px 0 10px 0;border-left:3px solid var(--navy-mid);}
+.section-heading:first-child{margin-top:0;}
+.concept-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--navy-mid);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.concept-title{font-weight:700;color:var(--navy-mid);margin-bottom:5px;font-size:14px;}
+.concept-block p{font-size:14px;color:#333;}
+.key-term{font-weight:700;color:var(--gold-dim);}
+.term-block{background:#fff;border:1px solid #e8e2d8;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.term-block p{font-size:14px;color:#333;}
+.trap-block{background:#fff5f5;border:1px solid #f5c6c6;border-left:3px solid var(--wrong);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.trap-label{display:inline-block;background:var(--wrong);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.trap-block p{font-size:14px;color:#4a1a1a;}
+.tip-block{background:#f0faf4;border:1px solid #b8e0c8;border-left:3px solid var(--correct);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:14px;color:#1a3a28;}
+.su-bottom-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid #e8e2d8;}
+.su-prev-btn,.su-next-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.su-prev-btn:hover,.su-next-btn:hover{opacity:.85;}
+.su-counter{font-size:13px;color:#888;font-weight:600;}
+</style>
+</head>
+<body>
+<div id="topbar"><div id="topbar-inner">
+  <button id="back-btn" onclick="window.location.href='summary_menu.html'">← Menyu</button>
+  <div id="app-title">Unit 6 · Xülasə</div>
+  <button id="lang-btn" onclick="toggleGlobalLang()">AZ</button>
+</div></div>
+
+<div id="su-nav"><div id="su-nav-inner">
+  <button class="su-nav-btn" id="nav-su-6-1" onclick="showSubunit('su-6-1')">
+    <span class="su-nav-num">6.1</span>
+    <span class="su-nav-title" data-en="Governance Principles" data-az="İdarəetmə Prinsipləri" data-tr="Yönetişim İlkeleri">Governance Principles</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-6-2" onclick="showSubunit('su-6-2')">
+    <span class="su-nav-num">6.2</span>
+    <span class="su-nav-title" data-en="Org. Culture" data-az="Təşkilat Mədəniyyəti" data-tr="Kurum Kültürü">Org. Culture</span>
+  </button>
+  <button class="su-nav-btn" id="nav-su-6-3" onclick="showSubunit('su-6-3')">
+    <span class="su-nav-num">6.3</span>
+    <span class="su-nav-title" data-en="IA Role in Governance" data-az="Auditin Rolu" data-tr="Denetimin Rolü">IA Role in Governance</span>
+  </button>
+</div></div>
+
+<div id="main">
+
+<!-- SU 6.1 -->
+<div class="subunit-summary" id="su-6-1" style="display:block">
+  <div class="su-header">
+    <div class="su-header-num">6.1</div>
+    <div>
+      <div class="su-header-title" data-en="Governance Principles" data-az="İdarəetmə Prinsipləri" data-tr="Yönetişim İlkeleri">Governance Principles</div>
+      <div class="su-header-sub">Unit 6 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-6-1','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-6-1','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-6-1','tr')">TR</button>
+  </div>
+
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">The Nature of Governance</div><p><strong class="key-term">Governance</strong> is the combination of processes and structures implemented by the board to inform, direct, manage, and monitor organizational activities. It establishes relationships between the board, management, shareholders, and other stakeholders.</p></div>
+    <div class="concept-block"><div class="concept-title">Two Major Components</div><p>Governance is driven by <strong class="key-term">strategic direction</strong> (setting the business model, objectives, and risk appetite) and <strong class="key-term">oversight</strong> (evaluating risk management and assurance activities). Internal auditing is primarily concerned with the <strong class="key-term">oversight</strong> component.</p></div>
+    <div class="concept-block"><div class="concept-title">The Board's Role</div><p>The board is the highest-level governing body responsible for guiding the organization. For effective governance, a majority of the board should be <strong class="key-term">outside directors</strong> who are willing to challenge management's choices.</p></div>
+    <div class="concept-block"><div class="concept-title">Management &amp; Risk Owners</div><p>Senior management handles day-to-day governance. Management designates specific <strong class="key-term">"risk owners"</strong> who handle day-to-day risk management, evaluate risk activities, and ensure accurate reporting.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Governance</strong> — Processes and structures implemented by the board to inform, direct, manage, and monitor the organization toward its objectives.</p></div>
+    <div class="term-block"><p><strong class="key-term">Stakeholders</strong> — Parties with a direct or indirect interest in an organization's activities and outcomes: employees, shareholders, regulators, and the public.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Owners</strong> — Managers responsible for specific day-to-day risks: evaluating, monitoring, and reporting on risk management activities.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Strict <strong>division of duties</strong>: the board handles oversight, risk appetite, and fundamental changes (mergers, officer selection); management handles day-to-day implementation and assigning risk owners.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Which governance component is internal auditing <em>most focused on</em>? → Always <strong>oversight</strong>, not strategic direction.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p><strong>Governance, risk management, and control are deeply interrelated</strong> — they do not exist independently of one another.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ Effective board = <strong>majority of outside (independent) directors</strong>.</div>
+    <div class="tip-block">✅ <strong>"Risk Owners"</strong> → link directly to <strong>"day-to-day risk management"</strong>.</div>
+    <div class="tip-block">✅ Ultimate responsibility for <strong>"tone at the top"</strong>? → <strong>Board and senior management working together</strong>.</div>
+  </div>
+
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">İdarəetmənin Mahiyyəti</div><p><strong class="key-term">İdarəetmə (Governance)</strong> İdarə Heyəti tərəfindən təşkilati fəaliyyətləri məlumatlandırmaq, istiqamətləndirmək, idarə etmək və izləmək üçün tətbiq edilən proseslər və strukturların birləşməsidir. İdarə Heyəti, rəhbərlik, səhmdarlar və digər maraqlı tərəflər arasında münasibətləri müəyyən edir.</p></div>
+    <div class="concept-block"><div class="concept-title">İki Əsas Komponent</div><p>İdarəetmə <strong class="key-term">strateji istiqamət (Strategic Direction)</strong> (biznes modeli, məqsədlər və risk iştahının müəyyən edilməsi) və <strong class="key-term">nəzarət (Oversight)</strong> (risk idarəetməsi və əminlik fəaliyyətlərinin qiymətləndirilməsi) tərəfindən idarə olunur. Daxili audit əsasən <strong class="key-term">nəzarət (Oversight)</strong> komponentinə fokuslanır.</p></div>
+    <div class="concept-block"><div class="concept-title">İdarə Heyətinin Rolu</div><p>İdarə Heyəti (Board) ən yüksək səviyyəli idarəetmə orqanıdır. Effektiv idarəetmə üçün əksəriyyəti rəhbərliyin seçimlərini sorğulamağa hazır olan <strong class="key-term">xarici direktorlar (Outside Directors)</strong> olmalıdır.</p></div>
+    <div class="concept-block"><div class="concept-title">Rəhbərlik və Risk Sahibləri</div><p>Yüksək rəhbərlik gündəlik idarəetməni həyata keçirir. Rəhbərlik gündəlik risk idarəetməsini həyata keçirən xüsusi <strong class="key-term">"risk sahibləri" (Risk Owners)</strong> təyin edir.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">İdarəetmə (Governance)</strong> — İdarə Heyəti tərəfindən təşkilatı öz məqsədlərinə doğru məlumatlandırmaq, istiqamətləndirmək, idarə etmək və izləmək üçün tətbiq edilən proseslər və strukturların birləşməsi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Maraqlı Tərəflər (Stakeholders)</strong> — Təşkilatın fəaliyyətlərinə birbaşa və ya dolayı marağı olan tərəflər: işçilərdən tənzimləyicilərə və ictimaiyyətə qədər.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Sahibləri (Risk Owners)</strong> — Xüsusi gündəlik risklərə cavabdeh olan menecerlər; risk idarəetməsi fəaliyyətlərinin qiymətləndirilməsi, izlənməsi və hesabat verilməsi daxildir.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Ciddi <strong>vəzifə bölgüsü (Division of Duties)</strong>: İdarə Heyəti nəzarət, risk iştahı və fundamental dəyişiklikləri idarə edir; rəhbərlik isə gündəlik tətbiqi və risk sahiblərinin təyin edilməsini idarə edir.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Daxili auditin idarəetmənin hansı komponentinə <em>ən çox fokuslandığı</em>? → Həmişə <strong>nəzarət (Oversight)</strong> — strateji istiqamət deyil.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p><strong>İdarəetmə, risk idarəetməsi və nəzarət dərindən bir-birilə əlaqəlidir</strong> — bir-birindən müstəqil mövcud deyil.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ Effektiv İdarə Heyəti = <strong>xarici (müstəqil) direktorların əksəriyyəti</strong>.</div>
+    <div class="tip-block">✅ <strong>"Risk Sahibləri" (Risk Owners)</strong> → birbaşa <strong>"gündəlik risk idarəetməsi"</strong> ilə əlaqələndirin.</div>
+    <div class="tip-block">✅ <strong>"Yuxarıdan Ton"</strong> üçün son məsuliyyət? → <strong>İdarə Heyəti və yüksək rəhbərliyin birlikdə işləməsi</strong>.</div>
+  </div>
+
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Yönetişimin Doğası</div><p><strong class="key-term">Yönetişim (Governance)</strong>, Yönetim Kurulu tarafından organizasyonel faaliyetleri bilgilendirmek, yönlendirmek, yönetmek ve izlemek için uygulanan süreçler ve yapıların birleşimidir.</p></div>
+    <div class="concept-block"><div class="concept-title">İki Ana Bileşen</div><p>Yönetişim <strong class="key-term">stratejik yön (Strategic Direction)</strong> ve <strong class="key-term">gözetim (Oversight)</strong> tarafından yönlendirilir. İç denetim esas olarak <strong class="key-term">gözetim (Oversight)</strong> bileşeniyle ilgilenir.</p></div>
+    <div class="concept-block"><div class="concept-title">Yönetim Kurulunun Rolü</div><p>Yönetim Kurulu en üst düzey yönetim organıdır. Etkin yönetişim için çoğunluğu, yönetimin seçimlerini sorgulamaya hazır <strong class="key-term">dış yöneticiler (Outside Directors)</strong> olmalıdır.</p></div>
+    <div class="concept-block"><div class="concept-title">Yönetim ve Risk Sahipleri</div><p>Üst Yönetim günlük yönetişimi yürütür. Yönetim, günlük risk yönetimini yürüten belirli <strong class="key-term">"risk sahipleri" (Risk Owners)</strong> atar.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Yönetişim (Governance)</strong> — Yönetim Kurulu tarafından kuruluşu hedeflerine doğru bilgilendirmek, yönlendirmek, yönetmek ve izlemek için uygulanan süreçler ve yapıların birleşimi.</p></div>
+    <div class="term-block"><p><strong class="key-term">Paydaşlar (Stakeholders)</strong> — Kuruluşun faaliyetlerine doğrudan veya dolaylı çıkarı olan taraflar: çalışanlardan düzenleyicilere ve kamuya kadar.</p></div>
+    <div class="term-block"><p><strong class="key-term">Risk Sahipleri (Risk Owners)</strong> — Belirli günlük risklerin yönetiminden sorumlu yöneticiler: değerlendirme, izleme ve raporlama dahildir.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Sıkı <strong>görev dağılımı</strong>: Yönetim Kurulu gözetimi, risk iştahını ve temel değişiklikleri yönetir; yönetim ise günlük uygulamayı yönetir.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>İç denetim hangi bileşene <em>en çok odaklanır</em>? → Her zaman <strong>gözetim (Oversight)</strong> — stratejik yön değil.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p><strong>Yönetişim, risk yönetimi ve kontrol derinden birbiriyle ilişkilidir</strong> — birbirinden bağımsız var olmaz.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ Etkin Yönetim Kurulu = <strong>dış (bağımsız) yöneticilerin çoğunluğu</strong>.</div>
+    <div class="tip-block">✅ <strong>"Risk Sahipleri"</strong> → doğrudan <strong>"günlük risk yönetimi"</strong> ile ilişkilendirin.</div>
+    <div class="tip-block">✅ <strong>"Üst Yönetim Tonu"</strong> için nihai sorumluluk? → <strong>Yönetim Kurulu ve üst yönetimin birlikte çalışması</strong>.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <div></div><span class="su-counter">1 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- SU 6.2 -->
+<div class="subunit-summary" id="su-6-2" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">6.2</div>
+    <div>
+      <div class="su-header-title" data-en="Organizational Culture" data-az="Təşkilat Mədəniyyəti" data-tr="Kurum Kültürü">Organizational Culture</div>
+      <div class="su-header-sub">Unit 6 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-6-2','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-6-2','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-6-2','tr')">TR</button>
+  </div>
+
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Culture &amp; Governance Link</div><p>Governance practices rely heavily on an organization's unique <strong class="key-term">culture</strong>. This culture is fundamentally shaped by the organization's <strong class="key-term">mission, vision, and core values</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Impact on Internal Controls</div><p>A <strong class="key-term">risk-aggressive</strong> culture often has lower regard for internal controls. A <strong class="key-term">risk-averse</strong> culture places much higher importance on them. Culture directly shapes the <strong class="key-term">control environment</strong>.</p></div>
+    <div class="concept-block"><div class="concept-title">Responsibility &amp; Tone at the Top</div><p>The board oversees the overall ethical climate, but <strong class="key-term">senior management</strong> holds the primary responsibility for establishing the culture, maintaining ethics programs, and setting the daily example of ethical behavior.</p></div>
+    <div class="concept-block"><div class="concept-title">Auditing the Ethical Climate</div><p>Internal auditors periodically evaluate the ethical climate by assessing <strong class="key-term">formal codes of conduct</strong>, confidential reporting mechanisms, leadership behaviors, and regular employee surveys.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Organizational Culture</strong> — The collective attitudes, behaviors, and understanding about risk that influence management and personnel decisions.</p></div>
+    <div class="term-block"><p><strong class="key-term">Mission</strong> — The organization's core purpose. &nbsp;|&nbsp; <strong class="key-term">Vision</strong> — The organization's aspirations over time. &nbsp;|&nbsp; <strong class="key-term">Core Values</strong> — Essential beliefs about acceptable behavior.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Division of ethical duties: the board <strong>oversees</strong> the ethical climate, but <strong>senior management</strong> is ultimately responsible for <strong>establishing and maintaining</strong> it.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Can an internal auditor act as <em>Chief Ethics Officer</em>? → Taking the official role <strong>may conflict with the required independence</strong> of internal audit.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>An unhealthy culture actively <strong>threatens the objectivity of decision-making</strong> and increases governance risks — not just HR metrics.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ <strong>Risk-aggressive</strong> culture → auditors tend to <strong>underestimate</strong> risks. <strong>Risk-averse</strong> culture → auditors tend to <strong>overestimate</strong> risks.</div>
+    <div class="tip-block">✅ Decision-making is dispersed → <strong>each person should act as an ethics advocate</strong>, officially or informally.</div>
+  </div>
+
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Mədəniyyət və İdarəetmə Əlaqəsi</div><p>İdarəetmə (Governance) təcrübələri effektiv olmaq üçün təşkilatın unikal <strong class="key-term">mədəniyyətinə (Culture)</strong> güclü şəkildə etibar edir. Bu mədəniyyət əsaslı şəkildə <strong class="key-term">missiya (Mission), viziya (Vision) və əsas dəyərlər (Core Values)</strong> tərəfindən formalaşdırılır.</p></div>
+    <div class="concept-block"><div class="concept-title">Daxili Nəzarətlərə Təsir</div><p><strong class="key-term">Riskə aqressiv (Risk-Aggressive)</strong> mədəniyyət daxili nəzarətlərə daha az əhəmiyyət verir. <strong class="key-term">Riskdən qaçan (Risk-Averse)</strong> mədəniyyət onlara çox daha yüksək əhəmiyyət verir. Mədəniyyət <strong class="key-term">nəzarət mühitini (Control Environment)</strong> birbaşa formalaşdırır.</p></div>
+    <div class="concept-block"><div class="concept-title">Məsuliyyət və Yuxarıdan Ton</div><p>İdarə Heyəti ümumi etik iqlimə nəzarət etsə də, <strong class="key-term">yüksək rəhbərlik (Senior Management)</strong> mədəniyyətin yaradılması, etika proqramlarının saxlanması və gündəlik etik nümunənin göstərilməsi üçün əsas məsuliyyət daşıyır.</p></div>
+    <div class="concept-block"><div class="concept-title">Etik İqlimin Audit Edilməsi</div><p>Daxili auditorlar etik iqlimin effektivliyini vaxtaşırı <strong class="key-term">rəsmi davranış kodeksləri (Formal Codes of Conduct)</strong>, məxfi hesabat mexanizmləri, liderlik davranışları və müntəzəm işçi sorğularını qiymətləndirərək araşdırırlar.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">Təşkilat Mədəniyyəti (Organizational Culture)</strong> — Rəhbərlik və personal qərarlarına təsir edən risk haqqında kollektiv münasibətlər, davranışlar və anlayışlar.</p></div>
+    <div class="term-block"><p><strong class="key-term">Missiya (Mission)</strong> — Əsas məqsəd. &nbsp;|&nbsp; <strong class="key-term">Viziya (Vision)</strong> — Gələcəkdə nail olmaq istənilən. &nbsp;|&nbsp; <strong class="key-term">Əsas Dəyərlər (Core Values)</strong> — Məqbul davranış haqqında inanclar.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Etik vəzifələrin bölgüsü: İdarə Heyəti etik iqlimə <strong>nəzarət edir (Oversees)</strong>, lakin <strong>yüksək rəhbərlik (Senior Management)</strong> onu <strong>yaratmaq və saxlamağa</strong> son nəticədə cavabdehdir.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>Daxili auditor <em>Baş Etika Məmuru</em> kimi fəaliyyət göstərə bilərmi? → Bu rəsmi rolu üzərinə götürmək <strong>daxili auditin müstəqilliyi ilə ziddiyyət yarada bilər</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Sağlam olmayan mədəniyyət fəal şəkildə <strong>qərar qəbulunun obyektivliyini təhdid edir</strong> — yalnız HR göstəricilərinə deyil.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>Riskə aqressiv</strong> mədəniyyət → auditorlar riskləri <strong>aşağı qiymətləndirməyə</strong> meyllidirlər. <strong>Riskdən qaçan</strong> mədəniyyət → <strong>yüksək qiymətləndirməyə</strong> meyllidirlər.</div>
+    <div class="tip-block">✅ Qərar qəbulu yayılmış olduğundan — <strong>hər bir şəxs etika müdafiəçisi (Ethics Advocate) kimi fəaliyyət göstərməlidir</strong>.</div>
+  </div>
+
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Kültür ve Yönetişim Bağlantısı</div><p>Yönetişim uygulamaları kuruluşun benzersiz <strong class="key-term">kültürüne (Culture)</strong> büyük ölçüde dayanır. Bu kültür temel olarak <strong class="key-term">misyon (Mission), vizyon (Vision) ve temel değerler (Core Values)</strong> tarafından şekillendirilir.</p></div>
+    <div class="concept-block"><div class="concept-title">İç Kontrollere Etkisi</div><p><strong class="key-term">Riske agresif (Risk-Aggressive)</strong> kültür iç kontrollere daha az önem verir. <strong class="key-term">Riskten kaçınan (Risk-Averse)</strong> kültür onlara çok daha yüksek önem verir. Kültür <strong class="key-term">kontrol ortamını (Control Environment)</strong> doğrudan şekillendirir.</p></div>
+    <div class="concept-block"><div class="concept-title">Sorumluluk ve Üst Yönetim Tonu</div><p>Yönetim Kurulu genel etik iklimi denetlese de, <strong class="key-term">üst yönetim (Senior Management)</strong> kültürün oluşturulması ve etik programların sürdürülmesi için birincil sorumluluğu taşır.</p></div>
+    <div class="concept-block"><div class="concept-title">Etik İklimin Denetlenmesi</div><p>İç denetçiler etik iklimi periyodik olarak <strong class="key-term">resmi davranış kuralları (Formal Codes of Conduct)</strong>, gizli raporlama mekanizmaları, liderlik davranışları ve düzenli çalışan anketlerini değerlendirerek inceler.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Kurum Kültürü (Organizational Culture)</strong> — Yönetim ve personel kararlarını etkileyen risk hakkındaki kolektif tutumlar, davranışlar ve anlayışlar.</p></div>
+    <div class="term-block"><p><strong class="key-term">Misyon (Mission)</strong> — Temel amaç. &nbsp;|&nbsp; <strong class="key-term">Vizyon (Vision)</strong> — Gelecekte başarılmak istenen. &nbsp;|&nbsp; <strong class="key-term">Temel Değerler</strong> — Kabul edilebilir davranış hakkındaki inançlar.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Etik görevlerin dağılımı: Yönetim Kurulu etik iklimi <strong>denetler</strong>, ancak <strong>üst yönetim</strong> onu <strong>oluşturmak ve sürdürmekten</strong> nihai olarak sorumludur.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>İç denetçi <em>Baş Etik Görevlisi</em> olabilir mi? → Bu resmi rolü üstlenmek <strong>iç denetimin bağımsızlığıyla çelişebilir</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>Sağlıksız kültür aktif olarak <strong>karar alma objektifliğini tehdit eder</strong> — sadece İK metriklerini değil.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>Riske agresif</strong> kültür → riskleri <strong>hafife alma</strong> eğilimi. <strong>Riskten kaçınan</strong> kültür → <strong>abartma</strong> eğilimi.</div>
+    <div class="tip-block">✅ Karar alma dağınık olduğundan — <strong>her birey etik savunucusu (Ethics Advocate) olarak hareket etmelidir</strong>.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">2 / 3</span>
+    <button class="su-next-btn" onclick="nextSubunit()">Növbəti →</button>
+  </div>
+</div>
+
+<!-- SU 6.3 -->
+<div class="subunit-summary" id="su-6-3" style="display:none">
+  <div class="su-header">
+    <div class="su-header-num">6.3</div>
+    <div>
+      <div class="su-header-title" data-en="IA Role in Governance" data-az="Auditin İdarəetmədəki Rolu" data-tr="İç Denetimin Yönetişimdeki Rolü">IA Role in Governance</div>
+      <div class="su-header-sub">Unit 6 · CIA Part 1</div>
+    </div>
+  </div>
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('su-6-3','en')">EN</button>
+    <button class="lang-tab" onclick="showLang('su-6-3','az')">AZ</button>
+    <button class="lang-tab" onclick="showLang('su-6-3','tr')">TR</button>
+  </div>
+
+  <div class="lang-content en active">
+    <div class="section-heading">🎯 Core Concepts</div>
+    <div class="concept-block"><div class="concept-title">Understanding the Framework</div><p>Before planning audits, the <strong class="key-term">CAE</strong> must understand how the organization makes strategic decisions, oversees risk, and promotes its ethical culture — by reviewing <strong class="key-term">board minutes</strong>, talking with senior management, and analyzing past audit reports.</p></div>
+    <div class="concept-block"><div class="concept-title">The Internal Audit Role</div><p>The primary function of internal auditing in governance is to <strong class="key-term">independently assess and enhance</strong> existing practices. Auditors evaluate how well governance safeguards are designed and if they effectively prevent or identify harmful conditions.</p></div>
+    <div class="concept-block"><div class="concept-title">Governance System Maturity</div><p>In a <strong class="key-term">less mature</strong> system → focus heavily on basic <strong class="key-term">compliance</strong> with policies and laws. As the system <strong class="key-term">matures</strong> → shift toward optimizing organizational structures and <strong class="key-term">adding strategic value</strong>.</p></div>
+    <div class="section-heading">📌 Key Terms &amp; Definitions</div>
+    <div class="term-block"><p><strong class="key-term">Governance System Maturity</strong> — The level of development of an organization's governance processes, dictating whether internal audit focuses on basic compliance or on optimizing operations.</p></div>
+    <div class="section-heading">⚠️ Exam Traps &amp; Frequently Tested</div>
+    <div class="trap-block"><span class="trap-label">Frequently Tested</span><p>Maturity determines audit focus: <strong>Less mature = compliance focus</strong> &nbsp;|&nbsp; <strong>More mature = optimization &amp; value-adding focus</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Tricky Questions</span><p>Governance is NOT evaluated in one single audit → it relies on <strong>findings from multiple audits across different processes</strong> and other assurance providers.</p></div>
+    <div class="trap-block"><span class="trap-label">Common Wrong Assumption</span><p>Internal audit does NOT design or implement the governance framework → role is strictly to <strong>scrutinize, assess, and enhance</strong> practices independently.</p></div>
+    <div class="section-heading">💡 Exam Tips</div>
+    <div class="tip-block">✅ A <strong>"sophisticated" internal audit function</strong> = transition from pure compliance toward <strong>"adding value"</strong> to operations.</div>
+    <div class="tip-block">✅ If governance processes have control weaknesses → CAE can use <strong>advisory services</strong> to help management strengthen them.</div>
+    <div class="tip-block">✅ CAE must <strong>communicate the audit plan</strong>, <strong>report significant issues</strong>, and <strong>obtain charter approval</strong> directly from the <strong>board</strong>.</div>
+  </div>
+
+  <div class="lang-content az">
+    <div class="section-heading">🎯 Əsas Konsepsiyalar</div>
+    <div class="concept-block"><div class="concept-title">Çərçivənin Anlaşılması</div><p>Auditləri planlaşdırmazdan əvvəl <strong class="key-term">Baş Audit İcraçısı (CAE)</strong> təşkilatın strateji qərarları necə qəbul etdiyini hərtərəfli başa düşməlidir — <strong class="key-term">İdarə Heyəti protokollarını (Board Minutes)</strong> nəzərdən keçirmək, yüksək rəhbərliklə danışmaq və keçmiş audit hesabatlarını təhlil etməklə.</p></div>
+    <div class="concept-block"><div class="concept-title">Daxili Auditin Rolu</div><p>İdarəetmədə daxili auditin əsas funksiyası mövcud təcrübələri <strong class="key-term">müstəqil şəkildə qiymətləndirmək və təkmilləşdirməkdir (Independently Assess and Enhance)</strong>. Auditorlar idarəetmə qoruma tədbirlərinin nə dərəcədə yaxşı dizayn edildiyini qiymətləndirir.</p></div>
+    <div class="concept-block"><div class="concept-title">İdarəetmə Sisteminin Yetkinliyi</div><p><strong class="key-term">Daha az yetkin (Less Mature)</strong> sistemdə → siyasət və qanunlara əsas <strong class="key-term">uyğunluq fokusu</strong>. Sistem <strong class="key-term">yetkinləşdikcə (Matures)</strong> → strukturların optimallaşdırılmasına və <strong class="key-term">strateji dəyər əlavə etməyə</strong> keçid.</p></div>
+    <div class="section-heading">📌 Əsas Terminlər və Təriflər</div>
+    <div class="term-block"><p><strong class="key-term">İdarəetmə Sisteminin Yetkinliyi (Governance System Maturity)</strong> — Daxili auditin əsasən əsas uyğunluğa fokuslanmasını və ya əməliyyatların optimallaşdırılmasına fokuslanmasını müəyyən edən inkişaf səviyyəsi.</p></div>
+    <div class="section-heading">⚠️ İmtahan Tələləri və Tez-tez Test Edilən Mövzular</div>
+    <div class="trap-block"><span class="trap-label">Tez-tez Test Edilir</span><p>Yetkinlik audit fokusunu müəyyən edir: <strong>Daha az yetkin = uyğunluq fokusu (Compliance Focus)</strong> &nbsp;|&nbsp; <strong>Daha yetkin = optimallaşdırma fokusu</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Çətin Suallar</span><p>İdarəetmə bir böyük tək auditlə qiymətləndirilmir → <strong>müxtəlif proseslər üzrə çoxsaylı auditlərdən əldə olunan tapıntılara</strong> əsaslanır.</p></div>
+    <div class="trap-block"><span class="trap-label">Yanlış Fərziyyə</span><p>Daxili audit idarəetmə çərçivəsini dizayn etmir və tətbiq etmir → rolu ciddi şəkildə <strong>araşdırmaq, qiymətləndirmək və təkmilləşdirməklə</strong> məhdudlaşır.</p></div>
+    <div class="section-heading">💡 İmtahan Məsləhətləri</div>
+    <div class="tip-block">✅ <strong>\"Mürəkkəb\" daxili audit funksiyası</strong> = sırf uyğunluqdan uzaqlaşma → <strong>\"dəyər əlavə etmə\" (Adding Value)</strong> istiqamətinə keçid.</div>
+    <div class="tip-block">✅ İdarəetmə proseslərində nəzarət zəiflikləri varsa → CAE rəhbərliyə kömək etmək üçün <strong>məsləhət xidmətlərindən (Advisory Services)</strong> istifadə edə bilər.</div>
+    <div class="tip-block">✅ CAE <strong>audit planını çatdırmalı</strong>, <strong>əhəmiyyətli məsələləri bildirməli</strong> və <strong>nizamnamənin (Charter) təsdiqini</strong> birbaşa <strong>İdarə Heyətindən (Board)</strong> almalıdır.</div>
+  </div>
+
+  <div class="lang-content tr">
+    <div class="section-heading">🎯 Temel Kavramlar</div>
+    <div class="concept-block"><div class="concept-title">Çerçevenin Anlaşılması</div><p>Denetimleri planlamadan önce <strong class="key-term">Denetim Yöneticisi (CAE)</strong>, kuruluşun stratejik kararları nasıl aldığını kapsamlı şekilde anlamalıdır — <strong class="key-term">Yönetim Kurulu tutanaklarını (Board Minutes)</strong> inceleyerek, üst yönetimle konuşarak ve geçmiş denetim raporlarını analiz ederek.</p></div>
+    <div class="concept-block"><div class="concept-title">İç Denetimin Rolü</div><p>Yönetişimde iç denetimin temel işlevi mevcut uygulamaları <strong class="key-term">bağımsız olarak değerlendirmek ve geliştirmektir (Independently Assess and Enhance)</strong>. Denetçiler yönetişim korumalarının ne kadar iyi tasarlandığını değerlendirir.</p></div>
+    <div class="concept-block"><div class="concept-title">Yönetişim Sisteminin Olgunluğu</div><p><strong class="key-term">Daha az olgun (Less Mature)</strong> sistemde → politika ve yasalara temel <strong class="key-term">uyum odağı</strong>. Sistem <strong class="key-term">olgunlaştıkça (Matures)</strong> → yapıların optimize edilmesine ve <strong class="key-term">stratejik değer katmaya</strong> kayış.</p></div>
+    <div class="section-heading">📌 Temel Terimler ve Tanımlar</div>
+    <div class="term-block"><p><strong class="key-term">Yönetişim Sisteminin Olgunluğu (Governance System Maturity)</strong> — İç denetimin esas olarak temel uyuma mı yoksa operasyonların optimize edilmesine mi odaklanacağını belirleyen gelişim düzeyi.</p></div>
+    <div class="section-heading">⚠️ Sınav Tuzakları ve Sık Test Edilen Konular</div>
+    <div class="trap-block"><span class="trap-label">Sık Test Edilir</span><p>Olgunluk denetim odağını belirler: <strong>Daha az olgun = uyum odağı (Compliance Focus)</strong> &nbsp;|&nbsp; <strong>Daha olgun = optimizasyon odağı</strong>.</p></div>
+    <div class="trap-block"><span class="trap-label">Zor Sorular</span><p>Yönetişim tek bir büyük denetimle değerlendirilmez → <strong>farklı süreçler genelinde birden fazla denetimden elde edilen bulgulara</strong> dayanır.</p></div>
+    <div class="trap-block"><span class="trap-label">Yaygın Yanlış Varsayım</span><p>İç denetim yönetişim çerçevesini tasarlamaz → rolü kesinlikle <strong>incelemek, değerlendirmek ve geliştirmekle</strong> sınırlıdır.</p></div>
+    <div class="section-heading">💡 Sınav İpuçları</div>
+    <div class="tip-block">✅ <strong>"Gelişmiş" iç denetim fonksiyonu</strong> = salt uyumdan uzaklaşma → operasyonlara <strong>"değer katma" (Adding Value)</strong> yönünde geçiş.</div>
+    <div class="tip-block">✅ Yönetişim süreçlerinde kontrol zayıflıkları varsa → CAE yönetime yardımcı olmak için <strong>danışmanlık hizmetlerinden (Advisory Services)</strong> yararlanabilir.</div>
+    <div class="tip-block">✅ CAE <strong>denetim planını iletmeli</strong>, <strong>önemli konuları bildirmeli</strong> ve <strong>yönetmelik (Charter) onayını</strong> doğrudan <strong>Yönetim Kurulundan (Board)</strong> almalıdır.</div>
+  </div>
+
+  <div class="su-bottom-nav">
+    <button class="su-prev-btn" onclick="prevSubunit()">← Əvvəlki</button>
+    <span class="su-counter">3 / 3</span>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+const SUBUNIT_IDS=["su-6-1","su-6-2","su-6-3"];
+let currentSU=SUBUNIT_IDS[0],globalLang='en';
+function showSubunit(id){
+  SUBUNIT_IDS.forEach(sid=>{document.getElementById(sid).style.display='none';document.getElementById('nav-'+sid).classList.remove('active');});
+  document.getElementById(id).style.display='block';
+  document.getElementById('nav-'+id).classList.add('active');
+  currentSU=id;
+  document.getElementById('nav-'+id).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  applyLangToSubunit(id,globalLang);
+}
+function showLang(unitId,lang){
+  globalLang=lang;
+  const unit=document.getElementById(unitId);
+  unit.querySelectorAll('.lang-content').forEach(el=>el.classList.remove('active'));
+  unit.querySelectorAll('.lang-tab').forEach(el=>el.classList.remove('active'));
+  unit.querySelector('.lang-content.'+lang).classList.add('active');
+  const tabs=unit.querySelectorAll('.lang-tab');
+  const langMap={'en':0,'az':1,'tr':2};
+  tabs[langMap[lang]].classList.add('active');
+  document.getElementById('lang-btn').textContent={'en':'AZ','az':'TR','tr':'EN'}[lang];
+}
+function applyLangToSubunit(id,lang){
+  showLang(id,lang);
+  const su=document.getElementById(id);
+  const titleEl=su.querySelector('.su-header-title');
+  if(titleEl)titleEl.textContent=titleEl.dataset[lang]||titleEl.dataset.en;
+  const navBtn=document.getElementById('nav-'+id);
+  const navTitle=navBtn.querySelector('.su-nav-title');
+  if(navTitle)navTitle.textContent=navTitle.dataset[lang]||navTitle.dataset.en;
+}
+function toggleGlobalLang(){
+  const langs=['en','az','tr'],idx=langs.indexOf(globalLang);
+  globalLang=langs[(idx+1)%3];
+  applyLangToSubunit(currentSU,globalLang);
+  SUBUNIT_IDS.forEach(sid=>{const t=document.querySelector('#nav-'+sid+' .su-nav-title');if(t)t.textContent=t.dataset[globalLang]||t.dataset.en;});
+  document.getElementById('app-title').textContent={en:'Unit 6 · Summary',az:'Unit 6 · Xülasə',tr:'Unit 6 · Özet'}[globalLang];
+}
+function nextSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx<SUBUNIT_IDS.length-1)showSubunit(SUBUNIT_IDS[idx+1]);}
+function prevSubunit(){const idx=SUBUNIT_IDS.indexOf(currentSU);if(idx>0)showSubunit(SUBUNIT_IDS[idx-1]);}
+document.getElementById('nav-'+SUBUNIT_IDS[0]).classList.add('active');
+</script>
+</body>
+</html>
