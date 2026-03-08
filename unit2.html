@@ -1189,6 +1189,86 @@ function toggleLang() {
   }
 }
 
+
+// ── MISTAKES MODE ─────────────────────────────────────────────────────────────
+const MISTAKES_MODE = new URLSearchParams(window.location.search).get('mode') === 'mistakes';
+
+if (MISTAKES_MODE) {
+  (function() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) { window.location.href = window.location.pathname; return; }
+      const data = JSON.parse(raw);
+      const sa = data.answered || [];
+      const sc = data.correctArr || [];
+
+      // Filter QUIZ to only incorrectly answered questions
+      let offset = 0;
+      let totalMistakes = 0;
+      SHEETS.forEach(sname => {
+        const orig = QUIZ[sname];
+        const keep = [];
+        for (let i = 0; i < orig.length; i++) {
+          if (sa[offset + i] && !sc[offset + i]) {
+            orig[i]._chosen = undefined;
+            keep.push(orig[i]);
+          }
+        }
+        offset += orig.length;
+        QUIZ[sname] = keep;
+        totalMistakes += keep.length;
+      });
+
+      if (totalMistakes === 0) { window.location.href = window.location.pathname; return; }
+
+      // Don't overwrite original progress
+      saveProgress = function() {};
+      clearProgress = function() {};
+
+      // Update UI for mistakes mode
+      const appTitle = document.getElementById("app-title");
+      if (appTitle) appTitle.textContent += " — Səhvlər";
+
+      const welc = document.getElementById("welcome");
+      if (welc) {
+        const h1 = welc.querySelector("h1");
+        if (h1) h1.innerHTML = `Səhv Suallar<br><span style="color:var(--gold);font-size:.65em">${appTitle ? appTitle.textContent : ''}</span>`;
+        const desc = document.getElementById("welcome-desc");
+        if (desc) desc.textContent = totalMistakes + (lang === "tr" ? " səhv sual — yenidən işlə" : " wrong answers — retry them");
+        // Update stats
+        const statsItems = welc.querySelectorAll(".ws-num");
+        if (statsItems.length >= 2) {
+          statsItems[0].textContent = SHEETS.filter(s => QUIZ[s].length > 0).length;
+          statsItems[1].textContent = totalMistakes;
+          if (statsItems[2]) statsItems[2].textContent = totalMistakes * 4;
+        }
+        // Change buttons
+        const mainBtn = document.getElementById("btn-main-start");
+        if (mainBtn) mainBtn.textContent = lang === "tr" ? "▶ Səhvləri İşlə" : "▶ Retry Mistakes";
+        const freshBtn = document.getElementById("btn-fresh-start");
+        if (freshBtn) freshBtn.style.display = "none";
+      }
+
+      // Override startOrResume to skip loading saved progress (we already filtered)
+      const _origStartOrResume = startOrResume;
+      startOrResume = function() {
+        initState();
+        quizStarted = true;
+        document.getElementById("welcome").style.display = "none";
+        document.getElementById("chapters-scroll").style.display = "";
+        document.getElementById("overall-result").className = "";
+        buildChapterTabs();
+        goToChapter(0);
+      };
+
+      // Override goToMenu to go back without ?mode
+      goToMenu = function() { window.location.href = "quiz_menu.html"; };
+
+    } catch(e) { console.error("Mistakes mode error:", e); }
+  })();
+}
+
+
 // ── PAGE LOAD ────────────────────────────────────────────────────────────────
 (function() {
   try {

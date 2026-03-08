@@ -206,6 +206,20 @@ body {
 }
 .unit-card.done .unit-progress-bar-fill { background: var(--correct); }
 
+/* Mistakes link */
+.mistakes-strip {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px;
+  background: #fef3f0;
+  border-top: 1px solid #f0e0da;
+  font-size: 12px; font-weight: 600;
+  color: var(--wrong);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mistakes-strip:hover { background: #fde8e2; }
+.mistakes-strip span { opacity: .6; }
+
 /* ── SECTION HEADER ──────────────────────────────────── */
 .section-header {
   max-width: 600px; margin: 0 auto;
@@ -315,6 +329,19 @@ function getUnitProgress(unit) {
   }
 }
 
+function getMistakeCount(unit) {
+  if(!unit.ready) return 0;
+  try {
+    const raw = localStorage.getItem(unit.lsKey);
+    if(!raw) return 0;
+    const d = JSON.parse(raw);
+    const a = d.answered || [], c = d.correctArr || [];
+    let m = 0;
+    for(let i = 0; i < a.length; i++) { if(a[i] && !c[i]) m++; }
+    return m;
+  } catch(e) { return 0; }
+}
+
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function render() {
   const list = document.getElementById("unit-list");
@@ -368,6 +395,14 @@ function render() {
           : (lang==="tr" ? "Hazırlanır..." : "In preparation..."))
       : (lang==="tr" ? "Hazırlanır..." : "In preparation...");
 
+    const mistakes = getMistakeCount(unit);
+    const mistakesHtml = (unit.ready && mistakes > 0)
+      ? `<div class="mistakes-strip" onclick="event.preventDefault();window.location.href='${unit.file}?mode=mistakes'">
+           ${mistakes} ${lang==="tr"?"səhv sual":"wrong"} — ${lang==="tr"?"yenidən işlə":"retry"}
+           <span>→</span>
+         </div>`
+      : '';
+
     card.innerHTML = `
       <div class="unit-card-inner">
         <div class="unit-num">${unit.id}</div>
@@ -385,7 +420,8 @@ function render() {
       </div>
       <div class="unit-progress-bar">
         <div class="unit-progress-bar-fill" style="width:${prog.pct}%"></div>
-      </div>`;
+      </div>
+      ${mistakesHtml}`;
 
     list.appendChild(card);
   });
