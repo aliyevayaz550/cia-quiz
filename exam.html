@@ -563,7 +563,7 @@ body {
   <!-- WELCOME -->
   <div id="welcome">
     <h1>Real İmtahan<br><span style="color:var(--gold);font-size:.75em">CIA Part 1</span></h1>
-    <p id="welcome-desc">14 kateqoriya, 478 real sual — keçmiş imtahan sualları</p>
+    <p id="welcome-desc">14 kateqoriya, 478 sual (475 TR+EN ikidilli) v2</p>
     <div class="welcome-stats">
       <div class="ws-item"><span class="ws-num">14</span><span class="ws-label">Kateqoriya</span></div>
       <div class="ws-item"><span class="ws-num">478</span><span class="ws-label">Sual</span></div>
@@ -1169,8 +1169,8 @@ function toggleLang() {
   if(!quizStarted) {
     document.getElementById("welcome-desc").textContent =
       lang==="tr"
-        ? "14 kateqoriya, 478 real sual — keçmiş imtahan sualları"
-        : "14 categories, 478 real questions — past exam questions";
+        ? "14 kateqoriya, 478 sual (475 TR+EN ikidilli) v2"
+        : "14 categories, 478 questions (475 TR+EN bilingual) v2";
     return;
   }
   updateProgress();
