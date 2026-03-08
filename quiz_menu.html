@@ -229,6 +229,41 @@ body {
   color: #999;
 }
 
+/* ── EXAM CARD ──────────────────────────────────────── */
+.exam-card {
+  max-width: 600px; margin: 4px auto;
+  background: linear-gradient(135deg, #1a2a44 0%, #0d1b30 100%);
+  border-radius: 14px; overflow: hidden;
+  text-decoration: none; display: block;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+  border: 1.5px solid rgba(212,175,55,.3);
+}
+.exam-card-inner {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 16px;
+}
+.exam-icon { font-size: 32px; }
+.exam-info { flex: 1; min-width: 0; }
+.exam-title {
+  font-size: 16px; font-weight: 700; color: #fff;
+  margin-bottom: 4px;
+}
+.exam-sub {
+  font-size: 12px; color: rgba(255,255,255,.55);
+}
+.exam-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: .5px;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
+  background: rgba(212,175,55,.15); color: var(--gold);
+}
+.exam-progress-bar {
+  height: 3px; background: rgba(255,255,255,.1);
+}
+.exam-progress-fill {
+  height: 100%; background: var(--gold);
+  transition: width .6s ease;
+}
+
 /* ── FOOTER ──────────────────────────────────────────── */
 #footer {
   text-align: center; padding: 20px;
@@ -279,6 +314,8 @@ body {
 </div>
 
 <div id="unit-list"></div>
+
+<div id="exam-section"></div>
 
 <div id="footer">CIA Part 1 Quiz © 2025</div>
 
@@ -432,6 +469,60 @@ function render() {
   document.getElementById("op-left").textContent =
     lang==="tr" ? `${totalAnswered} sual cavablandı` : `${totalAnswered} questions answered`;
   document.getElementById("total-done-num").textContent = totalDone;
+
+  // ── REAL EXAM CARD ──
+  renderExamCard();
+}
+
+function renderExamCard() {
+  const container = document.getElementById("exam-section");
+  if(!container) return;
+  const examKey = "cia_real_exam";
+  const examTotal = 478;
+  let examAnswered = 0, examCorrect = 0;
+  try {
+    const raw = localStorage.getItem(examKey);
+    if(raw) {
+      const d = JSON.parse(raw);
+      examAnswered = (d.answered||[]).filter(Boolean).length;
+      examCorrect = (d.correctArr||[]).filter(Boolean).length;
+    }
+  } catch(e) {}
+
+  const examMistakes = examAnswered - examCorrect;
+  const pct = examTotal ? Math.round(examAnswered/examTotal*100) : 0;
+  const isDone = examAnswered === examTotal && examTotal > 0;
+  const isActive = examAnswered > 0 && !isDone;
+
+  const badgeText = isDone
+    ? (lang==="tr" ? "Tamamlandı ✓" : "Completed ✓")
+    : isActive
+      ? `${examAnswered}/${examTotal}`
+      : (lang==="tr" ? "478 sual" : "478 questions");
+
+  const mistakesHtml = (examMistakes > 0)
+    ? `<div class="mistakes-strip" onclick="event.preventDefault();window.location.href='exam.html?mode=mistakes'" style="border-radius:0 0 12px 12px">
+         ${examMistakes} ${lang==="tr"?"səhv sual":"wrong"} — ${lang==="tr"?"yenidən işlə":"retry"}
+         <span>→</span>
+       </div>`
+    : '';
+
+  container.innerHTML = `
+    <div class="section-header" style="color:var(--gold)">${lang==="tr" ? "Real İmtahan Sualları" : "Real Exam Questions"}</div>
+    <a class="exam-card" href="exam.html">
+      <div class="exam-card-inner">
+        <div class="exam-icon">🎯</div>
+        <div class="exam-info">
+          <div class="exam-title">${lang==="tr" ? "Real İmtahan" : "Real Exam"}</div>
+          <div class="exam-sub">${lang==="tr" ? "14 kateqoriya · 478 keçmiş imtahan sualı" : "14 categories · 478 past exam questions"}</div>
+        </div>
+        <div class="exam-badge">${badgeText}</div>
+      </div>
+      <div class="exam-progress-bar">
+        <div class="exam-progress-fill" style="width:${pct}%"></div>
+      </div>
+      ${mistakesHtml}
+    </a>`;
 }
 
 // ── LANGUAGE ──────────────────────────────────────────────────────────────────
