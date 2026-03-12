@@ -263,7 +263,7 @@ body {
       <span class="hs-label" data-tr="Ünite" data-en="Units">Ünite</span>
     </div>
     <div class="hs-item" id="hs-questions">
-      <span class="hs-num" id="total-q-num">1031</span>
+      <span class="hs-num" id="total-q-num">1509</span>
       <span class="hs-label" data-tr="Sual" data-en="Questions">Sual</span>
     </div>
     <div class="hs-item" id="hs-done">
@@ -431,6 +431,64 @@ function render() {
 
     list.appendChild(card);
   });
+
+  // ── REAL EXAM SECTION ────────────────────────────────────────────────────
+  const examHeader = document.createElement("div");
+  examHeader.className = "section-header";
+  examHeader.textContent = lang !== "en" ? "Real İmtahan" : "Real Exam";
+  list.appendChild(examHeader);
+
+  const EXAM = { file: "exam.html", subunits: 14, questions: 478, lsKey: "cia_real_exam", ready: true };
+  const examProg = getUnitProgress(EXAM);
+  totalAnswered += examProg.answered;
+  totalQ += examProg.total;
+  if(examProg.answered === examProg.total && examProg.total > 0) totalDone++;
+
+  const examDone   = examProg.answered === examProg.total && examProg.total > 0;
+  const examActive = examProg.answered > 0 && !examDone;
+
+  const examCard = document.createElement("a");
+  examCard.href = EXAM.file;
+  let eCls = "unit-card";
+  if(examDone)  eCls += " done";
+  else if(examActive) eCls += " active";
+  examCard.className = eCls;
+
+  const eBadge = examDone
+    ? (lang!=="en" ? "Tamamlandı ✓" : "Completed ✓")
+    : examActive
+      ? (lang!=="en" ? "Davam edir" : "In Progress")
+      : (lang!=="en" ? "Başlamayıb" : "Not Started");
+  const eBadgeCls = examDone ? "badge-done" : examActive ? "badge-active" : "badge-locked";
+
+  const examMistakes = getMistakeCount(EXAM);
+  const examMistakesHtml = (examMistakes > 0)
+    ? `<div class="mistakes-strip" onclick="event.preventDefault();window.location.href='${EXAM.file}?mode=mistakes'">
+         ${examMistakes} ${lang!=="en"?"səhv sual":"wrong"} — ${lang!=="en"?"yenidən işlə":"retry"}
+         <span>→</span>
+       </div>`
+    : '';
+
+  examCard.innerHTML = `
+    <div class="unit-card-inner">
+      <div class="unit-num" style="background:var(--gold);color:var(--navy);font-size:13px">🎓</div>
+      <div class="unit-info">
+        <div class="unit-title">${lang!=="en" ? "Real İmtahan Sualları" : "Real Exam Questions"}</div>
+        <div class="unit-sub">${EXAM.subunits} ${lang!=="en"?"mövzu":"topics"} · ${EXAM.questions} ${lang!=="en"?"sual":"questions"}</div>
+      </div>
+      <div class="unit-progress">
+        <div class="unit-pct ${examDone?"done-pct":examProg.answered===0?"zero-pct":""}">${examProg.total?examProg.answered+"/"+examProg.total:""}</div>
+        <div class="unit-mini-bar">
+          <div class="unit-mini-fill" style="width:${examProg.pct}%"></div>
+        </div>
+        <div class="unit-badge ${eBadgeCls}">${eBadge}</div>
+      </div>
+    </div>
+    <div class="unit-progress-bar">
+      <div class="unit-progress-bar-fill" style="width:${examProg.pct}%"></div>
+    </div>
+    ${examMistakesHtml}`;
+  list.appendChild(examCard);
 
   // Update overall stats
   const overallPct = totalQ ? (totalAnswered/totalQ*100).toFixed(1) : 0;
