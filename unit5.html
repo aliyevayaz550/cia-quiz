@@ -403,6 +403,54 @@ body {
 }
 .btn-start:hover { background: var(--navy-mid); transform: translateY(-1px); }
 
+/* ── HISTORY SECTION ─────────────────────────────────── */
+#history-area {
+  max-width: 440px; margin: 24px auto 0; text-align: left;
+}
+.history-title {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase;
+  color: #999; margin-bottom: 8px; padding-left: 4px;
+}
+.history-card {
+  background: #fff; border: 1px solid #e8e2d8;
+  border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.05);
+  display: flex; align-items: center; gap: 12px;
+}
+.hc-ring {
+  position: relative; width: 48px; height: 48px; flex-shrink: 0;
+}
+.hc-ring svg { width: 48px; height: 48px; transform: rotate(-90deg); }
+.hc-ring-track { fill: none; stroke: #e8e2d8; stroke-width: 4; }
+.hc-ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; }
+.hc-ring-label {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-family: var(--font-head); font-size: 13px; font-weight: 700;
+  color: var(--navy);
+}
+.hc-info { flex: 1; min-width: 0; }
+.hc-date {
+  font-family: var(--font-ui); font-size: 12px; color: #999;
+  margin-bottom: 2px;
+}
+.hc-stats {
+  font-family: var(--font-ui); font-size: 13px; color: var(--ink);
+  font-weight: 600;
+}
+.hc-stats .hc-correct { color: var(--correct); }
+.hc-stats .hc-wrong { color: var(--wrong); }
+.hc-actions { flex-shrink: 0; }
+.hc-retry-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  background: #fef3f0; color: var(--wrong);
+  border: 1px solid #f0d0c8; border-radius: 6px;
+  padding: 5px 10px; cursor: pointer;
+  transition: background .2s;
+}
+.hc-retry-btn:hover { background: #fde0d8; }
+.hc-retry-btn:disabled { opacity: .4; cursor: default; }
+
 /* ── OVERALL RESULTS ──────────────────────────────────── */
 #overall-result {
   display: none;
@@ -573,6 +621,7 @@ body {
     <button class="btn-start" id="btn-fresh-start"
       style="display:none;margin-top:8px;background:transparent;border:1.5px solid var(--gold);color:var(--gold);font-size:13px;padding:10px"
       onclick="startQuiz()">↺ Yenidən başla / Restart</button>
+    <div id="history-area"></div>
   </div>
 
   <!-- CHAPTER TABS (hidden until started) -->
@@ -633,6 +682,8 @@ function globalIndex(ci, qi) {
 
 // ── LOCALSTORAGE KEY ─────────────────────────────────────────────────────────
 const LS_KEY = "cia_quiz_unit5";
+const HISTORY_KEY = LS_KEY + "_history";
+const MAX_HISTORY = 5;
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 function initState() {
@@ -736,6 +787,9 @@ function updateChapterTabs() {
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 function goToChapter(ci) {
+  // Skip chapters with 0 questions (can happen in mistakes modes)
+  while (ci < SHEETS.length && QUIZ[SHEETS[ci]].length === 0) { ci++; }
+  if (ci >= SHEETS.length) { showOverall(); return; }
   curChapter = ci;
   curQ = 0;
   document.getElementById("summary-card").className = "";
@@ -818,7 +872,9 @@ function confirmResetUnit() {
 // ── RENDER QUESTION ───────────────────────────────────────────────────────────
 function renderQuestion() {
   const qs   = QUIZ[SHEETS[curChapter]];
+  if (!qs || qs.length === 0 || curQ >= qs.length) { showChapterSummary(); return; }
   const q    = qs[curQ];
+  if (!q) { showChapterSummary(); return; }
   const gi   = globalIndex(curChapter, curQ);
   const done = answered[gi];
 
@@ -1118,6 +1174,11 @@ function showOverall() {
   const ta = totalQuestions();
   const pct = ta ? Math.round(tc/ta*100) : 0;
 
+  // Save history entry when quiz is fully completed
+  if (!MISTAKES_MODE && !HISTORY_MISTAKES_MODE) {
+    saveHistory();
+  }
+
   const rows = SHEETS.map((sname, ci) => {
     const s = getChapterStats(ci);
     const p = s.total ? Math.round(s.c/s.total*100) : 0;
@@ -1276,6 +1337,8 @@ if (MISTAKES_MODE) {
       }
     }
   } catch(e) {}
+  // Render history on welcome screen
+  renderHistory();
 })();
 
 // ── UTILS ────────────────────────────────────────────────────────────────────
@@ -1295,6 +1358,123 @@ function getCIFromGI(gi) {
   }
   return SHEETS.length-1;
 }
+// ── HISTORY SYSTEM ──────────────────────────────────────────────────────────
+function saveHistory() {
+  try {
+    const tc = totalCorrect();
+    const ta = totalAnswered();
+    const tq = totalQuestions();
+    const pct = tq ? Math.round(tc/tq*100) : 0;
+
+    const chapters = SHEETS.map((sname, ci) => {
+      const s = getChapterStats(ci);
+      return { name: sname, correct: s.c, wrong: s.t - s.c, total: s.total };
+    });
+
+    const mistakeIndices = [];
+    for (let i = 0; i < answered.length; i++) {
+      if (answered[i] && !correctArr[i]) mistakeIndices.push(i);
+    }
+
+    const entry = {
+      date: new Date().toISOString(),
+      correct: tc,
+      wrong: ta - tc,
+      total: tq,
+      pct: pct,
+      chapters: chapters,
+      mistakeIndices: mistakeIndices
+    };
+
+    let history = [];
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (raw) history = JSON.parse(raw);
+    } catch(e) {}
+
+    history.unshift(entry);
+    if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  } catch(e) { console.error("saveHistory error:", e); }
+}
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch(e) { return []; }
+}
+
+function renderHistory() {
+  const area = document.getElementById("history-area");
+  if (!area) return;
+  const history = loadHistory();
+  if (history.length === 0) { area.innerHTML = ""; return; }
+
+  const circ = 2 * Math.PI * 18;
+  const titleText = lang === "tr" ? "Tarixçə" : "History";
+
+  let html = `<div class="history-title">${titleText}</div>`;
+
+  history.forEach((entry, idx) => {
+    const d = new Date(entry.date);
+    const dateStr = d.toLocaleDateString(lang === "tr" ? "az-AZ" : "en-US", {
+      day: "numeric", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
+    });
+    const fill = circ * (1 - entry.pct / 100);
+    const ringColor = entry.pct >= 75 ? "var(--correct)" : entry.pct >= 50 ? "var(--gold)" : "var(--wrong)";
+    const hasMistakes = entry.mistakeIndices && entry.mistakeIndices.length > 0;
+    const mistakeCount = hasMistakes ? entry.mistakeIndices.length : 0;
+    const retryLabel = lang === "tr"
+      ? `${mistakeCount} səhv — təkrarla`
+      : `${mistakeCount} wrong — retry`;
+
+    html += `
+      <div class="history-card">
+        <div class="hc-ring">
+          <svg viewBox="0 0 44 44">
+            <circle class="hc-ring-track" cx="22" cy="22" r="18"/>
+            <circle class="hc-ring-fill" cx="22" cy="22" r="18"
+              stroke="${ringColor}"
+              stroke-dasharray="${circ}" stroke-dashoffset="${fill}"/>
+          </svg>
+          <div class="hc-ring-label">${entry.pct}%</div>
+        </div>
+        <div class="hc-info">
+          <div class="hc-date">${dateStr}</div>
+          <div class="hc-stats">
+            <span class="hc-correct">✓ ${entry.correct}</span> ·
+            <span class="hc-wrong">✗ ${entry.wrong}</span> ·
+            ${entry.total} ${lang === "tr" ? "sual" : "Q"}
+          </div>
+        </div>
+        ${hasMistakes ? `<div class="hc-actions">
+          <button class="hc-retry-btn" onclick="retryHistoryMistakes(${idx})">
+            ${retryLabel}
+          </button>
+        </div>` : `<div class="hc-actions" style="font-size:11px;color:var(--correct);font-weight:700">✓ ${lang==="tr"?"Mükəmməl":"Perfect"}</div>`}
+      </div>`;
+  });
+
+  area.innerHTML = html;
+}
+
+function retryHistoryMistakes(histIdx) {
+  try {
+    const history = loadHistory();
+    if (!history[histIdx]) return;
+    const entry = history[histIdx];
+    const mistakeIndices = new Set(entry.mistakeIndices || []);
+    if (mistakeIndices.size === 0) return;
+
+    localStorage.setItem(HISTORY_KEY + "_retry", JSON.stringify(entry.mistakeIndices));
+    const baseUrl = window.location.href.split('?')[0].split('#')[0];
+    window.location.href = baseUrl + "?mode=history_mistakes";
+  } catch(e) { console.error("retryHistoryMistakes error:", e); }
+}
+
 </script>
 </body>
 </html>

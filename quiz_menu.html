@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -59,6 +59,14 @@ body {
   border-radius: 6px; padding: 5px 10px; cursor: pointer;
   transition: background .2s;
 }
+.lang-btn {
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  padding: 5px 9px; cursor: pointer; border: none;
+  background: rgba(255,255,255,.10); color: rgba(255,255,255,.7);
+  transition: background .15s, color .15s;
+}
+.lang-btn + .lang-btn { border-left: 1px solid rgba(255,255,255,.15); }
+.lang-btn.active { background: var(--gold) !important; color: var(--navy) !important; }
 
 /* ── HERO ────────────────────────────────────────────── */
 #hero {
@@ -229,41 +237,6 @@ body {
   color: #999;
 }
 
-/* ── EXAM CARD ──────────────────────────────────────── */
-.exam-card {
-  max-width: 600px; margin: 4px auto;
-  background: linear-gradient(135deg, #1a2a44 0%, #0d1b30 100%);
-  border-radius: 14px; overflow: hidden;
-  text-decoration: none; display: block;
-  box-shadow: 0 2px 12px rgba(0,0,0,.15);
-  border: 1.5px solid rgba(212,175,55,.3);
-}
-.exam-card-inner {
-  display: flex; align-items: center; gap: 14px;
-  padding: 18px 16px;
-}
-.exam-icon { font-size: 32px; }
-.exam-info { flex: 1; min-width: 0; }
-.exam-title {
-  font-size: 16px; font-weight: 700; color: #fff;
-  margin-bottom: 4px;
-}
-.exam-sub {
-  font-size: 12px; color: rgba(255,255,255,.55);
-}
-.exam-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: .5px;
-  text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
-  background: rgba(212,175,55,.15); color: var(--gold);
-}
-.exam-progress-bar {
-  height: 3px; background: rgba(255,255,255,.1);
-}
-.exam-progress-fill {
-  height: 100%; background: var(--gold);
-  transition: width .6s ease;
-}
-
 /* ── FOOTER ──────────────────────────────────────────── */
 #footer {
   text-align: center; padding: 20px;
@@ -280,7 +253,11 @@ body {
       <span id="app-title">CIA Part 1</span>
       <span id="app-sub">Quiz</span>
     </div>
-    <button id="lang-btn" onclick="toggleLang()">EN</button>
+    <div id="lang-group" style="display:flex;gap:0;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.3)">
+      <button class="lang-btn active" onclick="setLang('az')" data-lang="az">AZ</button>
+      <button class="lang-btn" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('tr')" data-lang="tr">TR</button>
+    </div>
   </div>
 </div>
 
@@ -315,8 +292,6 @@ body {
 
 <div id="unit-list"></div>
 
-<div id="exam-section"></div>
-
 <div id="footer">CIA Part 1 Quiz © 2025</div>
 
 <script>
@@ -347,7 +322,8 @@ const UNITS = [
 // Sort by id
 UNITS.sort((a,b) => a.id - b.id);
 
-let lang = "tr";
+let lang = "az";
+const nextLang = { az: "en", en: "tr", tr: "az" };
 
 // ── READ PROGRESS FROM LOCALSTORAGE ──────────────────────────────────────────
 function getUnitProgress(unit) {
@@ -389,7 +365,7 @@ function render() {
   // Section: Hazır
   const readyHeader = document.createElement("div");
   readyHeader.className = "section-header";
-  readyHeader.textContent = lang === "tr" ? "Hazır Ünitlər" : "Available Units";
+  readyHeader.textContent = lang !== "en" ? "Hazır Ünitlər" : "Available Units";
   list.appendChild(readyHeader);
 
   UNITS.forEach(unit => {
@@ -411,12 +387,12 @@ function render() {
     card.className = cls;
 
     const badgeText = !unit.ready
-      ? (lang==="tr" ? "Tezliklə" : "Coming Soon")
+      ? (lang!=="en" ? "Tezliklə" : "Coming Soon")
       : isDone
-        ? (lang==="tr" ? "Tamamlandı ✓" : "Completed ✓")
+        ? (lang!=="en" ? "Tamamlandı ✓" : "Completed ✓")
         : isActive
-          ? (lang==="tr" ? "Davam edir" : "In Progress")
-          : (lang==="tr" ? "Başlamayıb" : "Not Started");
+          ? (lang!=="en" ? "Davam edir" : "In Progress")
+          : (lang!=="en" ? "Başlamayıb" : "Not Started");
 
     const badgeCls = !unit.ready ? "badge-locked"
       : isDone ? "badge-done"
@@ -428,14 +404,14 @@ function render() {
 
     const subText = unit.ready
       ? (unit.subunits > 0
-          ? `${unit.subunits} ${lang==="tr"?"alt bölüm":"subunits"} · ${unit.questions} ${lang==="tr"?"sual":"questions"}`
-          : (lang==="tr" ? "Hazırlanır..." : "In preparation..."))
-      : (lang==="tr" ? "Hazırlanır..." : "In preparation...");
+          ? `${unit.subunits} ${lang!=="en"?"alt bölüm":"subunits"} · ${unit.questions} ${lang!=="en"?"sual":"questions"}`
+          : (lang!=="en" ? "Hazırlanır..." : "In preparation..."))
+      : (lang!=="en" ? "Hazırlanır..." : "In preparation...");
 
     const mistakes = getMistakeCount(unit);
     const mistakesHtml = (unit.ready && mistakes > 0)
       ? `<div class="mistakes-strip" onclick="event.preventDefault();window.location.href='${unit.file}?mode=mistakes'">
-           ${mistakes} ${lang==="tr"?"səhv sual":"wrong"} — ${lang==="tr"?"yenidən işlə":"retry"}
+           ${mistakes} ${lang!=="en"?"səhv sual":"wrong"} — ${lang!=="en"?"yenidən işlə":"retry"}
            <span>→</span>
          </div>`
       : '';
@@ -444,7 +420,7 @@ function render() {
       <div class="unit-card-inner">
         <div class="unit-num">${unit.id}</div>
         <div class="unit-info">
-          <div class="unit-title">${lang==="tr" ? unit.titleTr : unit.title}</div>
+          <div class="unit-title">${lang!=="en" ? unit.titleTr : unit.title}</div>
           <div class="unit-sub">${subText}</div>
         </div>
         <div class="unit-progress">
@@ -467,77 +443,30 @@ function render() {
   const overallPct = totalQ ? (totalAnswered/totalQ*100).toFixed(1) : 0;
   document.getElementById("op-bar-fill").style.width = overallPct + "%";
   document.getElementById("op-left").textContent =
-    lang==="tr" ? `${totalAnswered} sual cavablandı` : `${totalAnswered} questions answered`;
+    lang!=="en" ? `${totalAnswered} sual cavablandı` : `${totalAnswered} questions answered`;
   document.getElementById("total-done-num").textContent = totalDone;
-
-  // ── REAL EXAM CARD ──
-  renderExamCard();
-}
-
-function renderExamCard() {
-  const container = document.getElementById("exam-section");
-  if(!container) return;
-  const examKey = "cia_real_exam";
-  const examTotal = 478;
-  let examAnswered = 0, examCorrect = 0;
-  try {
-    const raw = localStorage.getItem(examKey);
-    if(raw) {
-      const d = JSON.parse(raw);
-      examAnswered = (d.answered||[]).filter(Boolean).length;
-      examCorrect = (d.correctArr||[]).filter(Boolean).length;
-    }
-  } catch(e) {}
-
-  const examMistakes = examAnswered - examCorrect;
-  const pct = examTotal ? Math.round(examAnswered/examTotal*100) : 0;
-  const isDone = examAnswered === examTotal && examTotal > 0;
-  const isActive = examAnswered > 0 && !isDone;
-
-  const badgeText = isDone
-    ? (lang==="tr" ? "Tamamlandı ✓" : "Completed ✓")
-    : isActive
-      ? `${examAnswered}/${examTotal}`
-      : (lang==="tr" ? "478 sual" : "478 questions");
-
-  const mistakesHtml = (examMistakes > 0)
-    ? `<div class="mistakes-strip" onclick="event.preventDefault();window.location.href='exam.html?mode=mistakes'" style="border-radius:0 0 12px 12px">
-         ${examMistakes} ${lang==="tr"?"səhv sual":"wrong"} — ${lang==="tr"?"yenidən işlə":"retry"}
-         <span>→</span>
-       </div>`
-    : '';
-
-  container.innerHTML = `
-    <div class="section-header" style="color:var(--gold)">${lang==="tr" ? "Real İmtahan Sualları" : "Real Exam Questions"}</div>
-    <a class="exam-card" href="exam.html">
-      <div class="exam-card-inner">
-        <div class="exam-icon">🎯</div>
-        <div class="exam-info">
-          <div class="exam-title">${lang==="tr" ? "Real İmtahan" : "Real Exam"}</div>
-          <div class="exam-sub">${lang==="tr" ? "14 kateqoriya · 478 keçmiş imtahan sualı" : "14 categories · 478 past exam questions"}</div>
-        </div>
-        <div class="exam-badge">${badgeText}</div>
-      </div>
-      <div class="exam-progress-bar">
-        <div class="exam-progress-fill" style="width:${pct}%"></div>
-      </div>
-      ${mistakesHtml}
-    </a>`;
 }
 
 // ── LANGUAGE ──────────────────────────────────────────────────────────────────
-function toggleLang() {
-  lang = lang === "tr" ? "en" : "tr";
-  document.getElementById("lang-btn").textContent = lang === "tr" ? "EN" : "TR";
+function updateLangBtns(l) {
+  document.querySelectorAll('#lang-group .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === l);
+  });
+}
+
+function setLang(l) {
+  lang = l;
+  updateLangBtns(l);
   document.getElementById("hero-title").textContent =
-    lang === "tr" ? "CIA Sınav Quiz" : "CIA Exam Quiz";
+    lang === "en" ? "CIA Exam Quiz" : "CIA Sınav Quiz";
   document.getElementById("hero-desc").textContent =
-    lang === "tr" ? "Part 1 — 10 Ünite, Türkcə / İngiliscə" : "Part 1 — 10 Units, TR / EN Bilingual";
+    lang === "en" ? "Part 1 — 10 Units, TR / EN Bilingual"
+                  : "Part 1 — 10 Ünite, Türkcə / İngiliscə";
   document.querySelectorAll("[data-tr]").forEach(el => {
-    el.textContent = lang === "tr" ? el.dataset.tr : el.dataset.en;
+    el.textContent = lang === "en" ? el.dataset.en : el.dataset.tr;
   });
   document.getElementById("op-right").textContent =
-    lang === "tr" ? "Ümumi irəliləyiş" : "Overall progress";
+    lang === "en" ? "Overall progress" : "Ümumi irəliləyiş";
   render();
 }
 

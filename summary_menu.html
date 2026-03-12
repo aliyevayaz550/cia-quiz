@@ -109,6 +109,15 @@ body {
 }
 .badge-ready  { background: #e8f5e9; color: var(--correct); }
 .badge-soon   { background: #eee;    color: #999; }
+/* ── LANG BUTTONS ────────────────────────────────────── */
+.lang-btn {
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  padding: 5px 9px; cursor: pointer; border: none;
+  background: rgba(255,255,255,.10); color: rgba(255,255,255,.7);
+  transition: background .15s, color .15s;
+}
+.lang-btn + .lang-btn { border-left: 1px solid rgba(255,255,255,.15); }
+.lang-btn.active { background: var(--gold) !important; color: var(--navy) !important; }
 </style>
 </head>
 <body>
@@ -117,15 +126,20 @@ body {
   <div id="topbar-inner">
     <button id="back-btn" onclick="window.location.href='index.html'">← Geri</button>
     <div id="page-title">📖 Kitabın Xülasəsi</div>
+    <div id="lang-group" style="display:flex;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.3);margin-left:auto;flex-shrink:0">
+      <button class="lang-btn active" onclick="setLang('az')" data-lang="az">AZ</button>
+      <button class="lang-btn" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('tr')" data-lang="tr">TR</button>
+    </div>
   </div>
 </div>
 
 <div id="header-strip">
-  <h2>Kitabın Xülasəsi</h2>
-  <p>Hər Unit üçün strukturlu xülasə — AZ · EN · TR</p>
+  <h2 id="header-title">Kitabın Xülasəsi</h2>
+  <p id="header-desc">Hər Unit üçün strukturlu xülasə — AZ · EN · TR</p>
 </div>
 
-<div class="section-label">Hazır Unitlər</div>
+<div class="section-label" id="section-label">Hazır Unitlər</div>
 
 <div id="unit-list">
 
@@ -220,6 +234,38 @@ body {
   </a>
 
 </div>
+
+<script>
+let lang = "az";
+const nextLang = { az: "en", en: "tr", tr: "az" };
+
+const TEXTS = {
+  az: { pageTitle: "📖 Kitabın Xülasəsi", headerTitle: "Kitabın Xülasəsi", headerDesc: "Hər Unit üçün strukturlu xülasə — AZ · EN · TR", section: "Hazır Unitlər", badge: "Hazır ✓" },
+  en: { pageTitle: "📖 Book Summary", headerTitle: "Book Summary", headerDesc: "Structured summary for each Unit — AZ · EN · TR", section: "Available Units", badge: "Ready ✓" },
+  tr: { pageTitle: "📖 Kitap Özeti", headerTitle: "Kitap Özeti", headerDesc: "Her Ünite için yapılandırılmış özet — AZ · EN · TR", section: "Hazır Üniteler", badge: "Hazır ✓" }
+};
+
+function updateLangBtns(l) {
+  document.querySelectorAll('#lang-group .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === l);
+  });
+}
+
+function applyLang(l) {
+  const t = TEXTS[l];
+  updateLangBtns(l);
+  document.getElementById("page-title").textContent = t.pageTitle;
+  document.getElementById("header-title").textContent = t.headerTitle;
+  document.getElementById("header-desc").textContent = t.headerDesc;
+  document.getElementById("section-label").textContent = t.section;
+  document.querySelectorAll(".unit-badge").forEach(el => { el.textContent = t.badge; });
+}
+
+function setLang(l) {
+  lang = l;
+  applyLang(lang);
+}
+</script>
 
 </body>
 </html>

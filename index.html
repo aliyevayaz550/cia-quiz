@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CIA Quiz">
 <meta name="theme-color" content="#1a2e4a">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>CIA Part 1 – Ana Menyu</title>
 <style>
 :root {
@@ -162,6 +164,15 @@ body {
   text-align: center; padding: 0 0 32px;
   font-size: 11px; color: #bbb;
 }
+/* ── LANG BUTTONS ────────────────────────────────────── */
+.lang-btn {
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  padding: 5px 9px; cursor: pointer; border: none;
+  background: rgba(255,255,255,.10); color: rgba(255,255,255,.7);
+  transition: background .15s, color .15s;
+}
+.lang-btn + .lang-btn { border-left: 1px solid rgba(255,255,255,.15); }
+.lang-btn.active { background: var(--gold) !important; color: var(--navy) !important; }
 </style>
 </head>
 <body>
@@ -169,7 +180,11 @@ body {
 <!-- HERO -->
 <div id="topbar" style="position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;box-shadow:0 2px 12px rgba(0,0,0,.25)">
   <div style="display:flex;align-items:center;justify-content:flex-end;height:48px;max-width:560px;margin:0 auto">
-    <button id="lang-btn" onclick="cycleLang()" style="font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer">AZ</button>
+    <div id="lang-group" style="display:flex;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.3)">
+      <button class="lang-btn active" onclick="setLang('az')" data-lang="az">AZ</button>
+      <button class="lang-btn" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('tr')" data-lang="tr">TR</button>
+    </div>
   </div>
 </div>
 <div id="hero">
@@ -293,7 +308,12 @@ const LANGS = {
 
 let curLang = 'az';
 const nextLang = { az: 'en', en: 'tr', tr: 'az' };
-const btnLabel = { az: 'EN', en: 'TR', tr: 'AZ' };
+
+function updateLangBtns(l) {
+  document.querySelectorAll('#lang-group .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === l);
+  });
+}
 
 function applyLang(l) {
   const t = LANGS[l];
@@ -313,13 +333,15 @@ function applyLang(l) {
   document.getElementById('info-desc').textContent   = t.infoDesc;
   document.getElementById('info-meta').textContent   = t.infoMeta;
   document.getElementById('footer-text').textContent = t.footer;
-  document.getElementById('lang-btn').textContent    = btnLabel[l];
+  updateLangBtns(l);
 }
 
-function cycleLang() {
-  curLang = nextLang[curLang];
+function setLang(l) {
+  curLang = l;
   applyLang(curLang);
 }
+
+applyLang(curLang);
 
 // Read test progress from localStorage
 (function() {
