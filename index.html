@@ -217,7 +217,7 @@ body {
     <div class="card-body">
       <div class="card-title" id="sum-title">Kitabın Xülasəsi</div>
       <div class="card-desc" id="sum-desc">Hər SubUnit üçün əsas anlayışlar, açar terminlər, imtahan məsləhətləri — AZ / EN / TR</div>
-      <div class="card-meta ready" id="summary-meta">10 Unit hazır</div>
+      <div class="card-meta ready" id="sum-meta">10 Unit hazır</div>
     </div>
     <div class="card-arrow">›</div>
   </a>
@@ -368,7 +368,8 @@ applyLang(curLang);
     } catch(e) {}
   });
   if(totalDone > 0) {
-    document.getElementById('stat-done').textContent = totalDone;
+    const el = document.getElementById('stat-done');
+    if(el) el.textContent = totalDone;
   }
 })();
 </script>
