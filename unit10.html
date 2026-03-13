@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CIA Quiz">
 <meta name="theme-color" content="#1a2e4a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>CIA Quiz – Unit 10</title>
 <style>
 :root {
@@ -75,15 +78,19 @@ body {
   border-radius: 20px; padding: 4px 12px;
   white-space: nowrap; margin-left: 12px;
 }
-#lang-btn {
-  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  background: rgba(255,255,255,.12); color: #fff;
+#lang-group {
+  display: flex; border-radius: 6px; overflow: hidden;
   border: 1px solid rgba(255,255,255,.3);
-  border-radius: 6px; padding: 5px 10px; cursor: pointer;
-  margin-left: 10px; transition: background .2s;
+  margin-left: 10px;
 }
-#lang-btn:hover { background: rgba(255,255,255,.22); }
+.lang-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  letter-spacing: .5px; padding: 5px 9px; cursor: pointer; border: none;
+  background: rgba(255,255,255,.10); color: rgba(255,255,255,.7);
+  transition: background .15s, color .15s;
+}
+.lang-btn + .lang-btn { border-left: 1px solid rgba(255,255,255,.15); }
+.lang-btn.active { background: var(--gold) !important; color: var(--navy) !important; }
 
 /* ── PROGRESS ─────────────────────────────────────────── */
 #progress-wrap {
@@ -592,7 +599,10 @@ body {
     <button id="back-btn" onclick="goToMenu()">← Menyu</button>
     <div id="app-title">Unit 10</div>
     <div id="score-badge">0 / 0</div>
-    <button id="lang-btn" onclick="toggleLang()">EN</button>
+    <div id="lang-group">
+      <button class="lang-btn active" onclick="setLang('tr')" data-lang="tr">TR</button>
+      <button class="lang-btn" onclick="setLang('en')" data-lang="en">EN</button>
+    </div>
   </div>
 </div>
 <!-- PROGRESS -->
@@ -611,7 +621,7 @@ body {
   <!-- WELCOME -->
   <div id="welcome">
     <h1>CIA Sınav Quiz<br><span style="color:var(--gold);font-size:.75em">Study Unit 10</span></h1>
-    <p id="welcome-desc">3 mövzu, 111 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar</p>
+    <p id="welcome-desc" data-tr="3 mövzu, 111 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar" data-en="3 topics, 111 questions — TR/EN bilingual support with explanations">3 mövzu, 111 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar</p>
     <div class="welcome-stats">
       <div class="ws-item"><span class="ws-num">3</span><span class="ws-label">Mövzu</span></div>
       <div class="ws-item"><span class="ws-num">111</span><span class="ws-label">Sual</span></div>
@@ -1226,18 +1236,21 @@ function restartAll() {
 }
 
 // ── LANGUAGE TOGGLE ──────────────────────────────────────────────────────────
-function toggleLang() {
-  lang = lang==="tr" ? "en" : "tr";
-  document.getElementById("lang-btn").textContent = lang==="tr" ? "EN" : "TR";
+function updateLangBtns(l) {
+  document.querySelectorAll('#lang-group .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === l);
+  });
+}
+
+function setLang(l) {
+  lang = l;
+  updateLangBtns(l);
   if(!quizStarted) {
-    document.getElementById("welcome-desc").textContent =
-      lang==="tr"
-        ? "3 mövzu, 111 sual — Türkcə / İngiliscə dil dəstəyi, izahlı cavablar"
-        : "3 topics, 111 questions — TR/EN bilingual support with explanations";
+    const desc = document.getElementById("welcome-desc");
+    if(desc && desc.dataset[l]) desc.textContent = desc.dataset[l];
     return;
   }
   updateProgress();
-  // Re-render current question without resetting state
   if(document.getElementById("question-area").innerHTML !== "") {
     renderQuestion();
     renderQuestionGrid();
@@ -1477,6 +1490,12 @@ function retryHistoryMistakes(histIdx) {
   } catch(e) { console.error("retryHistoryMistakes error:", e); }
 }
 
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
 </body>
 </html>
